@@ -35,3 +35,4 @@ let g:clang2_placeholder_next = ''
 let g:clang2_placeholder_prev = ''
 let g:spacevim_enable_guicolors = 0
 set ic
+autocmd Filetype javascript setlocal ts=2 sts=2 sw=2
