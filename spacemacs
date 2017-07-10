@@ -320,6 +320,7 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   (my-setup-indent 2) ; indent 2 spaces width
+  (set-face-attribute 'default nil :height 130)
   )
 
 (defun dotspacemacs/user-config ()
