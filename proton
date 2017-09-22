@@ -38,6 +38,7 @@
     ;; :lang/markdown
     ;; :lang/rust
     ;; :lang/javascript
+    ;; :language-scala
 
     ;; -----------------------------------
     ;; Frameworks
