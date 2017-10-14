@@ -102,4 +102,5 @@ alias p="showmarks"
 alias rg="ranger"
 
 alias ccat="ccat -G Keyword=\"darkgreen\" -G Plaintext=\"ellow\" -G Tag=\"fuchsia\" -G HTMLAttrName=\"darkteal\" -G Decimal=\"yellow\" -G Punctuation=\"lightgray\" --color=always"
+alias dc="docker-compose"
 
