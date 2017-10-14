@@ -104,3 +104,5 @@ alias rg="ranger"
 alias ccat="ccat -G Keyword=\"darkgreen\" -G Plaintext=\"ellow\" -G Tag=\"fuchsia\" -G HTMLAttrName=\"darkteal\" -G Decimal=\"yellow\" -G Punctuation=\"lightgray\" --color=always"
 alias dc="docker-compose"
 
+alias lein="docker run --rm -it clojure lein"
+alias boot="docker run --rm -it clojure:boot boot"
