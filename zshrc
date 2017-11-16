@@ -56,6 +56,10 @@ plugins=(git zshmarks zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
+if [ $commands[kubectl] ]; then
+  source <(kubectl completion zsh)
+fi
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -106,3 +110,6 @@ alias dc="docker-compose"
 
 alias lein="docker run --rm -it clojure lein"
 alias boot="docker run --rm -it clojure:boot boot"
+
+alias gmacs="open -a /Applications/Emacs.app"
+
