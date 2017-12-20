@@ -60,6 +60,8 @@ if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
 
+source ~/icd/dotfiles/tmuxinator/completion/tmuxinator.zsh
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -89,6 +91,9 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+export TERM="xterm-256color"
+export EDITOR=vim
+
 bindkey -v
 export KEYTIMEOUT=1
 
@@ -112,4 +117,9 @@ alias lein="docker run --rm -it clojure lein"
 alias boot="docker run --rm -it clojure:boot boot"
 
 alias gmacs="open -a /Applications/Emacs.app"
-
+alias cmacs="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n ."
+alias muxl="mux local"
+alias muxk="tmux kill-session -t"
+alias muxle="vi .tmuxinator.yml"
+alias muxs="mux start"
+alias muxe="mux open"
