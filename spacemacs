@@ -55,7 +55,11 @@ values."
      helm
      (auto-completion :variables
                       auto-completion-enable-snippets-in-popup t
-                      spacemacs-default-company-backends '(company-files company-capf)
+                      spacemacs-default-company-backends
+                      '(company-files
+                        company-capf
+                        company-keywords
+                        company-tern)
                       auto-completion-enable-help-tooltip t)
      ;; better-defaults
      emacs-lisp
@@ -339,6 +343,7 @@ you should place your code here."
   (setq ruby-insert-encoding-magic-comment nil)
   (setq engine/browser-function 'eww-browse-url)
   (setq js2-strict-missing-semi-warning nil)
+  (global-company-mode)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
