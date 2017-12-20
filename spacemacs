@@ -356,7 +356,8 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ghub
+    (indium
+     ghub
      let-alist
      clojure-snippets
      clj-refactor
