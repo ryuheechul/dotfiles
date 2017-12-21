@@ -58,9 +58,7 @@ values."
                       spacemacs-default-company-backends
                       '(company-files
                         company-capf
-                        company-keywords
-                        company-elm
-                        company-tern)
+                        )
                       auto-completion-enable-help-tooltip t)
      ;; better-defaults
      emacs-lisp
