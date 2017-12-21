@@ -69,7 +69,7 @@ values."
             shell-default-height 30
             shell-default-term-shell "/bin/bash"
             shell-default-position 'bottom)
-     ;; spell-checking
+     spell-checking
      ;; syntax-checking
      ;; version-control
      )
@@ -231,7 +231,7 @@ values."
    dotspacemacs-helm-use-fuzzy 'always
    ;; If non nil the paste micro-state is enabled. When enabled pressing `p`
    ;; several times cycle between the kill ring content. (default nil)
-   dotspacemacs-enable-paste-transient-state nil
+   dotspacemacs-enable-paste-transient-state t
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
    ;; the commands bound to the current keystroke sequence. (default 0.4)
    dotspacemacs-which-key-delay 0.4
@@ -352,9 +352,13 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
    (quote
-    (indium
+    (flyspell-correct-helm
+     flyspell-correct
+     auto-dictionary
+     indium
      ghub
      let-alist
      clojure-snippets
