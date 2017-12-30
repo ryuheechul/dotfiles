@@ -356,7 +356,8 @@ you should place your code here."
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
    (quote
-    (flyspell-correct-helm
+    (org
+     flyspell-correct-helm
      flyspell-correct
      auto-dictionary
      indium
