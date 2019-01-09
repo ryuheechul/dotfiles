@@ -123,3 +123,14 @@ alias muxk="tmux kill-session -t"
 alias muxle="vi .tmuxinator.yml"
 alias muxs="mux start"
 alias muxe="mux open"
+alias clj-repl='docker run -i -t pandeiro/lein repl'
+alias shebang='echo "#!/usr/bin/env bash"|pbcopy;echo "#!/usr/bin/env bash"'
+
+source <(npx --shell-auto-fallback zsh)
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh

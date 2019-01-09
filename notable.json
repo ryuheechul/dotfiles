@@ -1,0 +1,13 @@
+{
+	"codemirror": {
+		"options": {
+			"lineWrapping": true
+		}
+	},
+	"sorting": {
+		"by": "title",
+		"type": "ascending"
+	},
+	"tutorial": true,
+	"cwd": "/Users/heechul/Library/Mobile Documents/com~apple~CloudDocs/notable"
+}
