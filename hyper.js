@@ -121,20 +121,6 @@ module.exports = {
   //   `@company/project`
   //   `project#1.0.1`
   plugins: [
-    "hyper-smyck",
-    "hyperline",
-    "hyper-cat",
-    "hyper-cat-cursor",
-    "gitrocket",
-    "hypergoogle",
-    "hyper-quit",
-    "hyper-history",
-    "hyper-statusline",
-    "hyperterm-alternatescroll",
-    "hyperterm-paste",
-    "hyperterm-clicky",
-    "hyperterm-dibdabs",
-    "hyper-search"
   ],
 
   // in development, you can create a directory under
