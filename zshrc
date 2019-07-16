@@ -128,6 +128,9 @@ alias muxe="mux open"
 alias clj-repl='docker run -i -t pandeiro/lein repl'
 alias shebang='echo "#!/usr/bin/env bash"|pbcopy;echo "#!/usr/bin/env bash"'
 
+alias mp='multipass'
+alias tf='terraform'
+
 source <(npx --shell-auto-fallback zsh)
 
 # tabtab source for serverless package
