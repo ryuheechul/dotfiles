@@ -101,13 +101,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-source $ZSH/plugins/fzf-tab/fzf-tab.plugin.zsh
-
-# forgit
-source <(curl -Ss https://raw.githubusercontent.com/wfxr/forgit/master/forgit.plugin.zsh)
-
 # auto completion for kubectl
 [ $commands[kubectl] ] && source <(kubectl completion zsh)
 

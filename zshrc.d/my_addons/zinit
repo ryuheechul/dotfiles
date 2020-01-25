@@ -25,3 +25,5 @@ zinit light zsh-users/zsh-autosuggestions
 zinit ice as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
     atpull'%atclone' pick"direnv" src"zhook.zsh"
 zinit light direnv/direnv
+
+zinit light Aloxaf/fzf-tab
