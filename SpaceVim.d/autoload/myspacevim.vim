@@ -1,9 +1,10 @@
 function! myspacevim#before() abort
-  let g:webdevicons_enable_vimfiler = 1
+  " watch file changes and auto reload
+  set autoread
+  au CursorHold,CursorHoldI * checktime
+  au FocusGained,BufEnter * checktime
+  " https://stackoverflow.com/questions/2490227/how-does-vims-autoread-work/20418591
 endfunction
 
 function! myspacevim#after() abort
-  set autoread
-  au FocusGained,BufEnter * :checktime
-  let g:webdevicons_enable_vimfiler = 1
 endfunction
