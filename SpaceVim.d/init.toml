@@ -54,7 +54,7 @@ name = 'git'
 git-plugin = 'fugitive'
 
 [[layers]]
-name = "ctrlp"
+name = "fzf"
 
 [[custom_plugins]]
 name = "zxqfl/tabnine-vim"

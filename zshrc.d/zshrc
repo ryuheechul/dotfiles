@@ -1,0 +1,34 @@
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+PATH=~/.rbenv/shims:$PATH
+
+# terminal and editor
+export TERM="xterm-256color"
+export EDITOR=nvim
+
+# fzf
+export FZF_DEFAULT_COMMAND='fd --type f'
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse'
+
+# vi keybinding
+export KEYTIMEOUT=1
+bindkey -v
+
+# enable reverse-i-search
+bindkey '^R' history-incremental-search-backward
+
+# diff with bat
+function bdiff () { diff -u $@ | bat;} # use `vimdiff` for editing
+
+# fallback any command to npx
+# source <(npx --shell-auto-fallback zsh)
+# disabled for now
+
+# source from seperate files to organize better
+export ADDON_D=~/.config/zshrc.d/my_addons
+
+for source_file in omz zinit lf_icons aliases
+do 
+[ -f $ADDON_D/$source_file ] && source $ADDON_D/$source_file
+done
+

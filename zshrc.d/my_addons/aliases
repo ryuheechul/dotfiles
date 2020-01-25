@@ -1,0 +1,34 @@
+alias gs="git status"
+alias gd="git diff"
+alias gdc="git diff --cached"
+
+alias vim="nvim"
+alias vi="vim"
+
+alias g="jump"
+alias s="bookmark"
+alias d="deletemark"
+alias p="showmarks"
+alias rg="ranger"
+
+alias ccat="ccat -G Keyword=\"darkgreen\" -G Plaintext=\"ellow\" -G Tag=\"fuchsia\" -G HTMLAttrName=\"darkteal\" -G Decimal=\"yellow\" -G Punctuation=\"lightgray\" --color=always"
+alias dc="docker-compose"
+
+alias weather='curl wttr.in'
+
+alias gmacs="open -a /Applications/Emacs.app"
+alias cmacs="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n ."
+alias muxl="mux local"
+alias muxk="tmux kill-session -t"
+alias muxle="vi .tmuxinator.yml"
+alias muxs="mux start"
+alias muxe="mux open"
+alias clj-repl='docker run -i -t pandeiro/lein repl'
+alias shebang='echo "#!/usr/bin/env bash"|pbcopy;echo "#!/usr/bin/env bash"'
+
+alias mp='multipass'
+alias tf='terraform'
+
+alias g1p='~/.g1p'
+alias fzfp='fzf --preview "bat --style=numbers --color=always {}"'
+
