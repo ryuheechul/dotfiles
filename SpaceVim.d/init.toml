@@ -28,6 +28,16 @@
     # Enable vim compatible mode, avoid changing origin vim key bindings
     vimcompatible = true
 
+    # filetree
+    filetree_direction = "left"
+    enable_vimfiler_filetypeicon = true
+    enable_vimfiler_gitstatus = true
+
+    # load vim custom setup
+    bootstrap_before = "myspacevim#before"
+    bootstrap_after = "myspacevim#after"
+    # macligatures = true
+
 # Enable autocomplete layer
 [[layers]]
 name = 'autocomplete'
@@ -39,6 +49,43 @@ name = 'shell'
 default_position = 'top'
 default_height = 30
 
+[[layers]]
+name = 'git'
+git-plugin = 'fugitive'
+
+[[layers]]
+name = "ctrlp"
+
 [[custom_plugins]]
 name = "zxqfl/tabnine-vim"
+merged = false
+[[custom_plugins]]
+name = "ryanoasis/vim-devicons"
+merged = false
+[[custom_plugins]]
+name = "tpope/vim-surround"
+merged = false
+[[custom_plugins]]
+name = "vim-scripts/ReplaceWithRegister"
+merged = false
+[[custom_plugins]]
+name = "christoomey/vim-titlecase"
+merged = false
+[[custom_plugins]]
+name = "christoomey/vim-system-copy"
+merged = false
+[[custom_plugins]]
+name = "tpope/vim-commentary"
+merged = false
+[[custom_plugins]]
+name = "hashivim/vim-terraform"
+merged = false
+[[custom_plugins]]
+name = "christoomey/vim-tmux-navigator"
+merged = false
+[[custom_plugins]]
+name = "tmux-plugins/vim-tmux-focus-events"
+merged = false
+[[custom_plugins]]
+name = "benmills/vimux"
 merged = false
