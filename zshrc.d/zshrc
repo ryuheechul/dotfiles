@@ -27,9 +27,6 @@ function bdiff () { diff -u $@ | bat;} # use `vimdiff` for editing
 # source from seperate files to organize better
 export ADDON_D=~/.config/zshrc.d/my_addons
 
-# fzf, TODO: move to zinit
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 # forgit, TODO: move to zinit
 source <(curl -Ss https://raw.githubusercontent.com/wfxr/forgit/master/forgit.plugin.zsh)
 
@@ -37,4 +34,7 @@ for source_file in omz zinit lf_icons aliases
 do 
 [ -f $ADDON_D/$source_file ] && source $ADDON_D/$source_file
 done
+
+# better history search with fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
