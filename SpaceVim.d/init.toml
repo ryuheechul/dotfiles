@@ -16,17 +16,21 @@
     # Disable guicolors in basic mode, many terminal do not support 24bit
     # true colors
     enable_guicolors = false
+
+    # Enable vim compatible mode, avoid changing origin vim key bindings
+    vimcompatible = false
+
     # Disable statusline separator, if you want to use other value, please
     # install nerd fonts
-    statusline_separator = "nil"
-    statusline_inactive_separator = "bar"
-    buffer_index_type = 4
-    windows_index_type = 3
-    enable_tabline_filetype_icon = false
-    enable_statusline_mode = false
+    statusline_separator = "curve"
+    statusline_inactive_separator = "curve"
     statusline_unicode_symbols = false
-    # Enable vim compatible mode, avoid changing origin vim key bindings
-    vimcompatible = true
+
+    # font or shape of buffer number
+    buffer_index_type = 2 
+    # font or shape of window number
+    windows_index_type = 3
+    enable_tabline_filetype_icon = true
 
     # filetree
     filetree_direction = "left"
@@ -36,7 +40,6 @@
     # load vim custom setup
     bootstrap_before = "myspacevim#before"
     bootstrap_after = "myspacevim#after"
-    # macligatures = true
 
 # Enable autocomplete layer
 [[layers]]
@@ -46,7 +49,7 @@ auto-completion-tab-key-behavior = "cycle"
 
 [[layers]]
 name = 'shell'
-default_position = 'top'
+default_position = 'bottom'
 default_height = 30
 
 [[layers]]
@@ -54,7 +57,7 @@ name = 'git'
 git-plugin = 'fugitive'
 
 [[layers]]
-name = "fzf"
+name = "denite"
 
 [[custom_plugins]]
 name = "zxqfl/tabnine-vim"
