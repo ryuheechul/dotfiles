@@ -92,3 +92,9 @@ merged = false
 [[custom_plugins]]
 name = "benmills/vimux"
 merged = false
+[[custom_plugins]]
+name = "junegunn/goyo.vim"
+merged = false
+[[custom_plugins]]
+name = "junegunn/limelight.vim"
+merged = false
