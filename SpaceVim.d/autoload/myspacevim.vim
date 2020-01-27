@@ -42,7 +42,7 @@ function! myspacevim#before() abort
   " four different char for different indentation depth
   let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
-  " Toggle goyo with <SPC> w z
+  " register toggle goyo with <SPC> w z
   call SpaceVim#custom#SPC('nore', ['w', 'z'], ':Goyo', 'toggle Goyo', 1)
 endfunction
 
@@ -55,6 +55,11 @@ function! myspacevim#after() abort
 
   " word wrap
   set wrap! breakindent!
+
+  " customizing goyo
+  let g:goyo_width = 100
+  let g:goyo_height = 100
+  let g:goyo_linenr = 1
 
   " register custom Goyo hooks
   autocmd! User GoyoEnter nested call <SID>goyo_enter()
