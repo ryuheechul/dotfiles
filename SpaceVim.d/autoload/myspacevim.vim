@@ -51,10 +51,10 @@ function! myspacevim#after() abort
   set timeoutlen=500 
 
   " show listchars - https://medium.com/usevim/understanding-listchars-acb9e5a90854
-  setlocal nolist!
+  set nolist!
 
   " word wrap
-  setlocal wrap! breakindent!
+  set wrap! breakindent!
 
   " register custom Goyo hooks
   autocmd! User GoyoEnter nested call <SID>goyo_enter()
