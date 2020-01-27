@@ -12,7 +12,6 @@ function! s:goyo_enter()
   set noshowcmd
   set scrolloff=999
   Limelight
-  " ...
 endfunction
 
 function! s:goyo_leave()
@@ -24,7 +23,6 @@ function! s:goyo_leave()
   set showcmd
   set scrolloff=5
   Limelight!
-  " ...
 endfunction
 
 function! myspacevim#before() abort
@@ -57,8 +55,8 @@ function! myspacevim#after() abort
   set wrap! breakindent!
 
   " customizing goyo
-  let g:goyo_width = 100
-  let g:goyo_height = 100
+  let g:goyo_width = "50%"
+  let g:goyo_height = "100%"
   let g:goyo_linenr = 1
 
   " register custom Goyo hooks
