@@ -1,0 +1,9 @@
+"This vimrc exist when minimal configuration is needed.
+"you can run this by `$ vi[m] -u [path/to/]mimvimrc`
+"Let's keep this close to vanila vim settings as much as possible
+"show line numbers
+set nu
+"syntax highlight
+set syntax
+"jk to enter normal mode
+inoremap jk <Esc>
