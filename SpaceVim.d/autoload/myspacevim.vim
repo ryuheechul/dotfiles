@@ -42,11 +42,13 @@ function! myspacevim#before() abort
 
   " register toggle goyo with <SPC> w z
   call SpaceVim#custom#SPC('nore', ['w', 'z'], ':Goyo', 'toggle Goyo', 1)
+
+  call kakoune#mimic_load()
 endfunction
 
 function! myspacevim#after() abort
   " faster guide shows up
-  set timeoutlen=500 
+  set timeoutlen=500
 
   " show listchars - https://medium.com/usevim/understanding-listchars-acb9e5a90854
   set nolist!
