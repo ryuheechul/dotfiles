@@ -1,3 +1,16 @@
+"This vimscript is an attempt to mimic (not perfectly) traversing words with selections like Kakoune editor (heavily inspired by it of course.)
+"You can try this out simply by sourcing this file and calling a function.
+"How-to in an order
+"1. download this file into your computer
+"2. open your vim and type below
+"`:source [path/to/]kakoune.vim`
+"3. call a function by typing below
+"`:call kakoune#mimic_load()`
+"4. now try pressing w,e,b to move around with selection
+"5. enjoy!
+"
+"Limitations: somehow it doesn't work when your setting is vanila with vim but it works with neovim even with vanila setup. In some cases it works with vim, when you have some setups like using spacevim. This is quite mysterious to me and I will keep an update here when get to figure out.
+
 function! s:selectwordfoward() abort
   normal! wevb
 endfunction
