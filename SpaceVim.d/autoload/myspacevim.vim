@@ -64,4 +64,12 @@ function! myspacevim#after() abort
   " register custom Goyo hooks
   autocmd! User GoyoEnter nested call <SID>goyo_enter()
   autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+  " enable true color in tmux
+  " https://github.com/tmux/tmux/issues/1246
+  if exists('+termguicolors')
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    set termguicolors
+  endif
 endfunction
