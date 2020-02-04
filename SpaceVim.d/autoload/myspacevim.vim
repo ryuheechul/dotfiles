@@ -57,7 +57,7 @@ function! myspacevim#after() abort
   set wrap! breakindent!
 
   " customizing goyo
-  let g:goyo_width = "50%"
+  let g:goyo_width = "60%"
   let g:goyo_height = "100%"
   let g:goyo_linenr = 1
 

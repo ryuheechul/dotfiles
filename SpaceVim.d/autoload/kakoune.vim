@@ -112,5 +112,6 @@ function! kakoune#mimic_load() abort
   " x/X to delete just a char so use d to delete the selection
   vnoremap <silent>x <Esc>x
   vnoremap <silent>X <Esc>X
+  vnoremap <silent>. <Esc>.
 endfunction
 
