@@ -72,4 +72,8 @@ function! myspacevim#after() abort
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
     set termguicolors
   endif
+
+  " set defx column to use icons and git
+  call defx#custom#option('_', 'columns', 'git:mark:indent:icons:filename:type:size:time')
+  Defx | Defx | wincmd p
 endfunction
