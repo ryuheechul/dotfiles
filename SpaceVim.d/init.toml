@@ -103,3 +103,9 @@ merged = false
 [[custom_plugins]]
 name = "kristijanhusak/defx-icons"
 merged = false
+[[custom_plugins]]
+name = "tmux-plugins/vim-tmux-focus-events"
+merged = 0
+[[custom_plugins]]
+name = "roxma/vim-tmux-clipboard"
+merged = 0
