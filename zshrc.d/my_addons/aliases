@@ -5,10 +5,6 @@ alias gdc="git diff --cached"
 alias vim="nvim"
 alias vi="vim"
 
-alias g="jump"
-alias s="bookmark"
-alias d="deletemark"
-alias p="showmarks"
 alias rg="rg -p"
 alias less="less -r"
 

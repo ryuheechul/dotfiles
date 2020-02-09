@@ -38,3 +38,4 @@ done
 # better history search with fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+cd ~/al
