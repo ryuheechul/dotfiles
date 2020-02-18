@@ -1,3 +1,10 @@
+unalias j 2>/dev/null
+j() {
+    [ $# -gt 0 ] && fasd_cd -d "$*" && return
+    local dir
+    dir="$(fasd -Rdl "$1" | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
+}
+
 alias ln="ln -s"
 
 alias gs="git status"
