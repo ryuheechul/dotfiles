@@ -7,6 +7,8 @@ j() {
 
 alias ln="ln -s"
 
+alias ls="lsd" # brew install lsd
+
 alias gs="git status"
 alias gd="git diff"
 alias gdc="git diff --cached"
