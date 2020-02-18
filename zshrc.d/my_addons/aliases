@@ -7,7 +7,7 @@ alias gdc="git diff --cached"
 alias vim="nvim"
 alias vi="vim"
 
-alias rg="rg -p"
+alias rg="rg -p -i"
 alias less="less -r"
 
 alias ccat="ccat -G Keyword=\"darkgreen\" -G Plaintext=\"ellow\" -G Tag=\"fuchsia\" -G HTMLAttrName=\"darkteal\" -G Decimal=\"yellow\" -G Punctuation=\"lightgray\" --color=always"
@@ -29,6 +29,9 @@ alias mp='multipass'
 alias tf='terraform'
 
 alias g1p='~/.g1p'
-alias fzfp='fzf --preview "bat --style=numbers --color=always {}"'
-alias shellwe="cd && cd al && tmux new"
+alias fzfp='COLORTERM=8bit fzf --height 100% --preview "bat --style=numbers --color=always {}"'
+alias fzfpp='fzf|fpp'
 
+alias bat='COLORTERM=8bit bat'
+
+alias shellwe="cd && cd al && tmux new"
