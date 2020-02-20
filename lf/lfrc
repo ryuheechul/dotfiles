@@ -23,3 +23,4 @@ cmd q push q
 # enter will do samething as l
 map <enter> push l
 
+cmd help $lf -doc|less
