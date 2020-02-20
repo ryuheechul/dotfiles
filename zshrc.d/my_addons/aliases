@@ -36,7 +36,7 @@ alias muxle="vi .tmuxinator.yml"
 alias muxs="mux start"
 alias muxe="mux open"
 alias clj-repl='docker run -i -t pandeiro/lein repl'
-alias shebang='echo "#!/usr/bin/env sh"|pbcopy;echo "#!/usr/bin/env bash"'
+alias shebang='echo "#!/usr/bin/env sh"|pbcopy;echo "#!/usr/bin/env sh"'
 
 alias mp='multipass'
 alias tf='terraform'
@@ -47,4 +47,7 @@ alias fzfpp='fzf|fpp'
 
 alias bat='COLORTERM=8bit bat'
 
-alias shellwe="cd && cd al && tmux new"
+alias shellwe="cd && cd al && tmux a"
+
+alias googler="googler -n 3"
+alias ddgr="ddgr -n 3"
