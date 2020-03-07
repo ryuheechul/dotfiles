@@ -27,3 +27,4 @@ zinit ice as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
 zinit light direnv/direnv
 
 zinit light Aloxaf/fzf-tab
+zinit light supercrabtree/k

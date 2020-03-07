@@ -50,7 +50,7 @@ alias fzfpp='fzf|fpp'
 
 alias bat='COLORTERM=8bit bat'
 
-alias shellwe="cd && cd al && tmux a"
+alias shellwe="cd && cd al && neofetch && tmux a"
 
 alias googler="googler -n 3"
 alias ddgr="ddgr -n 3"
