@@ -43,7 +43,8 @@ function! myspacevim#before() abort
   " register toggle goyo with <SPC> w z
   call SpaceVim#custom#SPC('nore', ['w', 'z'], ':Goyo', 'toggle Goyo', 1)
 
-  call kakoune#mimic_load()
+  " disable by default for now
+  " call kakoune#mimic_load()
 endfunction
 
 function! myspacevim#after() abort
@@ -72,6 +73,9 @@ function! myspacevim#after() abort
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
     set termguicolors
   endif
+
+  " add more options to eslint
+  let g:neomake_javascript_eslint_args = g:neomake_javascript_eslint_args + ['--ignore-pattern', '!.eslintrc.js']
 
   " set defx column to use icons and git
   call defx#custom#option('_', 'columns', 'git:mark:indent:icons:filename:type:size:time')

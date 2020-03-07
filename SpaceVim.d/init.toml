@@ -40,6 +40,13 @@
     bootstrap_before = "myspacevim#before"
     bootstrap_after = "myspacevim#after"
 
+[[layers]]
+name = "lang#javascript"
+auto_fix = true
+
+[[layers]]
+name = "lang#extra"
+
 # Enable autocomplete layer
 [[layers]]
 name = 'autocomplete'
