@@ -26,6 +26,8 @@ function! s:goyo_leave()
 endfunction
 
 function! myspacevim#before() abort
+  " for case insensitive search
+  set ignorecase
   " watch file changes and auto reload
   " > https://stackoverflow.com/questions/2490227/how-does-vims-autoread-work/20418591
   set autoread
