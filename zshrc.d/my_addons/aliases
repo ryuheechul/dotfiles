@@ -43,9 +43,6 @@ alias tf='terraform'
 alias googler="googler -n 3"
 alias ddgr="ddgr -n 3"
 
-# bootstrap terminal
-alias shellwe="cd && cd al && neofetch && tmux a"
-
 # quickly jump via fsad - https://github.com/junegunn/fzf/wiki/examples#with-fasd-1
 unalias j 2>/dev/null
 j() {

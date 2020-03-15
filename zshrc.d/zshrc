@@ -1,5 +1,8 @@
 ## basics
 
+# bootstrap terminal
+alias shellwe="cd && cd al && neofetch && tmux a"
+
 # terminal and editor
 export TERM="xterm-256color"
 export EDITOR=nvim
@@ -10,6 +13,11 @@ bindkey -v
 
 # enable reverse-i-search
 bindkey '^R' history-incremental-search-backward
+
+## if TMUX var is not set then skip the rest
+if [[ -z $TMUX ]]; then
+  return
+fi
 
 ## addons
 
