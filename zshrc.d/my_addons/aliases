@@ -18,8 +18,6 @@ alias tgs="tig status"
 alias gd="git diff"
 alias gdc="git diff --cached"
 
-alias pip="pip3"
-
 alias vim="nvim"
 alias vi="vim"
 
