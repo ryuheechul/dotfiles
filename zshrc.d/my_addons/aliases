@@ -13,7 +13,8 @@ alias ls="lsd" # brew install lsd
 
 alias touchreadme="touch README.md"
 
-alias gs="tig status"
+alias gs="git status"
+alias tgs="tig status"
 alias gd="git diff"
 alias gdc="git diff --cached"
 
