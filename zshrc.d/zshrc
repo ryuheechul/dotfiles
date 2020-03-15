@@ -1,17 +1,8 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-PATH=~/.rbenv/shims:$PATH
-
-export GOPATH=$HOME/go
-export PATH=$GOPATH/bin:$PATH
+## basics
 
 # terminal and editor
 export TERM="xterm-256color"
 export EDITOR=nvim
-
-# fzf
-export FZF_DEFAULT_COMMAND='fd --type f'
-export FZF_DEFAULT_OPTS='--height 40% --layout=reverse'
 
 # vi keybinding
 export KEYTIMEOUT=1
@@ -20,25 +11,12 @@ bindkey -v
 # enable reverse-i-search
 bindkey '^R' history-incremental-search-backward
 
-# diff with bat
-function bdiff () { diff -u $@ | bat;} # use `vimdiff` for editing
-
-# fallback any command to npx
-# source <(npx --shell-auto-fallback zsh)
-# disabled for now
+## addons
 
 # source from seperate files to organize better
 export ADDON_D=~/.config/zshrc.d/my_addons
-
-# forgit, TODO: move to zinit
-source <(curl -Ss https://raw.githubusercontent.com/wfxr/forgit/master/forgit.plugin.zsh)
-
-for source_file in omz zinit lf_icons aliases
+for source_file in omz zinit lf_icons aliases shell_ext
 do 
 [ -f $ADDON_D/$source_file ] && source $ADDON_D/$source_file
 done
-
-# better history search with fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-eval "$(starship init zsh)"
+unset ADDON_D

@@ -1,3 +1,52 @@
+# vim: set ft=zsh:
+
+
+# overwrite essential stuff
+alias which="which -a"
+alias ln="ln -s"
+alias ls="lsd" # brew install lsd
+
+alias vim="nvim"
+alias vi="vim"
+
+alias less="less -r"
+
+# commandify
+alias touchreadme="touch README.md"
+alias weather='curl wttr.in'
+alias shebang='echo "#!/usr/bin/env sh"|pbcopy;echo "#!/usr/bin/env sh"'
+
+# git
+alias gs="git status"
+alias tgs="tig status"
+alias gd="git diff"
+alias gdc="git diff --cached"
+
+
+# viewer and filter
+alias bat='COLORTERM=8bit bat'
+alias rg="rg -p -i" # brew install rg
+alias glow="glow -p" # brew install glow
+
+alias fzfp='COLORTERM=8bit fzf --height 100% --preview "bat --style=numbers --color=always {}"'
+alias fzfpp='fzf|fpp'
+
+# diff with bat
+function bdiff () { diff -u $@ | bat;} # use `vimdiff` for editing
+
+# shorthands
+alias dc="docker-compose"
+alias mp='multipass'
+alias tf='terraform'
+
+# web search
+alias googler="googler -n 3"
+alias ddgr="ddgr -n 3"
+
+# bootstrap terminal
+alias shellwe="cd && cd al && neofetch && tmux a"
+
+# quickly jump via fsad - https://github.com/junegunn/fzf/wiki/examples#with-fasd-1
 unalias j 2>/dev/null
 j() {
     [ $# -gt 0 ] && fasd_cd -d "$*" && return
@@ -5,51 +54,17 @@ j() {
     dir="$(fasd -Rdl "$1" | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
 }
 
-alias which="which -a"
-
-alias ln="ln -s"
-
-alias ls="lsd" # brew install lsd
-
-alias touchreadme="touch README.md"
-
-alias gs="git status"
-alias tgs="tig status"
-alias gd="git diff"
-alias gdc="git diff --cached"
-
-alias vim="nvim"
-alias vi="vim"
-
-alias rg="rg -p -i"
-alias less="less -r"
-alias glow="glow -p"
-
-alias ccat="ccat -G Keyword=\"darkgreen\" -G Plaintext=\"ellow\" -G Tag=\"fuchsia\" -G HTMLAttrName=\"darkteal\" -G Decimal=\"yellow\" -G Punctuation=\"lightgray\" --color=always"
-alias dc="docker-compose"
-
-alias weather='curl wttr.in'
-
-alias gmacs="open -a /Applications/Emacs.app"
-alias cmacs="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n ."
-alias muxl="mux local"
-alias muxk="tmux kill-session -t"
-alias muxle="vi .tmuxinator.yml"
-alias muxs="mux start"
-alias muxe="mux open"
-alias clj-repl='docker run -i -t pandeiro/lein repl'
-alias shebang='echo "#!/usr/bin/env sh"|pbcopy;echo "#!/usr/bin/env sh"'
-
-alias mp='multipass'
-alias tf='terraform'
-
-alias g1p='~/.g1p'
-alias fzfp='COLORTERM=8bit fzf --height 100% --preview "bat --style=numbers --color=always {}"'
-alias fzfpp='fzf|fpp'
-
-alias bat='COLORTERM=8bit bat'
-
-alias shellwe="cd && cd al && neofetch && tmux a"
-
-alias googler="googler -n 3"
-alias ddgr="ddgr -n 3"
+## legacy
+#
+# alias ccat="ccat -G Keyword=\"darkgreen\" -G Plaintext=\"ellow\" -G Tag=\"fuchsia\" -G HTMLAttrName=\"darkteal\" -G Decimal=\"yellow\" -G Punctuation=\"lightgray\" --color=always"
+#
+# alias gmacs="open -a /Applications/Emacs.app"
+# alias cmacs="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n ."
+#
+# alias clj-repl='docker run -i -t pandeiro/lein repl'
+#
+# alias muxl="mux local"
+# alias muxk="tmux kill-session -t"
+# alias muxle="vi .tmuxinator.yml"
+# alias muxs="mux start"
+# alias muxe="mux open"

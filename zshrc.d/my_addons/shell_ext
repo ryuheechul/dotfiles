@@ -1,0 +1,49 @@
+# vim: set ft=zsh:
+
+# fzf
+export FZF_DEFAULT_COMMAND='fd --type f'
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse'
+# better history search with fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# rust
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+# loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# shell completion
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+
+# golang
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$PATH
+
+# ruby version mananger
+export PATH=~/.rbenv/shims:$PATH
+
+# starship
+eval "$(starship init zsh)"
+
+# auto completion for kubectl
+[ $commands[kubectl] ] && source <(kubectl completion zsh)
+
+# use direnv
+[ $commands[direnv] ] && eval "$(direnv hook zsh)"
+
+# fallback any command to npx # disabled for now
+# source <(npx --shell-auto-fallback zsh)
+
+# base16 shell # disable for now
+# BASE16_SHELL="$HOME/.config/base16-shell/"
+# [ -n "$PS1" ] && \
+#     [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+#         eval "$("$BASE16_SHELL/profile_helper.sh")"
