@@ -4,7 +4,13 @@
 # overwrite essential stuff
 alias which="which -a"
 alias ln="ln -s"
-alias ls="lsd" # brew install lsd
+
+# brew install exa
+alias exa="exa --icons --group-directories-first -F"
+alias ls="exa"
+alias l="ls -lah -g --git"
+alias lt="ls -lah -T -L=3 --git --git-ignore --ignore-glob='**/.git'"
+alias tree="exa -G -T --git-ignore --ignore-glob='**/.git'"
 
 alias vim="nvim"
 alias vi="vim"
