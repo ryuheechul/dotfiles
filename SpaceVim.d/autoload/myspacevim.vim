@@ -2,6 +2,26 @@
 let g:limelight_conceal_ctermfg = 'gray'
 let g:limelight_conceal_ctermfg = 240
 
+function! s:lsp()
+  let g:ale_linters = {
+  \ 'reason': ['reason-language-server'],
+  \}
+  let g:ale_fixers = {
+  \ 'reason': ['refmt'],
+  \}
+  let g:ale_lint_on_save = 1
+  let g:ale_fix_on_save = 1
+
+  let g:LanguageClient_serverCommands = {
+  \ 'reason': ['reason-language-server']
+  \ }
+endfunction
+
+function! s:providers()
+  let g:python3_host_prog = '/Users/heechul/.pyenv/shims/python3'
+  let g:python_host_prog = '/Users/heechul/.pyenv/shims/python2'
+endfunction
+
 " Goyo hooks
 function! s:goyo_enter()
   if executable('tmux') && strlen($TMUX)
@@ -78,6 +98,9 @@ function! myspacevim#after() abort
 
   " add more options to eslint
   let g:neomake_javascript_eslint_args = g:neomake_javascript_eslint_args + ['--ignore-pattern', '!.eslintrc.js']
+
+  call <SID>lsp()
+  call <SID>providers()
 
   " set defx column to use icons and git
   call defx#custom#option('_', 'columns', 'git:mark:indent:icons:filename:type:size:time')

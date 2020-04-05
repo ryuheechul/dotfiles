@@ -27,7 +27,7 @@
     statusline_unicode_symbols = false
 
     # font or shape of buffer number
-    buffer_index_type = 2 
+    buffer_index_type = 2
     # font or shape of window number
     windows_index_type = 3
     enable_tabline_filetype_icon = true
@@ -40,6 +40,11 @@
     bootstrap_before = "myspacevim#before"
     bootstrap_after = "myspacevim#after"
 
+    ## enabling ale disable python lint
+    ## so disabling this option for now
+    # enable_neomake = false
+    # enable_ale = true
+
 [[layers]]
 name = "lang#javascript"
 auto_fix = true
@@ -47,7 +52,12 @@ auto_fix = true
 [[layers]]
 name = "lang#extra"
 
-# Enable autocomplete layer
+[[layers]]
+name = "checkers"
+
+[[layers]]
+name = "lsp"
+
 [[layers]]
 name = 'autocomplete'
 auto-completion-return-key-behavior = "complete"
@@ -111,5 +121,8 @@ merged = false
 name = "kristijanhusak/defx-icons"
 merged = false
 [[custom_plugins]]
+name = "reasonml-editor/vim-reason-plus"
+merged = false
+[[custom_plugins]]
 name = "roxma/vim-tmux-clipboard"
-merged = 0
+merged = false
