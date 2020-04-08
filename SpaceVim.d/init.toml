@@ -123,6 +123,14 @@ merged = false
 [[custom_plugins]]
 name = "reasonml-editor/vim-reason-plus"
 merged = false
+## using ale plugin directly
+## instead setting these options below
+## to be able to use neomake as well as ale
+# enable_neomake = false
+# enable_ale = true
+[[custom_plugins]]
+name = "dense-analysis/ale"
+merged = false
 [[custom_plugins]]
 name = "roxma/vim-tmux-clipboard"
 merged = false
