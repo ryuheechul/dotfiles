@@ -28,3 +28,11 @@ do
 [ -f $ADDON_D/$source_file ] && source $ADDON_D/$source_file
 done
 unset ADDON_D
+
+## configuring completions for brew installed packages
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+
+  autoload -Uz compinit
+  compinit
+fi
