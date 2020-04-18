@@ -30,7 +30,8 @@ alias gdc="git diff --cached"
 
 
 # viewer and filter
-alias bat='COLORTERM=8bit bat'
+alias bat='COLORTERM=256bit bat'
+alias k9s='COLORTERM=256bit k9s'
 alias rg="rg -p -i" # brew install rg
 alias glow="glow -p" # brew install glow
 
