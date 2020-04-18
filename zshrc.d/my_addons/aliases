@@ -30,12 +30,12 @@ alias gdc="git diff --cached"
 
 
 # viewer and filter
-alias bat='COLORTERM=256bit bat'
+alias cat='bat'
 alias k9s='COLORTERM=256bit k9s'
 alias rg="rg -p -i" # brew install rg
 alias glow="glow -p" # brew install glow
 
-alias fzfp='COLORTERM=8bit fzf --height 100% --preview "bat --style=numbers --color=always {}"'
+alias fzfp='fzf --height 100% --preview "bat --style=numbers --color=always {}"'
 alias fzfpp='fzf|fpp'
 
 # diff with bat
