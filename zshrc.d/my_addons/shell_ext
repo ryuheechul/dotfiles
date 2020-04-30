@@ -23,9 +23,6 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH
 
-# ruby version mananger
-export PATH=~/.rbenv/shims:$PATH
-
 # https://github.com/asdf-vm/asdf - version manager
 . $(brew --prefix asdf)/asdf.sh
 
