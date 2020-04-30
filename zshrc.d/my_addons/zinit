@@ -31,3 +31,4 @@ zinit light direnv/direnv
 zinit light Aloxaf/fzf-tab
 zinit light supercrabtree/k
 zinit light Tarrasch/zsh-bd
+zinit light paulirish/git-open
