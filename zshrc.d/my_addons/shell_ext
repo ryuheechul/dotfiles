@@ -32,6 +32,14 @@ eval "$(starship init zsh)"
 # use direnv
 [ $commands[direnv] ] && eval "$(direnv hook zsh)"
 
+# for https://github.com/aykamko/tag
+if (( $+commands[tag] )); then
+  export TAG_SEARCH_PROG=ag
+  tag() { command tag "$@"; source ${TAG_ALIAS_FILE:-/tmp/tag_aliases} 2>/dev/null }
+  alias ag=tag
+fi
+
+
 # fallback any command to npx # disabled for now
 # source <(npx --shell-auto-fallback zsh)
 
