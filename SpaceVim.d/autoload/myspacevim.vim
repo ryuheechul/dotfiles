@@ -18,8 +18,8 @@ function! s:lsp()
 endfunction
 
 function! s:providers()
-  let g:python3_host_prog = '/Users/heechul/.pyenv/shims/python3'
-  let g:python_host_prog = '/Users/heechul/.pyenv/shims/python2'
+  let g:python3_host_prog = '~/.asdf/shims/python3'
+  let g:python_host_prog = '~/.asdf/shims/python2'
 endfunction
 
 " Goyo hooks
