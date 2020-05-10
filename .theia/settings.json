@@ -1,0 +1,8 @@
+{
+  "editor.fontLigatures": true,
+  "editor.fontFamily": "Jetbrains Mono, FuraCode Nerd Font Mono, Menlo, Monaco, 'Courier New', monospace",
+  "terminal.integrated.fontFamily": "Jetbrains Mono, FuraCode Nerd Font Mono, Menlo, Monaco, 'Courier New', monospace",
+  "terminal.integrated.shell.linux": "env",
+  "terminal.integrated.shellArgs.linux": ["zsh"],
+  "workbench.colorTheme": "Monokai"
+}

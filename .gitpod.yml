@@ -1,0 +1,7 @@
+image:
+  file: .gitpod.Dockerfile
+tasks:
+    # it doesn't seem to cache which is too bad even with `init`
+  - before: pip3 install neovim && .gitpod/clone-dotfiles.sh
+    # enter tmux with zsh
+    command: SHELL=`which zsh` tmux a
