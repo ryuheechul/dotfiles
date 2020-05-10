@@ -16,6 +16,7 @@ bindkey '^R' history-incremental-search-backward
 
 ## if TMUX var is not set then skip the rest
 if [[ -z $TMUX ]]; then
+  echo "skipping load the rest because \$TMUX is not set"
   return
 fi
 
