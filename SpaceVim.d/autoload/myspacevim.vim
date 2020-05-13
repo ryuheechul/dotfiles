@@ -18,8 +18,8 @@ function! s:lsp()
 endfunction
 
 function! s:providers()
-  let g:python3_host_prog = '~/.asdf/shims/python3'
-  let g:python_host_prog = '~/.asdf/shims/python2'
+  let g:python3_host_prog = expand('~/.asdf/shims/python3')
+  let g:python_host_prog = expand('~/.asdf/shims/python2')
 endfunction
 
 " Goyo hooks
@@ -46,6 +46,8 @@ function! s:goyo_leave()
 endfunction
 
 function! myspacevim#before() abort
+  " hopefully drawing interfere key input much less
+  set lazyredraw
   " for case insensitive search
   set ignorecase
   " watch file changes and auto reload
