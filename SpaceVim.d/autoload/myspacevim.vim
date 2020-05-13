@@ -46,8 +46,6 @@ function! s:goyo_leave()
 endfunction
 
 function! myspacevim#before() abort
-  " hopefully drawing interfere key input much less
-  set lazyredraw
   " for case insensitive search
   set ignorecase
   " watch file changes and auto reload
@@ -72,6 +70,11 @@ function! myspacevim#before() abort
 endfunction
 
 function! myspacevim#after() abort
+  " hopefully drawing interfere key input much less
+  set lazyredraw
+  set norelativenumber " sadly much faster without this even in fast computer
+  set cursorline!      " this also makes difference
+
   " faster guide shows up
   set timeoutlen=500
 
