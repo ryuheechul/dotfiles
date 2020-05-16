@@ -40,6 +40,9 @@
     bootstrap_before = "myspacevim#before"
     bootstrap_after = "myspacevim#after"
 
+    relativenumber = false    # sadly much faster without this even in fast computer
+    enable_cursorline = false # this also makes difference
+
     ## enabling ale disable python lint
     ## so disabling this option for now
     # enable_neomake = false

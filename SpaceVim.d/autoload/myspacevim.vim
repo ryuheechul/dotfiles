@@ -72,8 +72,6 @@ endfunction
 function! myspacevim#after() abort
   " hopefully drawing interfere key input much less
   set lazyredraw
-  set norelativenumber " sadly much faster without this even in fast computer
-  set cursorline!      " this also makes difference
 
   " faster guide shows up
   set timeoutlen=500
