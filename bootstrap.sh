@@ -27,6 +27,12 @@ git clone https://github.com/ohmyzsh/ohmyzsh ~/.oh-my-zsh
 # zinit
 zsh -c "source ~/.config/zshrc.d/my_addons/zinit"
 
+# lf
+ln -s "$(this_repo_path)"/lf ~/.config/lf
+
+# tig
+ln -s "$(this_repo_path)"/vim.tigrc ~/.tigrc
+
 # tmux
 ln -s "${this_repo_path}"/tmux.conf ~/.tmux.conf
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
