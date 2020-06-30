@@ -2,7 +2,7 @@
 
 unset COLORTERM
 
-filename=$(basename $1)
+filename="$(basename "$1")"
 EXT="${filename##*.}"
 
 # lowercasing
