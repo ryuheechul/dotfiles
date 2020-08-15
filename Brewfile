@@ -26,6 +26,8 @@ brew "fd" # mordern find
 brew "tig" # git helper
 brew "tldr" # Simplified and community-driven man pages
 brew "taskell" # CLI kanban
+brew "fpp" # for tmux-fpp
+brew "extract_url" # for tmux-urlview
 
 # misc
 brew "neofetch"
