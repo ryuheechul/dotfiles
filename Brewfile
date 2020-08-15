@@ -19,6 +19,8 @@ brew "lf" # terminal file manager
 # search
 brew "rg" # modern grep
 brew "the_silver_searcher" # another modern grep
+brew "fasd" # Command-line productivity booster, offers quick access to files and directories
+brew "fd" # mordern find
 
 # helper
 brew "tig" # git helper

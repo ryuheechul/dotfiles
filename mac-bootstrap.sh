@@ -16,10 +16,15 @@ fi
 # mas let you install Mac App Store app with CLI
 brew install mas
 mas install 869223134 # KakaoTalk
+mas install 1480933944 # Vimari
+mas install 1142151959 # Just Focus
 
 brew cask install iterm2
 brew cask install alfred
 brew cask install vanilla
+brew cask install 1password
+brew cask install amethyst
+brew cask install google-chrome
 brew cask install karabiner-elements
 echo "if you have karabiner files already then simlink to ~/.config/karabiner"
 

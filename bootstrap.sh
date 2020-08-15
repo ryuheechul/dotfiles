@@ -28,6 +28,13 @@ git clone https://github.com/ohmyzsh/ohmyzsh ~/.oh-my-zsh
 # zinit
 zsh -c "source ~/.config/zshrc.d/my_addons/zinit"
 
+# fzf shell integration to enable history and directory search
+
+yes | $(brew --prefix fzf)/install
+
+# starship
+ln -s "${this_repo_path}"/starship.toml ~/.config/starship.toml
+
 # lf
 ln -s "${this_repo_path}"/lf ~/.config/lf
 
