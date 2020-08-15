@@ -24,11 +24,11 @@ zinit light zdharma/fast-syntax-highlighting
 zinit ice wait atload"_zsh_autosuggest_start"
 zinit light zsh-users/zsh-autosuggestions
 
-zinit ice as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
-    atpull'%atclone' pick"direnv" src"zhook.zsh"
-zinit light direnv/direnv
-
 zinit light Aloxaf/fzf-tab
 zinit light supercrabtree/k
 zinit light Tarrasch/zsh-bd
 zinit light paulirish/git-open
+
+# somehow this should be placed in the bottom to intefere others
+zinit ice as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
+   atpull'%atclone' pick"direnv" src"zhook.zsh"
