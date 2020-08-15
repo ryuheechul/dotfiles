@@ -14,7 +14,8 @@ if [ -z "${SKIP_INSTALL_BREW}" ]; then
 fi
 
 # symlink to be read by zshrc
-this_repo_path="$(readlink -f "$(dirname "$0")")"
+this_repo_path="$(greadlink -f "$(dirname "$0")")"
+
 mkdir -p ~/.config
 ln -s "${this_repo_path}"/zshrc.d ~/.config/zshrc.d
 
@@ -28,10 +29,10 @@ git clone https://github.com/ohmyzsh/ohmyzsh ~/.oh-my-zsh
 zsh -c "source ~/.config/zshrc.d/my_addons/zinit"
 
 # lf
-ln -s "$(this_repo_path)"/lf ~/.config/lf
+ln -s "${this_repo_path}"/lf ~/.config/lf
 
 # tig
-ln -s "$(this_repo_path)"/vim.tigrc ~/.tigrc
+ln -s "${this_repo_path}"/vim.tigrc ~/.tigrc
 
 # tmux
 ln -s "${this_repo_path}"/tmux.conf ~/.tmux.conf
@@ -52,6 +53,15 @@ if [ -z "${SKIP_INSTALL_ASDF_PYTHON3}" ]; then
   zsh -c "pip install neovim"
 fi
 
+# install node via asdf for nvim + spacevim
+if [ -z "${SKIP_INSTALL_ASDF_NODEJS}" ]; then
+  asdf plugin add nodejs
+  bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'
+  asdf install nodejs 12.18.3
+  asdf global nodejs 12.18.3
+  asdf reshim nodejs
+fi
+
 # spacevim
 spacevim_ver="v1.4.0"
 git clone https://github.com/SpaceVim/SpaceVim ~/.SpaceVim \
@@ -65,5 +75,7 @@ ln -s ~/.SpaceVim ~/.config/nvim
 # trigger spacevim plugins install via command line
 if [ -z "${SKIP_INSTALL_VIM_PLUGINS}" ]; then
   npm install -g import-js # to avoid Galooshi/vim-import-js plugin to hang while being installed
+  npm install -g neovim
   nvim --headless -c 'call dein#update()' -c q
+  nvim --headless -c 'UpdateRemotePlugins' -c q
 fi
