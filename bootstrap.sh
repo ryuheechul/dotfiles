@@ -41,6 +41,9 @@ ln -s "${this_repo_path}"/lf ~/.config/lf
 # tig
 ln -s "${this_repo_path}"/vim.tigrc ~/.tigrc
 
+# tig
+ln -s "${this_repo_path}"/gitmux.conf ~/.gitmux.conf
+
 # tmux
 ln -s "${this_repo_path}"/tmux.conf ~/.tmux.conf
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
