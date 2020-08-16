@@ -29,7 +29,7 @@ brew cask install notion
 brew cask install sublime-text
 sublime/.link.sh
 brew cask install karabiner-elements
-echo "if you have karabiner files already then simlink to ~/.config/karabiner"
+karabiner/.link.sh
 
 sleep 2
 
