@@ -25,6 +25,9 @@ brew cask install vanilla
 brew cask install 1password
 brew cask install amethyst
 brew cask install google-chrome
+brew cask install notion
+brew cask install sublime-text
+sublime/.link.sh
 brew cask install karabiner-elements
 echo "if you have karabiner files already then simlink to ~/.config/karabiner"
 
