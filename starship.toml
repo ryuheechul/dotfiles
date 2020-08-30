@@ -27,3 +27,6 @@ disabled = false
 
 [terraform]
 show_version = true
+
+[nix_shell]
+use_name = true
