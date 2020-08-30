@@ -45,6 +45,7 @@ function bdiff () { diff -u $@ | bat;} # use `vimdiff` for editing
 alias dc="docker-compose"
 alias mp='multipass'
 alias tf='terraform'
+alias wttr='curl wttr.in'
 
 # web search
 alias googler="googler -n 3"
