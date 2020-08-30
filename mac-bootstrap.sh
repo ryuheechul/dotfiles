@@ -14,7 +14,7 @@ else
 fi
 
 # mas let you install Mac App Store app with CLI
-brew install mas
+brew install mas coreutils gnu-sed
 mas install 869223134 # KakaoTalk
 mas install 1480933944 # Vimari
 mas install 1142151959 # Just Focus
