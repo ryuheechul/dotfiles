@@ -1,5 +1,8 @@
 # vim: set ft=zsh:
 
+# theme
+alias light="base16_solarized-light"
+alias dark="base16_solarized-dark"
 
 # overwrite essential stuff
 alias which="which -a"
