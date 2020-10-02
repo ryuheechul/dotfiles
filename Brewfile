@@ -16,6 +16,7 @@ brew "exa" # modern ls
 brew "bat" # cat with wings
 brew "glow" # markdown render on cli
 brew "lf" # terminal file manager
+brew "fx" # json viewer
 
 # search
 brew "rg" # modern grep
@@ -26,9 +27,12 @@ brew "fd" # mordern find
 # helper
 brew "tig" # git helper
 brew "tldr" # Simplified and community-driven man pages
+brew "watch" # execute a program periodically
+brew "entr" # Run arbitrary commands when files change
 brew "taskell" # CLI kanban
 brew "fpp" # for tmux-fpp
 brew "extract_url" # for tmux-urlview
+brew "jq" # json processor
 
 # misc
 brew "neofetch"
