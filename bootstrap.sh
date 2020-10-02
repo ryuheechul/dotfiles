@@ -41,7 +41,7 @@ ln -s "${this_repo_path}"/lf ~/.config/lf
 # tig
 ln -s "${this_repo_path}"/vim.tigrc ~/.tigrc
 
-# tig
+# gitmux
 ln -s "${this_repo_path}"/gitmux.conf ~/.gitmux.conf
 
 # tmux
