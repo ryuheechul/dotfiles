@@ -11,11 +11,11 @@
     # set spacevim theme. by default colorscheme layer is not loaded,
     # if you want to use more colorscheme, please load the colorscheme
     # layer
-    colorscheme = "gruvbox"
-    colorscheme_bg = "dark"
+    colorscheme = "NeoSolarized"
+    colorscheme_bg = "light"
     # Disable guicolors in basic mode, many terminal do not support 24bit
     # true colors
-    enable_guicolors = false
+    enable_guicolors = true
 
     # Enable vim compatible mode, avoid changing origin vim key bindings
     vimcompatible = false
@@ -47,6 +47,9 @@
     ## so disabling this option for now
     # enable_neomake = false
     # enable_ale = true
+
+[[layers]]
+name = "colorscheme"
 
 [[layers]]
 name = "lang#javascript"
@@ -136,4 +139,7 @@ name = "dense-analysis/ale"
 merged = false
 [[custom_plugins]]
 name = "roxma/vim-tmux-clipboard"
+merged = false
+[[custom_plugins]]
+name = "jjo/vim-cue"
 merged = false
