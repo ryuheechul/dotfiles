@@ -52,6 +52,9 @@
 name = "colorscheme"
 
 [[layers]]
+name = "lang#rust"
+
+[[layers]]
 name = "lang#javascript"
 auto_fix = true
 
