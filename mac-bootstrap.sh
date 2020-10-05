@@ -41,6 +41,7 @@ defaults write -g InitialKeyRepeat -int 10 # normal minimum is 15 (225 ms)
 defaults write -g KeyRepeat -int 1 # normal minimum is 2 (30 ms)
 
 echo "registering automatic theme switching"
+brew install crescentrose/sunshine/sunshine
 bin/mac/theme/register-to-launchd.sh
 
 echo "Settings > Accessibility > Display > Reduce Motion checkbox" # https://github.com/mathiasbynens/dotfiles/issues/711#issuecomment-278265644
