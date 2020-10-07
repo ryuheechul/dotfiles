@@ -12,7 +12,7 @@
     # if you want to use more colorscheme, please load the colorscheme
     # layer
     colorscheme = "NeoSolarized"
-    colorscheme_bg = "light"
+    # colorscheme_bg = "dark" # default is dark anyway
     # Disable guicolors in basic mode, many terminal do not support 24bit
     # true colors
     enable_guicolors = true

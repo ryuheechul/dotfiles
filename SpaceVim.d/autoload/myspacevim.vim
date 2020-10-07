@@ -45,6 +45,42 @@ function! s:goyo_leave()
   Limelight!
 endfunction
 
+" inspired by https://www.halcyon.hr/posts/automatic-dark-mode-switching-for-vim-and-terminal/
+function! s:change_color_scheme(data)
+  let time = trim(a:data)
+
+  if time ==# "day"
+    " prevent lagging
+    if &background !=# "light"
+      set background=light
+    endif
+  else
+    " prevent lagging
+    if &background !=# "dark"
+      set background=dark
+    endif
+  endif
+endfunction
+
+function! s:sunshine()
+  let cached = system('cat ~/.cache/sunshine-result')
+
+  call s:change_color_scheme(cached)
+endfunction
+
+function! Sunshine(timer)
+  call s:sunshine()
+endfunction
+
+function! s:auto_dark_mode_setup()
+  " timer to check day/night every 30 minutes
+  let timer = timer_start(1000 * 30 * 60, 'Sunshine', {'repeat': -1})
+
+  " immediate timer to change theme accordingly
+  " using timer rather than directly calling function to avoid glitch of broken redrawing
+  let immediate_timer = timer_start(0, 'Sunshine')
+endfunction
+
 function! myspacevim#before() abort
   " for case insensitive search
   set ignorecase
@@ -108,4 +144,6 @@ function! myspacevim#after() abort
   " set defx column to use icons and git
   call defx#custom#option('_', 'columns', 'git:mark:indent:icons:filename:type:size:time')
   Defx | Defx | wincmd p
+
+  call s:auto_dark_mode_setup()
 endfunction
