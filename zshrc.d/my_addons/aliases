@@ -36,7 +36,15 @@ alias gdc="git diff --cached"
 alias cat='bat'
 alias k9s='COLORTERM=256bit k9s'
 alias rg="rg -p -i" # brew install rg
-alias glow="glow -p" # brew install glow
+
+case "$(uname -s)" in
+  Darwin)
+    alias glow="~/dotfiles/bin/mac/glow.sh"
+    ;;
+  *)
+    alias glow="glow -p" # brew install glow
+    ;;
+esac
 
 alias fzfp='fzf --height 100% --preview "bat --style=numbers --color=always {}"'
 alias fzfpp='fzf|fpp'
