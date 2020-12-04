@@ -18,8 +18,13 @@ brew install mas coreutils gnu-sed
 mas install 869223134 # KakaoTalk
 mas install 1480933944 # Vimari
 mas install 1142151959 # Just Focus
+mas install 803453959 # Slack
 
 brew cask install iterm2
+
+# for iterm2 and tmux scrolling issue.
+# https://github.com/NHDaly/tmux-better-mouse-mode/issues/42#issuecomment-579612022
+
 brew cask install alfred
 brew cask install vanilla
 brew cask install 1password
@@ -49,6 +54,10 @@ sleep 2
 
 ## Maybe JetBrainsMono is enough? so comment this out for now
 # brew cask install homebrew/cask-fonts/font-hack-nerd-font
+
+# download nerd font patched jetbrains mono font
+brew tap homebrew/cask-fonts
+brew cask install font-jetbrains-mono-nerd-font
 
 # download and install JetBrains Mono
 wget -O JetBrainsMono.zip https://download.jetbrains.com/fonts/JetBrainsMono-2.001.zip
