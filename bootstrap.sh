@@ -35,6 +35,10 @@ yes | $(brew --prefix fzf)/install
 # starship
 ln -s "${this_repo_path}"/starship.toml ~/.config/starship.toml
 
+# base16
+
+git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
+
 # lf
 ln -s "${this_repo_path}"/lf ~/.config/lf
 
