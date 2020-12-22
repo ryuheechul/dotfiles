@@ -33,6 +33,7 @@ brew "taskell" # CLI kanban
 brew "fpp" # for tmux-fpp
 brew "extract_url" # for tmux-urlview
 brew "jq" # json processor
+brew "gh" # official Github CLI
 
 # misc
 brew "neofetch"

@@ -74,6 +74,9 @@ if [ -z "${SKIP_INSTALL_ASDF_NODEJS}" ]; then
   asdf install nodejs 12.18.3
   asdf global nodejs 12.18.3
   asdf reshim nodejs
+
+  asdf plugin-add yarn
+  asdf install yarn latest
 fi
 
 # spacevim
