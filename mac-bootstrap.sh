@@ -20,20 +20,21 @@ mas install 1480933944 # Vimari
 mas install 1142151959 # Just Focus
 mas install 803453959 # Slack
 
-brew cask install iterm2
+brew install --cask iterm2
 
 # for iterm2 and tmux scrolling issue.
 # https://github.com/NHDaly/tmux-better-mouse-mode/issues/42#issuecomment-579612022
 
-brew cask install alfred
-brew cask install vanilla
-brew cask install 1password
-brew cask install amethyst
-brew cask install google-chrome
-brew cask install notion
-brew cask install sublime-text
+brew install --cask alfred
+brew install --cask alacritty
+brew install --cask vanilla
+brew install --cask 1password
+brew install --cask amethyst
+brew install --cask google-chrome
+brew install --cask notion
+brew install --cask sublime-text
 sublime/.link.sh
-brew cask install karabiner-elements
+brew install --cask karabiner-elements
 karabiner/.link.sh
 
 sleep 2
@@ -57,7 +58,7 @@ sleep 2
 
 # download nerd font patched jetbrains mono font
 brew tap homebrew/cask-fonts
-brew cask install font-jetbrains-mono-nerd-font
+brew install --cask font-jetbrains-mono-nerd-font
 
 # download and install JetBrains Mono
 wget -O JetBrainsMono.zip https://download.jetbrains.com/fonts/JetBrainsMono-2.001.zip
