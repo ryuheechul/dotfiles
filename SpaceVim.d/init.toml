@@ -146,3 +146,6 @@ merged = false
 [[custom_plugins]]
 name = "jjo/vim-cue"
 merged = false
+[[custom_plugins]]
+name = "jaawerth/neomake-local-eslint-first"
+merged = false
