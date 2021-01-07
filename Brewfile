@@ -1,5 +1,6 @@
 # essential
 brew "zsh" # my favorite shell interface
+brew "git" # to replace possible old git comes with OS
 brew "bash" # use latest bash
 brew "tmux" # terminal multiplexer
 brew "neovim" # my favorite editor
