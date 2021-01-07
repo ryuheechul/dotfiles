@@ -17,7 +17,7 @@ fi
 this_repo_path="$(greadlink -f "$(dirname "$0")")"
 
 mkdir -p ~/.config
-ln -s "${this_repo_path}"/zshrc.d ~/.config/zshrc.d
+ln -sf "${this_repo_path}"/zshrc.d ~/.config/zshrc.d
 
 # source dotfiles' zshrc
 echo "source ~/.config/zshrc.d/zshrc" >> ~/.zshrc
@@ -33,23 +33,23 @@ zsh -c "source ~/.config/zshrc.d/my_addons/zinit"
 yes | $(brew --prefix fzf)/install
 
 # starship
-ln -s "${this_repo_path}"/starship.toml ~/.config/starship.toml
+ln -sf "${this_repo_path}"/starship.toml ~/.config/starship.toml
 
 # base16
 
 git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
 
 # lf
-ln -s "${this_repo_path}"/lf ~/.config/lf
+ln -sf "${this_repo_path}"/lf ~/.config/lf
 
 # tig
-ln -s "${this_repo_path}"/vim.tigrc ~/.tigrc
+ln -sf "${this_repo_path}"/vim.tigrc ~/.tigrc
 
 # gitmux
-ln -s "${this_repo_path}"/gitmux.conf ~/.gitmux.conf
+ln -sf "${this_repo_path}"/gitmux.conf ~/.gitmux.conf
 
 # tmux
-ln -s "${this_repo_path}"/tmux.conf ~/.tmux.conf
+ln -sf "${this_repo_path}"/tmux.conf ~/.tmux.conf
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 tmux start-server && \
   tmux new-session -d && \
@@ -84,10 +84,10 @@ spacevim_ver="v1.4.0"
 git clone https://github.com/SpaceVim/SpaceVim ~/.SpaceVim \
   && cd ~/.SpaceVim \
   && git checkout ${spacevim_ver}
-ln -s ~/dotfiles/SpaceVim.d ~/.SpaceVim.d
+ln -sf ~/dotfiles/SpaceVim.d ~/.SpaceVim.d
 # shim vimrc
-ln -s ~/.SpaceVim ~/.vim
-ln -s ~/.SpaceVim ~/.config/nvim
+ln -sf ~/.SpaceVim ~/.vim
+ln -sf ~/.SpaceVim ~/.config/nvim
 
 # trigger spacevim plugins install via command line
 if [ -z "${SKIP_INSTALL_VIM_PLUGINS}" ]; then

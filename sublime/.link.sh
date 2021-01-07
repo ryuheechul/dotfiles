@@ -9,7 +9,7 @@ cd "$(dirname "$0")" || exit
 this_dir_path="$(greadlink -f "$(dirname "$0")")"
 
 # keymap
-ln -s "${this_dir_path}"/keymap ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/Default\ \(OSX\).sublime-keymap
+ln -sf "${this_dir_path}"/keymap ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/Default\ \(OSX\).sublime-keymap
 
 # settings
-ln -s "${this_dir_path}"/settings ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/Preferences.sublime-settings
+ln -sf "${this_dir_path}"/settings ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/Preferences.sublime-settings

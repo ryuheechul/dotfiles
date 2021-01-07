@@ -6,7 +6,6 @@ alias dark="base16_solarized-dark"
 
 # overwrite essential stuff
 alias which="which -a"
-alias ln="ln -s"
 
 # brew install exa
 alias exa="exa --icons --group-directories-first -F --ignore-glob='**/.git|**/.DS_Store'"
