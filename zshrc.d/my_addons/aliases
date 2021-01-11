@@ -33,7 +33,7 @@ alias gdc="git diff --cached"
 
 # viewer and filter
 alias cat='bat'
-alias k9s='COLORTERM=256bit k9s'
+alias k9s='TERM=xterm COLORTERM=256bit k9s'
 alias rg="rg -p -i" # brew install rg
 
 case "$(uname -s)" in
