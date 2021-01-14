@@ -10,9 +10,9 @@ EXT="${filename##*.}"
 # then `$ brew install bash`
 ext="${EXT,,}"
 
-if [ $ext == "md" ]; then
+if [ "${ext}" == "md" ]; then
   echo '`# Markdown: '"$1"'`via **glow**' | glow - -s dark
-  glow -s dark "$1"
+  ~/dotfiles/bin/mac/glow.sh "$1"
 else
   bat --color=always --theme=base16 "$@"
 fi
