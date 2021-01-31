@@ -36,6 +36,7 @@ brew "extract_url" # for tmux-urlview
 brew "jq" # json processor
 brew "jsonnet" # templating with json
 brew "gh" # official Github CLI
+brew "pueue" # long running task manager
 
 # misc
 brew "neofetch"
