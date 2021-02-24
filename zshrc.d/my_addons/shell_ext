@@ -27,7 +27,7 @@ export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH
 
 # https://github.com/asdf-vm/asdf - version manager
-. $(brew --prefix asdf)/asdf.sh
+. $HOME/.asdf/asdf.sh
 
 # starship
 eval "$(starship init zsh)"
