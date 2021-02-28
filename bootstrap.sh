@@ -58,6 +58,9 @@ tmux start-server && \
   sleep 1 && \
   tmux kill-server
 
+# install asdf
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0
+
 # install python3 via asdf for nvim + spacevim
 if [ -z "${SKIP_INSTALL_ASDF_PYTHON3}" ]; then
   asdf plugin add python
