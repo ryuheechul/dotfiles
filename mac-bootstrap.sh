@@ -75,3 +75,6 @@ echo ".JetBrainsMono will be cleaned up after a minute"
 sleep 5
 # go to Keytty download page
 open https://github.com/keytty/shelter/releases
+
+# to prevent loading zsh stuff twice in case tmux is the default shell command for terminal emulators
+echo "export HOST_ALWAYS_USE_TMUX=1" >> ~/.zshrc

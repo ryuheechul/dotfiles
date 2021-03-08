@@ -17,9 +17,18 @@ bindkey -v
 # enable reverse-i-search
 bindkey '^R' history-incremental-search-backward
 
-## if TMUX var is not set then skip the rest
+## to have an option of preventing loading things nested in tmux shell
+## if TMUX var is not set then...
 if [[ -z $TMUX ]]; then
-  echo "skipping load the rest because \$TMUX is not set"
+  ## if HOST_ALWAYS_USE_TMUX var is set then skip the rest
+  if [[ -n $HOST_ALWAYS_USE_TMUX ]]; then
+    echo "skip loading the rest because \$HOST_ALWAYS_USE_TMUX is set"
+    return
+  fi
+fi
+
+if [[ -n $ALL_MY_ZSH_STUFF_LOADED ]]; then
+  echo "skip loading the rest because \$ALL_MY_ZSH_STUFF_LOADED is set"
   return
 fi
 
@@ -40,3 +49,6 @@ if type brew &>/dev/null; then
   autoload -Uz compinit
   compinit
 fi
+
+# mark the status to prevent double loading
+export ALL_MY_ZSH_STUFF_LOADED=1
