@@ -26,8 +26,9 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH
 
+ASDF_DIR=${ASDF_DIR:-${HOME}/.asdf}
 # https://github.com/asdf-vm/asdf - version manager
-. $HOME/.asdf/asdf.sh
+. ${ASDF_DIR}/asdf.sh
 
 # starship
 eval "$(starship init zsh)"

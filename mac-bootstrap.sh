@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 # If you are on mac, do this first before ./bootstrap.sh!
+# It's assumed that this script will be runned by a human (expect minimal interactions)
 
 # install homebrew
 if ! command -v brew &> /dev/null

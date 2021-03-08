@@ -1,5 +1,8 @@
 ## basics
 
+# in case of linux
+[ -d /home/linuxbrew/.linuxbrew/bin ] && export PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}
+
 # bootstrap terminal
 alias shellwe="cd && cd al && neofetch && tmux a"
 

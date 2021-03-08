@@ -1,21 +1,33 @@
 #!/usr/bin/env sh
 
-# this script run assumes that system has installed Homebrew
+# This script run assumes that system has installed Homebrew via either ./mac-bootstrap.sh or ./linux-bootstrap.sh
+# Either machine or human can run this script (there should be no interactions)
 
 set -x
 
 # to be able to be call from anywhere
 cd "$(dirname "$0")" || exit
 
+# in case of using brew in linux
+[ -d /home/linuxbrew/.linuxbrew/bin ] && PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH
+
 # install via Brewfile
 if [ -z "${SKIP_INSTALL_BREW}" ]; then
   brew update --verbose
-  brew bundle --verbose
+  brew bundle --verbose --file brew/Brewfile
+fi
+
+# get repo path
+if [ -x "$(command -v greadlink)" ]; then
+  this_repo_path="$(greadlink -f "$(dirname "$0")")"
+elif [ -x "$(command -v readlink)" ]; then
+  this_repo_path="$(readlink -f "$(dirname "$0")")"
+else
+  echo "readlink binary is required to continue"
+  exit 1
 fi
 
 # symlink to be read by zshrc
-this_repo_path="$(greadlink -f "$(dirname "$0")")"
-
 mkdir -p ~/.config
 ln -sf "${this_repo_path}"/zshrc.d ~/.config/zshrc.d
 
@@ -59,28 +71,27 @@ tmux start-server && \
   tmux kill-server
 
 # install asdf
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0
+ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
+ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
+PATH="${ASDF_DIR}/bin:${ASDF_DATA_DIR}/shims:${PATH}"
+ln -sf ${this_repo_path}/asdf/tool-versions ~/.tool-versions
 
-# install python3 via asdf for nvim + spacevim
-if [ -z "${SKIP_INSTALL_ASDF_PYTHON3}" ]; then
-  asdf plugin add python
-  asdf install python 3.7.7
-  asdf global python 3.7.7
-  asdf reshim python
-  zsh -c "pip install neovim"
-fi
+git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0
 
-# install node via asdf for nvim + spacevim
-if [ -z "${SKIP_INSTALL_ASDF_NODEJS}" ]; then
-  asdf plugin add nodejs
-  bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'
-  asdf install nodejs 12.18.3
-  asdf global nodejs 12.18.3
-  asdf reshim nodejs
+asdf plugin add python
+asdf plugin add nodejs
+bash -c '${ASDF_DATA_DIR}/plugins/nodejs/bin/import-release-team-keyring'
+asdf plugin-add yarn
 
-  asdf plugin-add yarn
-  asdf install yarn latest
-fi
+asdf install
+
+# are these even necessary?
+asdf reshim python
+asdf reshim nodejs
+asdf reshim yarn
+
+# for nvim + spacevim
+zsh -c "pip install neovim"
 
 # spacevim
 spacevim_ver="v1.4.0"
