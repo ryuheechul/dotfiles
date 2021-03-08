@@ -28,8 +28,13 @@ if [[ -z $TMUX ]]; then
 fi
 
 if [[ -n $ALL_MY_ZSH_STUFF_LOADED ]]; then
-  echo "skip loading the rest because \$ALL_MY_ZSH_STUFF_LOADED is set"
-  return
+  if [[ -n $FORCE_LOAD_MY_ZSH_STUFF ]]; then
+    echo "\$ALL_MY_ZSH_STUFF_LOADED is set but also \$FORCE_LOAD_MY_ZSH_STUFF is set too. Therefore keep loading."
+  else
+    echo "skip loading the rest because \$ALL_MY_ZSH_STUFF_LOADED is set"
+    echo "to prevent skipping, set \$FORCE_LOAD_MY_ZSH_STUFF"
+    return
+  fi
 fi
 
 ## addons
