@@ -8,6 +8,11 @@ set -x
 # to be able to be call from anywhere
 cd "$(dirname "$0")" || exit
 
+if [ -x "$(command -v nix)" ]; then
+  SKIP_INSTALL_BREW=1
+  home-manager switch
+fi
+
 # in case of using brew in linux
 [ -d /home/linuxbrew/.linuxbrew/bin ] && PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH
 
@@ -19,9 +24,9 @@ fi
 
 # get repo path
 if [ -x "$(command -v greadlink)" ]; then
-  this_repo_path="$(greadlink -f "$(dirname "$0")")"
+  this_repo_path="$(greadlink -f "$(pwd)")"
 elif [ -x "$(command -v readlink)" ]; then
-  this_repo_path="$(readlink -f "$(dirname "$0")")"
+  this_repo_path="$(readlink -f "$(pwd)")"
 else
   echo "readlink binary is required to continue"
   exit 1
