@@ -17,7 +17,16 @@ export FZF_ALT_C_COMMAND='fd -t d'
 export FZF_ALT_C_OPTS=''
 
 # better history search with fzf
+# in case of enabling with brew
+# via https://github.com/junegunn/fzf#using-homebrew
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# samethign but in case of enabling with nix
+# via https://nixos.wiki/wiki/Fzf
+if [ -n "${commands[fzf-share]}" ]; then
+  source "$(fzf-share)/key-bindings.zsh"
+  source "$(fzf-share)/completion.zsh"
+fi
 
 # rust
 export PATH="$HOME/.cargo/bin:$PATH"

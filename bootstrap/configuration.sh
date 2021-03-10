@@ -1,26 +1,15 @@
 #!/usr/bin/env sh
 
-# This script run assumes that system has installed Homebrew via either ./mac-bootstrap.sh or ./linux-bootstrap.sh
 # Either machine or human can run this script (there should be no interactions)
+
+# Configuration.sh is platform agnostic and assumes dependant packages are installed via `./foundation/`
+# Also make sure to configure right $PATH for this script to work properly
 
 set -x
 
-# to be able to be call from anywhere
+# go to repo's root to be able to be call from anywhere
 cd "$(dirname "$0")" || exit
-
-if [ -x "$(command -v nix)" ]; then
-  SKIP_INSTALL_BREW=1
-  home-manager switch
-fi
-
-# in case of using brew in linux
-[ -d /home/linuxbrew/.linuxbrew/bin ] && PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH
-
-# install via Brewfile
-if [ -z "${SKIP_INSTALL_BREW}" ]; then
-  brew update --verbose
-  brew bundle --verbose --file brew/Brewfile
-fi
+cd ../ || exit
 
 # get repo path
 if [ -x "$(command -v greadlink)" ]; then
@@ -44,10 +33,6 @@ git clone https://github.com/ohmyzsh/ohmyzsh ~/.oh-my-zsh
 
 # zinit
 zsh -c "source ~/.config/zshrc.d/my_addons/zinit"
-
-# fzf shell integration to enable history and directory search
-
-yes | $(brew --prefix fzf)/install
 
 # starship
 ln -sf "${this_repo_path}"/starship.toml ~/.config/starship.toml

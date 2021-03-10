@@ -5,8 +5,9 @@ set -x
 # If you are on linux, do this first before ./bootstrap.sh!
 # Either machine or human can run this script (there should be no interactions)
 
-# to be able to be call from anywhere
+# go to repo's root to be able to be call from anywhere
 cd "$(dirname "$0")" || exit
+cd ../../ || exit
 
 # install nix
 ./nix/bin/install.sh
@@ -22,6 +23,9 @@ sudo ./nix/bin/shim/path.sh
 
 # set up local ~/.config/nixpkgs/home.nix
 ./nix/bin/init-home-manager.sh
+
+# install packages for current user
+home-manager switch
 
 # skip brew installation for now since nix is replacing it
 
@@ -39,3 +43,12 @@ else
     echo "brew exists, so skipping installation"
 fi
 
+# install via Brewfile
+if [ -z "${SKIP_INSTALL_BREW}" ]; then
+  brew update --verbose
+  brew bundle --verbose --file brew/Brewfile
+
+  # fzf shell integration to enable history and directory search
+
+  yes | $(brew --prefix fzf)/install
+fi

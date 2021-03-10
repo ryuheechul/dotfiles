@@ -1,7 +1,13 @@
 #!/usr/bin/env sh
 
+set -x
+
 # If you are on mac, do this first before ./bootstrap.sh!
 # It's assumed that this script will be runned by a human (expect minimal interactions)
+
+# go to repo's root to be able to be call from anywhere
+cd "$(dirname "$0")" || exit
+cd ../../ || exit
 
 # install homebrew
 if ! command -v brew &> /dev/null
@@ -78,3 +84,18 @@ open https://github.com/keytty/shelter/releases
 
 # to prevent loading zsh stuff twice in case tmux is the default shell command for terminal emulators
 echo "export HOST_ALWAYS_USE_TMUX=1" >> ~/.zshrc
+
+if [ -x "$(command -v nix)" ]; then
+  SKIP_INSTALL_BREW=1
+  home-manager switch
+fi
+
+# install via Brewfile
+if [ -z "${SKIP_INSTALL_BREW}" ]; then
+  brew update --verbose
+  brew bundle --verbose --file brew/Brewfile
+
+  # fzf shell integration to enable history and directory search
+
+  yes | $(brew --prefix fzf)/install
+fi

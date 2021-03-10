@@ -1,3 +1,6 @@
+# package installation via this file is being replaced by ../nix/pkgs.nix
+# this may be used as an fallback
+
 # essential
 brew "zsh" # my favorite shell interface
 brew "git" # to replace possible old git comes with OS
