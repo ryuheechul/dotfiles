@@ -59,6 +59,9 @@ name = "lang#javascript"
 auto_fix = true
 
 [[layers]]
+name = "lang#nix"
+
+[[layers]]
 name = "lang#extra"
 
 [[layers]]
