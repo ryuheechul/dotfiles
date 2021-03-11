@@ -27,5 +27,5 @@ in
   # changes in each release.
   home.stateVersion = "21.05";
 
-  home.packages = packages.toInstall;
+  home.packages = packages;
 }

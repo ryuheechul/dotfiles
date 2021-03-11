@@ -1,50 +1,50 @@
-{ pkgs }:
+{ pkgs ? import <nixpkgs> {} }:
 
-{
-  toInstall = [
-    pkgs.htop
-    pkgs.cowsay
-    pkgs.fortune
+with pkgs;
+[
+  # just for fun and testing
+  hello
+  cowsay
+  fortune
 
-    # essential
-    pkgs.zsh # my favorite shell interface
-    pkgs.git # to replace possible old git comes with OS
-    pkgs.bash # use latest bash
-    pkgs.tmux # terminal multiplexer
-    pkgs.neovim # my favorite editor
-    pkgs.starship # cross-shell prompt
-    pkgs.fzf # A command-line fuzzy finder
-    pkgs.direnv # auto loading env per dir
-    pkgs.htop # resource monitoring
-    pkgs.gnupg # GnuPG
-    pkgs.wget # useful for downloading files
+  # essential
+  zsh # my favorite shell interface
+  git # to replace possible old git comes with OS
+  bash # use latest bash
+  tmux # terminal multiplexer
+  neovim # my favorite editor
+  starship # cross-shell prompt
+  fzf # A command-line fuzzy finder
+  direnv # auto loading env per dir
+  htop # resource monitoring
+  gnupg # GnuPG
+  wget # useful for downloading files
 
-    # viewer
-    pkgs.exa # modern ls
-    pkgs.bat # cat with wings
-    pkgs.glow # markdown render on cli
-    pkgs.lf # terminal file manager
-    pkgs.fx # json viewer
+  # viewer
+  exa # modern ls
+  bat # cat with wings
+  glow # markdown render on cli
+  lf # terminal file manager
+  fx # json viewer
 
-    # search
-    pkgs.ripgrep # modern grep
-    pkgs.fasd # Command-line productivity booster, offers quick access to files and directories
-    pkgs.fd # mordern find
+  # search
+  ripgrep # modern grep
+  fasd # Command-line productivity booster, offers quick access to files and directories
+  fd # mordern find
 
-    # helper
-    pkgs.tig # git helper
-    pkgs.tldr # Simplified and community-driven man pages
-    pkgs.watch # execute a program periodically
-    pkgs.entr # Run arbitrary commands when files change
-    # pkgs.taskell # CLI kanban
-    pkgs.fpp # for tmux-fpp
-    pkgs.extract_url # for tmux-urlview
-    pkgs.jq # json processor
-    pkgs.jsonnet # templating with json
-    pkgs.gh # official Github CLI
-    pkgs.pueue # long running task manager
+  # helper
+  tig # git helper
+  tldr # Simplified and community-driven man pages
+  watch # execute a program periodically
+  entr # Run arbitrary commands when files change
+  # taskell # CLI kanban
+  fpp # for tmux-fpp
+  extract_url # for tmux-urlview
+  jq # json processor
+  jsonnet # templating with json
+  gh # official Github CLI
+  pueue # long running task manager
 
-    # misc
-    pkgs.neofetch
-  ];
-}
+  # misc
+  neofetch
+]
