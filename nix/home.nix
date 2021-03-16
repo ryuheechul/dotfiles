@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  packages = import ./pkgs.nix {pkgs=pkgs;};
+  packages = import ./pkgs.nix {};
 in
 {
   # Let Home Manager install and manage itself.
