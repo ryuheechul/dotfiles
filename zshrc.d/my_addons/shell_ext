@@ -43,10 +43,10 @@ ASDF_DIR=${ASDF_DIR:-${HOME}/.asdf}
 . ${ASDF_DIR}/asdf.sh
 
 # starship
-eval "$(starship init zsh)"
+_evalcache starship init zsh
 
 # use direnv
-[ $commands[direnv] ] && eval "$(direnv hook zsh)"
+[ $commands[direnv] ] && _evalcache direnv hook zsh
 
 # for https://github.com/aykamko/tag
 if (( $+commands[tag] )); then
@@ -62,4 +62,4 @@ fi
 BASE16_SHELL="$HOME/.config/base16-shell/"
 [ -n "$PS1" ] && \
     [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-        eval "$("$BASE16_SHELL/profile_helper.sh")"
+        _evalcache $BASE16_SHELL/profile_helper.sh

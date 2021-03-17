@@ -13,6 +13,8 @@ autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 ### End of Zinit installer's chunk
 
+zinit light mroth/evalcache
+
 zinit ice wait blockf atpull'zinit creinstall -q .'
 zinit light zsh-users/zsh-completions
 
