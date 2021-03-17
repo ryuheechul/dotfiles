@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> (import ./darwin/optional-overlaying.nix) }:
+{ pkgs ? import <nixpkgs> (import ../darwin/optional-overlaying.nix) }:
 
 with pkgs;
 [
@@ -8,6 +8,8 @@ with pkgs;
   fortune
 
   # essential
+  coreutils # like for readlink
+  gnused # sed
   zsh # my favorite shell interface
   git # to replace possible old git comes with OS
   bash # use latest bash
@@ -19,6 +21,7 @@ with pkgs;
   htop # resource monitoring
   gnupg # GnuPG
   wget # useful for downloading files
+
 
   # viewer
   exa # modern ls
@@ -48,3 +51,5 @@ with pkgs;
   # misc
   neofetch
 ]
+++
+(import ./lang.nix {pkgs=pkgs;})

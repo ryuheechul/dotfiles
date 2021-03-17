@@ -2,5 +2,5 @@
 { pkgs ? import <nixpkgs> {} }:
 
 pkgs.mkShell {
-  buildInputs = import ./pkgs.nix {};
+  buildInputs = import ./pkgs {};
 }

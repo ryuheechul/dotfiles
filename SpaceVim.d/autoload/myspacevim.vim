@@ -17,11 +17,6 @@ function! s:lsp()
   \ }
 endfunction
 
-function! s:providers()
-  let g:python3_host_prog = expand('~/.asdf/shims/python3')
-  let g:python_host_prog = expand('~/.asdf/shims/python2')
-endfunction
-
 " Goyo hooks
 function! s:goyo_enter()
   if executable('tmux') && strlen($TMUX)
@@ -139,7 +134,6 @@ function! myspacevim#after() abort
   let g:neomake_javascript_eslint_args = g:neomake_javascript_eslint_args + ['--ignore-pattern', '!.eslintrc.js']
 
   call <SID>lsp()
-  call <SID>providers()
 
   " set defx column to use icons and git
   call defx#custom#option('_', 'columns', 'git:mark:indent:icons:filename:type:size:time')

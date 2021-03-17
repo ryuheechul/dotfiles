@@ -71,20 +71,22 @@ ln -sf ${this_repo_path}/asdf/tool-versions ~/.tool-versions
 
 git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0
 
-asdf plugin add python
-asdf plugin add nodejs
-bash -c '${ASDF_DATA_DIR}/plugins/nodejs/bin/import-release-team-keyring'
-asdf plugin-add yarn
+## installing packages with asdf is being replaced with Nix - look at ../nix/pkgs.nix
 
-asdf install
+# asdf plugin add python
+# asdf plugin add nodejs
+# bash -c '${ASDF_DATA_DIR}/plugins/nodejs/bin/import-release-team-keyring'
+# asdf plugin-add yarn
 
-# are these even necessary?
-asdf reshim python
-asdf reshim nodejs
-asdf reshim yarn
+# asdf install
 
-# for nvim + spacevim
-zsh -c "pip install neovim"
+# # are these even necessary?
+# asdf reshim python
+# asdf reshim nodejs
+# asdf reshim yarn
+
+# # for nvim + spacevim
+# zsh -c "pip install neovim"
 
 # spacevim
 spacevim_ver="v1.4.0"
@@ -98,8 +100,6 @@ ln -sf ~/.SpaceVim ~/.config/nvim
 
 # trigger spacevim plugins install via command line
 if [ -z "${SKIP_INSTALL_VIM_PLUGINS}" ]; then
-  npm install -g import-js # to avoid Galooshi/vim-import-js plugin to hang while being installed
-  npm install -g neovim
   nvim --headless -c 'call dein#update()' -c q
   nvim --headless -c 'UpdateRemotePlugins' -c q
 fi
