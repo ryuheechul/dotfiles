@@ -109,7 +109,7 @@ merged = false
 name = "tpope/vim-commentary"
 merged = false
 [[custom_plugins]]
-name = "hashivim/vim-terraform"
+name = "hashivim/vim-hashicorp-tools"
 merged = false
 [[custom_plugins]]
 name = "christoomey/vim-tmux-navigator"
