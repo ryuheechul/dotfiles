@@ -37,13 +37,6 @@ if [[ -n $ALL_MY_ZSH_STUFF_LOADED ]]; then
   fi
 fi
 
-## configuring completions for brew installed packages
-if type brew &>/dev/null; then
-  if ! command -v fzf-share &> /dev/null; then
-    FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
-  fi
-fi
-
 ## addons
 #
 # source from seperate files to organize better
