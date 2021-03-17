@@ -37,8 +37,15 @@ if [[ -n $ALL_MY_ZSH_STUFF_LOADED ]]; then
   fi
 fi
 
-## addons
+## configuring completions for brew installed packages
+if type brew &>/dev/null; then
+  if ! command -v fzf-share &> /dev/null; then
+    FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+  fi
+fi
 
+## addons
+#
 # source from seperate files to organize better
 export ADDON_D=~/.config/zshrc.d/my_addons
 for source_file in omz zinit lf_icons aliases shell_ext
@@ -47,13 +54,12 @@ do
 done
 unset ADDON_D
 
-## configuring completions for brew installed packages
-if type brew &>/dev/null; then
-  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
 
-  autoload -Uz compinit
+autoload -Uz compinit
+for dump in ~/.zcompdump(N.mh+24); do
   compinit
-fi
+done
+compinit -C
 
 # mark the status to prevent double loading
 export ALL_MY_ZSH_STUFF_LOADED=1
