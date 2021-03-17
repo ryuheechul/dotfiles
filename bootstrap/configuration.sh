@@ -28,6 +28,9 @@ ln -sf "${this_repo_path}"/zshrc.d ~/.config/zshrc.d
 # source dotfiles' zshrc
 echo "source ~/.config/zshrc.d/zshrc" >> ~/.zshrc
 
+# making sure this comes before others
+echo 'export PATH="$HOME/.nix-profile/bin:$PATH"' >> ~/.zshrc
+
 # oh my zsh
 git clone https://github.com/ohmyzsh/ohmyzsh ~/.oh-my-zsh
 
