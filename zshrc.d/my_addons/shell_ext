@@ -35,6 +35,9 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$PATH
 
+# making sure this comes before others
+export PATH="$HOME/.nix-profile/bin:$PATH"
+
 ASDF_DIR=${ASDF_DIR:-${HOME}/.asdf}
 # https://github.com/asdf-vm/asdf - version manager
 . ${ASDF_DIR}/asdf.sh

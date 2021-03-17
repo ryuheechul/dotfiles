@@ -4,6 +4,8 @@
 alias light="base16_solarized-light"
 alias dark="base16_solarized-dark"
 
+# convinient way to print $PATH
+alias path="echo $PATH | tr : '\n'"
 # overwrite essential stuff
 alias which="which -a"
 
