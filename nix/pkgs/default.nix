@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> (import ../darwin/optional-overlaying.nix) }:
+{ pkgs ? import <nixpkgs> (import ./fallback/darwin/optional-overlaying.nix) }:
 
 with pkgs;
 [
