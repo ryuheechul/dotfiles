@@ -5,6 +5,7 @@
 # Configuration.sh is platform agnostic and assumes dependant packages are installed via `./foundation/`
 # Also make sure to configure right $PATH for this script to work properly
 
+set -e
 set -x
 
 # go to repo's root to be able to be call from anywhere
@@ -30,9 +31,6 @@ echo "source ~/.config/zshrc.d/zshrc" >> ~/.zshrc
 
 # making sure this comes before others
 echo 'export PATH="$HOME/.nix-profile/bin:$PATH"' >> ~/.zshrc
-
-# oh my zsh
-git clone https://github.com/ohmyzsh/ohmyzsh ~/.oh-my-zsh
 
 # zinit
 zsh -c "source ~/.config/zshrc.d/my_addons/zinit"
