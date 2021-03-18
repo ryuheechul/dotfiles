@@ -59,7 +59,7 @@ tmux start-server && \
   sleep 1 && \
   ~/.tmux/plugins/tpm/bin/install_plugins && \
   sleep 1 && \
-  tmux kill-server
+  tmux kill-server || true
 
 # install asdf
 ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
