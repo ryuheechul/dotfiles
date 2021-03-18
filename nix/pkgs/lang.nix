@@ -22,6 +22,7 @@ let
   in [
     nodejs
     yarn
+    nodePackages.node2nix
     node-global-pkg-neovim
     node-global-pkg-import-js
   ]);
