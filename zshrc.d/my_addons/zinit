@@ -17,20 +17,19 @@ zinit snippet OMZP::git
 zinit snippet OMZP::fasd
 
 zinit light mroth/evalcache
-
-zinit ice wait blockf atpull'zinit creinstall -q .'
-zinit light zsh-users/zsh-completions
-
-zinit ice wait atinit"zpcompinit; zpcdreplay"
-zinit light zdharma/fast-syntax-highlighting
-
-zinit ice wait atload"_zsh_autosuggest_start"
-zinit light zsh-users/zsh-autosuggestions
-
 zinit light Aloxaf/fzf-tab
 zinit light supercrabtree/k
 zinit light Tarrasch/zsh-bd
 zinit light paulirish/git-open
+
+# fast-syntax-highlighting & autosuggestions & completions
+zinit wait lucid for \
+ atinit"ZINIT[COMPINIT_OPTS]=-C; zpcompinit; zpcdreplay" \
+    zdharma/fast-syntax-highlighting \
+ atload"!_zsh_autosuggest_start" \
+    zsh-users/zsh-autosuggestions \
+ blockf \
+    zsh-users/zsh-completions
 
 # somehow this should be placed in the bottom to intefere others
 zinit ice as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
