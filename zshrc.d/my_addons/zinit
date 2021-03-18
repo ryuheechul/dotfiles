@@ -13,6 +13,9 @@ autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 ### End of Zinit installer's chunk
 
+zinit snippet OMZP::git
+zinit snippet OMZP::fasd
+
 zinit light mroth/evalcache
 
 zinit ice wait blockf atpull'zinit creinstall -q .'
