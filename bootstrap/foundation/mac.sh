@@ -120,8 +120,8 @@ open https://github.com/keytty/shelter/releases
 
 ####### Nix #######
 
-# install nix - https://nixos.org/manual/nix/stable/#sect-macos-installation
-sh <(curl -L https://nixos.org/nix/install) --darwin-use-unencrypted-nix-store-volume
+# install nix
+./nix/bin/install/darwin.sh
 
 # source nix profile only for this script to work
 . ~/.nix-profile/etc/profile.d/nix.sh

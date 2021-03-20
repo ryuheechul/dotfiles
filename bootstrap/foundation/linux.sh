@@ -10,7 +10,7 @@ cd "$(dirname "$0")" || exit
 cd ../../ || exit
 
 # install nix
-./nix/bin/install.sh
+./nix/bin/install/multi-user.sh
 
 sudo ./nix/bin/shim/path.sh
 
