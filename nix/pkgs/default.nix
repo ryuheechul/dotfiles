@@ -15,6 +15,7 @@ with pkgs;
   bash # use latest bash
   tmux # terminal multiplexer
   neovim # my favorite editor
+  emacs-nox # terminal only emacs
   starship # cross-shell prompt
   fzf # A command-line fuzzy finder
   direnv # auto loading env per dir

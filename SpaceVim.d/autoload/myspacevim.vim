@@ -98,6 +98,12 @@ function! myspacevim#before() abort
 
   " disable by default for now
   " call kakoune#mimic_load()
+
+  " this part was removed after v1.4.0 as described here https://github.com/SpaceVim/SpaceVim/issues/4005
+  " and I want it back, so here we are
+  if !g:spacevim_vimcompatible
+    call SpaceVim#mapping#def('nnoremap <silent>', '<Tab>', ':wincmd w<CR>', 'Switch to next window or tab','wincmd w')
+  endif
 endfunction
 
 function! myspacevim#after() abort

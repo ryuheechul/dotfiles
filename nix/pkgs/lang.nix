@@ -2,10 +2,14 @@
 
 with pkgs;
 let
+  # python
   python-with-pkgs = python3.withPackages (python-packages: with python-packages; [
     pynvim
+    setuptools
+    pip
   ]);
 
+  # nodejs
   bundle-nodejs-with-pkgs = (let
     nodejs = nodejs-14_x;
     args-for-node = { pkgs=pkgs; nodejs=nodejs; };
@@ -19,10 +23,17 @@ let
     (pure-import-js.override (oldAttrs: {
       buildInputs = oldAttrs.buildInputs ++ [ nodePackages.node-pre-gyp ];
     })));
-  in [
+  in
+  # node essentials
+  [
     nodejs
     yarn
-    nodePackages.node2nix
+  # with nodePackages
+  ] ++ (with nodePackages; [
+    node2nix
+    javascript-typescript-langserver
+  # with node2nix
+  ]) ++ [
     node-global-pkg-neovim
     node-global-pkg-import-js
   ]);

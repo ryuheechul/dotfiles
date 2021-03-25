@@ -86,8 +86,12 @@ git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0
 # # for nvim + spacevim
 # zsh -c "pip install neovim"
 
+# spacemacs
+git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+ln -sf ~/dotfiles/spacemacs ~/.spacemacs
+
 # spacevim
-spacevim_ver="v1.4.0"
+spacevim_ver="v1.6.0"
 git clone https://github.com/SpaceVim/SpaceVim ~/.SpaceVim \
   && cd ~/.SpaceVim \
   && git checkout ${spacevim_ver}
