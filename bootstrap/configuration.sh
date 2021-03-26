@@ -88,14 +88,14 @@ git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0
 
 # spacemacs
 git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
-ln -sf ~/dotfiles/spacemacs ~/.spacemacs
+ln -sf "${this_repo_path}"/spacemacs ~/.spacemacs
 
 # spacevim
 spacevim_ver="v1.6.0"
 git clone https://github.com/SpaceVim/SpaceVim ~/.SpaceVim \
   && cd ~/.SpaceVim \
   && git checkout ${spacevim_ver}
-ln -sf ~/dotfiles/SpaceVim.d ~/.SpaceVim.d
+ln -sf "${this_repo_path}"/SpaceVim.d ~/.SpaceVim.d
 # shim vimrc
 ln -sf ~/.SpaceVim ~/.vim
 ln -sf ~/.SpaceVim ~/.config/nvim

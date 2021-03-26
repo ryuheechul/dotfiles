@@ -15,7 +15,6 @@ cd "$(dirname "$0")" || exit
 
 # source nix
 . ${HOME}/.nix-profile/etc/profile.d/nix.sh
-. /etc/profile.d/user-shim-for-nix-path.sh
 
 # init channels
 ./nix/bin/channels.sh
