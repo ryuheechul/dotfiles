@@ -79,6 +79,8 @@ defaults read -g KeyRepeat
 
 defaults write -g InitialKeyRepeat -int 10 # normal minimum is 15 (225 ms)
 defaults write -g KeyRepeat -int 1 # normal minimum is 2 (30 ms)
+# enable repeating in VSCode on macOS - https://github.com/VSCodeVim/Vim
+defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
 
 
 echo "registering automatic theme switching"
