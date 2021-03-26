@@ -63,6 +63,7 @@ brew install --cask amethyst
 brew install --cask google-chrome
 brew install --cask notion
 brew install --cask sublime-text
+brew install --cask visual-studio-code
 sublime/.link.sh
 brew install --cask karabiner-elements
 karabiner/.link.sh
