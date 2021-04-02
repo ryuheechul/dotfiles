@@ -20,22 +20,29 @@ setopt auto_cd
 # enable reverse-i-search
 bindkey '^R' history-incremental-search-backward
 
+# helper function to give feedback about configurations
+function _echo() {
+  if [[ -z $SILENT_FEEDBACK_ZSHRC ]]; then
+    echo $1
+  fi
+}
+
 ## to have an option of preventing loading things nested in tmux shell
 ## if TMUX var is not set then...
 if [[ -z $TMUX ]]; then
   ## if HOST_ALWAYS_USE_TMUX var is set then skip the rest
   if [[ -n $HOST_ALWAYS_USE_TMUX ]]; then
-    echo "skip loading the rest because \$HOST_ALWAYS_USE_TMUX is set"
+    _echo "skip loading the rest because \$HOST_ALWAYS_USE_TMUX is set"
     return
   fi
 fi
 
 if [[ -n $ALL_MY_ZSH_STUFF_LOADED ]]; then
   if [[ -n $FORCE_LOAD_MY_ZSH_STUFF ]]; then
-    echo "\$ALL_MY_ZSH_STUFF_LOADED is set but also \$FORCE_LOAD_MY_ZSH_STUFF is set too. Therefore keep loading."
+    _echo "\$ALL_MY_ZSH_STUFF_LOADED is set but also \$FORCE_LOAD_MY_ZSH_STUFF is set too. Therefore keep loading."
   else
-    echo "skip loading the rest because \$ALL_MY_ZSH_STUFF_LOADED is set"
-    echo "to prevent skipping, set \$FORCE_LOAD_MY_ZSH_STUFF"
+    _echo "skip loading the rest because \$ALL_MY_ZSH_STUFF_LOADED is set"
+    _echo "to prevent skipping, set \$FORCE_LOAD_MY_ZSH_STUFF"
     return
   fi
 fi
@@ -59,3 +66,5 @@ compinit -C
 
 # mark the status to prevent double loading
 export ALL_MY_ZSH_STUFF_LOADED=1
+
+unfunction _echo

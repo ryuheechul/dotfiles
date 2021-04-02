@@ -104,6 +104,10 @@ function! myspacevim#before() abort
   if !g:spacevim_vimcompatible
     call SpaceVim#mapping#def('nnoremap <silent>', '<Tab>', ':wincmd w<CR>', 'Switch to next window or tab','wincmd w')
   endif
+
+  " let nvim terminal to load full zshrc
+  let $FORCE_LOAD_MY_ZSH_STUFF = 1
+  let $SILENT_FEEDBACK_ZSHRC = 1
 endfunction
 
 function! myspacevim#after() abort
