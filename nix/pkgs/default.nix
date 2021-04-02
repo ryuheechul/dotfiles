@@ -30,6 +30,7 @@ with pkgs;
   glow # markdown render on cli
   lf # terminal file manager
   fx # json viewer
+  delta # syntax-highlighting pager for git
 
   # search
   ripgrep # modern grep

@@ -32,6 +32,12 @@ echo "source ~/.config/zshrc.d/zshrc" >> ~/.zshrc
 # making sure this comes before others
 echo 'export PATH="$HOME/.nix-profile/bin:$PATH"' >> ~/.zshrc
 
+# source my gitconfig
+cat << EOF >> ~/.gitconfig
+[include]
+  path = ${this_repo_path}/gitconfig
+EOF
+
 # zinit
 zsh -c "source ~/.config/zshrc.d/my_addons/zinit"
 
