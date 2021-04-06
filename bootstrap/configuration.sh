@@ -39,6 +39,7 @@ cat << EOF >> ~/.gitconfig
 EOF
 
 # symlink batconfig
+mkdir -p ~/.config/bat
 ln -sf "${this_repo_path}"/batconfig ~/.config/bat/config
 
 # zinit

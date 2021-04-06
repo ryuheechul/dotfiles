@@ -1,5 +1,8 @@
 # vim: set ft=zsh:
 
+# theme for bat
+export BAT_THEME="Solarized (light)"
+
 # fzf + fd # fd ignores .gitignore files/directories by default
 # default
 export FZF_DEFAULT_COMMAND='fd --type f'
