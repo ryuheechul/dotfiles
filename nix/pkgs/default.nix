@@ -54,4 +54,12 @@ with pkgs;
   neofetch
 ]
 ++
+(with bat-extras; [
+  batman
+  batgrep
+  batdiff
+  batwatch
+  prettybat
+])
+++
 (import ./lang.nix {pkgs=pkgs;})

@@ -38,6 +38,9 @@ cat << EOF >> ~/.gitconfig
   path = ${this_repo_path}/gitconfig
 EOF
 
+# symlink batconfig
+ln -sf "${this_repo_path}"/batconfig ~/.config/bat/config
+
 # zinit
 zsh -c "source ~/.config/zshrc.d/my_addons/zinit"
 
@@ -45,7 +48,6 @@ zsh -c "source ~/.config/zshrc.d/my_addons/zinit"
 ln -sf "${this_repo_path}"/starship.toml ~/.config/starship.toml
 
 # base16
-
 git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
 
 # lf
