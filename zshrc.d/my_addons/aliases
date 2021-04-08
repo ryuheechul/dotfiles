@@ -18,6 +18,7 @@ alias tree="exa -G -T --git-ignore"
 
 alias vim="nvim"
 alias vi="vim"
+alias vimdiff="nvim -dR"
 
 alias less="less -r"
 
