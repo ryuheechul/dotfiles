@@ -3,6 +3,11 @@
 # theme for bat
 export BAT_THEME="Solarized (light)"
 
+# set LS_COLORS with vivid
+if [ -n "${commands[vivid]}" ]; then
+  export LS_COLORS=$(vivid generate solarized-light)
+fi
+
 # fzf + fd # fd ignores .gitignore files/directories by default
 # default
 export FZF_DEFAULT_COMMAND='fd --type f'

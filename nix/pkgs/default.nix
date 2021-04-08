@@ -25,6 +25,7 @@ with pkgs;
 
 
   # viewer
+  vivid # LS_COLORS generator
   exa # modern ls
   bat # cat with wings
   glow # markdown render on cli
