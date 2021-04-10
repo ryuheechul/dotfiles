@@ -20,6 +20,7 @@ with pkgs;
   fzf # A command-line fuzzy finder
   direnv # auto loading env per dir
   htop # resource monitoring
+  gotop # terminal based graphical activity monitor
   gnupg # GnuPG
   wget # useful for downloading files
 
