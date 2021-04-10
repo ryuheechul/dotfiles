@@ -140,7 +140,6 @@ if [ -x "$(command -v nix)" ]; then
   home-manager switch
 fi
 
-
 ####### Brewfile #######
 
 # install via Brewfile
@@ -150,3 +149,5 @@ if [ -z "${SKIP_INSTALL_BREW}" ]; then
   # fzf shell integration to enable history and directory search
   yes | $(brew --prefix fzf)/install
 fi
+
+echo "You may continue the rest with $(readlink -f ./bootstrap/configuration.sh)"
