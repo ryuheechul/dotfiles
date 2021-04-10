@@ -4,12 +4,14 @@
 alias light="base16_solarized-light"
 alias dark="base16_solarized-dark"
 
+# replace htop with bottom
+alias htop="btm -b"
 # convinient way to print $PATH
 alias path="echo $PATH | tr : '\n'"
 # overwrite essential stuff
 alias which="which -a"
 
-# brew install exa
+# exa
 alias exa="exa --icons --group-directories-first -F --ignore-glob='**/.git|**/.DS_Store'"
 alias ls="exa"
 alias l="ls -lah -g --git"
@@ -37,14 +39,14 @@ alias gdc="git diff --cached"
 # viewer and filter
 alias cat='bat'
 alias k9s='TERM=xterm COLORTERM=256bit k9s'
-alias rg="rg -p -i" # brew install rg
+alias rg="rg -p -i" # ripgrep
 
 case "$(uname -s)" in
   Darwin)
     alias glow="~/dotfiles/bin/mac/glow.sh"
     ;;
   *)
-    alias glow="glow -p" # brew install glow
+    alias glow="glow -p" # glow
     ;;
 esac
 
