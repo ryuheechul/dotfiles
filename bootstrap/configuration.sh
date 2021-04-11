@@ -26,11 +26,11 @@ fi
 mkdir -p ~/.config
 ln -sf "${this_repo_path}"/zshrc.d ~/.config/zshrc.d
 
-# source dotfiles' zshrc
-echo "source ~/.config/zshrc.d/zshrc" >> ~/.zshrc
-
 # making sure this comes before others
 echo 'export PATH="$HOME/.nix-profile/bin:$PATH"' >> ~/.zshrc
+
+# source dotfiles' zshrc
+echo "source ~/.config/zshrc.d/zshrc" >> ~/.zshrc
 
 # source my gitconfig
 cat << EOF >> ~/.gitconfig
