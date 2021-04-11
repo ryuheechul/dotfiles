@@ -41,3 +41,6 @@ Space::Space ; without this Space will not work
 !r::Send, ^r ;  refresh
 !c::Send, ^c ; copy
 !v::Send, ^v ; paste
+
+; mimic opening alfred
+!space:: Send ^{esc}
