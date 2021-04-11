@@ -27,4 +27,7 @@ sudo ./nix/bin/shim/path.sh
 # install packages for current user
 home-manager switch
 
+./bin/wsl/create-pbcopypaste.sh
+./bin/wsl/path.sh
+
 echo "You may continue the rest with $(readlink -f ./bootstrap/configuration.sh)"
