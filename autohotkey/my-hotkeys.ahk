@@ -1,3 +1,5 @@
+; ../bin/wsl/create-reload-ahk.sh should be helpful to reload this
+
 ; recommended defaults - google to know more in details
 #NoEnv
 #UseHook
