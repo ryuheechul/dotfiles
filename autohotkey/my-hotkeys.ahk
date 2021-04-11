@@ -38,9 +38,13 @@ Space::Space ; without this Space will not work
 
 ; since Alt is in position of Apple Cmd key these are usually:
 !w::Send, ^w ; close window
-!r::Send, ^r ;  refresh
+!r::Send, ^r ; refresh
 !c::Send, ^c ; copy
 !v::Send, ^v ; paste
+!l::Send, ^l ; focus address bar
 
 ; mimic opening alfred
-!space:: Send ^{esc}
+!space:: Send ^{Esc}
+
+; mimic Cmd Backspace
+!Backspace::Send ^{Backspace}
