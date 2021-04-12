@@ -10,10 +10,10 @@ SendMode Input
 ; end of defaults
 
 ; Helper escapes in case developing this script
-^!+Esc::ExitApp  ; Exit script with Ctrl+Alt+Shift+Escape key
-^!+p::Pause      ; Pause script with Ctrl+Alt+Shift+P
-^!+s::Suspend    ; Suspend script with Ctrl+Alt+Shift+S
-^!+r::Reload     ; Reload script with Ctrl+Alt+Shift+R
+;^!+Esc::ExitApp  ; Exit script with Ctrl+Alt+Shift+Escape key
+;^!+p::Pause      ; Pause script with Ctrl+Alt+Shift+P
+;^!+s::Suspend    ; Suspend script with Ctrl+Alt+Shift+S
+;^!+r::Reload     ; Reload script with Ctrl+Alt+Shift+R
 
 ; Disable CapsLock
 SetCapsLockState, AlwaysOff
