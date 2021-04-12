@@ -44,9 +44,14 @@ Space::Space ; without this Space will not work
 !c::Send, ^c ; copy
 !v::Send, ^v ; paste
 !l::Send, ^l ; focus address bar
+!z::Send, ^z ; undo
+!+z::Send, ^+z ; redo
+; move wordly
+<!Left::Send, ^{Left}
+<!Right::Send, ^{Right}
 
 ; mimic opening alfred
-!space:: Send ^{Esc}
+!Space:: Send ^{Esc}
 
 ; mimic Cmd Backspace
 !Backspace::Send ^{Backspace}
