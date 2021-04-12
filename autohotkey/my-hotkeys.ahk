@@ -47,8 +47,11 @@ Space::Space ; without this Space will not work
 !z::Send, ^z ; undo
 !+z::Send, ^+z ; redo
 ; move wordly
-<!Left::Send, ^{Left}
-<!Right::Send, ^{Right}
+<#Left::Send, ^{Left}
+<#Right::Send, ^{Right}
+; move to ends
+<!Left::Send, {Home}
+<!Right::Send, {End}
 
 ; mimic opening alfred
 !Space:: Send ^{Esc}
