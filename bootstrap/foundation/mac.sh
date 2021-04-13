@@ -16,8 +16,14 @@ cd ../../ || exit
 ln -sf ~/Library/Mobile\ Documents/com~apple~CloudDocs/ ~/icd
 
 # to prevent loading zsh stuff twice in case tmux is the default shell command for terminal emulators
-echo "export HOST_ALWAYS_USE_TMUX=1" >> ~/.zshrc
-
+# but skip in ssh - https://unix.stackexchange.com/a/9606
+cat <<EOF >> ~/.zshrc
+if [ -n "\$SSH_CLIENT" ] || [ -n "\$SSH_TTY" ] || [ -n "\$SSH_CONNECTION" ] ; then
+  true
+else
+  export HOST_ALWAYS_USE_TMUX=1
+fi
+EOF
 
 ####### brew #######
 
