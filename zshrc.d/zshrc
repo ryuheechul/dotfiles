@@ -28,16 +28,26 @@ function _echo() {
 }
 
 ## to have an option of preventing loading things nested in tmux shell
-## if TMUX var is not set then...
+# if TMUX var is not set then...
 if [[ -z $TMUX ]]; then
-  ## if HOST_ALWAYS_USE_TMUX var is set then skip the rest
+  # if HOST_ALWAYS_USE_TMUX var is set then skip the rest
   if [[ -n $HOST_ALWAYS_USE_TMUX ]]; then
-    _echo "skip loading the rest because \$HOST_ALWAYS_USE_TMUX is set"
-    return
+    # still give a chance to load if FORCE_LOAD_MY_ZSH_STUFF var is set
+    if [[ -n $FORCE_LOAD_MY_ZSH_STUFF ]]; then
+      _echo "\$HOST_ALWAYS_USE_TMUX is set but also \$FORCE_LOAD_MY_ZSH_STUFF is set too. Therefore keep loading."
+    else
+      _echo "skip loading the rest because \$HOST_ALWAYS_USE_TMUX is set"
+      _echo "to prevent skipping, set \$FORCE_LOAD_MY_ZSH_STUFF"
+      return
+    fi
+  # else - do nothing, therefore continue
   fi
 fi
 
+## now this is a one more circuit breaker in case of inside tmux
+# if ALL_MY_ZSH_STUFF_LOADED var is set then...
 if [[ -n $ALL_MY_ZSH_STUFF_LOADED ]]; then
+  # but also if FORCE_LOAD_MY_ZSH_STUFF var is set then...
   if [[ -n $FORCE_LOAD_MY_ZSH_STUFF ]]; then
     _echo "\$ALL_MY_ZSH_STUFF_LOADED is set but also \$FORCE_LOAD_MY_ZSH_STUFF is set too. Therefore keep loading."
   else
@@ -52,7 +62,7 @@ fi
 # source from seperate files to organize better
 export ADDON_D=~/.config/zshrc.d/my_addons
 for source_file in zinit lf_icons aliases shell_ext
-do 
+do
 [ -f $ADDON_D/$source_file ] && source $ADDON_D/$source_file
 done
 unset ADDON_D
