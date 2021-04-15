@@ -12,6 +12,9 @@ set -x
 cd "$(dirname "$0")" || exit
 cd ../ || exit
 
+# source to access depedent binaries
+. ~/.nix-profile/etc/profile.d/nix.sh
+
 # get repo path
 if [ -x "$(command -v greadlink)" ]; then
   this_repo_path="$(greadlink -f "$(pwd)")"
