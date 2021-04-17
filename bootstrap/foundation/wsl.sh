@@ -29,5 +29,6 @@ home-manager switch
 
 ./bin/wsl/create-pbcopypaste.sh
 ./bin/wsl/path.sh
+./bin/wsl/install-wudo.sh
 
 echo "You may continue the rest with $(readlink -f ./bootstrap/configuration.sh)"
