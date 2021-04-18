@@ -4,7 +4,8 @@
 [ -d /home/linuxbrew/.linuxbrew/bin ] && export PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}
 
 # bootstrap terminal
-alias shellwe="cd && cd al && neofetch && tmux a"
+# https://stackoverflow.com/a/3432749
+alias shellwe="cd && cd al && neofetch && tmux a -t default || tmux new -s default"
 
 # terminal and editor
 [[ $TMUX = "" ]] && export TERM="xterm-256color"
