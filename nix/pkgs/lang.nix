@@ -7,6 +7,7 @@ let
     pynvim
     setuptools
     pip
+    pipx
   ]);
 
   # nodejs
