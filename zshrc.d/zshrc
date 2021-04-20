@@ -1,31 +1,34 @@
 ## basics
 
-# in case of linux
-[ -d /home/linuxbrew/.linuxbrew/bin ] && export PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}
-
-# bootstrap terminal
-alias shellwe="cd && cd al && neofetch && ~/.local/bin/tmux-attach-or-new.sh default"
-
-# terminal and editor
-[[ $TMUX = "" ]] && export TERM="xterm-256color"
-export EDITOR=nvim
-
-# vi keybinding
-export KEYTIMEOUT=1
-bindkey -v
-
-# maintain this until https://github.com/ohmyzsh/ohmyzsh/pull/9750 is merged
-setopt auto_cd
-
-# enable reverse-i-search
-bindkey '^R' history-incremental-search-backward
-
 # helper function to give feedback about configurations
 function _echo() {
   if [[ -z $SILENT_FEEDBACK_ZSHRC ]]; then
     echo $1
   fi
 }
+
+# prevent overriding unnecessarily in case it's being loaded again
+if [[ -z $ALL_MY_ZSH_STUFF_LOADED ]] || [[ -n $FORCE_LOAD_MY_ZSH_STUFF ]]; then
+  # in case of linux
+  [ -d /home/linuxbrew/.linuxbrew/bin ] && export PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}
+
+  # bootstrap terminal
+  alias shellwe="cd && cd al && neofetch && ~/.local/bin/tmux-attach-or-new.sh default"
+
+  # terminal and editor
+  [[ $TMUX = "" ]] && export TERM="xterm-256color"
+  export EDITOR=nvim
+
+  # vi keybinding
+  export KEYTIMEOUT=1
+  bindkey -v
+
+  # maintain this until https://github.com/ohmyzsh/ohmyzsh/pull/9750 is merged
+  setopt auto_cd
+
+  # enable reverse-i-search
+  bindkey '^R' history-incremental-search-backward
+fi
 
 ## to have an option of preventing loading things nested in tmux shell
 # if TMUX var is not set then...
