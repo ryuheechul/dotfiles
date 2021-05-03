@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# run this script with nix-shell -p coreutils especially on macOS
+
 set -x
 
 curr_dir="$(dirname "$0")"
@@ -12,9 +14,8 @@ nix-shell '<home-manager>' -A install
 # use this as a template to replace ~/.config/nixpkgs/home.nix
 cat << EOF > ~/.config/nixpkgs/home.nix
 let
-  imports = [
-    $(echo "${nix_home_path}")
-  ];
+  home-nix-path = /. + builtins.toPath "$(echo "${nix_home_path}")";
+  imports = [ home-nix-path ];
 in
 {
   inherit imports;

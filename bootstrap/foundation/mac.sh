@@ -139,7 +139,7 @@ open https://github.com/keytty/shelter/releases
 ./nix/bin/channels.sh
 
 # set up a local ~/.config/nixpkgs/home.nix
-./nix/bin/init-home-manager.sh
+nix-shell -p coreutils --run ./nix/bin/init-home-manager.sh
 
 if [ -x "$(command -v nix)" ]; then
   SKIP_INSTALL_BREW=1
@@ -156,4 +156,4 @@ if [ -z "${SKIP_INSTALL_BREW}" ]; then
   yes | $(brew --prefix fzf)/install
 fi
 
-echo "You may continue the rest with $(readlink -f ./bootstrap/configuration.sh)"
+nix-shell -p coreutils --run 'echo "You may continue the rest with $(readlink -f ./bootstrap/configuration.sh)"'
