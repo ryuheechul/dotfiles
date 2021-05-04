@@ -41,12 +41,23 @@ else # falling back to brew
   fi
 fi
 
+## binaries by language global packages, for example, npm, rust, go, etc.
+
 # rust
-export PATH="$HOME/.cargo/bin:$PATH"
+if [ -n "${commands[cargo]}" ]; then
+  export PATH="$HOME/.cargo/bin:$PATH"
+fi
 
 # golang
-export GOPATH=$HOME/go
-export PATH=$GOPATH/bin:$PATH
+if [ -n "${commands[go]}" ]; then
+  export GOPATH=$HOME/go
+  export PATH=$GOPATH/bin:$PATH
+fi
+
+# yarn
+if [ -n "${commands[yarn]}" ]; then
+  export PATH="$(yarn global bin):$PATH"
+fi
 
 
 ASDF_DIR=${ASDF_DIR:-${HOME}/.asdf}
