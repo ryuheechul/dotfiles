@@ -49,6 +49,9 @@ EOF
 mkdir -p ~/.config/bat
 ln -sf "${this_repo_path}/batconfig" ~/.config/bat/config
 
+# alacritty
+ln -sf "${this_repo_path}/alacritty.yml" ~/.alacritty.yml
+
 # zinit
 zsh -c "source ~/.config/zshrc.d/my_addons/zinit"
 
