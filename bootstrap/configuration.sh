@@ -27,11 +27,11 @@ fi
 
 # symlink to be read by zshrc
 mkdir -p ~/.config
-ln -sf "${this_repo_path}"/zshrc.d ~/.config/zshrc.d
+ln -sf "${this_repo_path}/zshrc.d" ~/.config/zshrc.d
 
 # symlink tmux helper script
 mkdir -p ~/.local/bin/
-ln -sf "${this_repo_path}"/bin/local/tmux-attach-or-new.sh ~/.local/bin/tmux-attach-or-new.sh
+ln -sf "${this_repo_path}/bin/local/tmux-attach-or-new.sh" ~/.local/bin/tmux-attach-or-new.sh
 
 # making sure this comes before others
 echo 'export PATH="$HOME/.nix-profile/bin:$PATH"' >> ~/.zshrc
@@ -42,34 +42,34 @@ echo "source ~/.config/zshrc.d/zshrc" >> ~/.zshrc
 # source my gitconfig
 cat << EOF >> ~/.gitconfig
 [include]
-  path = ${this_repo_path}/gitconfig
+  path = "${this_repo_path}/gitconfig"
 EOF
 
 # symlink batconfig
 mkdir -p ~/.config/bat
-ln -sf "${this_repo_path}"/batconfig ~/.config/bat/config
+ln -sf "${this_repo_path}/batconfig" ~/.config/bat/config
 
 # zinit
 zsh -c "source ~/.config/zshrc.d/my_addons/zinit"
 
 # starship
-ln -sf "${this_repo_path}"/starship.toml ~/.config/starship.toml
+ln -sf "${this_repo_path}/starship.toml" ~/.config/starship.toml
 
 # base16
-git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
+git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell || bash -c 'cd ~/.config/base16-shell && git pull'
 
 # lf
-ln -sf "${this_repo_path}"/lf ~/.config/lf
+ln -sf "${this_repo_path}/lf" ~/.config/lf
 
 # tig
-ln -sf "${this_repo_path}"/vim.tigrc ~/.tigrc
+ln -sf "${this_repo_path}/vim.tigrc" ~/.tigrc
 
 # gitmux
-ln -sf "${this_repo_path}"/gitmux.conf ~/.gitmux.conf
+ln -sf "${this_repo_path}/gitmux.conf" ~/.gitmux.conf
 
 # tmux
-ln -sf "${this_repo_path}"/tmux.conf ~/.tmux.conf
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+ln -sf "${this_repo_path}/tmux.conf" ~/.tmux.conf
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm || bash -c 'cd ~/.tmux/plugins/tpm && git pull'
 tmux start-server && \
   tmux new-session -d && \
   sleep 1 && \
@@ -81,9 +81,9 @@ tmux start-server && \
 ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
 PATH="${ASDF_DIR}/bin:${ASDF_DATA_DIR}/shims:${PATH}"
-ln -sf ${this_repo_path}/asdf/tool-versions ~/.tool-versions
+ln -sf "${this_repo_path}/asdf/tool-versions" ~/.tool-versions
 
-git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0
+git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0 || true
 
 ## installing packages with asdf is being replaced with Nix - look at ../nix/pkgs.nix
 
@@ -103,15 +103,15 @@ git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0
 # zsh -c "pip install neovim"
 
 # spacemacs
-git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
-ln -sf "${this_repo_path}"/spacemacs ~/.spacemacs
+git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d || bash -c 'cd ~/.emacs.d && git pull'
+ln -sf "${this_repo_path}/spacemacs" ~/.spacemacs
 
 # spacevim
 spacevim_ver="v1.6.0"
-git clone https://github.com/SpaceVim/SpaceVim ~/.SpaceVim \
+git clone https://github.com/SpaceVim/SpaceVim ~/.SpaceVim || bash -c 'cd ~/.SpaceVim && git checkout master && git pull' \
   && cd ~/.SpaceVim \
   && git checkout ${spacevim_ver}
-ln -sf "${this_repo_path}"/SpaceVim.d ~/.SpaceVim.d
+ln -sf "${this_repo_path}/SpaceVim.d" ~/.SpaceVim.d
 # shim vimrc
 ln -sf ~/.SpaceVim ~/.vim
 ln -sf ~/.SpaceVim ~/.config/nvim
@@ -121,3 +121,5 @@ if [ -z "${SKIP_INSTALL_VIM_PLUGINS}" ]; then
   nvim --headless -c 'call dein#update()' -c q
   nvim --headless -c 'UpdateRemotePlugins' -c q
 fi
+
+echo "configuration.sh seemed to have run successfully!"
