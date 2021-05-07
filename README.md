@@ -29,7 +29,7 @@ Rest of my instruction will assume that you cloned to `~/dotfiles` though.
 
 or
 
-`~/dotfiles/bootstrap/foundation/mac.sh`
+`~/dotfiles/bootstrap/foundation/mac/essential.sh`
 
 ### Configuration
 
@@ -50,7 +50,13 @@ source /etc/profile.d/user-shim-for-nix-path.sh
 
 #### macOS
 ```
-~/dotfiles/bootstrap/foundation/mac.sh
+# this should prepare essential stuff
+~/dotfiles/bootstrap/foundation/mac/essential.sh
+
+# do below optionally since it's heavily customized to the author
+~/dotfiles/bootstrap/foundation/mac/extra.sh
+
+# this should prepare platform agnostic essential stuff
 ~/dotfiles/bootstrap/configuration.sh
 ```
 
