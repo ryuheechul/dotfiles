@@ -1,0 +1,1 @@
+../karabiner/.link.sh
