@@ -56,6 +56,15 @@ fi
 
 
 ####### system #######
+set -x
+
+defaults read -g TISRomanSwitchState
+echo "use the Caps Lock key to switch between input sources via setting it to 1"
+
+defaults read -g "com.apple.trackpad.scaling"
+echo "change trackpad speed via changing it to 2.5"
+
+echo "allow three fingers to drag in Accessibility > Pointer Control > Trackpad Options"
 
 echo "reading key repeat values before set"
 defaults read -g InitialKeyRepeat
@@ -71,6 +80,7 @@ defaults write -g ApplePressAndHoldEnabled -bool false
 
 echo "keyboard repeating, press and hold is set, you may want to restart applications"
 
+set +x
 sleep 2
 
 # iCloudDrive symlink
