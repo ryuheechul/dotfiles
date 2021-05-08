@@ -19,6 +19,8 @@ mas install 869223134 # KakaoTalk
 mas install 1480933944 # Vimari
 mas install 1142151959 # Just Focus
 mas install 803453959 # Slack
+mas install 1475387142 # Tailscale
+mas install 1480933944 # Vimari
 
 ####### Brew Cask #######
 
