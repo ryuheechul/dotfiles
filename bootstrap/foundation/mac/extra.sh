@@ -11,6 +11,10 @@ cd ../../../ || exit
 
 . ~/.nix-profile/etc/profile.d/nix.sh
 
+####### Screenshots #######
+
+mkdir -p ~/Screenshots && defaults write com.apple.screencapture location ~/Screenshots
+
 ####### Mac App Store #######
 
 # mas let you install Mac App Store app with CLI
