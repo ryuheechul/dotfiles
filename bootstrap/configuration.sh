@@ -33,9 +33,6 @@ ln -sf "${this_repo_path}/zshrc.d" ~/.config/zshrc.d
 mkdir -p ~/.local/bin/
 ln -sf "${this_repo_path}/bin/local/tmux-attach-or-new.sh" ~/.local/bin/tmux-attach-or-new.sh
 
-# making sure this comes before others
-echo 'export PATH="$HOME/.nix-profile/bin:$PATH"' >> ~/.zshrc
-
 # source dotfiles' zshrc
 echo "source ~/.config/zshrc.d/zshrc" >> ~/.zshrc
 
