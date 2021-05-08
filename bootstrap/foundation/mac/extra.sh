@@ -50,6 +50,7 @@ _install_cask amethyst
 _install_cask google-chrome
 _install_cask notion
 _install_cask sublime-text
+_install_cask secretive
 _install_cask visual-studio-code
 ./sublime/.link.sh
 _install_cask karabiner-elements
