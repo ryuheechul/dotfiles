@@ -45,18 +45,25 @@ fi
 
 # rust
 if [ -n "${commands[cargo]}" ]; then
-  export PATH="$HOME/.cargo/bin:$PATH"
+  export PATH="${HOME}/.cargo/bin:${PATH}"
 fi
 
 # golang
 if [ -n "${commands[go]}" ]; then
-  export GOPATH=$HOME/go
-  export PATH=$GOPATH/bin:$PATH
+  export GOPATH=${HOME}/go
+  export PATH=${GOPATH}/bin:${PATH}
 fi
+
+# to make it consumable for _evalcache
+function _yarnglobalpath {
+  echo "echo \"$(yarn global bin)\""
+}
 
 # yarn
 if [ -n "${commands[yarn]}" ]; then
-  export PATH="$(yarn global bin):$PATH"
+  # because yarn global bin is slow
+  _YARN_GLOBAL_PATH=$(_evalcache _yarnglobalpath)
+  export PATH="${_YARN_GLOBAL_PATH}:${PATH}"
 fi
 
 
@@ -81,7 +88,7 @@ fi
 # fallback any command to npx # disabled for now
 # source <(npx --shell-auto-fallback zsh)
 
-BASE16_SHELL="$HOME/.config/base16-shell/"
-[ -n "$PS1" ] && \
-    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-        _evalcache $BASE16_SHELL/profile_helper.sh
+BASE16_SHELL="${HOME}/.config/base16-shell/"
+[ -n "${PS1}" ] && \
+    [ -s "${BASE16_SHELL}/profile_helper.sh" ] && \
+        _evalcache ${BASE16_SHELL}/profile_helper.sh

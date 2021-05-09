@@ -1,3 +1,5 @@
+# vim: set ft=zsh:
+
 ## basics
 
 # helper function to give feedback about configurations
