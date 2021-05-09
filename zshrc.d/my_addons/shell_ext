@@ -88,7 +88,7 @@ fi
 # fallback any command to npx # disabled for now
 # source <(npx --shell-auto-fallback zsh)
 
-BASE16_SHELL="${HOME}/.config/base16-shell/"
+BASE16_SHELL="${HOME}/.config/base16-shell"
 [ -n "${PS1}" ] && \
     [ -s "${BASE16_SHELL}/profile_helper.sh" ] && \
         _evalcache ${BASE16_SHELL}/profile_helper.sh

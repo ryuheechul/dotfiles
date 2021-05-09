@@ -72,13 +72,6 @@ do
 done
 unset ADDON_D
 
-
-autoload -Uz compinit
-for dump in ~/.zcompdump(N.mh+24); do
-  compinit
-done
-compinit -C
-
 # mark the status to prevent double loading
 export ALL_MY_ZSH_STUFF_LOADED=1
 
