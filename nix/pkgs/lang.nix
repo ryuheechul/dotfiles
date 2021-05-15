@@ -8,6 +8,7 @@ let
     setuptools
     pip
     pipx
+    yq
   ]);
 
   # nodejs
