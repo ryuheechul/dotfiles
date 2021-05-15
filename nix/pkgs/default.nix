@@ -55,7 +55,7 @@ with pkgs;
   # misc
   neofetch
 ]
-# ++ (import ./extra/git.nix {pkgs=pkgs;})
+++ (import ./extra/default.nix {pkgs=pkgs;})
 ++
 (with bat-extras; [
   batman

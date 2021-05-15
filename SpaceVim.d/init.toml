@@ -55,6 +55,9 @@ name = "colorscheme"
 name = "lang#rust"
 
 [[layers]]
+name = "lang#go"
+
+[[layers]]
 name = "lsp"
 filetypes = [
   "javascript"

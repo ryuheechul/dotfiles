@@ -1,7 +1,12 @@
-{ pkgs ? import <nixpkgs> (import ./fallback/darwin/optional-overlaying.nix) }:
+{ pkgs }:
 
-with pkgs;
-[
-  git-lfs # git extention for large file storage
-  pre-commit # for managing multi-language pre-commit hooks
-]
+let
+  checkEnv = import ../../utils/checkEnv.nix;
+in
+  with pkgs;
+  []
+  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_GIT")
+  [
+    git-lfs # git extention for large file storage
+    pre-commit # for managing multi-language pre-commit hooks
+  ]
