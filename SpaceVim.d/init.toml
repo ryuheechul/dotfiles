@@ -58,6 +58,10 @@ name = "lang#rust"
 name = "lang#go"
 
 [[layers]]
+name = "lang#python"
+format_on_save = true
+
+[[layers]]
 name = "lsp"
 filetypes = [
   "javascript"

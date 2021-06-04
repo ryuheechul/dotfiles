@@ -4,11 +4,20 @@ with pkgs;
 let
   # python
   python-with-pkgs = python3.withPackages (python-packages: with python-packages; [
-    pynvim
+    # essentials
     setuptools
     pip
     pipx
-    yq
+
+    yq # jq for yaml
+    pynvim # for neovim
+
+    # for https://spacevim.org/layers/lang/python/
+    pylint
+    yapf
+    autoflake
+    isort
+    coverage
   ]);
 
   # nodejs
