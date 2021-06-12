@@ -12,8 +12,22 @@ set -x
 cd "$(dirname "$0")" || exit
 cd ../ || exit
 
-# source to access depedent binaries
-. ~/.nix-profile/etc/profile.d/nix.sh
+
+# enable nix for the rest of script
+# try linux way first
+if [ -z "${commands[nix]}" ]; then
+  . /etc/profile.d/nix.sh || true
+  . /etc/profile.d/user-shim-for-nix-path.sh || true
+fi
+
+# try macOS way next
+if [ -z "${commands[nix]}" ]; then
+  . ~/.nix-profile/etc/profile.d/nix.sh || true
+fi
+
+if [ -z "${commands[nix]}" ]; then
+  echo '`nix` is still not found but trying to run the rest of this script anyway'
+fi
 
 # get repo path
 if [ -x "$(command -v greadlink)" ]; then
