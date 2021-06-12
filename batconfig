@@ -18,6 +18,8 @@
 # disable text selection, unless you press shift.
 --pager="less --RAW-CONTROL-CHARS --quit-if-one-screen --mouse -I"
 
+--map-syntax='*.nomad:Terraform'
+
 # Syntax mappings: map a certain filename pattern to a language.
 #   Example 1: use the C++ syntax for .ino files
 #   Example 2: Use ".gitignore"-style highlighting for ".ignore" files
