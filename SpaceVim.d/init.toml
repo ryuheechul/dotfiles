@@ -152,3 +152,7 @@ merged = false
 [[custom_plugins]]
 name = "jaawerth/neomake-local-eslint-first"
 merged = false
+
+[[custom_plugins]]
+name = "tsandall/vim-rego"
+merged = false
