@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 
+set -e
 set -x
 
 # If you are on linux, do this first before ./bootstrap.sh!

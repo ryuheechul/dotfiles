@@ -14,19 +14,11 @@ cd ../ || exit
 
 
 # enable nix for the rest of script
-# try linux way first
-if [ -z "${commands[nix]}" ]; then
-  . /etc/profile.d/nix.sh || true
-  . /etc/profile.d/user-shim-for-nix-path.sh || true
-fi
 
-# try macOS way next
-if [ -z "${commands[nix]}" ]; then
-  . ~/.nix-profile/etc/profile.d/nix.sh || true
-fi
+. ./nix/bin/source-nix.sh
 
-if [ -z "${commands[nix]}" ]; then
-  echo '`nix` is still not found but trying to run the rest of this script anyway'
+if [ -z "$(command -v nix)" ]; then
+  echo 'Warning: `nix` is still not found but trying to run the rest of this script anyway'
 fi
 
 # get repo path

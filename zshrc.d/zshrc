@@ -23,6 +23,10 @@ function _load_brew() {
 
 # prevent overriding unnecessarily in case it's being loaded again
 if [ -z "$MY_BASIC_ZSH_STUFF_LOADED" ] || [ -n "$FORCE_LOAD_MY_ZSH_STUFF" ]; then
+
+  # just in case `nix` is still not loaded
+  . ~/dotfiles/nix/bin/source-nix.sh # maybe the path could be updated later to prevent `~/dotfiles` being hard coded
+
   _load_brew
 
   # bootstrap terminal
