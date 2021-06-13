@@ -25,13 +25,13 @@ cd ../../../ || exit
 nix-shell -p coreutils --run ./nix/bin/init-home-manager.sh
 
 if [ -x "$(command -v nix)" ]; then
-  SKIP_INSTALL_BREW=1
+  SKIP_BREW_BUNDLE=1
   home-manager switch
 fi
 
 ####### brew #######
 
-[ -f /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+[ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # install homebrew
 if ! command -v brew &> /dev/null; then
@@ -43,10 +43,18 @@ else
     echo "brew exist, so skipping installation"
 fi
 
+# in case of apple silicon because:
+# - nix currently only run with Rosetta 2 
+# - at least terminal and shell should run natively 
+# - to prevent being forced to run only Intel based apps as child processes of the shell and terminal
+if test "arm64" = "$(arch)"; then
+  brew install zsh bash tmux
+fi
+
 ####### Brewfile #######
 
 # install via Brewfile
-if [ -z "${SKIP_INSTALL_BREW}" ]; then
+if [ -z "${SKIP_BREW_BUNDLE}" ]; then
   brew update --verbose
   brew bundle --verbose --file brew/Brewfile
 

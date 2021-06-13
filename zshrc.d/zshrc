@@ -9,10 +9,21 @@ function _echo() {
   fi
 }
 
-# prevent overriding unnecessarily in case it's being loaded again
-if [[ -z $ALL_MY_ZSH_STUFF_LOADED ]] || [[ -n $FORCE_LOAD_MY_ZSH_STUFF ]]; then
+function _load_brew() {
   # in case of linux
-  [ -d /home/linuxbrew/.linuxbrew/bin ] && export PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}
+  [ -x /home/linuxbrew/.linuxbrew/bin/brew ] && \
+    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
+  # in case of apple silicon
+  [ -x /opt/homebrew/bin/brew ] && \
+    eval $(/opt/homebrew/bin/brew shellenv)
+
+  # in case of intel mac, it should already be loaded
+}
+
+# prevent overriding unnecessarily in case it's being loaded again
+if [ -z "$MY_BASIC_ZSH_STUFF_LOADED" ] || [ -n "$FORCE_LOAD_MY_ZSH_STUFF" ]; then
+  _load_brew
 
   # bootstrap terminal
   alias shellwe="cd && neofetch && ~/.local/bin/tmux-attach-or-new.sh default"
@@ -30,6 +41,8 @@ if [[ -z $ALL_MY_ZSH_STUFF_LOADED ]] || [[ -n $FORCE_LOAD_MY_ZSH_STUFF ]]; then
 
   # enable reverse-i-search
   bindkey '^R' history-incremental-search-backward
+
+  export MY_BASIC_ZSH_STUFF_LOADED=1
 fi
 
 ## to have an option of preventing loading things nested in tmux shell
@@ -76,3 +89,4 @@ unset ADDON_D
 export ALL_MY_ZSH_STUFF_LOADED=1
 
 unfunction _echo
+unfunction _load_brew
