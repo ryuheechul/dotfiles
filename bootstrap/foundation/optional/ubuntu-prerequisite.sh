@@ -4,4 +4,5 @@ set -e
 set -x
 
 # since ubuntu may not come with these 
-sudo apt install git curl
+sudo apt update && \
+  sudo apt install git curl openssh-server
