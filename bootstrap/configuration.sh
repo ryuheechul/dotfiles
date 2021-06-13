@@ -99,6 +99,9 @@ ln -sf "${this_repo_path}/asdf/tool-versions" ~/.tool-versions
 
 git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0 || true
 
+# avoid using `/usr/local/bin` as a global path for yarn
+yarn config set prefix ~/.yarn
+
 ## installing packages with asdf is being replaced with Nix - look at ../nix/pkgs.nix
 
 # asdf plugin add python
