@@ -43,6 +43,7 @@ let
   ] ++ (with nodePackages; [
     node2nix
     javascript-typescript-langserver
+    pnpm
   # with node2nix
   ]) ++ [
     node-global-pkg-neovim

@@ -36,6 +36,7 @@ with pkgs;
 
   # search
   ripgrep # modern grep
+  amber # A code search-and-replace tool
   fasd # Command-line productivity booster, offers quick access to files and directories
   fd # mordern find
 
