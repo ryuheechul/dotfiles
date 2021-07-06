@@ -18,7 +18,6 @@ with pkgs;
   emacs-nox # terminal only emacs
   starship # cross-shell prompt
   fzf # A command-line fuzzy finder
-  direnv # auto loading env per dir
   gotop # terminal based graphical activity monitor
   bottom # bottom instead of top
   gnupg # GnuPG
