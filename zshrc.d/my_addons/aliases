@@ -35,6 +35,7 @@ alias gs="git status"
 alias tgs="tig status"
 alias gd="git diff"
 alias gdc="git diff --cached"
+alias gl="git pull --rebase"
 
 
 # viewer and filter
