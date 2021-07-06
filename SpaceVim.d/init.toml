@@ -156,3 +156,7 @@ merged = false
 [[custom_plugins]]
 name = "tsandall/vim-rego"
 merged = false
+
+[[custom_plugins]]
+name = "sheerun/vim-polyglot"
+merged = false

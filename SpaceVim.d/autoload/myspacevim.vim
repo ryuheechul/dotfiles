@@ -108,6 +108,8 @@ function! myspacevim#before() abort
   " let nvim terminal to load full zshrc
   let $FORCE_LOAD_MY_ZSH_STUFF = 1
   let $SILENT_FEEDBACK_ZSHRC = 1
+
+  let g:vim_svelte_plugin_use_typescript = 1
 endfunction
 
 function! myspacevim#after() abort
