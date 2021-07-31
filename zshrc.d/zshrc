@@ -81,6 +81,9 @@ fi
 
 ## addons
 #
+# to speed up SpaceVim startup time
+export PYTHON3_HOST_PROG=`command -v python3`
+
 # source from seperate files to organize better
 export ADDON_D=~/.config/zshrc.d/my_addons
 for source_file in zinit lf_icons aliases shell_ext

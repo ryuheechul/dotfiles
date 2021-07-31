@@ -109,7 +109,17 @@ function! myspacevim#before() abort
   let $FORCE_LOAD_MY_ZSH_STUFF = 1
   let $SILENT_FEEDBACK_ZSHRC = 1
 
+  let g:polyglot_disabled = ['markdown']
+
   let g:vim_svelte_plugin_use_typescript = 1
+
+  " to save 200ms of loading time
+  let g:loaded_python_provider = 0 
+  " explicitly not load to have cleaner health check
+  let g:loaded_ruby_provider = 0
+  let g:loaded_perl_provider = 0
+  let g:loaded_node_provider = 0 " somehow binary from nix does this automatically
+
 endfunction
 
 function! myspacevim#after() abort
