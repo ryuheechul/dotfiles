@@ -23,6 +23,12 @@ with pkgs;
   gnupg # GnuPG
   wget # useful for downloading files
 
+  # editor - mostly for neovim
+  ## TODO: add descriptions for tools below
+  ctags
+  tree-sitter
+  clang-tools
+  rust-analyzer
 
   # viewer
   vivid # LS_COLORS generator

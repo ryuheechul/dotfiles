@@ -34,7 +34,7 @@ if [ -z "$MY_BASIC_ZSH_STUFF_LOADED" ] || [ -n "$FORCE_LOAD_MY_ZSH_STUFF" ]; the
 
   # terminal and editor
   [[ $TMUX = "" ]] && export TERM="xterm-256color"
-  export EDITOR=nvim
+  export EDITOR="nvim -u ~/.config/my-quick-nvim/init.lua"
 
   # vi keybinding
   export KEYTIMEOUT=1

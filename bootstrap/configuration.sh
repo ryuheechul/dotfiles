@@ -67,6 +67,9 @@ git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shel
 # lf
 ln -sf "${this_repo_path}/lf" ~/.config/lf
 
+# my quick nvim configurations
+ln -sf "${this_repo_path}/nvim" ~/.config/my-quick-nvim
+
 # tig
 ln -sf "${this_repo_path}/vim.tigrc" ~/.tigrc
 
