@@ -41,34 +41,21 @@ require('packer').startup(function()
   use 'hrsh7th/nvim-compe' -- Autocompletion plugin
   use 'L3MON4D3/LuaSnip' -- Snippets plugin
 
-  -- bringing plugins to accomodate my muscle memory with ../SpaceVim.d
+  --- bringing plugins to accomodate my muscle memory with ../SpaceVim.d
+
+  -- for more text objects, visit https://github.com/kana/vim-textobj-user/wiki
+  use { 'kana/vim-textobj-line', requires = { 'kana/vim-textobj-user' } }
+  use { 'kana/vim-textobj-entire', requires = { 'kana/vim-textobj-user' } }
+  use 'christoomey/vim-system-copy'
+  use 'roxma/vim-tmux-clipboard'
   use 'christoomey/vim-tmux-navigator'
   use 'tmux-plugins/vim-tmux-focus-events'
-  use 'roxma/vim-tmux-clipboard'
   use 'tpope/vim-surround'
-
   use { 'codota/tabnine-vim', event = 'InsertEnter' }
-
   use 'sheerun/vim-polyglot'
-  use {
-    'AckslD/nvim-whichkey-setup.lua',
-    requires = {'liuchengxu/vim-which-key'},
-  }
+  -- let space to show which keys are available just like SpaceVim
+  use { 'AckslD/nvim-whichkey-setup.lua', requires = {'liuchengxu/vim-which-key'} }
 end)
-
---- my keymaps to to accomodate my muscle memory with ../SpaceVim.d
-
--- because `use 'zhou13/vim-easyescape'` is too slow on startup
-vim.api.nvim_set_keymap('i', 'jk', '<Esc>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<Tab>', ':wincmd w<CR>', { noremap = true, silent = true })
-
--- indent right away without waiting in normal mode
-vim.api.nvim_set_keymap('n', '>', '>>', { noremap = true })
-vim.api.nvim_set_keymap('n', '<', '<<', { noremap = true })
-
--- stay in visual mode after indentation in visual mode
-vim.api.nvim_set_keymap('v', '>', '>gv', { noremap = true })
-vim.api.nvim_set_keymap('v', '<', '<gv', { noremap = true })
 
 --Incremental live completion
 vim.o.inccommand = 'nosplit'
@@ -370,11 +357,10 @@ vim.api.nvim_set_keymap('s', '<S-Tab>', 'v:lua.s_tab_complete()', { expr = true 
 vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm("<cr>")', { expr = true })
 vim.api.nvim_set_keymap('i', '<c-space>', 'compe#complete()', { expr = true })
 
+--- my custom configs to accomodate my muscle memory with ../SpaceVim.d
 
---- use which-key to accomodate visual assistant on key-bindings ../SpaceVim.d
-local wk = require('whichkey_setup')
-
-local keymap = {
+-- use which-key to accomodate visual assistant on key-bindings ../SpaceVim.d
+require('whichkey_setup').register_keymap('leader', {
     w = {':w!<CR>', 'save file'}, -- set a single command and text
     j = 'split args', -- only set a text for an already configured keymap
     ['<CR>'] = {'@q', 'macro q'}, -- setting a special key
@@ -402,7 +388,24 @@ local keymap = {
         name = '+Searching/Symbol',
         c = {'<Cmd>nohlsearch<CR>', 'clear hihglight'},
     },
-}
+})
 
-wk.register_keymap('leader', keymap)
+-- put away `tags` according to https://github.com/ludovicchabant/vim-gutentags/issues/211
+vim.g.gutentags_ctags_tagfile = '.git/gutentags'
 
+--- my keymaps to to accomodate my muscle memory with ../SpaceVim.d
+
+-- because `use 'zhou13/vim-easyescape'` is too slow on startup
+vim.api.nvim_set_keymap('i', 'jk', '<Esc>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Tab>', '<Cmd>wincmd w<CR>', { noremap = true, silent = true })
+
+-- indent right away without waiting in normal mode
+vim.api.nvim_set_keymap('n', '>', '>>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<', '<<', { noremap = true })
+
+-- stay in visual mode after indentation in visual mode
+vim.api.nvim_set_keymap('v', '>', '>gv', { noremap = true })
+vim.api.nvim_set_keymap('v', '<', '<gv', { noremap = true })
+
+-- q to close
+vim.api.nvim_set_keymap('n', 'q', '<Cmd>q<CR>', { noremap = true })
