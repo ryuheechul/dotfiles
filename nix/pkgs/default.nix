@@ -25,7 +25,7 @@ with pkgs;
 
   # editor - mostly for neovim
   ## TODO: add descriptions for tools below
-  ctags
+  universal-ctags
   tree-sitter
   clang-tools
   rust-analyzer
