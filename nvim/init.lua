@@ -24,13 +24,16 @@ require('packer').startup(function()
   use 'tpope/vim-fugitive' -- Git commands in nvim
   use 'tpope/vim-rhubarb' -- Fugitive-companion to interact with github
   use 'tpope/vim-commentary' -- "gc" to comment visual regions/lines
-  use 'ludovicchabant/vim-gutentags' -- Automatic tags management
+  -- comment since it creates more issue than a help for my usage
+  -- use 'ludovicchabant/vim-gutentags' -- Automatic tags management
   -- UI to select things (files, grep results, open buffers...)
   use { 'nvim-telescope/telescope.nvim', requires = { { 'nvim-lua/popup.nvim' }, { 'nvim-lua/plenary.nvim' } } }
   use 'joshdick/onedark.vim' -- Theme inspired by Atom
   use 'itchyny/lightline.vim' -- Fancier statusline
   -- Add indentation guides even on blank lines
-  use 'lukas-reineke/indent-blankline.nvim'
+  -- comment until this issue gets resolved,
+  -- https://github.com/lukas-reineke/indent-blankline.nvim/issues/74
+  -- use 'lukas-reineke/indent-blankline.nvim'
   -- Add git related info in the signs columns and popups
   use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
   -- Highlight, edit, and navigate code using a fast incremental parsing library
@@ -46,15 +49,20 @@ require('packer').startup(function()
   -- for more text objects, visit https://github.com/kana/vim-textobj-user/wiki
   use { 'kana/vim-textobj-line', requires = { 'kana/vim-textobj-user' } }
   use { 'kana/vim-textobj-entire', requires = { 'kana/vim-textobj-user' } }
-  use 'christoomey/vim-system-copy'
-  use 'roxma/vim-tmux-clipboard'
-  use 'christoomey/vim-tmux-navigator'
-  use 'tmux-plugins/vim-tmux-focus-events'
-  use 'tpope/vim-surround'
-  use { 'codota/tabnine-vim', event = 'InsertEnter' }
-  use 'sheerun/vim-polyglot'
-  -- let space to show which keys are available just like SpaceVim
-  use { 'AckslD/nvim-whichkey-setup.lua', requires = {'liuchengxu/vim-which-key'} }
+
+  use 'christoomey/vim-system-copy' -- copy text to clipboard with `cp`
+  use 'roxma/vim-tmux-clipboard' -- share clipboard with tmux
+  use 'christoomey/vim-tmux-navigator' -- navigate with tmux key binding
+  use 'tpope/vim-surround' -- surround text with something like quotes
+  use { 'codota/tabnine-vim', event = 'InsertEnter' } -- AI helper to type quicker
+  use 'sheerun/vim-polyglot' -- one plugin to accomodate many different filetypes
+  use { 'folke/which-key.nvim' } -- show key bindings just like SpaceVim
+  use { 'junegunn/goyo.vim' } -- a helper to focus on one window
+  use { 'akinsho/nvim-toggleterm.lua' } -- a great ergonomic terminal customization
+  use { 'ap/vim-buftabline' } -- simple and light tab (actually buffer) visualizer
+  use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' } -- enhanced filetree replacing netrw
+  use { 'axelf4/vim-strip-trailing-whitespace' } -- strip whitespace on save
+  use { 'tpope/vim-repeat' } -- enhance `.` to repeat on non-native functionality like vim-surround
 end)
 
 --Incremental live completion
@@ -100,8 +108,8 @@ vim.g.lightline = {
 
 --Remap space as leader key
 vim.api.nvim_set_keymap('', '<Space>', '<Nop>', { noremap = true, silent = true })
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+-- vim.g.mapleader = ' '
+-- vim.g.maplocalleader = ' '
 
 --Remap for dealing with word wrap
 vim.api.nvim_set_keymap('n', 'k', "v:count == 0 ? 'gk' : 'k'", { noremap = true, expr = true, silent = true })
@@ -137,14 +145,14 @@ require('telescope').setup {
   },
 }
 --Add leader shortcuts
-vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sf', [[<cmd>lua require('telescope.builtin').find_files({previewer = false})<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sb', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sh', [[<cmd>lua require('telescope.builtin').help_tags()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>st', [[<cmd>lua require('telescope.builtin').tags()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sd', [[<cmd>lua require('telescope.builtin').grep_string()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sp', [[<cmd>lua require('telescope.builtin').live_grep()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>so', [[<cmd>lua require('telescope.builtin').tags{ only_current_buffer = true }<CR>]], { noremap = true, silent = true }) vim.api.nvim_set_keymap('n', '<leader>?', [[<cmd>lua require('telescope.builtin').oldfiles()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space><space>', [[<cmd>lua require('telescope.builtin').buffers()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>sf', [[<cmd>lua require('telescope.builtin').find_files({previewer = false})<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>sb', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>sh', [[<cmd>lua require('telescope.builtin').help_tags()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>st', [[<cmd>lua require('telescope.builtin').tags()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>sd', [[<cmd>lua require('telescope.builtin').grep_string()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>sp', [[<cmd>lua require('telescope.builtin').live_grep()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>so', [[<cmd>lua require('telescope.builtin').tags{ only_current_buffer = true }<CR>]], { noremap = true, silent = true }) vim.api.nvim_set_keymap('n', '<leader>?', [[<cmd>lua require('telescope.builtin').oldfiles()<CR>]], { noremap = true, silent = true })
 
 -- Highlight on yank
 vim.api.nvim_exec(
@@ -359,9 +367,33 @@ vim.api.nvim_set_keymap('i', '<c-space>', 'compe#complete()', { expr = true })
 
 --- my custom configs to accomodate my muscle memory with ../SpaceVim.d
 
+-- show some hidden characters
+vim.o.listchars = [[tab:→\ ,eol:↵,trail:·,extends:↷,precedes:↶]]
+vim.o.list = true
+
 -- use which-key to accomodate visual assistant on key-bindings ../SpaceVim.d
-require('whichkey_setup').register_keymap('leader', {
-    w = {':w!<CR>', 'save file'}, -- set a single command and text
+paste_after_here = '"*p'
+paste_before_here = '"*P'
+if vim.fn.has('unnamedplus') == 1 then
+  paste_after_here = '"+p'
+  paste_before_here = '"+P'
+end
+
+require('which-key').register({
+    p = {paste_after_here, 'paste after here'},
+    P = {paste_before_here, 'paste before here'},
+}, { prefix = '<leader>' })
+
+require('which-key').register({
+    [' '] = {'', 'remove trailing whitespaces'},
+}, { prefix = ',' })
+
+require('which-key').register({
+    w = {
+      m = {':Goyo<CR>', 'maximize/minimize window'}
+    },
+    ['<Tab>'] = {':bn<CR>', 'rotate buffer'},
+    ["'"] = {':ToggleTerm<CR>', 'open shell'},
     j = 'split args', -- only set a text for an already configured keymap
     ['<CR>'] = {'@q', 'macro q'}, -- setting a special key
     f = { -- set a nested structure
@@ -381,17 +413,17 @@ require('whichkey_setup').register_keymap('leader', {
             b = {'<Cmd>Telescope git_branches<CR>', 'branches'},
             s = {'<Cmd>Telescope git_status<CR>', 'status'},
         },
-
         s = {':w<CR>', 'save file'}, -- set a single command and text
+        t = {':NvimTreeToggle<CR>', 'toggle file tree'},
     },
     s = {
         name = '+Searching/Symbol',
         c = {'<Cmd>nohlsearch<CR>', 'clear hihglight'},
     },
-})
+}, { prefix = '<Space>' })
 
 -- put away `tags` according to https://github.com/ludovicchabant/vim-gutentags/issues/211
-vim.g.gutentags_ctags_tagfile = '.git/gutentags'
+-- vim.g.gutentags_ctags_tagfile = '.git/gutentags'
 
 --- my keymaps to to accomodate my muscle memory with ../SpaceVim.d
 
@@ -409,3 +441,80 @@ vim.api.nvim_set_keymap('v', '<', '<gv', { noremap = true })
 
 -- q to close
 vim.api.nvim_set_keymap('n', 'q', '<Cmd>q<CR>', { noremap = true })
+
+-- remember the last position and go to that line
+-- https://askubuntu.com/a/202077
+vim.cmd [[if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+endif]]
+
+-- augment terminal
+
+vim.cmd [[
+  let $FORCE_LOAD_MY_ZSH_STUFF = 1
+  let $NO_VI_KEY_ON_ZSH = 1
+]]
+
+require("toggleterm").setup{
+  -- size can be a number or function which is passed the current terminal
+  size =  function(term)
+    if term.direction == "horizontal" then
+      return 15
+    elseif term.direction == "vertical" then
+      return vim.o.columns * 0.4
+    end
+  end, -- | 20
+  open_mapping = [[<c-\>]],
+  hide_numbers = true, -- hide the number column in toggleterm buffers
+  shade_filetypes = {},
+  shade_terminals = true,
+  shading_factor = '<number>', -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
+  start_in_insert = true,
+  insert_mappings = true, -- whether or not the open mapping applies in insert mode
+  persist_size = true,
+  direction = 'horizontal', -- | 'vertical' | 'window' | 'float',
+  close_on_exit = true, -- close the terminal window when the process exits
+  shell = vim.o.shell, -- change the default shell
+  -- This field is only relevant if direction is set to 'float'
+  float_opts = {
+    -- The border key is *almost* the same as 'nvim_win_open'
+    -- see :h nvim_win_open for details on borders however
+    -- the 'curved' border is a custom border type
+    -- not natively supported but implemented in this plugin.
+    border = 'single', -- | 'double' | 'shadow' | 'curved' | ... other options supported by win open
+    -- width = <value>,
+    -- height = <value>,
+    winblend = 3,
+    highlights = {
+      border = "Normal",
+      background = "Normal",
+    }
+  }
+}
+
+local opts = {noremap = true}
+vim.api.nvim_set_keymap('t', '<esc>', [[<C-\><C-n>]], opts)
+vim.api.nvim_set_keymap('t', 'jk', [[<C-\><C-n>]], opts)
+vim.api.nvim_set_keymap('t', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
+vim.api.nvim_set_keymap('t', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
+vim.api.nvim_set_keymap('t', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
+vim.api.nvim_set_keymap('t', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
+
+-- nvimtree
+vim.g.nvim_tree_side = 'right'
+
+-- vim.g.nvim_tree_auto_open = true
+vim.g.nvim_tree_auto_close = true
+vim.g.nvim_tree_disable_netrw = false
+vim.g.nvim_tree_hijack_netrw = false
+local tree_cb = require'nvim-tree.config'.nvim_tree_callback
+-- override default mappings
+vim.g.nvim_tree_bindings = {
+  { key = {"o", "<2-LeftMouse>", "l"},         cb = tree_cb("edit") },
+  -- { key = {"<2-RightMouse>", "<C-]>", "<CR>"}, cb = tree_cb("cd") },
+  { key = {"-", "h"},                          cb = tree_cb("dir_up") },
+  { key = {"<Tab>"},                           cb = ':wincmd w<CR>' },
+}
+
+-- only show when there is more than two files are open
+vim.g.buftabline_show = 1

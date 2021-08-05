@@ -41,7 +41,6 @@ if [ -z "$MY_BASIC_ZSH_STUFF_LOADED" ] || [ -n "$FORCE_LOAD_MY_ZSH_STUFF" ]; the
 
   # vi keybinding
   export KEYTIMEOUT=1
-  bindkey -v
 
   # maintain this until https://github.com/ohmyzsh/ohmyzsh/pull/9750 is merged
   setopt auto_cd
@@ -80,6 +79,13 @@ if [[ -n $ALL_MY_ZSH_STUFF_LOADED ]]; then
     _echo "to prevent skipping, set \$FORCE_LOAD_MY_ZSH_STUFF"
     return
   fi
+fi
+
+# make it possible to cancel vi keybinding via $NO_VI_KEY_ON_ZSH
+if [[ -z $NO_VI_KEY_ON_ZSH ]]; then
+  set -o vi
+else
+  set -o emacs
 fi
 
 ## addons
