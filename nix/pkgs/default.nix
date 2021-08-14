@@ -23,12 +23,17 @@ with pkgs;
   gnupg # GnuPG
   wget # useful for downloading files
 
+  # modern tools - i.e. https://github.com/ibraheemdev/modern-unix
+  dasel # jq, yq replacement
+  hyperfine # Command-line benchmarking tool
+  xh # httpie reimplementation - use with `xh` and `xhs`
+  curlie # front-end to curl that tries to mimic httpie
+  choose # a human-friendly and fast alternative to cut and (sometimes) awk
+
   # editor - mostly for neovim
-  ## TODO: add descriptions for tools below
-  universal-ctags
-  tree-sitter
-  clang-tools
-  rust-analyzer
+  tree-sitter # An incremental parsing system for programming tools
+  clang-tools # Standalone command line tools for C++ development
+  rust-analyzer # An experimental modular compiler frontend for the Rust language
 
   # viewer
   vivid # LS_COLORS generator
@@ -38,6 +43,9 @@ with pkgs;
   lf # terminal file manager
   fx # json viewer
   delta # syntax-highlighting pager for git
+  du-dust # du + rust = dust. Like du but more intuitive - use with `dust`
+  duf # Disk Usage/Free Utility
+  gping # ping with graph
 
   # search
   ripgrep # modern grep

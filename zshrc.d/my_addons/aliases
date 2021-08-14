@@ -10,6 +10,8 @@ alias htop="btm -b"
 alias path="echo $PATH | tr : '\n'"
 # overwrite essential stuff
 alias which="which -a"
+alias ping="gping"
+alias df="duf"
 
 # exa
 alias exa="exa --icons --group-directories-first -F --ignore-glob='**/.git|**/.DS_Store'"
