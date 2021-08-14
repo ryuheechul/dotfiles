@@ -19,6 +19,7 @@
 --pager="less --RAW-CONTROL-CHARS --quit-if-one-screen --mouse -I"
 
 --map-syntax='*.nomad:Terraform'
+--map-syntax='*tmux.conf:Tmux' # https://github.com/sharkdp/bat/issues/1703
 
 # Syntax mappings: map a certain filename pattern to a language.
 #   Example 1: use the C++ syntax for .ino files

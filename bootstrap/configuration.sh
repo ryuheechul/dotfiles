@@ -50,7 +50,7 @@ EOF
 
 # symlink batconfig
 mkdir -p ~/.config/bat
-ln -sf "${this_repo_path}/batconfig" ~/.config/bat/config
+ln -sf "${this_repo_path}/bat" ~/.config/bat
 
 # alacritty
 ln -sf "${this_repo_path}/alacritty.yml" ~/.alacritty.yml
