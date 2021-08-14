@@ -20,6 +20,9 @@
 
 --map-syntax='*.nomad:Terraform'
 --map-syntax='*tmux.conf:Tmux' # https://github.com/sharkdp/bat/issues/1703
+--map-syntax='*spacemacs:Lisp'
+--map-syntax='**/zshrc.d/my_addons/*:Bourne Again Shell (bash)'
+--map-syntax='**/zshrc.d/z*:Bourne Again Shell (bash)'
 
 # Syntax mappings: map a certain filename pattern to a language.
 #   Example 1: use the C++ syntax for .ino files
