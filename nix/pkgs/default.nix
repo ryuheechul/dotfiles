@@ -49,7 +49,7 @@ with pkgs;
 
   # search
   ripgrep # modern grep
-  amber # A code search-and-replace tool
+  amber # A code search-and-replace tool - use it with `ambs` and `ambr`
   fasd # Command-line productivity booster, offers quick access to files and directories
   fd # mordern find
 

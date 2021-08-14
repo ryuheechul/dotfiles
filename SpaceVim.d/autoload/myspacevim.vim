@@ -120,6 +120,10 @@ function! myspacevim#before() abort
   let g:loaded_perl_provider = 0
   let g:loaded_node_provider = 0 " somehow binary from nix does this automatically
 
+  let g:indent_blankline_disable_warning_message = 1
+
+  " it can be in after but not with SpaceVim v1.6.0 speculating due to the bug
+  call s:auto_dark_mode_setup()
 endfunction
 
 function! myspacevim#after() abort
@@ -161,5 +165,6 @@ function! myspacevim#after() abort
   call defx#custom#option('_', 'columns', 'git:mark:indent:icons:filename:type:size:time')
   Defx | Defx | wincmd p
 
-  call s:auto_dark_mode_setup()
+
+  au TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=300, on_visual=true}
 endfunction
