@@ -66,10 +66,13 @@ if [ -n "${commands[yarn]}" ]; then
   export PATH="${_YARN_GLOBAL_PATH}:${PATH}"
 fi
 
-
+# asdf
 ASDF_DIR=${ASDF_DIR:-${HOME}/.asdf}
 # https://github.com/asdf-vm/asdf - version manager
 [ -f "${ASDF_DIR}/asdf.sh" ] && source "${ASDF_DIR}/asdf.sh"
+
+# discover user specific binaries and scripts
+export PATH="${HOME}/.local/bin:${PATH}"
 
 # starship
 _evalcache starship init zsh
