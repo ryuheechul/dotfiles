@@ -25,15 +25,16 @@ Rest of my instruction will assume that you cloned to `~/dotfiles` though.
 
 ### Platform foundation
 
-`~/dotfiles/bootstrap/foundation/linux.sh`
+`~/dotfiles/bootstrap/foundation/linux.sh` # recommended to look at an example below
 
 or
 
-`~/dotfiles/bootstrap/foundation/mac/essential.sh`
+`~/dotfiles/bootstrap/foundation/mac/essential.sh` # recommended you to look at an example below
 
 ### Configuration
 
-`~/dotfiles/bootstrap/configuration.sh`
+`~/dotfiles/bootstrap/configuration.sh` # recommended you to look at an example below
+
 
 ### Examples
 
@@ -46,7 +47,7 @@ source /etc/profile.d/user-shim-for-nix-path.sh
 ~/dotfiles/bootstrap/configuration.sh
 ```
 
-> See https://github.com/ryuheechul/dotfiles-launchpad/tree/master/Vagrantfile for mode details
+> See https://github.com/ryuheechul/dotfiles-launchpad/tree/master/Vagrantfile for more details
 
 #### macOS
 ```
@@ -63,7 +64,7 @@ source /etc/profile.d/user-shim-for-nix-path.sh
 ## Stuff that come with
 
 All the source code here aim to be self explanatory.
-You can take a look at directory and files especially top level ones and `bootstrap/configuration.sh`, `nix/pkgs.nix`.
+You can take a look at directories and files especially top level ones and `bootstrap/configuration.sh`, `nix/pkgs/`.
 Frequent updates are expected as the needs grow.
 
 https://github.com/ryuheechul/dotfiles-launchpad might be useful to see how it's being used
