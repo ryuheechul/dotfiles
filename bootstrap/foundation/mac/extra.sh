@@ -10,6 +10,7 @@ cd "$(dirname "$0")" || exit
 cd ../../../ || exit
 
 . ~/.nix-profile/etc/profile.d/nix.sh
+[ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 ####### Screenshots #######
 

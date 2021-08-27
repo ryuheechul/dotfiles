@@ -54,10 +54,12 @@ source /etc/profile.d/user-shim-for-nix-path.sh
 # this should prepare essential stuff
 ~/dotfiles/bootstrap/foundation/mac/essential.sh
 
-# do below optionally since it's heavily customized to the author
+# do below only optionally since it's heavily customized to the author
+# make sure to sign in to appstore first
 ~/dotfiles/bootstrap/foundation/mac/extra.sh
 
 # this should prepare platform agnostic essential stuff
+# you might need to open a new terminal window to be able to do this successfully
 ~/dotfiles/bootstrap/configuration.sh
 ```
 

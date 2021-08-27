@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set -e
 # set -x # uncomment this for debugging
 
 # If you are on mac, do this first before ./bootstrap.sh!
@@ -77,10 +78,10 @@ fi
 ####### system #######
 set -x
 
-defaults read -g TISRomanSwitchState
+defaults read -g TISRomanSwitchState || true
 echo "use the Caps Lock key to switch between input sources via setting it to 1"
 
-defaults read -g "com.apple.trackpad.scaling"
+defaults read -g "com.apple.trackpad.scaling" || true
 echo "change trackpad speed via changing it to 2.5"
 
 echo "allow three fingers to drag in Accessibility > Pointer Control > Trackpad Options"
