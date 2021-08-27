@@ -12,6 +12,17 @@ cd ../../../ || exit
 
 ####### Nix #######
 
+## TODO: add a step to workaround absence of T2 chip and in the meantime read below to workaround manually
+# check if filevault is enabled (most likely with non-T2 mac) - https://osxdaily.com/2013/11/25/check-filevault-status-command-line-mac-os-x/
+# `fdesetup status == `FileVault is On.`
+# because it will fail to install nix
+# you can workaround that by creating volume and mount it to `/nix` manually
+# create volume by `Disk Utility` GUI app
+# `disktuil list` to check what is map to `/dev/disk1sX`
+# `mount_apfs /dev/disk1sX /nix`
+# and you should be good to go
+## end of TODO
+
 # install nix
 ./nix/bin/install/darwin.sh
 
