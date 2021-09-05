@@ -10,8 +10,7 @@ fi
 
 # let brew (binaries) takes more priority then nix in case of apple silicon
 if test "Darwin" = "$(uname)" && test "arm64" = "$(arch)"; then
-  [ -x /opt/homebrew/bin/brew ] && \
-    eval $(/opt/homebrew/bin/brew shellenv)
+  [ -x /opt/homebrew/bin/brew ] && eval $(/opt/homebrew/bin/brew shellenv)
 fi
 
 SHELL=$(which zsh)

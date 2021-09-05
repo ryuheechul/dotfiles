@@ -42,14 +42,14 @@ if [ -z "$MY_BASIC_ZSH_STUFF_LOADED" ] || [ -n "$FORCE_LOAD_MY_ZSH_STUFF" ]; the
   # vi keybinding
   export KEYTIMEOUT=1
 
-  # maintain this until https://github.com/ohmyzsh/ohmyzsh/pull/9750 is merged
-  setopt auto_cd
-
   # enable reverse-i-search
   bindkey '^R' history-incremental-search-backward
 
   export MY_BASIC_ZSH_STUFF_LOADED=1
 fi
+
+# maintain this until https://github.com/ohmyzsh/ohmyzsh/pull/9750 is merged
+setopt auto_cd
 
 ## to have an option of preventing loading things nested in tmux shell
 # if TMUX var is not set then...

@@ -41,6 +41,8 @@ _install_cask iterm2
 # https://github.com/NHDaly/tmux-better-mouse-mode/issues/42#issuecomment-579612022
 echo "read https://github.com/NHDaly/tmux-better-mouse-mode/issues/42#issuecomment-579612022 for tmux scrolling issue with iterm"
 
+echo "Go to Profiles > Command > Command and set '~/.local/bin/tmux-attach-or-new.sh default'"
+
 sleep 3
 
 _install_cask alfred
