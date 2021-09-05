@@ -23,3 +23,8 @@ font:
   size: 11.0
   use_thin_strokes: true # macOS only
   draw_bold_text_with_bright_colors: true
+shell:
+  program: /bin/bash
+  args:
+    - -c
+    - '~/.local/bin/tmux-attach-or-new.sh default'
