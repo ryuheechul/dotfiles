@@ -24,11 +24,16 @@ cd ../../../ || exit
 # and you should be good to go
 ## end of TODO
 
-# install nix
-./nix/bin/install/darwin.sh
+[ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ] && . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 
-# source nix profile only for this script to work
-. ~/.nix-profile/etc/profile.d/nix.sh
+# install nix
+if ! command -v nix &> /dev/null
+then
+  ./nix/bin/install/darwin.sh
+
+  # source nix profile only for this script to work
+  . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+fi
 
 # init channels
 ./nix/bin/channels.sh
