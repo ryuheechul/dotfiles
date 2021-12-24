@@ -18,7 +18,7 @@ with pkgs;
   emacs-nox # terminal only emacs
   starship # cross-shell prompt
   fzf # A command-line fuzzy finder
-  gotop # terminal based graphical activity monitor
+  # gotop # terminal based graphical activity monitor
   bottom # bottom instead of top
   gnupg # GnuPG
   wget # useful for downloading files
@@ -32,7 +32,7 @@ with pkgs;
 
   # editor - mostly for neovim
   tree-sitter # An incremental parsing system for programming tools
-  clang-tools # Standalone command line tools for C++ development
+  # clang-tools # Standalone command line tools for C++ development
   rust-analyzer # An experimental modular compiler frontend for the Rust language
 
   # viewer
@@ -71,13 +71,13 @@ with pkgs;
   neofetch
 ]
 ++ (import ./extra/default.nix {pkgs=pkgs;})
-++
-(with bat-extras; [
-  batman
-  batgrep
-  batdiff
-  batwatch
-  prettybat
-])
+#++
+#(with bat-extras; [
+#  batman
+#  batgrep
+#  batdiff
+#  batwatch
+#  prettybat
+#])
 ++
 (import ./lang.nix {pkgs=pkgs;})
