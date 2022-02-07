@@ -44,7 +44,11 @@ require('packer').startup(function()
   -- Additional textobjects for treesitter
   use 'nvim-treesitter/nvim-treesitter-textobjects'
   use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
-  use 'hrsh7th/nvim-compe' -- Autocompletion plugin
+  use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
+  -- use { 'codota/tabnine-vim', event = 'InsertEnter' } -- AI helper to type quicker
+  use {'tzachar/cmp-tabnine', run='./install.sh', requires = 'hrsh7th/nvim-cmp'}
+  use 'hrsh7th/cmp-nvim-lsp'
+  use 'saadparwaiz1/cmp_luasnip'
   use 'L3MON4D3/LuaSnip' -- Snippets plugin
 
   --- bringing plugins to accomodate my muscle memory with ../SpaceVim.d
@@ -57,13 +61,16 @@ require('packer').startup(function()
   use 'roxma/vim-tmux-clipboard' -- share clipboard with tmux
   use 'christoomey/vim-tmux-navigator' -- navigate with tmux key binding
   use 'tpope/vim-surround' -- surround text with something like quotes
-  use { 'codota/tabnine-vim', event = 'InsertEnter' } -- AI helper to type quicker
   use 'sheerun/vim-polyglot' -- one plugin to accomodate many different filetypes
   use 'folke/which-key.nvim' -- show key bindings just like SpaceVim
   use 'junegunn/goyo.vim' -- a helper to focus on one window
   use 'akinsho/nvim-toggleterm.lua' -- a great ergonomic terminal customization
   use 'ap/vim-buftabline' -- simple and light tab (actually buffer) visualizer
-  use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' } -- enhanced filetree replacing netrw
+  use {
+    'kyazdani42/nvim-tree.lua',
+    requires = 'kyazdani42/nvim-web-devicons',
+    config = function() require'nvim-tree'.setup {} end
+  } -- enhanced filetree replacing netrw
   use 'axelf4/vim-strip-trailing-whitespace' -- strip whitespace on save
   use 'tpope/vim-repeat' -- enhance `.` to repeat on non-native functionality like vim-surround
   use 'overcache/NeoSolarized'
@@ -176,14 +183,12 @@ vim.api.nvim_exec(
 vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
 
 -- LSP settings
-local nvim_lsp = require 'lspconfig'
+local lspconfig = require 'lspconfig'
 local on_attach = function(_, bufnr)
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
   local opts = { noremap = true, silent = true }
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
@@ -193,38 +198,30 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  -- vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>ca', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
   vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
 end
 
+-- nvim-cmp supports additional completion capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 -- Enable the following language servers
 local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
 for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
+  lspconfig[lsp].setup {
     on_attach = on_attach,
     capabilities = capabilities,
   }
 end
 
 -- Example custom server
-local sumneko_root_path = vim.fn.getenv("HOME").."/.local/bin/sumneko_lua" -- Change to your sumneko root installation
-local sumneko_binary = sumneko_root_path .. '/bin/linux/lua-language-server'
-
 -- Make runtime files discoverable to the server
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, 'lua/?.lua')
 table.insert(runtime_path, 'lua/?/init.lua')
 
-require('lspconfig').sumneko_lua.setup {
-  cmd = { sumneko_binary, '-E', sumneko_root_path .. '/main.lua' },
+lspconfig.sumneko_lua.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
@@ -307,70 +304,54 @@ require('nvim-treesitter.configs').setup {
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
--- Compe setup
-require('compe').setup {
-  source = {
-    path = true,
-    nvim_lsp = true,
-    luasnip = true,
-    buffer = false,
-    calc = false,
-    nvim_lua = false,
-    vsnip = false,
-    ultisnips = false,
+-- luasnip setup - https://github.com/nvim-lua/kickstart.nvim/blob/9288f4adcb25ebc70dab2ba0cd6b910b1fde57bf/init.lua#L270
+local luasnip = require 'luasnip'
+
+-- nvim-cmp setup
+local cmp = require 'cmp'
+cmp.setup {
+  snippet = {
+    expand = function(args)
+      luasnip.lsp_expand(args.body)
+    end,
+  },
+  mapping = {
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.close(),
+    ['<CR>'] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
+    },
+    ['<Tab>'] = function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      else
+        fallback()
+      end
+    end,
+    ['<S-Tab>'] = function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end,
+  },
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' },
+    { name = 'cmp_tabnine' },
   },
 }
 
--- Utility functions for compe and luasnip
-local t = function(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
-local check_back_space = function()
-  local col = vim.fn.col '.' - 1
-  if col == 0 or vim.fn.getline('.'):sub(col, col):match '%s' then
-    return true
-  else
-    return false
-  end
-end
-
--- Use (s-)tab to:
---- move to prev/next item in completion menuone
---- jump to prev/next snippet's placeholder
-local luasnip = require 'luasnip'
-
-_G.tab_complete = function()
-  if vim.fn.pumvisible() == 1 then
-    return t '<C-n>'
-  elseif luasnip.expand_or_jumpable() then
-    return t '<Plug>luasnip-expand-or-jump'
-  elseif check_back_space() then
-    return t '<Tab>'
-  else
-    return vim.fn['compe#complete']()
-  end
-end
-
-_G.s_tab_complete = function()
-  if vim.fn.pumvisible() == 1 then
-    return t '<C-p>'
-  elseif luasnip.jumpable(-1) then
-    return t '<Plug>luasnip-jump-prev'
-  else
-    return t '<S-Tab>'
-  end
-end
-
--- Map tab to the above tab complete functiones
-vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.tab_complete()', { expr = true })
-vim.api.nvim_set_keymap('s', '<Tab>', 'v:lua.tab_complete()', { expr = true })
-vim.api.nvim_set_keymap('i', '<S-Tab>', 'v:lua.s_tab_complete()', { expr = true })
-vim.api.nvim_set_keymap('s', '<S-Tab>', 'v:lua.s_tab_complete()', { expr = true })
-
--- Map compe confirm and complete functions
-vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm("<cr>")', { expr = true })
-vim.api.nvim_set_keymap('i', '<c-space>', 'compe#complete()', { expr = true })
 
 --- my custom configs to accomodate my muscle memory with ../SpaceVim.d
 
@@ -392,20 +373,32 @@ endif]]
 require'term'
 
 -- nvimtree
-vim.g.nvim_tree_side = 'right'
 
--- vim.g.nvim_tree_auto_open = true
-vim.g.nvim_tree_auto_close = true
-vim.g.nvim_tree_disable_netrw = false
-vim.g.nvim_tree_hijack_netrw = false
+-- `nvim_tree_callback` and `cb` is deprecated
 local tree_cb = require'nvim-tree.config'.nvim_tree_callback
--- override default mappings
-vim.g.nvim_tree_bindings = {
-  { key = {"o", "<2-LeftMouse>", "l"},         cb = tree_cb("edit") },
-  -- { key = {"<2-RightMouse>", "<C-]>", "<CR>"}, cb = tree_cb("cd") },
-  { key = {"-", "h"},                          cb = tree_cb("dir_up") },
-  { key = {"<Tab>"},                           cb = ':wincmd w<CR>' },
+
+require'nvim-tree'.setup {
+  view = {
+    side = 'right',
+    mappings = {
+      custom_only = false,
+      -- override default mappings
+      list = {
+        { key = {"o", "<2-LeftMouse>", "l"},         action = "edit" },
+        -- { key = {"<2-RightMouse>", "<C-]>", "<CR>"}, cb = tree_cb("cd") },
+        { key = {"-", "h"},                          action = "dir_up" },
+        { key = {"<Tab>"},                           cb = ':wincmd w<CR>' },
+      }
+    },
+  },
+  -- auto_open = true,
+  auto_close = false,
+  disable_netrw = false,
+  hijack_netrw = false,
+  open_on_setup = true,
 }
 
 -- only show when there is more than two files are open
 vim.g.buftabline_show = 1
+
+-- vim: ts=2 sts=2 sw=2 et

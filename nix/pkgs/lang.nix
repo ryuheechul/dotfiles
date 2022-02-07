@@ -44,10 +44,15 @@ let
     node2nix
     javascript-typescript-langserver
     pnpm
+    pyright # lsp server for python
   # with node2nix
   ]) ++ [
     node-global-pkg-neovim
     node-global-pkg-import-js
   ]);
+
+  for-lua = [
+    sumneko-lua-language-server # Lua Language Server coded by Lua
+  ];
 in
-  [ python-with-pkgs ] ++ bundle-nodejs-with-pkgs
+  [ python-with-pkgs ] ++ bundle-nodejs-with-pkgs ++ for-lua
