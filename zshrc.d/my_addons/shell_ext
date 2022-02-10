@@ -43,6 +43,9 @@ fi
 
 ## binaries by language global packages, for example, npm, rust, go, etc.
 
+# making sure it supersedes like /bin /usr/bin /usr/local/bin
+export PATH="$(path | grep nix-profile):${PATH}"
+
 # rust
 if [ -n "${commands[cargo]}" ]; then
   export PATH="${HOME}/.cargo/bin:${PATH}"
@@ -51,7 +54,7 @@ fi
 # golang
 if [ -n "${commands[go]}" ]; then
   export GOPATH=${HOME}/go
-  export PATH=${GOPATH}/bin:${PATH}
+  export PATH="${GOPATH}/bin:${PATH}"
 fi
 
 # to make it consumable for _evalcache

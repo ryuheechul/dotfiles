@@ -7,7 +7,7 @@ alias dark="base16_solarized-dark"
 # replace htop with bottom
 alias htop="btm -b"
 # convinient way to print $PATH
-alias path="echo $PATH | tr : '\n'"
+alias path='echo ${PATH} | tr : "\n"'
 # overwrite essential stuff
 alias which="which -a"
 alias ping="gping"

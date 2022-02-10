@@ -48,6 +48,9 @@ cat << EOF >> ~/.gitconfig
   path = "${this_repo_path}/gitconfig"
 EOF
 
+# symlink gh config
+ln -sf "${this_repo_path}/gh/config.yml" ~/.config/gh/config.yml
+
 # symlink batconfig
 ln -sf "${this_repo_path}/bat" ~/.config/bat
 
