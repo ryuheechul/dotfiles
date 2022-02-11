@@ -33,14 +33,13 @@ zinit light supercrabtree/k
 zinit light Tarrasch/zsh-bd
 zinit light paulirish/git-open
 
-# fast-syntax-highlighting & autosuggestions & completions
-zinit wait lucid for \
- atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-    zdharma-continuum/fast-syntax-highlighting \
- atload"!_zsh_autosuggest_start" \
-    zsh-users/zsh-autosuggestions \
- blockf \
-    zsh-users/zsh-completions
+# this load zsh-defer faster
+zinit light romkatv/zsh-defer
+zsh-defer zinit load romkatv/zsh-defer
+
+# now slow plugins can be loaded via ./znap
+CURR_DIR=~/.config/zshrc.d/my_addons
+zsh-defer zinit snippet "${CURR_DIR}/znap"
 
 # somehow this should be placed in the bottom to intefere others
 zinit ice as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \

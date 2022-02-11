@@ -33,6 +33,7 @@ alias less="less -r"
 alias touchreadme="touch README.md"
 alias weather='curl wttr.in'
 alias shebang='echo "#!/usr/bin/env bash" | pbcopy ; pbpaste'
+alias executable='chmod +x'
 
 # git
 alias gs="git status"
