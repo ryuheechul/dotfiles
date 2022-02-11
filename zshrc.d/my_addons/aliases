@@ -32,7 +32,7 @@ alias less="less -r"
 # commandify
 alias touchreadme="touch README.md"
 alias weather='curl wttr.in'
-alias shebang='echo "#!/usr/bin/env sh"|pbcopy;echo "#!/usr/bin/env sh"'
+alias shebang='echo "#!/usr/bin/env bash" | pbcopy ; pbpaste'
 
 # git
 alias gs="git status"
