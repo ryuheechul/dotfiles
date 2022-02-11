@@ -41,7 +41,11 @@ alias tgs="tig status"
 alias gd="git diff"
 alias gdc="git diff --cached"
 alias gl="git pull --rebase"
+# this overwrites existing gap which is for git apply
+alias gap="git add -p"
 
+# git fix remote to ssh from https
+alias gfssh="ambr 'https://' 'ssh://git@' .git/config"
 
 # viewer and filter
 alias cat='bat'
