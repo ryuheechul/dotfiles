@@ -11,9 +11,10 @@ source ~/.local/share/zsh-snap/znap.zsh  # Start Znap
 # znap prompt sindresorhus/pure
 
 # `znap source` automatically downloads and starts your plugins.
-znap source marlonrichert/zsh-autocomplete
 znap source zsh-users/zsh-autosuggestions
 znap source zsh-users/zsh-syntax-highlighting
+# config for this is found at ./zinit
+znap source marlonrichert/zsh-autocomplete
 
 zsh-defer znap fpath _gh 'gh completion -s zsh'
 

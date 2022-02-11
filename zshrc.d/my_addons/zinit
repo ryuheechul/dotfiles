@@ -28,7 +28,8 @@ zinit snippet OMZP::git
 zinit snippet OMZP::fasd
 
 zinit light mroth/evalcache
-zinit light Aloxaf/fzf-tab
+# this seems to be not in effect because other similar plugins so disabling for now
+# zinit light Aloxaf/fzf-tab
 zinit light supercrabtree/k
 zinit light Tarrasch/zsh-bd
 zinit light paulirish/git-open
@@ -36,6 +37,14 @@ zinit light paulirish/git-open
 # this load zsh-defer faster
 zinit light romkatv/zsh-defer
 zsh-defer zinit load romkatv/zsh-defer
+
+# additional configuration for marlonrichert/zsh-autocomplete
+# these need to be defined before loading marlonrichert/zsh-autocomplete
+# therefore before loading ./znap which is here
+# zstyle ':autocomplete:*' widget-style menu-select
+zstyle ':autocomplete:*' widget-style menu-complete
+zstyle ':autocomplete:*' fzf-completion yes
+# end of additional configuration for marlonrichert/zsh-autocomplete
 
 # now slow plugins can be loaded via ./znap
 CURR_DIR=~/.config/zshrc.d/my_addons
