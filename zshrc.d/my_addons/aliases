@@ -45,7 +45,7 @@ alias gl="git pull --rebase"
 alias gap="git add -p"
 
 # git fix remote to ssh from https
-alias gfssh="ambr 'https://' 'ssh://git@' .git/config"
+alias gfssh="ambr --no-parent-ignore 'https://' 'ssh://git@' .git/config"
 
 # viewer and filter
 alias cat='bat'
