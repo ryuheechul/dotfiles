@@ -9,7 +9,8 @@ let
     pip
     pipx
 
-    yq # jq for yaml
+    ## comment yq out to favor yq-go
+    # yq # jq for yaml
     pynvim # for neovim
 
     # for https://spacevim.org/layers/lang/python/

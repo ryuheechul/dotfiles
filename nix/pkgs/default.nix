@@ -24,6 +24,7 @@ with pkgs;
   wget # useful for downloading files
 
   # modern tools - i.e. https://github.com/ibraheemdev/modern-unix
+  yq-go # yaml processor and it's not a jq wrapper
   dasel # jq, yq replacement
   hyperfine # Command-line benchmarking tool
   xh # httpie reimplementation - use with `xh` and `xhs`
