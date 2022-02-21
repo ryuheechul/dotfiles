@@ -2,6 +2,7 @@
 
 let
   checkEnv = import ../../utils/checkEnv.nix;
+  tag = import ../custom/tag {pkgs=pkgs;};
 in
   with pkgs;
   []
@@ -29,5 +30,7 @@ in
   [
     circleci-cli # circle ci cli # add checkEnv MY_NIX_EXTRA_CIRCLE_CI
   ]
-  ++
-  (import ./custom/default.nix {pkgs=pkgs;})
+  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_TAG")
+  [
+    tag
+  ]
