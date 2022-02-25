@@ -44,6 +44,7 @@ let
   ] ++ (with nodePackages; [
     node2nix
     javascript-typescript-langserver
+    typescript-language-server
     pnpm
     pyright # lsp server for python
   # with node2nix
