@@ -93,6 +93,11 @@ timezsh() {
 
 alias fulltimezsh="FORCE_LOAD_MY_ZSH_STUFF=1 timezsh"
 
+# use help like man
+help () {
+  $1 --help | less
+}
+
 ## legacy
 #
 # alias ccat="ccat -G Keyword=\"darkgreen\" -G Plaintext=\"ellow\" -G Tag=\"fuchsia\" -G HTMLAttrName=\"darkteal\" -G Decimal=\"yellow\" -G Punctuation=\"lightgray\" --color=always"
