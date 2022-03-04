@@ -1,0 +1,11 @@
+{
+  "PHONY": {
+    "prefix": "ph",
+    "body": [
+      ".PHONY: ${1:name}",
+      "${1}:",
+      "\t"
+    ],
+    "description": "ergonomic .PHONY"
+  }
+}

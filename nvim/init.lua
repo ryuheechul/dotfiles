@@ -75,6 +75,7 @@ require('packer').startup(function()
   use 'axelf4/vim-strip-trailing-whitespace' -- strip whitespace on save
   use 'tpope/vim-repeat' -- enhance `.` to repeat on non-native functionality like vim-surround
   use 'overcache/NeoSolarized'
+  use 'rafamadriz/friendly-snippets'
 end)
 
 --Incremental live completion
@@ -353,6 +354,12 @@ cmp.setup {
   },
 }
 
+-- load including'rafamadriz/friendly-snippets'
+require("luasnip.loaders.from_vscode").load()
+
+-- require("luasnip.loaders.from_vscode").load({ paths = { "./snippets" } }) -- Load snippets from my-snippets folder
+-- not sure how to do relative path properly like above, so just doing the below for now instead
+require("luasnip.loaders.from_vscode").load({ paths = { "~/dotfiles/nvim/snippets" } }) -- Load snippets from my-snippets folder
 
 --- my custom configs to accomodate my muscle memory with ../SpaceVim.d
 

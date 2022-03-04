@@ -1,0 +1,17 @@
+{
+  "name": "my-nvim-snippets",
+  "engines": {
+    "vscode": "^1.11.0"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "language": [
+          "make",
+          "markdown"
+        ],
+        "path": "./make.json"
+      }
+    ]
+  }
+}
