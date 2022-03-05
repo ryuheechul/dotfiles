@@ -26,7 +26,12 @@ require('packer').startup(function()
   use 'wbthomason/packer.nvim' -- Package manager
   use 'tpope/vim-fugitive' -- Git commands in nvim
   use 'tpope/vim-rhubarb' -- Fugitive-companion to interact with github
-  use 'tpope/vim-commentary' -- "gc" to comment visual regions/lines
+  use {
+    'numToStr/Comment.nvim', -- replacing 'tpope/vim-commentary'
+    config = function()
+      require('Comment').setup()
+    end
+  }
   -- comment since it creates more issue than a help for my usage
   -- use 'ludovicchabant/vim-gutentags' -- Automatic tags management
   -- UI to select things (files, grep results, open buffers...)
@@ -40,7 +45,10 @@ require('packer').startup(function()
   -- Add git related info in the signs columns and popups
   use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
   -- Highlight, edit, and navigate code using a fast incremental parsing library
-  use 'nvim-treesitter/nvim-treesitter'
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    run = ':TSUpdate'
+  }
   -- Additional textobjects for treesitter
   use 'nvim-treesitter/nvim-treesitter-textobjects'
   use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
@@ -50,7 +58,8 @@ require('packer').startup(function()
   -- for more text objects, visit https://github.com/kana/vim-textobj-user/wiki
   use { 'kana/vim-textobj-line', requires = { 'kana/vim-textobj-user' } }
   use { 'kana/vim-textobj-entire', requires = { 'kana/vim-textobj-user' } }
-
+  -- to fallback in case no treesitter
+  use { 'sgur/vim-textobj-parameter', requires = { 'kana/vim-textobj-user' } }
   use 'christoomey/vim-system-copy' -- copy text to clipboard with `cp`
   use 'roxma/vim-tmux-clipboard' -- share clipboard with tmux
   use 'christoomey/vim-tmux-navigator' -- navigate with tmux key binding
@@ -259,8 +268,11 @@ lspconfig.sumneko_lua.setup {
 -- Treesitter configuration
 -- Parsers must be installed manually via :TSInstall
 require('nvim-treesitter.configs').setup {
+  ensure_installed = "maintained",
+  sync_install = false,
   highlight = {
     enable = true, -- false will disable the whole extension
+    additional_vim_regex_highlighting = false,
   },
   incremental_selection = {
     enable = true,
@@ -284,6 +296,8 @@ require('nvim-treesitter.configs').setup {
         ['if'] = '@function.inner',
         ['ac'] = '@class.outer',
         ['ic'] = '@class.inner',
+        ['a,'] = '@parameter.outer',
+        ['i,'] = '@parameter.inner',
       },
     },
     move = {
@@ -292,18 +306,22 @@ require('nvim-treesitter.configs').setup {
       goto_next_start = {
         [']m'] = '@function.outer',
         [']]'] = '@class.outer',
+        ['],'] = '@parameter.inner',
       },
       goto_next_end = {
         [']M'] = '@function.outer',
         [']['] = '@class.outer',
+        [']<'] = '@parameter.outer',
       },
       goto_previous_start = {
         ['[m'] = '@function.outer',
         ['[['] = '@class.outer',
+        ['[,'] = '@parameter.inner',
       },
       goto_previous_end = {
         ['[M'] = '@function.outer',
         ['[]'] = '@class.outer',
+        ['[<'] = '@parameter.outer',
       },
     },
   },
@@ -428,9 +446,9 @@ require("luasnip.loaders.from_vscode").load({ paths = { "~/dotfiles/nvim/snippet
 
 -- Every unspecified option will be set to the default.
 luasnip.config.set_config({
-	history = true,
-	-- Update more often, :h events for more info.
-	updateevents = "TextChanged,TextChangedI",
+  history = true,
+  -- Update more often, :h events for more info.
+  updateevents = "TextChanged,TextChangedI",
 })
 
 --- my custom configs to accomodate my muscle memory with ../SpaceVim.d
