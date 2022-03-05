@@ -426,6 +426,13 @@ require("luasnip.loaders.from_vscode").load()
 -- not sure how to do relative path properly like above, so just doing the below for now instead
 require("luasnip.loaders.from_vscode").load({ paths = { "~/dotfiles/nvim/snippets" } }) -- Load snippets from my-snippets folder
 
+-- Every unspecified option will be set to the default.
+luasnip.config.set_config({
+	history = true,
+	-- Update more often, :h events for more info.
+	updateevents = "TextChanged,TextChangedI",
+})
+
 --- my custom configs to accomodate my muscle memory with ../SpaceVim.d
 
 -- show some hidden characters
