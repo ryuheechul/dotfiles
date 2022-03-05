@@ -44,12 +44,6 @@ require('packer').startup(function()
   -- Additional textobjects for treesitter
   use 'nvim-treesitter/nvim-treesitter-textobjects'
   use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
-  use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
-  -- use { 'codota/tabnine-vim', event = 'InsertEnter' } -- AI helper to type quicker
-  use {'tzachar/cmp-tabnine', run='./install.sh', requires = 'hrsh7th/nvim-cmp'}
-  use 'hrsh7th/cmp-nvim-lsp'
-  use 'saadparwaiz1/cmp_luasnip'
-  use 'L3MON4D3/LuaSnip' -- Snippets plugin
 
   --- bringing plugins to accomodate my muscle memory with ../SpaceVim.d
 
@@ -75,7 +69,18 @@ require('packer').startup(function()
   use 'axelf4/vim-strip-trailing-whitespace' -- strip whitespace on save
   use 'tpope/vim-repeat' -- enhance `.` to repeat on non-native functionality like vim-surround
   use 'overcache/NeoSolarized'
+
+  use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
+  use 'L3MON4D3/LuaSnip' -- Snippets plugin
+  use 'onsails/lspkind-nvim'
+  use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-nvim-lua'
+  use 'hrsh7th/cmp-buffer'
+  use 'hrsh7th/cmp-path'
+  -- use 'hrsh7th/cmp-cmdline' -- I don't understand what this is yet so skip loading for now.
+  use 'saadparwaiz1/cmp_luasnip'
   use 'rafamadriz/friendly-snippets'
+  use {'tzachar/cmp-tabnine', run='./install.sh', requires = 'hrsh7th/nvim-cmp'} -- AI helper to type quicker
 end)
 
 --Incremental live completion
@@ -241,6 +246,7 @@ lspconfig.sumneko_lua.setup {
       workspace = {
         -- Make the server aware of Neovim runtime files
         library = vim.api.nvim_get_runtime_file('', true),
+        checkThirdParty = false, -- to avoid being asked about 'Do you need to configure your work environment as `OpenResty`?'
       },
       -- Do not send telemetry data containing a randomized but unique identifier
       telemetry = {
@@ -307,7 +313,24 @@ require('nvim-treesitter.configs').setup {
 vim.o.completeopt = 'menuone,noselect'
 
 -- luasnip setup - https://github.com/nvim-lua/kickstart.nvim/blob/9288f4adcb25ebc70dab2ba0cd6b910b1fde57bf/init.lua#L270
+
 local luasnip = require 'luasnip'
+local lspkind = require 'lspkind'
+
+local has_words_before = function()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
+local source_mapping = {
+  buffer = "[buf]",
+  nvim_lsp = "[LSP]",
+  nvim_lua = "[api]",
+  path = "[path]",
+  luasnip = "[snip]",
+  gh_issues = "[issues]",
+  cmp_tabnine = "[TabNine]",
+}
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
@@ -323,21 +346,33 @@ cmp.setup {
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.close(),
+    ['<C-e>'] = cmp.mapping({
+      i = cmp.mapping.abort(),
+      c = cmp.mapping.close(),
+    }),
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    ['<Tab>'] = function(fallback)
+    ['<c-y>'] = cmp.mapping(
+      cmp.mapping.confirm {
+        behavior = cmp.ConfirmBehavior.Insert,
+        select = true,
+      },
+      { 'i', 'c' }
+    ),
+    ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
       elseif luasnip.expand_or_jumpable() then
         luasnip.expand_or_jump()
+      elseif has_words_before() then
+        cmp.complete()
       else
         fallback()
       end
-    end,
-    ['<S-Tab>'] = function(fallback)
+    end, { 'i', 's' }),
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
       elseif luasnip.jumpable(-1) then
@@ -345,12 +380,42 @@ cmp.setup {
       else
         fallback()
       end
-    end,
+    end, { 'i', 's' }),
   },
   sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-    { name = 'cmp_tabnine' },
+    { name = "gh_issues" },
+    -- Could enable this only for lua, but nvim_lua handles that already.
+    { name = "nvim_lua" },
+    { name = "nvim_lsp" },
+    { name = "path" },
+    -- { name = "cmdline" }, -- I don't understand what this is yet so skip loading for now.
+    { name = "luasnip" },
+    { name = "buffer", keyword_length = 4 },
+    { name = 'cmp_tabnine', keyword_length = 4 },
+  },
+  formatting = {
+    -- -- this is simpler but less customization
+    -- format = lspkind.cmp_format {
+    --   with_text = true,
+    --   menu = source_mapping
+    -- },
+    -- this is on top of above but extra style for TabNine
+    format = function(entry, vim_item)
+      vim_item.kind = lspkind.presets.default[vim_item.kind]
+      local menu = source_mapping[entry.source.name]
+      if entry.source.name == 'cmp_tabnine' then
+        if entry.completion_item.data ~= nil and entry.completion_item.data.detail ~= nil then
+          menu = entry.completion_item.data.detail .. ' ' .. menu
+        end
+        vim_item.kind = ''
+      end
+      vim_item.menu = menu
+      return vim_item
+    end
+  },
+  experimental = {
+    native_menu = false,
+    ghost_text = true -- this feature conflict to the copilot.vim's preview.
   },
 }
 
