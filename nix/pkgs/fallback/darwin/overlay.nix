@@ -5,6 +5,7 @@ let
   pkgs = fallback.pkgs;
 in with pkgs;
 {
+  inherit starship;
   ## these two lines are examples
   # inherit hello;
   # inherit bash;
