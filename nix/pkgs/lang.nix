@@ -47,6 +47,7 @@ let
     typescript-language-server
     pnpm
     pyright # lsp server for python
+    typescript
   # with node2nix
   ]) ++ [
     node-global-pkg-neovim

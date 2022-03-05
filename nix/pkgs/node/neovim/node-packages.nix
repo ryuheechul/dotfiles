@@ -4,31 +4,40 @@
 
 let
   sources = {
-    "@dabh/diagnostics-2.0.2" = {
+    "@colors/colors-1.5.0" = {
+      name = "_at_colors_slash_colors";
+      packageName = "@colors/colors";
+      version = "1.5.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@colors/colors/-/colors-1.5.0.tgz";
+        sha512 = "ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==";
+      };
+    };
+    "@dabh/diagnostics-2.0.3" = {
       name = "_at_dabh_slash_diagnostics";
       packageName = "@dabh/diagnostics";
-      version = "2.0.2";
+      version = "2.0.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@dabh/diagnostics/-/diagnostics-2.0.2.tgz";
-        sha512 = "+A1YivoVDNNVCdfozHSR8v/jyuuLTMXwjWuxPFlFlUapXoGc+Gj9mDlTDDfrwl7rXCl2tNZ0kE8sIBO6YOn96Q==";
+        url = "https://registry.npmjs.org/@dabh/diagnostics/-/diagnostics-2.0.3.tgz";
+        sha512 = "hrlQOIi7hAfzsMqlGSFyVucrx38O+j6wiGOf//H2ecvIEqYN4ADBSS2iLMh5UFyDunCNniUIPk/q3riFv45xRA==";
       };
     };
-    "@msgpack/msgpack-2.7.1" = {
+    "@msgpack/msgpack-2.7.2" = {
       name = "_at_msgpack_slash_msgpack";
       packageName = "@msgpack/msgpack";
-      version = "2.7.1";
+      version = "2.7.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@msgpack/msgpack/-/msgpack-2.7.1.tgz";
-        sha512 = "ApwiSL2c9ObewdOE/sqt788P1C5lomBOHyO8nUBCr4ofErBCnYQ003NtJ8lS9OQZc11ximkbmgAZJjB8y6cCdA==";
+        url = "https://registry.npmjs.org/@msgpack/msgpack/-/msgpack-2.7.2.tgz";
+        sha512 = "rYEi46+gIzufyYUAoHDnRzkWGxajpD9vVXFQ3g1vbjrBm6P7MBmm+s/fqPa46sxa+8FOUdEuRQKaugo5a4JWpw==";
       };
     };
-    "async-3.2.2" = {
+    "async-3.2.3" = {
       name = "async";
       packageName = "async";
-      version = "3.2.2";
+      version = "3.2.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/async/-/async-3.2.2.tgz";
-        sha512 = "H0E+qZaDEfx/FY4t7iLRv1W2fFI6+pyCeTw1uN20AQPiwqwM6ojPxHxdLv4z8hi2DtnW9BOckSspLucW7pIE5g==";
+        url = "https://registry.npmjs.org/async/-/async-3.2.3.tgz";
+        sha512 = "spZRyzKL5l5BZQrr/6m/SqFdBN0q3OCI0f9rjfBzCMBIP4p75P620rR3gTmaksNOhmzgdxcaxdNfMy6anrbM0g==";
       };
     };
     "color-3.2.1" = {
@@ -65,15 +74,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/color-string/-/color-string-1.9.0.tgz";
         sha512 = "9Mrz2AQLefkH1UvASKj6v6hj/7eWgjnT/cVsR8CumieLoT+g900exWeNogqtweI8dxloXN9BDQTYro1oWu/5CQ==";
-      };
-    };
-    "colors-1.4.0" = {
-      name = "colors";
-      packageName = "colors";
-      version = "1.4.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/colors/-/colors-1.4.0.tgz";
-        sha512 = "a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==";
       };
     };
     "colorspace-1.1.4" = {
@@ -148,13 +148,13 @@ let
         sha512 = "Xq9nH7KlWZmXAtodXDDRE7vs6DU1gTU8zYDHDiWLSip45Egwq3plLHzPn27NgvzL2r1LMPC1vdqh98sQxtqj4A==";
       };
     };
-    "logform-2.3.0" = {
+    "logform-2.4.0" = {
       name = "logform";
       packageName = "logform";
-      version = "2.3.0";
+      version = "2.4.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/logform/-/logform-2.3.0.tgz";
-        sha512 = "graeoWUH2knKbGthMtuG1EfaSPMZFZBIrhuJHhkS5ZseFBrc7DupCzihOQAzsK/qIKPQaPJ/lFQFctILUY5ARQ==";
+        url = "https://registry.npmjs.org/logform/-/logform-2.4.0.tgz";
+        sha512 = "CPSJw4ftjf517EhXZGGvTHHkYobo7ZCc0kvwUoOYcjfR2UVrI66RHj8MCrfAdEitdmFqbu2BYdYs8FHHZSb6iw==";
       };
     };
     "lru-cache-6.0.0" = {
@@ -202,13 +202,13 @@ let
         sha512 = "rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==";
       };
     };
-    "safe-stable-stringify-1.1.1" = {
+    "safe-stable-stringify-2.3.1" = {
       name = "safe-stable-stringify";
       packageName = "safe-stable-stringify";
-      version = "1.1.1";
+      version = "2.3.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/safe-stable-stringify/-/safe-stable-stringify-1.1.1.tgz";
-        sha512 = "ERq4hUjKDbJfE4+XtZLFPCDi8Vb1JqaxAPTxWFLBx8XcAlf9Bda/ZJdVezs/NAfsMQScyIlUMx+Yeu7P7rx5jw==";
+        url = "https://registry.npmjs.org/safe-stable-stringify/-/safe-stable-stringify-2.3.1.tgz";
+        sha512 = "kYBSfT+troD9cDA85VDnHZ1rpHC50O0g1e6WlGHVCz/g+JS+9WKLj+XwFYyR8UbrZN8ll9HUpDAAddY58MGisg==";
       };
     };
     "semver-7.3.5" = {
@@ -283,13 +283,13 @@ let
         sha512 = "oEXTISQnC8VlSAKf1KYSSd7J6IWuRPQqDdo8eoRNaYKLvwSb5+79Z3Yi1lrl6KDpU6/VWaxpakDAtb1oQ4n9aw==";
       };
     };
-    "winston-transport-4.4.1" = {
+    "winston-transport-4.5.0" = {
       name = "winston-transport";
       packageName = "winston-transport";
-      version = "4.4.1";
+      version = "4.5.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/winston-transport/-/winston-transport-4.4.1.tgz";
-        sha512 = "ciZRlU4CSjHqHe8RQG1iPxKMRVwv6ZJ0RC7DxStKWd0KjpAhPDy5gVYSCpIUq+5CUsP+IyNOTZy1X0tO2QZqjg==";
+        url = "https://registry.npmjs.org/winston-transport/-/winston-transport-4.5.0.tgz";
+        sha512 = "YpZzcUzBedhlTAfJg6vJDlyEai/IFMIVcaEZZyl3UXIl4gmqRpU7AE89AHLkbzLUsv0NVmw7ts+iztqKxxPW1Q==";
       };
     };
     "yallist-4.0.0" = {
@@ -313,14 +313,14 @@ in
       sha512 = "H46Jl2bh/LAFJsitv2MiIK3oCxvQnEK9t3efNMUUkKzsTYlLIikVxGWVk/vJnHzvxoHYBIRB/KHwPAOm+9UStg==";
     };
     dependencies = [
-      sources."@dabh/diagnostics-2.0.2"
-      sources."@msgpack/msgpack-2.7.1"
-      sources."async-3.2.2"
+      sources."@colors/colors-1.5.0"
+      sources."@dabh/diagnostics-2.0.3"
+      sources."@msgpack/msgpack-2.7.2"
+      sources."async-3.2.3"
       sources."color-3.2.1"
       sources."color-convert-1.9.3"
       sources."color-name-1.1.3"
       sources."color-string-1.9.0"
-      sources."colors-1.4.0"
       sources."colorspace-1.1.4"
       sources."enabled-2.0.0"
       sources."fecha-4.2.1"
@@ -329,13 +329,13 @@ in
       sources."is-arrayish-0.3.2"
       sources."is-stream-2.0.1"
       sources."kuler-2.0.0"
-      sources."logform-2.3.0"
+      sources."logform-2.4.0"
       sources."lru-cache-6.0.0"
       sources."ms-2.1.3"
       sources."one-time-1.0.0"
       sources."readable-stream-3.6.0"
       sources."safe-buffer-5.2.1"
-      sources."safe-stable-stringify-1.1.1"
+      sources."safe-stable-stringify-2.3.1"
       sources."semver-7.3.5"
       sources."simple-swizzle-0.2.2"
       sources."stack-trace-0.0.10"
@@ -344,7 +344,7 @@ in
       sources."triple-beam-1.3.0"
       sources."util-deprecate-1.0.2"
       sources."winston-3.3.3"
-      sources."winston-transport-4.4.1"
+      sources."winston-transport-4.5.0"
       sources."yallist-4.0.0"
     ];
     buildInputs = globalBuildInputs;

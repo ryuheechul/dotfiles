@@ -63,7 +63,7 @@ require('packer').startup(function()
   use 'christoomey/vim-system-copy' -- copy text to clipboard with `cp`
   use 'roxma/vim-tmux-clipboard' -- share clipboard with tmux
   use 'christoomey/vim-tmux-navigator' -- navigate with tmux key binding
-  use 'christoomey/vim-titlecase' -- `gz(il)` to titlecase (the whole line)
+  use 'christoomey/vim-titlecase' -- `gz[il]` to titlecase [the whole line]
   use 'tpope/vim-surround' -- surround text with something like quotes
   use 'sheerun/vim-polyglot' -- one plugin to accomodate many different filetypes
   use 'folke/which-key.nvim' -- show key bindings just like SpaceVim
