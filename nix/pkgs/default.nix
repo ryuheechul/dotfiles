@@ -57,6 +57,8 @@ with pkgs;
 
   # helper
   tig # git helper
+  # read here, https://stackoverflow.com/a/69947947/1570165 for usage
+  git-filter-repo # quickly rewrite git repository history
   tldr # Simplified and community-driven man pages
   watch # execute a program periodically
   entr # Run arbitrary commands when files change
