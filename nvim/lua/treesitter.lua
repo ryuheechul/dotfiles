@@ -61,6 +61,10 @@ require('nvim-treesitter.configs').setup {
   -- this is for https://github.com/andymass/vim-matchup#tree-sitter-integration
   matchup = {
     enable = true, -- mandatory, false will disable the whole extension
+  },
+  -- for p00f/nvim-ts-rainbow
+  rainbow = {
+    enable = true,
   }
 }
 

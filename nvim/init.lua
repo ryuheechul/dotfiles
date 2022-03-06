@@ -18,8 +18,18 @@ vim.g.matchup_surround_enabled = 1
 vim.g.matchup_matchparen_deferred = 1
 vim.g.matchup_matchparen_hi_surround_always = 1
 
+-- let the code be folded by default
+-- useful with 'anuvyklack/pretty-fold.nvim'
+vim.o.foldmethod = 'expr'
+vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
+
+--
+require'scrollbar'.setup()
+--
+require'numb'.setup()
+
 -- Gitsigns
-require('gitsigns').setup {
+require'gitsigns'.setup {
   signs = {
     add = { hl = 'GitGutterAdd', text = '+' },
     change = { hl = 'GitGutterChange', text = '~' },
@@ -30,7 +40,7 @@ require('gitsigns').setup {
 }
 
 -- Telescope
-require('telescope').setup {
+require'telescope'.setup {
   defaults = {
     mappings = {
       i = {

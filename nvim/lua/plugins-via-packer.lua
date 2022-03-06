@@ -11,14 +11,28 @@ return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim' -- Package manager
   use 'tpope/vim-fugitive' -- Git commands in nvim
   use 'tpope/vim-rhubarb' -- Fugitive-companion to interact with github
-  use {
-    'numToStr/Comment.nvim', -- replacing 'tpope/vim-commentary'
+  use { 'numToStr/Comment.nvim', -- replacing 'tpope/vim-commentary'
     config = function()
       require('Comment').setup()
     end
   }
-  use {'andymass/vim-matchup', event = 'VimEnter'}
-
+  use {'andymass/vim-matchup', event = 'VimEnter'} -- kind of like vim-surround but not
+  use { 'jghauser/mkdir.nvim', -- allow you to save at non existing directory
+    config = function()
+      require('mkdir')
+    end
+  }
+  use 'RRethy/vim-illuminate' -- Highlight the same words at the cursor
+  use 'petertriho/nvim-scrollbar' -- scrollbar
+  use 'haringsrob/nvim_context_vt' -- show context via virtual text
+  use 'nacro90/numb.nvim' -- let you peek lines without moving the cursor to the line
+  use { 'McAuleyPenney/tidy.nvim', event = 'BufWritePre' } -- remove trailing whitespace when save
+  use{ 'anuvyklack/pretty-fold.nvim', -- easier to work with folded code
+    config = function()
+      require('pretty-fold').setup{}
+      require('pretty-fold.preview').setup()
+    end
+  }
   use 'AndrewRadev/splitjoin.vim' -- give you `gS` and `gJ`
   -- comment since it creates more issue than a help for my usage
   -- use 'ludovicchabant/vim-gutentags' -- Automatic tags management
@@ -26,6 +40,12 @@ return require('packer').startup(function(use)
   use { 'nvim-telescope/telescope.nvim', requires = { { 'nvim-lua/popup.nvim' }, { 'nvim-lua/plenary.nvim' } } }
   use 'joshdick/onedark.vim' -- Theme inspired by Atom
   use 'itchyny/lightline.vim' -- Fancier statusline
+  use { 'startup-nvim/startup.nvim', -- A highly configurable neovim startup screen
+    requires = {'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim'},
+    config = function()
+      require'startup'.setup()
+    end
+  }
   -- Add indentation guides even on blank lines
   -- comment until this issue gets resolved,
   -- https://github.com/lukas-reineke/indent-blankline.nvim/issues/74
@@ -33,12 +53,12 @@ return require('packer').startup(function(use)
   -- Add git related info in the signs columns and popups
   use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
   -- Highlight, edit, and navigate code using a fast incremental parsing library
-  use {
-    'nvim-treesitter/nvim-treesitter',
+  use { 'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate'
   }
   -- Additional textobjects for treesitter
   use 'nvim-treesitter/nvim-treesitter-textobjects'
+  use 'p00f/nvim-ts-rainbow' -- differnciate parenthesis with colors
   use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
 
   --- bringing plugins to accomodate my muscle memory with ../SpaceVim.d
@@ -58,8 +78,7 @@ return require('packer').startup(function(use)
   use 'junegunn/goyo.vim' -- a helper to focus on one window
   use 'akinsho/nvim-toggleterm.lua' -- a great ergonomic terminal customization
   use 'ap/vim-buftabline' -- simple and light tab (actually buffer) visualizer
-  use {
-    'kyazdani42/nvim-tree.lua',
+  use { 'kyazdani42/nvim-tree.lua',
     requires = 'kyazdani42/nvim-web-devicons',
     config = function() require'nvim-tree'.setup {} end
   } -- enhanced filetree replacing netrw

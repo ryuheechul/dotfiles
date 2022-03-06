@@ -57,6 +57,7 @@ with pkgs;
 
   # helper
   tig # git helper
+  gfold # help keep track of your Git repositories
   # read here, https://stackoverflow.com/a/69947947/1570165 for usage
   git-filter-repo # quickly rewrite git repository history
   tldr # Simplified and community-driven man pages
