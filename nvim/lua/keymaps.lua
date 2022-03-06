@@ -55,6 +55,9 @@ require('which-key').register({
         s = {':w<CR>', 'save file'}, -- set a single command and text
         t = {':NvimTreeToggle<CR>', 'toggle file tree'},
     },
+    g = {
+        b = {':VGit toggle_live_blame<CR>', 'toggle git blame in live'},
+    },
     s = {
         name = '+Searching/Symbol',
         c = {'<Cmd>nohlsearch<CR>', 'clear hihglight'},
