@@ -3,15 +3,15 @@
 -- workaround to be able to load other files while using alternative rtp
 -- vim.cmd 'set rtp^=~/.config/my-quick-nvim' -- no longer necessary
 
--- via ./lua/plugins-by-packer.lua
-require'plugins-by-packer'
+-- via ./lua
+require'plugins-via-packer'
 require'misc'
 require'lsp'
 require'treesitter'
 require'completion'
 require'keymaps'
 require'term'
--- end of via ./lua/plugins-by-packer.lua
+-- end of via ./lua
 
 -- Gitsigns
 require('gitsigns').setup {
