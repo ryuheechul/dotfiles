@@ -1,6 +1,6 @@
 -- use which-key to accomodate visual assistant on key-bindings ../SpaceVim.d
-paste_after_here = '"*p'
-paste_before_here = '"*P'
+local paste_after_here = '"*p'
+local paste_before_here = '"*P'
 if vim.fn.has('unnamedplus') == 1 then
   paste_after_here = '"+p'
   paste_before_here = '"+P'
@@ -16,7 +16,7 @@ require('which-key').register({
 }, { prefix = ',' })
 
 
-function toggle_background()
+function Toggle_background()
   if vim.o.background == 'dark' then
     vim.o.background = 'light'
   else
@@ -65,7 +65,7 @@ require('which-key').register({
     t = {
         name = '+UI Toggles',
         l = {'<Cmd>set list!<CR>', 'toggle-hidden-listchars'},
-        b = {'<Cmd>lua toggle_background()<CR>', 'toggle-background'},
+        b = {'<Cmd>lua Toggle_background()<CR>', 'toggle-background'},
     },
 
 }, { prefix = '<Space>' })
@@ -74,6 +74,7 @@ require('which-key').register({
 -- vim.g.gutentags_ctags_tagfile = '.git/gutentags'
 
 --- my keymaps to to accomodate my muscle memory with ../SpaceVim.d
+--- these may go to which-key side someday
 
 -- because `use 'zhou13/vim-easyescape'` is too slow on startup
 vim.api.nvim_set_keymap('i', 'jk', '<Esc>', { noremap = true, silent = true })
@@ -89,3 +90,27 @@ vim.api.nvim_set_keymap('v', '<', '<gv', { noremap = true })
 
 -- q to close
 vim.api.nvim_set_keymap('n', 'q', '<Cmd>q<CR>', { noremap = true })
+
+--Remap space as leader key
+vim.api.nvim_set_keymap('', '<Space>', '<Nop>', { noremap = true, silent = true })
+-- vim.g.mapleader = ' '
+-- vim.g.maplocalleader = ' '
+
+--Remap for dealing with word wrap
+vim.api.nvim_set_keymap('n', 'k', "v:count == 0 ? 'gk' : 'k'", { noremap = true, expr = true, silent = true })
+vim.api.nvim_set_keymap('n', 'j', "v:count == 0 ? 'gj' : 'j'", { noremap = true, expr = true, silent = true })
+
+--Add leader shortcuts
+vim.api.nvim_set_keymap('n', '<space><space>', [[<cmd>lua require('telescope.builtin').buffers()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>sf', [[<cmd>lua require('telescope.builtin').find_files({previewer = false})<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>sb', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>sh', [[<cmd>lua require('telescope.builtin').help_tags()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>st', [[<cmd>lua require('telescope.builtin').tags()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>sd', [[<cmd>lua require('telescope.builtin').grep_string()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>sp', [[<cmd>lua require('telescope.builtin').live_grep()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<space>so', [[<cmd>lua require('telescope.builtin').tags{ only_current_buffer = true }<CR>]], { noremap = true, silent = true }) vim.api.nvim_set_keymap('n', '<leader>?', [[<cmd>lua require('telescope.builtin').oldfiles()<CR>]], { noremap = true, silent = true })
+
+-- Y yank until the end of line
+vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
+
+-- vim: ts=2 sts=2 sw=2 et
