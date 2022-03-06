@@ -56,7 +56,7 @@ require('which-key').register({
         t = {':NvimTreeToggle<CR>', 'toggle file tree'},
     },
     g = {
-        b = {':VGit toggle_live_blame<CR>', 'toggle git blame in live'},
+        b = {':Git blame<CR>', 'toggle git blame'},
     },
     s = {
         name = '+Searching/Symbol',
