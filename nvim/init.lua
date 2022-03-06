@@ -13,6 +13,11 @@ require'keymaps'
 require'term'
 -- end of via ./lua
 
+-- enables `ds%` and `cs%` via vim-matchup
+vim.g.matchup_surround_enabled = 1
+vim.g.matchup_matchparen_deferred = 1
+vim.g.matchup_matchparen_hi_surround_always = 1
+
 -- Gitsigns
 require('gitsigns').setup {
   signs = {

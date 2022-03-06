@@ -1,22 +1,12 @@
 -- Install packer
-local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
 
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+local fn = vim.fn
+local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+if fn.empty(fn.glob(install_path)) > 0 then
+  Packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
 end
 
-vim.api.nvim_exec(
-  [[
-  augroup Packer
-    autocmd!
-    autocmd BufWritePost init.lua PackerCompile
-  augroup end
-]],
-  false
-)
-
-local use = require('packer').use
-require('packer').startup(function()
+return require('packer').startup(function(use)
   --- plugins from https://github.com/mjlbach/defaults.nvim/blob/73d4b205be5711b681ef2df9d171b1c55040803b/init.lua
   use 'wbthomason/packer.nvim' -- Package manager
   use 'tpope/vim-fugitive' -- Git commands in nvim
@@ -27,6 +17,9 @@ require('packer').startup(function()
       require('Comment').setup()
     end
   }
+  use {'andymass/vim-matchup', event = 'VimEnter'}
+
+  use 'AndrewRadev/splitjoin.vim' -- give you `gS` and `gJ`
   -- comment since it creates more issue than a help for my usage
   -- use 'ludovicchabant/vim-gutentags' -- Automatic tags management
   -- UI to select things (files, grep results, open buffers...)
@@ -85,6 +78,13 @@ require('packer').startup(function()
   use 'saadparwaiz1/cmp_luasnip'
   use 'rafamadriz/friendly-snippets'
   use {'tzachar/cmp-tabnine', run='./install.sh', requires = 'hrsh7th/nvim-cmp'} -- AI helper to type quicker
+  use {'subnut/nvim-ghost.nvim', run=':call nvim_ghost#installer#install()'} -- https://github.com/fregante/GhostText
+
+  -- Automatically set up your configuration after cloning packer.nvim
+  -- Put this at the end after all plugins
+  if Packer_bootstrap then
+    require('packer').sync()
+  end
 end)
 
 -- vim: ts=2 sts=2 sw=2 et

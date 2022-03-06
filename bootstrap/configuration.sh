@@ -107,7 +107,7 @@ ln -sf "${this_repo_path}/nvim" ~/.config/nvim
 
 # trigger neovim plugins install via command line
 if [ -z "${SKIP_INSTALL_VIM_PLUGINS}" ]; then
-  nvim --headless -c 'PackerInstall' -c q
+  nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
   nvim --headless -c 'UpdateRemotePlugins' -c q
 fi
 
