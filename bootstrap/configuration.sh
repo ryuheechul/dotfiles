@@ -69,9 +69,6 @@ git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shel
 # lf
 ln -sf "${this_repo_path}/lf" ~/.config/lf
 
-# my quick nvim configurations
-ln -sf "${this_repo_path}/nvim" ~/.config/my-quick-nvim
-
 # tig
 ln -sf "${this_repo_path}/vim.tigrc" ~/.tigrc
 
@@ -99,28 +96,22 @@ git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0 || tru
 # avoid using `/usr/local/bin` as a global path for yarn
 yarn config set prefix ~/.yarn
 
-## installing packages with asdf is being replaced with Nix - look at ../nix/pkgs.nix
-
-# asdf plugin add python
-# asdf plugin add nodejs
-# bash -c '${ASDF_DATA_DIR}/plugins/nodejs/bin/import-release-team-keyring'
-# asdf plugin-add yarn
-
-# asdf install
-
-# # are these even necessary?
-# asdf reshim python
-# asdf reshim nodejs
-# asdf reshim yarn
-
-# # for nvim + spacevim
-# zsh -c "pip install neovim"
+## installing packages with asdf has been replaced with Nix - look at ../nix/pkgs.nix
 
 # spacemacs
 git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d || bash -c 'cd ~/.emacs.d && git pull'
 ln -sf "${this_repo_path}/spacemacs" ~/.spacemacs
 
-# spacevim
+# neovim - now this replace SpaceVim
+ln -sf "${this_repo_path}/nvim" ~/.config/nvim
+
+# trigger neovim plugins install via command line
+if [ -z "${SKIP_INSTALL_VIM_PLUGINS}" ]; then
+  nvim --headless -c 'PackerInstall' -c q
+  nvim --headless -c 'UpdateRemotePlugins' -c q
+fi
+
+# SpaceVim - this still may be used for vim but not with nvim
 spacevim_ver="v1.6.0"
 git clone https://github.com/SpaceVim/SpaceVim ~/.SpaceVim || bash -c 'cd ~/.SpaceVim && git checkout master && git pull' \
   && cd ~/.SpaceVim \
@@ -128,12 +119,5 @@ git clone https://github.com/SpaceVim/SpaceVim ~/.SpaceVim || bash -c 'cd ~/.Spa
 ln -sf "${this_repo_path}/SpaceVim.d" ~/.SpaceVim.d
 # shim vimrc
 ln -sf ~/.SpaceVim ~/.vim
-ln -sf ~/.SpaceVim ~/.config/nvim
-
-# trigger spacevim plugins install via command line
-if [ -z "${SKIP_INSTALL_VIM_PLUGINS}" ]; then
-  nvim --headless -c 'call dein#update()' -c q
-  nvim --headless -c 'UpdateRemotePlugins' -c q
-fi
 
 echo "configuration.sh seemed to have run successfully!"

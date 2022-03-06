@@ -1,9 +1,10 @@
-# the purpose of this folder/method is to reduce typing hard ones by avoiding
+# Why
+the purpose of this folder/method is to reduce typing hard ones by avoiding:
 - captial alphabets
 - special chars like `, or ~`
 - nested folders
 
-# strategy
+# Strategy
 - this real folder under dotfiles will not really contain real aliases since aliases will be different for each machine.
 - `$ mkdir -p ~/aliases`
 - `$ ln -sf ~/aliases al`

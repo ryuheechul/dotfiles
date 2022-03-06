@@ -23,7 +23,7 @@ map <enter> push l
 
 # f will fuzzy search file and open with nvim
 map f $nvim $(fzf)
-map e $nvim -u ~/.config/my-quick-nvim/init.lua "$f"
+map e $nvim "$f"
 
 # :q will quit lf just like vim
 cmd q push q

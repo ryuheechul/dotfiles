@@ -20,9 +20,7 @@ alias l="ls -lah -g --git"
 alias lt="ls -lah -T -L=3 --git --git-ignore"
 alias tree="exa -G -T --git-ignore"
 
-# use alternative init rather than SpaceVim for the moment
-alias vim="nvim -u ~/.config/my-quick-nvim/init.lua"
-# once the transition is complete the line will change back to `alias vim="nvim"`
+alias vim="nvim"
 alias vi="vim"
 alias vimdiff="nvim -dR"
 alias diff="git diff --no-index"
