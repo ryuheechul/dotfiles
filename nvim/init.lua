@@ -2,8 +2,8 @@
 -- vim.cmd 'set rtp^=~/.config/my-quick-nvim' -- no longer necessary
 
 -- via ./lua
-require'plugins-via-packer'
-require'misc'
+require 'plugins-via-packer'
+require 'misc'
 -- end of via ./lua
 
 -- vim: ts=2 sts=2 sw=2 et

@@ -44,7 +44,6 @@ vim.g.lightline = {
   component_function = { gitbranch = 'fugitive#head' },
 }
 
-
 --Map blankline
 vim.g.indent_blankline_char = '┊'
 vim.g.indent_blankline_filetype_exclude = { 'help', 'packer' }
@@ -83,7 +82,6 @@ endif]]
 -- show some hidden characters
 vim.o.listchars = [[tab:→\ ,eol:↵,trail:·,extends:↷,precedes:↶]]
 vim.o.list = true
-
 
 -- only show when there is more than two files are open
 vim.g.buftabline_show = 1

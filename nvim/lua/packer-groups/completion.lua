@@ -9,13 +9,15 @@ return {
   -- 'hrsh7th/cmp-cmdline' -- I don't understand what this is yet so skip loading for now.
   'saadparwaiz1/cmp_luasnip',
   'rafamadriz/friendly-snippets',
-{ 'tzachar/cmp-tabnine', -- AI helper to type quicker
+  {
+    'tzachar/cmp-tabnine', -- AI helper to type quicker
     run = './install.sh',
     requires = 'hrsh7th/nvim-cmp',
   },
-{ 'L3MON4D3/LuaSnip', -- Snippets plugin
+  {
+    'L3MON4D3/LuaSnip', -- Snippets plugin
     requires = 'onsails/lspkind-nvim',
-    config = function ()
+    config = function()
       -- Set completeopt to have a better completion experience
       vim.o.completeopt = 'menuone,noselect'
 
@@ -26,17 +28,17 @@ return {
 
       local has_words_before = function()
         local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match '%s' == nil
       end
 
       local source_mapping = {
-        buffer = "[buf]",
-        nvim_lsp = "[LSP]",
-        nvim_lua = "[api]",
-        path = "[path]",
-        luasnip = "[snip]",
-        gh_issues = "[issues]",
-        cmp_tabnine = "[TabNine]",
+        buffer = '[buf]',
+        nvim_lsp = '[LSP]',
+        nvim_lua = '[api]',
+        path = '[path]',
+        luasnip = '[snip]',
+        gh_issues = '[issues]',
+        cmp_tabnine = '[TabNine]',
       }
 
       -- nvim-cmp setup
@@ -53,10 +55,10 @@ return {
           ['<C-d>'] = cmp.mapping.scroll_docs(-4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-Space>'] = cmp.mapping.complete(),
-          ['<C-e>'] = cmp.mapping({
+          ['<C-e>'] = cmp.mapping {
             i = cmp.mapping.abort(),
             c = cmp.mapping.close(),
-          }),
+          },
           ['<CR>'] = cmp.mapping.confirm {
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,
@@ -66,7 +68,7 @@ return {
               behavior = cmp.ConfirmBehavior.Insert,
               select = true,
             },
-          { 'i', 'c' }
+            { 'i', 'c' }
           ),
           ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
@@ -90,15 +92,15 @@ return {
           end, { 'i', 's' }),
         },
         sources = {
-        { name = "gh_issues" },
+          { name = 'gh_issues' },
           -- Could enable this only for lua, but nvim_lua handles that already.
-        { name = "nvim_lua" },
-        { name = "nvim_lsp" },
-        { name = "path" },
+          { name = 'nvim_lua' },
+          { name = 'nvim_lsp' },
+          { name = 'path' },
           -- { name = "cmdline" }, -- I don't understand what this is yet so skip loading for now.
-        { name = "luasnip" },
-        { name = "buffer", keyword_length = 4 },
-        { name = 'cmp_tabnine', keyword_length = 4 },
+          { name = 'luasnip' },
+          { name = 'buffer', keyword_length = 4 },
+          { name = 'cmp_tabnine', keyword_length = 4 },
         },
         formatting = {
           -- -- this is simpler but less customization
@@ -118,28 +120,28 @@ return {
             end
             vim_item.menu = menu
             return vim_item
-          end
+          end,
         },
         experimental = {
           native_menu = false,
-          ghost_text = true -- this feature conflict to the copilot.vim's preview.
+          ghost_text = true, -- this feature conflict to the copilot.vim's preview.
         },
       }
 
       -- load including'rafamadriz/friendly-snippets'
-      require("luasnip.loaders.from_vscode").load()
+      require('luasnip.loaders.from_vscode').load()
 
       -- require("luasnip.loaders.from_vscode").load({ paths = { "./snippets" } }) -- Load snippets from my-snippets folder
       -- not sure how to do relative path properly like above, so just doing the below for now instead
-      require("luasnip.loaders.from_vscode").load({ paths = { "~/dotfiles/nvim/snippets" } }) -- Load snippets from my-snippets folder
+      require('luasnip.loaders.from_vscode').load { paths = { '~/dotfiles/nvim/snippets' } } -- Load snippets from my-snippets folder
 
       -- Every unspecified option will be set to the default.
-      luasnip.config.set_config({
+      luasnip.config.set_config {
         history = true,
         -- Update more often, :h events for more info.
-        updateevents = "TextChanged,TextChangedI",
-      })
-    end
+        updateevents = 'TextChanged,TextChangedI',
+      }
+    end,
   },
 }
 

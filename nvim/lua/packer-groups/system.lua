@@ -4,20 +4,21 @@ return {
   'christoomey/vim-system-copy', -- copy text to clipboard with `cp`
   'roxma/vim-tmux-clipboard', -- share clipboard with tmux
   'christoomey/vim-tmux-navigator', -- navigate with tmux key binding
-{ 'akinsho/nvim-toggleterm.lua', -- a great ergonomic terminal customization
-    config = function ()
+  {
+    'akinsho/nvim-toggleterm.lua', -- a great ergonomic terminal customization
+    config = function()
       -- augment terminal
       vim.cmd [[
         let $FORCE_LOAD_MY_ZSH_STUFF = 1
         let $NO_VI_KEY_ON_ZSH = 1
       ]]
 
-      require("toggleterm").setup{
+      require('toggleterm').setup {
         -- size can be a number or function which is passed the current terminal
-        size =  function(term)
-          if term.direction == "horizontal" then
+        size = function(term)
+          if term.direction == 'horizontal' then
             return 15
-          elseif term.direction == "vertical" then
+          elseif term.direction == 'vertical' then
             return vim.o.columns * 0.4
           end
         end, -- | 20
@@ -43,26 +44,27 @@ return {
           -- height = <value>,
           winblend = 3,
           highlights = {
-            border = "Normal",
-            background = "Normal",
-          }
-        }
+            border = 'Normal',
+            background = 'Normal',
+          },
+        },
       }
 
-      local opts = {noremap = true}
+      local opts = { noremap = true }
       vim.api.nvim_set_keymap('t', '<esc>', [[<C-\><C-n>]], opts)
       vim.api.nvim_set_keymap('t', 'jk', [[<C-\><C-n>]], opts)
       vim.api.nvim_set_keymap('t', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
       vim.api.nvim_set_keymap('t', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
       vim.api.nvim_set_keymap('t', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
       vim.api.nvim_set_keymap('t', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
-    end
+    end,
   },
   -- UI to select things (files, grep results, open buffers...)
-{ 'nvim-telescope/telescope.nvim',
+  {
+    'nvim-telescope/telescope.nvim',
     requires = { 'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim' },
-    config = function ()
-      require'telescope'.setup {
+    config = function()
+      require('telescope').setup {
         defaults = {
           mappings = {
             i = {
@@ -72,26 +74,27 @@ return {
           },
         },
       }
-    end
+    end,
   },
-{ 'kyazdani42/nvim-tree.lua',
+  {
+    'kyazdani42/nvim-tree.lua',
     requires = 'kyazdani42/nvim-web-devicons',
     config = function()
       -- `nvim_tree_callback` and `cb` is deprecated
-      local tree_cb = require'nvim-tree.config'.nvim_tree_callback
+      local tree_cb = require('nvim-tree.config').nvim_tree_callback
 
-      require'nvim-tree'.setup {
+      require('nvim-tree').setup {
         view = {
           side = 'right',
           mappings = {
             custom_only = false,
             -- override default mappings
             list = {
-            { key = {"o", "<2-LeftMouse>", "l"},         action = "edit" },
+              { key = { 'o', '<2-LeftMouse>', 'l' }, action = 'edit' },
               -- { key = {"<2-RightMouse>", "<C-]>", "<CR>"}, cb = tree_cb("cd") },
-            { key = {"-", "h"},                          action = "dir_up" },
-            { key = {"<Tab>"},                           cb = ':wincmd w<CR>' },
-            }
+              { key = { '-', 'h' }, action = 'dir_up' },
+              { key = { '<Tab>' }, cb = ':wincmd w<CR>' },
+            },
           },
         },
         -- auto_open = true,
@@ -100,10 +103,9 @@ return {
         hijack_netrw = false,
         open_on_setup = true,
       }
-    end
+    end,
   }, -- enhanced filetree replacing netrw
-{ 'subnut/nvim-ghost.nvim',
-    run = ':call nvim_ghost#installer#install()' }, -- https://github.com/fregante/GhostText
+  { 'subnut/nvim-ghost.nvim', run = ':call nvim_ghost#installer#install()' }, -- https://github.com/fregante/GhostText
 }
 
 -- vim: ts=2 sts=2 sw=2 et

@@ -1,8 +1,8 @@
 -- Treesitter configuration
 
-return function ()
+return function()
   require('nvim-treesitter.configs').setup {
-    ensure_installed = "maintained",
+    ensure_installed = 'maintained',
     sync_install = false,
     highlight = {
       enable = true, -- false will disable the whole extension
@@ -66,7 +66,7 @@ return function ()
     -- for p00f/nvim-ts-rainbow
     rainbow = {
       enable = true,
-    }
+    },
   }
 end
 

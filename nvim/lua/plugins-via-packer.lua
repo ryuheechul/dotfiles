@@ -1,23 +1,30 @@
 -- Install packer
 
 local fn = vim.fn
-local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+local install_path = fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
-  Packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+  Packer_bootstrap = fn.system {
+    'git',
+    'clone',
+    '--depth',
+    '1',
+    'https://github.com/wbthomason/packer.nvim',
+    install_path,
+  }
 end
 
 local groups = {
-{ -- packer itself
+  { -- packer itself
     'wbthomason/packer.nvim', -- Package manager
   },
-  require'packer-groups.system',
-  require'packer-groups.git',
-  require'packer-groups.editing',
-  require'packer-groups.lsp',
-  require'packer-groups.extra',
-  require'packer-groups.keymaps',
-  require'packer-groups.completion',
-{ -- leftovers
+  require 'packer-groups.system',
+  require 'packer-groups.git',
+  require 'packer-groups.editing',
+  require 'packer-groups.lsp',
+  require 'packer-groups.extra',
+  require 'packer-groups.keymaps',
+  require 'packer-groups.completion',
+  { -- leftovers
     -- comment since it creates more issue than a help for my usage
     -- 'ludovicchabant/vim-gutentags' -- Automatic tags management
     --
@@ -30,7 +37,10 @@ local groups = {
 
 local function _values(t) -- via https://stackoverflow.com/a/39991824/1570165
   local i = 0
-  return function() i = i + 1; return t[i] end
+  return function()
+    i = i + 1
+    return t[i]
+  end
 end
 
 local load_plugins = function(use)
@@ -40,7 +50,6 @@ local load_plugins = function(use)
     end
   end
 end
-
 
 return require('packer').startup(function(use)
   --- plugins from https://github.com/mjlbach/defaults.nvim/blob/73d4b205be5711b681ef2df9d171b1c55040803b/init.lua

@@ -3,13 +3,15 @@ return {
   -- Additional textobjects for treesitter
   'nvim-treesitter/nvim-treesitter-textobjects',
   -- Highlight, edit, and navigate code using a fast incremental parsing library
-{ 'nvim-treesitter/nvim-treesitter',
+  {
+    'nvim-treesitter/nvim-treesitter',
     -- Parsers must be installed manually via :TSInstall
     run = ':TSUpdate',
-    config = require'packer-groups.config.treesitter',
+    config = require 'packer-groups.config.treesitter',
   },
-{ 'neovim/nvim-lspconfig', -- Collection of configurations for built-in LSP client
-    config = require'packer-groups.config.lsp',
+  {
+    'neovim/nvim-lspconfig', -- Collection of configurations for built-in LSP client
+    config = require 'packer-groups.config.lsp',
   },
 }
 

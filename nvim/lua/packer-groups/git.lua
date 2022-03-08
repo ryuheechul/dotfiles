@@ -4,10 +4,11 @@ return {
   'tpope/vim-fugitive', -- Git commands in nvim
   'tpope/vim-rhubarb', -- Fugitive-companion to interact with github
   -- Add git related info in the signs columns and popups
-{ 'lewis6991/gitsigns.nvim',
+  {
+    'lewis6991/gitsigns.nvim',
     requires = { 'nvim-lua/plenary.nvim' },
     config = function()
-      require'gitsigns'.setup {
+      require('gitsigns').setup {
         signs = {
           add = { hl = 'GitGutterAdd', text = '+' },
           change = { hl = 'GitGutterChange', text = '~' },
@@ -16,7 +17,7 @@ return {
           changedelete = { hl = 'GitGutterChange', text = '~' },
         },
       }
-    end
+    end,
   },
 }
 

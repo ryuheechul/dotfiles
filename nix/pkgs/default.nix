@@ -35,6 +35,7 @@ with pkgs;
   tree-sitter # An incremental parsing system for programming tools
   # clang-tools # Standalone command line tools for C++ development
   rust-analyzer # An experimental modular compiler frontend for the Rust language
+  stylua # An opinionated Lua code formatter
 
   # viewer
   vivid # LS_COLORS generator
