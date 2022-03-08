@@ -39,7 +39,7 @@ return {
       -- useful with 'anuvyklack/pretty-fold.nvim'
       vim.o.foldmethod = 'expr'
       vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
-      vim.o.foldminlines = 3
+      vim.o.foldminlines = 5
       vim.o.foldlevel = 2
     end
   },
