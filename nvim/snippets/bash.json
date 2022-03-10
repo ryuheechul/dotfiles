@@ -1,0 +1,16 @@
+{
+  "reference var": {
+    "prefix": "ref",
+    "body": [
+      "\"\\${${1:var}\\}\""
+    ],
+    "description": "refer var without typing with shifts"
+  },
+  "reference cmd": {
+    "prefix": "cmd",
+    "body": [
+      "\"\\$(${1:cmd})\""
+    ],
+    "description": "refer the command execution without typing with shifts"
+  }
+}

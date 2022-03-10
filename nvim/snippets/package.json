@@ -7,10 +7,23 @@
     "snippets": [
       {
         "language": [
-          "make",
-          "markdown"
+          "make"
         ],
         "path": "./make.json"
+      },
+      {
+        "language": [
+          "lua"
+        ],
+        "path": "./lua.json"
+      },
+      {
+        "language": [
+          "sh",
+          "bash",
+          "zsh"
+        ],
+        "path": "./bash.json"
       }
     ]
   }

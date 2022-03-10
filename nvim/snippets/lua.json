@@ -1,0 +1,14 @@
+{
+  "Packer-package-install": {
+    "prefix": "pi",
+    "body": [
+      "{",
+      "  '${1:name}',",
+      "  config = function ()",
+      "    ${0}",
+      "  end,",
+      "},"
+    ],
+    "description": "packer package install"
+  }
+}
