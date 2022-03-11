@@ -21,9 +21,10 @@ local groups = {
   require 'packer-groups.git',
   require 'packer-groups.editing',
   require 'packer-groups.lsp',
-  require 'packer-groups.extra',
   require 'packer-groups.keymaps',
   require 'packer-groups.completion',
+  require 'packer-groups.debug',
+  require 'packer-groups.extra',
   { -- leftovers
     -- comment since it creates more issue than a help for my usage
     -- 'ludovicchabant/vim-gutentags' -- Automatic tags management
