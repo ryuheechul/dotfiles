@@ -2,13 +2,35 @@
 
 return {
   'joshdick/onedark.vim', -- Theme inspired by Atom
-  'overcache/NeoSolarized',
+  {
+    'overcache/NeoSolarized',
+    config = function()
+      vim.cmd [[
+  colorscheme NeoSolarized
+  set background=light
+]]
+    end,
+  },
   'RRethy/vim-illuminate', -- Highlight the same words at the cursor
   'haringsrob/nvim_context_vt', -- show context via virtual text
-  'itchyny/lightline.vim', -- Fancier statusline
+  {
+    'itchyny/lightline.vim', -- Fancier statusline
+    config = function()
+      --Set statusbar
+      vim.g.lightline = {
+        colorscheme = 'onedark',
+        active = { left = { { 'mode', 'paste' }, { 'gitbranch', 'readonly', 'filename', 'modified' } } },
+        component_function = { gitbranch = 'fugitive#head' },
+      }
+    end,
+  },
   'junegunn/goyo.vim', -- a helper to focus on one window
   'p00f/nvim-ts-rainbow', -- differnciate parenthesis with colors
   'ap/vim-buftabline', -- simple and light tab (actually buffer) visualizer
+  {
+    'felipec/vim-sanegx', -- `gx` to open url
+    event = 'BufRead',
+  },
   {
     'nacro90/numb.nvim', -- let you peek lines without moving the cursor to the line
     config = function()
