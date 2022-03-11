@@ -17,6 +17,7 @@ return {
       }
     end,
   },
+  { 'michaelb/sniprun', run = 'bash ./install.sh' },
 }
 
 -- vim: ts=2 sts=2 sw=2 et

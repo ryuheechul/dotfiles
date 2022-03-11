@@ -3,6 +3,19 @@
 return {
   'joshdick/onedark.vim', -- Theme inspired by Atom
   {
+    'lukas-reineke/headlines.nvim',
+    config = function()
+      require('headlines').setup()
+    end,
+  },
+  -- this doesn't work until treesitter markdown gets install and it's currently unstable and fails to install
+  -- {
+  --   'jghauser/follow-md-links.nvim', -- <CR> at links to open them
+  --   config = function()
+  --     require 'follow-md-links'
+  --   end,
+  -- },
+  {
     'overcache/NeoSolarized',
     config = function()
       vim.cmd [[
