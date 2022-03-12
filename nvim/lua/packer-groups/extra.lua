@@ -1,13 +1,97 @@
 -- extra but nice
 
 return {
-  'joshdick/onedark.vim', -- Theme inspired by Atom
   {
-    'lukas-reineke/headlines.nvim',
+    'lukas-reineke/headlines.nvim', -- highlights headlines for markdown like files
     config = function()
       require('headlines').setup()
     end,
   },
+  {
+    'beauwilliams/focus.nvim', -- automatically adjust the size for focused windows
+    config = function()
+      require('focus').setup()
+    end,
+  },
+  -- stop using until https://github.com/sunjon/Shade.nvim/issues/6#issuecomment-1065939353 gets resolved
+  -- {
+  --   'sunjon/Shade.nvim', -- automatically dims not focused windows
+  --   config = function()
+  --     require('shade').setup {
+  --       overlay_opacity = 60,
+  --     }
+  --   end,
+  -- },
+  {
+    'gelguy/wilder.nvim', -- A more adventurous wildmenu
+    run = 'UpdateRemotePlugins',
+    config = function()
+      local wilder = require 'wilder'
+      wilder.setup { modes = { ':', '/', '?' } }
+      wilder.set_option(
+        'renderer',
+        wilder.popupmenu_renderer {
+          highlighter = wilder.basic_highlighter(),
+          left = { ' ', wilder.popupmenu_devicons() },
+          right = { ' ', wilder.popupmenu_scrollbar() },
+        }
+      )
+    end,
+  },
+  {
+    'kevinhwang91/nvim-bqf', -- Better quickfix window in Neovim, polish old quickfix window
+    ft = 'qf',
+  },
+  -- now nvim-cokeline takes over
+  -- 'ap/vim-buftabline', -- simple and light tab (actually buffer) visualizer
+  {
+    'noib3/nvim-cokeline', -- customzing buftabline
+    requires = 'kyazdani42/nvim-web-devicons', -- If you want devicons
+    config = function()
+      local get_hex = require('cokeline/utils').get_hex
+      require('cokeline').setup {
+        default_hl = {
+          fg = function(buffer)
+            return buffer.is_focused and get_hex('ColorColumn', 'bg') or get_hex('Normal', 'fg')
+          end,
+          bg = function(buffer)
+            return buffer.is_focused and get_hex('Normal', 'fg') or get_hex('ColorColumn', 'bg')
+          end,
+        },
+
+        components = {
+          {
+            text = function(buffer)
+              return ' ' .. buffer.devicon.icon
+            end,
+            fg = function(buffer)
+              return buffer.devicon.color
+            end,
+          },
+          {
+            text = function(buffer)
+              return buffer.unique_prefix
+            end,
+            fg = get_hex('Comment', 'fg'),
+            style = 'italic',
+          },
+          {
+            text = function(buffer)
+              return buffer.filename .. ' '
+            end,
+          },
+          {
+            text = '',
+            delete_buffer_on_left_click = true,
+          },
+          {
+            text = ' ',
+          },
+        },
+      }
+    end,
+  },
+
   -- this doesn't work until treesitter markdown gets install and it's currently unstable and fails to install
   -- {
   --   'jghauser/follow-md-links.nvim', -- <CR> at links to open them
@@ -15,15 +99,6 @@ return {
   --     require 'follow-md-links'
   --   end,
   -- },
-  {
-    'overcache/NeoSolarized',
-    config = function()
-      vim.cmd [[
-  colorscheme NeoSolarized
-  set background=light
-]]
-    end,
-  },
   'RRethy/vim-illuminate', -- Highlight the same words at the cursor
   'haringsrob/nvim_context_vt', -- show context via virtual text
   {
@@ -39,7 +114,6 @@ return {
   },
   'junegunn/goyo.vim', -- a helper to focus on one window
   'p00f/nvim-ts-rainbow', -- differnciate parenthesis with colors
-  'ap/vim-buftabline', -- simple and light tab (actually buffer) visualizer
   {
     'felipec/vim-sanegx', -- `gx` to open url
     event = 'BufRead',
@@ -87,6 +161,16 @@ return {
     requires = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
     config = function()
       require('startup').setup()
+    end,
+  },
+  {
+    'luukvbaal/stabilize.nvim', -- prevents the contents being cramped on windows's open/close event
+    config = function()
+      require('stabilize').setup {
+        -- by setting force to be false,
+        -- it does not stabilize window when the content will be hidden behind the new windows
+        force = false,
+      }
     end,
   },
 }

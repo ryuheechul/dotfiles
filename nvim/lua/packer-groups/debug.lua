@@ -18,6 +18,8 @@ return {
     end,
   },
   { 'michaelb/sniprun', run = 'bash ./install.sh' },
+  -- maybe one day this becomes useful
+  -- { 'rcarriga/vim-ultest', requires = { 'vim-test/vim-test' }, run = ':UpdateRemotePlugins' },
 }
 
 -- vim: ts=2 sts=2 sw=2 et

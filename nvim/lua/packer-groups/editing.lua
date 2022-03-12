@@ -60,6 +60,12 @@ return {
       }
     end,
   },
+  {
+    'rmagatti/goto-preview', -- show preview when `gd`
+    config = function()
+      require('goto-preview').setup {}
+    end,
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et

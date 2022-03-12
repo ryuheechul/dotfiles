@@ -124,9 +124,12 @@ return {
       require('which-key').register({
         w = {
           m = { ':Goyo<CR>', 'maximize/minimize window' },
+          ['/'] = { ':vsplit<CR>', 'split window vertically' },
+          ['-'] = { ':split<CR>', 'split window horizontally' },
         },
         b = {
           b = { [[<cmd>lua require('telescope.builtin').buffers()<CR>]], 'search buffer' },
+          d = { ':bd<CR>', 'close buffer' },
         },
         ['<Tab>'] = { ':bn<CR>', 'rotate buffer' },
         ["'"] = { ':ToggleTerm<CR>', 'open shell' },
@@ -155,6 +158,9 @@ return {
         g = {
           b = { ':Git blame<CR>', 'toggle git blame' },
         },
+        p = {
+          s = { ':PackerSync<CR>', 'run :PackerSync' },
+        },
         s = {
           name = '+Searching/Symbol',
           c = { '<Cmd>nohlsearch<CR>', 'clear hihglight' },
@@ -167,6 +173,7 @@ return {
       }, { prefix = '<Space>' })
     end,
   },
+  -- 'b0o/mapx.nvim', -- see if I would like to use this when keymapping code need optimized
 }
 
 -- vim: ts=2 sts=2 sw=2 et

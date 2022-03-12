@@ -94,6 +94,7 @@ return {
               -- { key = {"<2-RightMouse>", "<C-]>", "<CR>"}, cb = tree_cb("cd") },
               { key = { '-', 'h' }, action = 'dir_up' },
               { key = { '<Tab>' }, cb = ':wincmd w<CR>' },
+              { key = { 'q' }, cb = ':q<CR>' },
             },
           },
         },
