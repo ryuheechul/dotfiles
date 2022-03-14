@@ -160,6 +160,7 @@ return {
         },
         p = {
           s = { ':PackerSync<CR>', 'run :PackerSync' },
+          c = { ':PackerCompile<CR>', 'run :PackerCompile' },
         },
         s = {
           name = '+Searching/Symbol',

@@ -90,7 +90,7 @@ return {
             custom_only = false,
             -- override default mappings
             list = {
-              { key = { 'o', '<2-LeftMouse>', 'l' }, action = 'edit' },
+              { key = { 'o', '<2-LeftMouse>', 'l', 'e' }, action = 'edit' },
               -- { key = {"<2-RightMouse>", "<C-]>", "<CR>"}, cb = tree_cb("cd") },
               { key = { '-', 'h' }, action = 'dir_up' },
               { key = { '<Tab>' }, cb = ':wincmd w<CR>' },
@@ -107,6 +107,88 @@ return {
     end,
   }, -- enhanced filetree replacing netrw
   { 'subnut/nvim-ghost.nvim', run = ':call nvim_ghost#installer#install()' }, -- https://github.com/fregante/GhostText
+  -- now nvim-cokeline takes over
+  'ap/vim-buftabline', -- simple and light tab (actually buffer) visualizer
+  -- {
+  --   'noib3/nvim-cokeline', -- customzing buftabline
+  --   requires = 'kyazdani42/nvim-web-devicons', -- If you want devicons
+  --   config = function()
+  --     local get_hex = require('cokeline/utils').get_hex
+  --     require('cokeline').setup {
+  --       default_hl = {
+  --         fg = function(buffer)
+  --           return buffer.is_focused and get_hex('ColorColumn', 'bg') or get_hex('Normal', 'fg')
+  --         end,
+  --         bg = function(buffer)
+  --           return buffer.is_focused and get_hex('Normal', 'fg') or get_hex('ColorColumn', 'bg')
+  --         end,
+  --       },
+  --
+  --       components = {
+  --         {
+  --           text = function(buffer)
+  --             return ' ' .. buffer.devicon.icon
+  --           end,
+  --           fg = function(buffer)
+  --             return buffer.devicon.color
+  --           end,
+  --         },
+  --         {
+  --           text = function(buffer)
+  --             return buffer.unique_prefix
+  --           end,
+  --           fg = get_hex('Comment', 'fg'),
+  --           style = 'italic',
+  --         },
+  --         {
+  --           text = function(buffer)
+  --             return buffer.filename .. ' '
+  --           end,
+  --         },
+  --         {
+  --           text = '',
+  --           delete_buffer_on_left_click = true,
+  --         },
+  --         {
+  --           text = ' ',
+  --         },
+  --       },
+  --     }
+  --   end,
+  -- },
+  {
+    'nvim-lualine/lualine.nvim',
+    requires = {
+      'kyazdani42/nvim-web-devicons',
+      'SmiteshP/nvim-gps',
+    },
+    config = function()
+      local gps = require 'nvim-gps'
+      require('lualine').setup {
+        sections = {
+          lualine_c = {
+            { gps.get_location, cond = gps.is_available },
+          },
+          lualine_x = {
+            -- opening lua file makes lsp work, if I `:PackerCompile` during that time I get an error below
+            --[[
+            Error executing vim.schedule lua callback: ...ine-lsp-progress/lua/lualine/components/lsp_progress.lua:80: attempt to index a nil value
+            stack traceback:
+            ...ine-lsp-progress/lua/lualine/components/lsp_progress.lua:80: in function 'progress_callback'
+            ...ine-lsp-progress/lua/lualine/components/lsp_progress.lua:133: in function 'handler'
+            ...eovim-unwrapped-0.6.1/share/nvim/runtime/lua/vim/lsp.lua:735: in function 'cb'
+            vim.lua:285: in function <vim.lua:285>
+            ]]
+            -- so just wait for that to finish and do compile/sync
+            'lsp_progress',
+            'encoding',
+            'fileformat',
+            'filetype',
+          },
+        },
+      }
+    end,
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et
