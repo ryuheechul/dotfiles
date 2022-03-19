@@ -10,6 +10,9 @@ with pkgs;
   # essential
   coreutils # like for readlink
   gnused # sed
+  gcc # the GNU Compiler Collection
+  unzip # The UnZip package contains ZIP extraction utilities
+  curl # Curl is a command-line tool for transferring data specified with URL syntax
   zsh # my favorite shell interface
   git # to replace possible old git comes with OS
   bash # use latest bash
