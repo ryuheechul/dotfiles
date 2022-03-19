@@ -34,3 +34,7 @@ in
   [
     tag
   ]
+  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_TAILSCALE")
+  [
+    tailscale
+  ]
