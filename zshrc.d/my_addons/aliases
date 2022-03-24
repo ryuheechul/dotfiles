@@ -20,19 +20,6 @@ alias l="ls -lah -g --git"
 alias lt="ls -lah -T -L=3 --git --git-ignore"
 alias tree="exa -G -T --git-ignore"
 
-alias vim="nvim"
-alias vi="vim"
-alias vimdiff="nvim -dR"
-alias diff="git diff --no-index"
-
-alias less="less -r"
-
-# commandify
-alias touchreadme="touch README.md"
-alias weather='curl wttr.in'
-alias shebang='echo "#!/usr/bin/env bash" | pbcopy ; pbpaste'
-alias executable='chmod +x'
-
 # git
 alias gs="git status"
 alias tgs="tig status"
@@ -45,7 +32,14 @@ alias gap="git add -p"
 # git fix remote to ssh from https
 alias gfssh="ambr --no-parent-ignore 'https://' 'ssh://git@' .git/config"
 
+# editor
+alias vim="nvim"
+alias vi="nvim"
+
 # viewer and filter
+alias vimdiff="nvim -dR"
+alias diff="git diff --no-index"
+alias less="less -r"
 alias cat='bat'
 alias k9s='TERM=xterm COLORTERM=256bit k9s'
 alias rg="rg -p -i" # ripgrep
@@ -89,7 +83,18 @@ timezsh() {
   for i in $(seq 1 10); do /usr/bin/time $shell -i -c exit; done
 }
 
+# commandify
 alias fulltimezsh="FORCE_LOAD_MY_ZSH_STUFF=1 timezsh"
+alias vzshrc="nvim ~/.zshrc"
+alias touchreadme="touch README.md"
+alias touchmakefile="touch Makefile"
+alias weather='curl wttr.in'
+alias shebang='echo "#!/usr/bin/env bash" | pbcopy ; pbpaste'
+alias executable='chmod +x'
+alias dotfiles="cd ~/dotfiles"
+alias nis="npm install --save"
+alias nisd="npm install --save-dev"
+alias whoami-aws="aws sts get-caller-identity"
 
 # use help like man
 help () {
