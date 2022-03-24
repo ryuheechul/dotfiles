@@ -8,6 +8,7 @@ with pkgs;
   fortune
 
   # essential
+  gnumake # gnu make
   coreutils # like for readlink
   gnused # sed
   gcc # the GNU Compiler Collection
