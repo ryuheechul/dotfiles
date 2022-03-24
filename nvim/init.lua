@@ -3,6 +3,7 @@
 
 -- via ./lua
 require 'plugins-via-packer'
+require 'filetype'
 require 'misc'
 -- end of via ./lua
 

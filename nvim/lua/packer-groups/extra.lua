@@ -121,6 +121,7 @@ return {
     end,
   },
   'arkav/lualine-lsp-progress',
+  'sbulav/nredir.nvim', -- Redirect the output of Vim or external command to scratch buffer, in LUA
 }
 
 -- vim: ts=2 sts=2 sw=2 et

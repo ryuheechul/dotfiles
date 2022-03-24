@@ -16,6 +16,10 @@ return {
     'numToStr/Comment.nvim', -- replacing 'tpope/vim-commentary'
     config = function()
       require('Comment').setup()
+
+      local ft = require 'Comment.ft'
+      -- correct comment character
+      ft.set('mermaid', '%%%s')
     end,
   },
   {
