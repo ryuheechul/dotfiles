@@ -25,6 +25,7 @@ in
     # also consider installing `pipx install aws-shell`
     awscli2 # aws cli
     ssm-session-manager-plugin # AWS SSM Plugin
+    amazon-ecs-cli # aws ecs cli
   ]
   ++ lib.optionals (checkEnv "MY_NIX_EXTRA_CI")
   [

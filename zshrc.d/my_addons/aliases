@@ -91,7 +91,6 @@ alias touchmakefile="touch Makefile"
 alias weather='curl wttr.in'
 alias shebang='echo "#!/usr/bin/env bash" | pbcopy ; pbpaste'
 alias executable='chmod +x'
-alias dotfiles="cd ~/dotfiles"
 alias nis="npm install --save"
 alias nisd="npm install --save-dev"
 alias whoami-aws="aws sts get-caller-identity"
