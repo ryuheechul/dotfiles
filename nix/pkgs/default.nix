@@ -18,6 +18,7 @@ with pkgs;
   git # to replace possible old git comes with OS
   bash # use latest bash
   tmux # terminal multiplexer
+  zellij # A terminal workspace with batteries included
   neovim # my favorite editor
   emacs-nox # terminal only emacs
   starship # cross-shell prompt
