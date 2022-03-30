@@ -11,7 +11,10 @@ alias path='echo ${PATH} | tr : "\n"'
 # overwrite essential stuff
 alias which="which -a"
 alias ping="gping"
+
+# human friendly df and du
 alias df="duf"
+alias du='du -d 1 -h | sort -h -r'
 
 # exa
 alias exa="exa --icons --group-directories-first -F --ignore-glob='**/.git|**/.DS_Store'"
