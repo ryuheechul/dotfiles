@@ -3,6 +3,7 @@
 let
   checkEnv = import ../../utils/checkEnv.nix;
   tag = import ../custom/tag {pkgs=pkgs;};
+  tf-helper = import ../custom/tf-helper.nix {pkgs=pkgs;};
 in
   with pkgs;
   []
@@ -34,6 +35,12 @@ in
   ++ lib.optionals (checkEnv "MY_NIX_EXTRA_TAG")
   [
     tag
+  ]
+  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_TERRAFORM")
+  [
+    terraform
+    nodePackages.cdktf-cli
+    tf-helper
   ]
   ++ lib.optionals (checkEnv "MY_NIX_EXTRA_EXERCISM")
   [
