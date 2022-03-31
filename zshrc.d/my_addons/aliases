@@ -97,10 +97,29 @@ alias executable='chmod +x'
 alias nis="npm install --save"
 alias nisd="npm install --save-dev"
 alias whoami-aws="aws sts get-caller-identity"
+alias q="exit"
+
+# this will return either `light` or `dark`
+theme_tone () {
+  # assuming I only use `solarized-*`
+  printenv BASE16_THEME | sed s/solarized-//
+}
+
+cmd_gh="$(which gh)"
+
+# override gh to work better with current theme tone
+gh () {
+  GLAMOUR_STYLE=$(theme_tone) ${cmd_gh} $@
+}
+
+# when I don't feel liking adding `| less` at the end
+show () {
+  $@ | less
+}
 
 # use help like man
 help () {
-  $1 --help | less
+  show $@ --help
 }
 
 ## legacy
