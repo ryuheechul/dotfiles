@@ -70,6 +70,19 @@ return {
       require('goto-preview').setup {}
     end,
   },
+  'arthurxavierx/vim-caser', -- convert between cases - https://github.com/arthurxavierx/vim-caser#usage
+  -- | Case                                    | Default Mapping | Plug Mapping (normal/visual)                             |
+  -- | --------------------------------------- | --------------- | -------------------------------------------------------- |
+  -- | `MixedCase` or `PascalCase`             | `gsm` or `gsp`  | `<Plug>CaserMixedCase`/`<Plug>CaserVMixedCase`           |
+  -- | `camelCase`                             | `gsc`           | `<Plug>CaserCamelCase`/`<Plug>CaserVCamelCase`           |
+  -- | `snake_case`                            | `gs_`           | `<Plug>CaserSnakeCase`/`<Plug>CaserVSnakeCase`           |
+  -- | `UPPER_CASE`                            | `gsu` or `gsU`  | `<Plug>CaserUpperCase`/`<Plug>CaserVUpperCase`           |
+  -- | `Title Case`                            | `gst`           | `<Plug>CaserTitleCase`/`<Plug>CaserVTitleCase`           |
+  -- | `Sentence case`                         | `gss`           | `<Plug>CaserSentenceCase`/`<Plug>CaserVSentenceCase`     |
+  -- | `space case`                            | `gs<space>`     | `<Plug>CaserSpaceCase`/`<Plug>CaserVSpaceCase`           |
+  -- | `dash-case` or `kebab-case`             | `gs-` or `gsk`  | `<Plug>CaserKebabCase`/`<Plug>CaserVKebabCase`           |
+  -- | `Title-Dash-Case` or `Title-Kebab-Case` | `gsK`           | `<Plug>CaserTitleKebabCase`/`<Plug>CaserVTitleKebabCase` |
+  -- | `dot.case`                              | `gs.`           | `<Plug>CaserDotCase`/`<Plug>CaserVDotCase`               |
 }
 
 -- vim: ts=2 sts=2 sw=2 et
