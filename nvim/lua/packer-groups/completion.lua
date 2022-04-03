@@ -13,6 +13,9 @@ return {
     'tzachar/cmp-tabnine', -- AI helper to type quicker
     run = './install.sh',
     requires = 'hrsh7th/nvim-cmp',
+    cond = function()
+      return vim.env.my_nvim_tabnine ~= nil
+    end,
   },
   {
     'L3MON4D3/LuaSnip', -- Snippets plugin

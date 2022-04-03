@@ -106,7 +106,13 @@ return {
       }
     end,
   }, -- enhanced filetree replacing netrw
-  { 'subnut/nvim-ghost.nvim', run = ':call nvim_ghost#installer#install()' }, -- https://github.com/fregante/GhostText
+  {
+    'subnut/nvim-ghost.nvim',
+    run = ':call nvim_ghost#installer#install()',
+    cond = function()
+      return vim.env.my_nvim_ghost ~= nil
+    end,
+  }, -- https://github.com/fregante/GhostText
   -- now nvim-cokeline takes over
   'ap/vim-buftabline', -- simple and light tab (actually buffer) visualizer
   -- {

@@ -14,10 +14,16 @@ source ~/.local/share/zsh-snap/znap.zsh  # Start Znap
 znap source zsh-users/zsh-autosuggestions
 znap source zsh-users/zsh-syntax-highlighting
 # config for this is found at ./zinit
-znap source marlonrichert/zsh-autocomplete
+
+# intel chip (at least not powerful ones) can't seem to handle this, so make this optional
+test -n "${my_zsh_plugin_zsh_autocomplete}" \
+    && znap source marlonrichert/zsh-autocomplete
 
 zsh-defer znap fpath _gh 'gh completion -s zsh'
 
 # # `znap function` lets you lazy-load features you don't always need.
 # znap function _pyenv pyenvn 'eval "$( pyenv init - --no-rehash )"'
 # compctl -K    _pyenv pyenv
+
+# only way to preperly load this file again is to remove from zinit and open a new shell
+alias znap-reset="yes | zinit delete Users/heechul--.config--zshrc.d--my_addons/znap"

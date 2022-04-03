@@ -1,5 +1,31 @@
 # vim: set ft=zsh:
 
+function evalcache-clear {
+  yes | _evalcache_clear
+}
+
+# to make it consumable for _evalcache
+function _evalable {
+  echo "$@"
+}
+
+function _evalable_arch {
+  _evalable arch
+}
+
+function _evalable_yarnglobalpath {
+  _evalable yarn global bin
+}
+
+_arch="$(_evalcache _evalable_arch)"
+
+# intel chip (at least not powerful ones) can't seem to handle this, so disabled for them for now
+test "${_arch}" = "arm64" && {
+  export my_zsh_plugin_zsh_autocomplete=1;
+  export my_nvim_ghost=1;
+  export my_nvim_tabnine=1;
+}
+
 # theme for bat
 export BAT_THEME="Solarized (light)"
 
@@ -13,8 +39,8 @@ fi
 export FZF_DEFAULT_COMMAND='fd --type f'
 # color is based on https://github.com/junegunn/fzf/wiki/Color-schemes#solarized-light
 export FZF_DEFAULT_OPTS='
-  --height 40% 
-  --layout=reverse 
+  --height 40%
+  --layout=reverse
   --color fg:240,hl:33,fg+:241,bg+:221,hl+:33
   --color info:33,prompt:33,pointer:166,marker:166,spinner:33
   '
@@ -57,15 +83,10 @@ if [ -n "${commands[go]}" ]; then
   export PATH="${GOPATH}/bin:${PATH}"
 fi
 
-# to make it consumable for _evalcache
-function _yarnglobalpath {
-  echo "echo \"$(yarn global bin)\""
-}
-
 # yarn
 if [ -n "${commands[yarn]}" ]; then
   # because yarn global bin is slow
-  _YARN_GLOBAL_PATH=$(_evalcache _yarnglobalpath)
+  _YARN_GLOBAL_PATH=$(_evalcache _evalable_yarnglobalpath)
   export PATH="${_YARN_GLOBAL_PATH}:${PATH}"
 fi
 
