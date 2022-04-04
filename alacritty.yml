@@ -2,10 +2,12 @@ window:
   title: Alacritty
   decorations: transparent
   padding:
-    x: 0
+    x: 5
     y: 22
 live_config_reload: true
 
+env:
+  TERM: xterm-256color
 font:
   normal:
     family: JetBrainsMono Nerd Font
@@ -20,7 +22,7 @@ font:
   bold_italic:
     family: JetBrainsMono Nerd Font
     style: Bold Italic
-  size: 11.0
+  size: 13.0
   use_thin_strokes: true # macOS only
   draw_bold_text_with_bright_colors: true
 shell:
