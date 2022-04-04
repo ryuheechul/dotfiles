@@ -8,6 +8,7 @@ with pkgs;
   fortune
 
   # essential
+  xsel # clipboard - https://ostechnix.com/access-clipboard-contents-using-xclip-and-xsel-in-linux/
   gnumake # gnu make
   coreutils # like for readlink
   gnused # sed

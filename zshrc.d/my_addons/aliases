@@ -25,6 +25,20 @@ function help () {
   show $@ --help
 }
 
+# to measure zsh performance - https://blog.mattclemente.com/2020/06/26/oh-my-zsh-slow-to-load.html
+function timezsh() {
+  shell=${1-$SHELL}
+  for i in $(seq 1 10); do /usr/bin/time $shell -i -c exit; done
+}
+
+# quickly jump via fsad - https://github.com/junegunn/fzf/wiki/examples#with-fasd-1
+unalias j 2>/dev/null
+function j() {
+    [ $# -gt 0 ] && fasd_cd -d "$*" && return
+    local dir
+    dir="$(fasd -Rdl "$1" | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
+}
+
 # theme
 alias light="base16_solarized-light"
 alias dark="base16_solarized-dark"
@@ -97,20 +111,6 @@ alias wttr='curl wttr.in'
 alias googler="googler -n 3"
 alias ddgr="ddgr -n 3"
 
-# quickly jump via fsad - https://github.com/junegunn/fzf/wiki/examples#with-fasd-1
-unalias j 2>/dev/null
-j() {
-    [ $# -gt 0 ] && fasd_cd -d "$*" && return
-    local dir
-    dir="$(fasd -Rdl "$1" | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
-}
-
-# to measure zsh performance - https://blog.mattclemente.com/2020/06/26/oh-my-zsh-slow-to-load.html
-timezsh() {
-  shell=${1-$SHELL}
-  for i in $(seq 1 10); do /usr/bin/time $shell -i -c exit; done
-}
-
 # commandify
 alias fulltimezsh="FORCE_LOAD_MY_ZSH_STUFF=1 timezsh"
 alias vzshrc="nvim ~/.zshrc"
@@ -123,6 +123,13 @@ alias nis="npm install --save"
 alias nisd="npm install --save-dev"
 alias whoami-aws="aws sts get-caller-identity"
 alias q="exit"
+
+# bring `pbcopy` and `pbpaste` to linux
+test -z "${commands[pbcopy]}" \
+  && alias pbcopy='xsel -i -b'
+
+test -z "${commands[pbpaste]}" \
+  && alias pbpaste='xsel -o -b'
 
 ## legacy
 #
