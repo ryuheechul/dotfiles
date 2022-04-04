@@ -1,5 +1,30 @@
 # vim: set ft=zsh:
 
+# define functions first so that it doesn't get affected by aliases being defined here
+#
+# this will return either `light` or `dark`
+function theme_tone () {
+  # assuming I only use `solarized-*`
+  printenv BASE16_THEME | sed s/solarized-//
+}
+
+cmd_gh="$(which gh)"
+
+# override gh to work better with current theme tone
+function gh () {
+  GLAMOUR_STYLE=$(theme_tone) ${cmd_gh} $@
+}
+
+# when I don't feel liking adding `| less` at the end
+function show () {
+  $@ | less -r
+}
+
+# use help like man
+function help () {
+  show $@ --help
+}
+
 # theme
 alias light="base16_solarized-light"
 alias dark="base16_solarized-dark"
@@ -98,29 +123,6 @@ alias nis="npm install --save"
 alias nisd="npm install --save-dev"
 alias whoami-aws="aws sts get-caller-identity"
 alias q="exit"
-
-# this will return either `light` or `dark`
-theme_tone () {
-  # assuming I only use `solarized-*`
-  printenv BASE16_THEME | sed s/solarized-//
-}
-
-cmd_gh="$(which gh)"
-
-# override gh to work better with current theme tone
-gh () {
-  GLAMOUR_STYLE=$(theme_tone) ${cmd_gh} $@
-}
-
-# when I don't feel liking adding `| less` at the end
-show () {
-  $@ | less
-}
-
-# use help like man
-help () {
-  show $@ --help
-}
 
 ## legacy
 #
