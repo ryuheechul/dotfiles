@@ -35,10 +35,6 @@ fi
 mkdir -p ~/.config
 ln -sf "${this_repo_path}/zshrc.d" ~/.config/zshrc.d
 
-# symlink tmux helper script
-mkdir -p ~/.local/bin/
-ln -sf "${this_repo_path}/bin/local/tmux-attach-or-new.sh" ~/.local/bin/tmux-attach-or-new.sh
-
 # source dotfiles' zshrc
 echo "source ~/.config/zshrc.d/zshrc" >> ~/.zshrc
 
@@ -47,6 +43,13 @@ cat << EOF >> ~/.gitconfig
 [include]
   path = "${this_repo_path}/gitconfig"
 EOF
+
+# symlink dotfiles/bin
+mkdir -p ~/.local
+ln -sf "${this_repo_path}/bin" ~/.local/dotfiles-bin
+
+# additional bin from a separate repo
+git clone https://github.com/ryuheechul/bin.git ~/.local/my-bin || bash -c 'cd ~/.local/my-bin && git pull'
 
 # symlink gh config
 mkdir -p ~/.config/gh

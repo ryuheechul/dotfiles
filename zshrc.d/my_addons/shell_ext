@@ -98,6 +98,12 @@ ASDF_DIR=${ASDF_DIR:-${HOME}/.asdf}
 # discover user specific binaries and scripts
 export PATH="${HOME}/.local/bin:${PATH}"
 
+# ../../bin/local/ will be symlinked to this
+export PATH="${HOME}/.local/dotfiles-bin/local:${PATH}"
+
+# https://github.com/ryuheechul/bin will be clone to this
+export PATH="${HOME}/.local/my-bin:${PATH}"
+
 # starship
 _evalcache starship init zsh
 
@@ -112,10 +118,10 @@ if (( $+commands[tag] )); then
 fi
 
 
-# fallback any command to npx # disabled for now
-# source <(npx --shell-auto-fallback zsh)
-
 BASE16_SHELL="${HOME}/.config/base16-shell"
 [ -n "${PS1}" ] && \
     [ -s "${BASE16_SHELL}/profile_helper.sh" ] && \
         _evalcache ${BASE16_SHELL}/profile_helper.sh
+
+# fallback any command to npx # disabled for now
+# source <(npx --shell-auto-fallback zsh)
