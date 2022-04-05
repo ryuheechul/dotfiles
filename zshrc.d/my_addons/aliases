@@ -124,12 +124,14 @@ alias nisd="npm install --save-dev"
 alias whoami-aws="aws sts get-caller-identity"
 alias q="exit"
 
-# bring `pbcopy` and `pbpaste` to linux
-test -z "${commands[pbcopy]}" \
-  && alias pbcopy='xsel -i -b'
-
-test -z "${commands[pbpaste]}" \
-  && alias pbpaste='xsel -o -b'
+## these are replaced by ../../bin/local/pb[paste|copy]
+#
+# # bring `pbcopy` and `pbpaste` to linux
+# test -z "${commands[pbcopy]}" \
+#   && alias pbcopy='xsel -i -b'
+#
+# test -z "${commands[pbpaste]}" \
+#   && alias pbpaste='xsel -o -b'
 
 ## legacy
 #

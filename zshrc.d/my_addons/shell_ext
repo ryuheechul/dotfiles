@@ -101,6 +101,10 @@ export PATH="${HOME}/.local/bin:${PATH}"
 # ../../bin/local/ will be symlinked to this
 export PATH="${HOME}/.local/dotfiles-bin/local:${PATH}"
 
+# actually this wouldn't work.
+# so bootstrap script should be at its own repo
+# and that should be sourced
+# ---
 # https://github.com/ryuheechul/bin will be clone to this
 export PATH="${HOME}/.local/my-bin:${PATH}"
 

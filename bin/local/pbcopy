@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# when either X11 is on local or forwarded
+if test -n "${DISPLAY}"; then
+  xsel -i -b $@
+# when there is no sign of using X11
+else
+  # favor pbpaste
+  if test -x /usr/bin/pbcopy; then
+    /usr/bin/pbcopy $@
+  # fallback to xsel
+  else
+    xsel -i -b $@
+  fi
+fi
