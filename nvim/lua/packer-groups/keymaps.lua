@@ -105,7 +105,7 @@ return {
         },
         p = {
           c = { ':PackerCompile<CR>', 'run :PackerCompile' },
-          i = { ':PackerCompile<CR>', 'run :PackerInstall' },
+          i = { ':PackerInstall<CR>', 'run :PackerInstall' },
           s = { ':PackerSync<CR>', 'run :PackerSync' },
         },
         s = {

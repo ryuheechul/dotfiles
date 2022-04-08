@@ -142,6 +142,19 @@ return {
       require('telescope').load_extension 'luasnip'
     end,
   },
+  {
+    -- pretty cool motion plugin that turns s/f/t to be supurchared.
+    -- it takes some to get used to but it's quite powerful and reduce cognitive loads
+    -- while it could be super efficient with predicting some potential normal future
+    -- they call it "clairvoyant" ability!
+    -- my favorite is `f<enter>` to go to the end of the line
+    'ggandor/lightspeed.nvim',
+    config = function()
+      require('lightspeed').setup {
+        ignore_case = true,
+      }
+    end,
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et
