@@ -30,62 +30,6 @@ vim.api.nvim_set_keymap('', '<Space>', '<Nop>', { noremap = true, silent = true 
 vim.api.nvim_set_keymap('n', 'k', "v:count == 0 ? 'gk' : 'k'", { noremap = true, expr = true, silent = true })
 vim.api.nvim_set_keymap('n', 'j', "v:count == 0 ? 'gj' : 'j'", { noremap = true, expr = true, silent = true })
 
---Add leader shortcuts
-vim.api.nvim_set_keymap(
-  'n',
-  '<space><space>',
-  [[<cmd>lua require('telescope.builtin').buffers()<CR>]],
-  { noremap = true, silent = true }
-)
-vim.api.nvim_set_keymap(
-  'n',
-  '<space>sf',
-  [[<cmd>lua require('telescope.builtin').find_files({previewer = false})<CR>]],
-  { noremap = true, silent = true }
-)
-vim.api.nvim_set_keymap(
-  'n',
-  '<space>sb',
-  [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>]],
-  { noremap = true, silent = true }
-)
-vim.api.nvim_set_keymap(
-  'n',
-  '<space>sh',
-  [[<cmd>lua require('telescope.builtin').help_tags()<CR>]],
-  { noremap = true, silent = true }
-)
-vim.api.nvim_set_keymap(
-  'n',
-  '<space>st',
-  [[<cmd>lua require('telescope.builtin').tags()<CR>]],
-  { noremap = true, silent = true }
-)
-vim.api.nvim_set_keymap(
-  'n',
-  '<space>sd',
-  [[<cmd>lua require('telescope.builtin').grep_string()<CR>]],
-  { noremap = true, silent = true }
-)
-vim.api.nvim_set_keymap(
-  'n',
-  '<space>sp',
-  [[<cmd>lua require('telescope.builtin').live_grep()<CR>]],
-  { noremap = true, silent = true }
-)
-vim.api.nvim_set_keymap(
-  'n',
-  '<space>so',
-  [[<cmd>lua require('telescope.builtin').tags{ only_current_buffer = true }<CR>]],
-  { noremap = true, silent = true }
-)
-vim.api.nvim_set_keymap(
-  'n',
-  '<leader>?',
-  [[<cmd>lua require('telescope.builtin').oldfiles()<CR>]],
-  { noremap = true, silent = true }
-)
-
 -- Y yank until the end of line
 vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
 
@@ -131,6 +75,7 @@ return {
           b = { [[<cmd>lua require('telescope.builtin').buffers()<CR>]], 'search buffer' },
           d = { ':bd<CR>', 'close buffer' },
         },
+        ['<space>'] = { '<cmd>lua require("telescope.builtin").buffers()<CR>', 'telescope: buffers' },
         ['<Tab>'] = { ':bn<CR>', 'rotate buffer' },
         ["'"] = { ':ToggleTerm<CR>', 'open shell' },
         j = 'split args', -- only set a text for an already configured keymap
@@ -164,7 +109,18 @@ return {
         },
         s = {
           name = '+Searching/Symbol',
+          ['?'] = { '<cmd>lua require("telescope.builtin").oldfiles()<CR>', 'old files' },
           c = { '<Cmd>nohlsearch<CR>', 'clear hihglight' },
+          f = { '<cmd>lua require("telescope.builtin").find_files({previewer = false})<CR>', 'find files' },
+          b = { '<cmd>lua require("telescope.builtin").current_buffer_fuzzy_find()<CR>', 'current buffer fuzzy' },
+          h = { '<cmd>lua require("telescope.builtin").help_tags()<CR>', 'help tags' },
+          t = { '<cmd>lua require("telescope.builtin").tags()<CR>', 'tags' },
+          d = { '<cmd>lua require("telescope.builtin").grep_string()<CR>', 'grep string' },
+          p = { '<cmd>lua require("telescope.builtin").live_grep()<CR>', 'live grep' },
+          o = {
+            '<cmd>lua require("telescope.builtin").tags{ only_current_buffer = true }<CR>',
+            'tags only current buffer',
+          },
         },
         t = {
           name = '+UI Toggles',
