@@ -1,0 +1,30 @@
+{
+  "reference": {
+    "prefix": "ref",
+    "body": [
+      "\\${${1:var}\\}"
+    ],
+    "description": "reference without typing with shifts"
+  },
+  "variable": {
+    "prefix": "var",
+    "body": [
+      "variable \"${1:name}\" {",
+      "  description = \"${2:desc}\"",
+      "  type        = ${3:type}",
+      "}"
+    ],
+    "description": "define variable"
+  },
+  "sensitive variable": {
+    "prefix": "svar",
+    "body": [
+      "variable \"${1:name}\" {",
+      "  description = \"${2:desc}\"",
+      "  type        = ${3:type}",
+      "  sensitive   = true",
+      "}"
+    ],
+    "description": "define sensitive variable"
+  }
+}

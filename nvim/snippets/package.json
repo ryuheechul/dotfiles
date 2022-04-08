@@ -19,6 +19,13 @@
       },
       {
         "language": [
+          "hcl",
+          "terraform"
+        ],
+        "path": "./hcl.json"
+      },
+      {
+        "language": [
           "sh",
           "bash",
           "zsh"
