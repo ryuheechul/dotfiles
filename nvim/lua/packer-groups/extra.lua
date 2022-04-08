@@ -122,6 +122,26 @@ return {
   },
   'arkav/lualine-lsp-progress',
   'sbulav/nredir.nvim', -- Redirect the output of Vim or external command to scratch buffer, in LUA
+  -- telescope extensions
+  {
+    -- it could be anything but this was chosen to be the head here
+    'crispgm/telescope-heading.nvim',
+    requires = {
+      -- setup for these at at ./system.lua
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      -- end of dependencies and now other telescope extensions
+      'ANGkeith/telescope-terraform-doc.nvim',
+      'camgraff/telescope-tmux.nvim',
+      'benfowler/telescope-luasnip.nvim',
+    },
+    config = function()
+      require('telescope').load_extension 'heading'
+      require('telescope').load_extension 'terraform_doc'
+      require('telescope').load_extension 'tmux'
+      require('telescope').load_extension 'luasnip'
+    end,
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et

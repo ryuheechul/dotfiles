@@ -104,8 +104,9 @@ return {
           b = { ':Git blame<CR>', 'toggle git blame' },
         },
         p = {
-          s = { ':PackerSync<CR>', 'run :PackerSync' },
           c = { ':PackerCompile<CR>', 'run :PackerCompile' },
+          i = { ':PackerCompile<CR>', 'run :PackerInstall' },
+          s = { ':PackerSync<CR>', 'run :PackerSync' },
         },
         s = {
           name = '+Searching/Symbol',
