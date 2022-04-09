@@ -103,7 +103,7 @@ return {
         auto_close = false,
         disable_netrw = false,
         hijack_netrw = false,
-        open_on_setup = true,
+        open_on_setup = false,
       }
     end,
   }, -- enhanced filetree replacing netrw
