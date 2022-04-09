@@ -75,4 +75,8 @@ vim.o.list = true
 -- only show when there is more than two files are open
 vim.g.buftabline_show = 1
 
+-- this enables pseudo-transparency for popup-menu
+-- some plugins need to set `winblend` to have same effects.
+vim.opt.pumblend = 20
+
 -- vim: ts=2 sts=2 sw=2 et

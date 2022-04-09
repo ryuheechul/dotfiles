@@ -56,16 +56,23 @@ return {
         paste_before_here = '"+P'
       end
 
-      require('which-key').register({
+      local wk = require 'which-key'
+      wk.setup {
+        window = {
+          winblend = 20,
+        },
+      }
+
+      wk.register({
         p = { paste_after_here, 'paste after here' },
         P = { paste_before_here, 'paste before here' },
       }, { prefix = '<leader>' })
 
-      require('which-key').register({
+      wk.register({
         [' '] = { '', 'remove trailing whitespaces' },
       }, { prefix = ',' })
 
-      require('which-key').register({
+      wk.register({
         w = {
           m = { ':Goyo<CR>', 'maximize/minimize window' },
           ['/'] = { ':vsplit<CR>', 'split window vertically' },

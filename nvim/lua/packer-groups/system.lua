@@ -66,6 +66,7 @@ return {
     config = function()
       require('telescope').setup {
         defaults = {
+          winblend = 20,
           mappings = {
             i = {
               ['<C-u>'] = false,
