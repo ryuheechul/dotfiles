@@ -129,6 +129,10 @@ return {
             '<cmd>lua require("telescope.builtin").tags{ only_current_buffer = true }<CR>',
             'tags only current buffer',
           },
+          r = {
+            '<cmd>lua require"telescope".extensions.repo.list{search_dirs = {"~/play"}}<CR>',
+            'Telescope repo',
+          },
         },
         t = {
           name = '+UI Toggles',

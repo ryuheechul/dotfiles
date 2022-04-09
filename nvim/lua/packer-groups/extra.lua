@@ -135,6 +135,7 @@ return {
       'camgraff/telescope-tmux.nvim',
       'benfowler/telescope-luasnip.nvim',
       'xiyaowong/telescope-emoji.nvim',
+      'cljoly/telescope-repo.nvim',
     },
     config = function()
       require('telescope').load_extension 'heading'
@@ -142,6 +143,7 @@ return {
       require('telescope').load_extension 'tmux'
       require('telescope').load_extension 'luasnip'
       require('telescope').load_extension 'emoji'
+      require('telescope').load_extension 'repo'
     end,
   },
   {
