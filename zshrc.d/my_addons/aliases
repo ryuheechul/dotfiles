@@ -123,6 +123,7 @@ alias nis="npm install --save"
 alias nisd="npm install --save-dev"
 alias whoami-aws="aws sts get-caller-identity"
 alias q="exit"
+alias e='${EDITOR} $(fzf)'
 
 ## these are replaced by ../../bin/local/pb[paste|copy]
 #

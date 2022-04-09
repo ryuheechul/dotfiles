@@ -134,12 +134,14 @@ return {
       'ANGkeith/telescope-terraform-doc.nvim',
       'camgraff/telescope-tmux.nvim',
       'benfowler/telescope-luasnip.nvim',
+      'xiyaowong/telescope-emoji.nvim',
     },
     config = function()
       require('telescope').load_extension 'heading'
       require('telescope').load_extension 'terraform_doc'
       require('telescope').load_extension 'tmux'
       require('telescope').load_extension 'luasnip'
+      require('telescope').load_extension 'emoji'
     end,
   },
   {
