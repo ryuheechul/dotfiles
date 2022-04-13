@@ -111,8 +111,9 @@ ln -sf "${this_repo_path}/nvim" ~/.config/nvim
 
 # trigger neovim plugins install via command line
 if [ -z "${SKIP_INSTALL_VIM_PLUGINS}" ]; then
-  nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
-  nvim --headless -c 'UpdateRemotePlugins' -c q
+  # since I'm not sure about this command to work very well and it's ok to fail for now anyway let it not cause disruption on failure
+  nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync' || true
+  nvim --headless -c 'UpdateRemotePlugins' -c q || true
 fi
 
 # SpaceVim - this still may be used for vim but not with nvim
