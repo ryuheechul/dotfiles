@@ -5,7 +5,7 @@ return {
   'roxma/vim-tmux-clipboard', -- share clipboard with tmux
   'christoomey/vim-tmux-navigator', -- navigate with tmux key binding
   {
-    'akinsho/nvim-toggleterm.lua', -- a great ergonomic terminal customization
+    'akinsho/toggleterm.nvim', -- a great ergonomic terminal customization
     config = function()
       -- augment terminal
       vim.cmd [[

@@ -70,6 +70,10 @@ return {
       require('goto-preview').setup {}
     end,
   },
+  {
+    'eraserhd/parinfer-rust', -- editing helper for lisp family langs
+    run = 'nix-shell --run "cargo build --release"',
+  },
   'arthurxavierx/vim-caser', -- convert between cases - https://github.com/arthurxavierx/vim-caser#usage
   -- | Case                                    | Default Mapping | Plug Mapping (normal/visual)                             |
   -- | --------------------------------------- | --------------- | -------------------------------------------------------- |
