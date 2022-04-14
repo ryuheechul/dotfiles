@@ -89,6 +89,9 @@ tmux start-server && \
   sleep 1 && \
   tmux kill-server || true
 
+# avoid using `/usr/local/bin` as a global path for yarn
+yarn config set prefix ~/.yarn
+
 # install asdf
 ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
@@ -97,15 +100,22 @@ ln -sf "${this_repo_path}/asdf/tool-versions" ~/.tool-versions
 
 git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0 || true
 
-# avoid using `/usr/local/bin` as a global path for yarn
-yarn config set prefix ~/.yarn
-
 ## installing packages with asdf has been replaced with Nix - look at ../nix/pkgs.nix
 
+## emacs
 # spacemacs
-git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d || bash -c 'cd ~/.emacs.d && git pull'
-ln -sf "${this_repo_path}/spacemacs" ~/.spacemacs
+git clone https://github.com/syl20bnr/spacemacs ~/.spacemacs.d || bash -c 'cd ~/.spacemacs.d && git pull'
+ln -sf "${this_repo_path}/emacs.d/spacemacs" ~/.spacemacs
 
+# doom emacs
+git clone https://github.com/hlissner/doom-emacs ~/.doom-emacs.d || bash -c 'cd ~/.doom-emacs.d && git pull'
+~/.doom-emacs.d/bin/doom -y install
+
+# chemecs to allow switching between configs like doom emacs and spacemacs
+git clone https://github.com/plexus/chemacs2.git ~/.emacs.d || bash -c 'cd ~/.emacs.d && git pull'
+ln -sf "${this_repo_path}/emacs.d/emacs-profiles.el" ~/.emacs-profiles.el
+
+## (neo)vim
 # neovim - now this replace SpaceVim
 ln -sf "${this_repo_path}/nvim" ~/.config/nvim
 

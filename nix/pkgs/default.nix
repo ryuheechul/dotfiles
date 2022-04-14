@@ -21,7 +21,7 @@ with pkgs;
   tmux # terminal multiplexer
   zellij # A terminal workspace with batteries included
   neovim # my favorite editor
-  emacs-nox # terminal only emacs
+  emacs # emacs editor including GUI, `emacs -nw` to run as TUI
   starship # cross-shell prompt
   fzf # A command-line fuzzy finder
   # gotop # terminal based graphical activity monitor
