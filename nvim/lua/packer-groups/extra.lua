@@ -131,7 +131,11 @@ return {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope.nvim',
       -- end of dependencies and now other telescope extensions
-      'ANGkeith/telescope-terraform-doc.nvim',
+      {
+        'ANGkeith/telescope-terraform-doc.nvim',
+        -- temp workaround to deal with broken head
+        commit = '73291b564fed413ced13e890144d359793b3860c',
+      },
       'camgraff/telescope-tmux.nvim',
       'benfowler/telescope-luasnip.nvim',
       'xiyaowong/telescope-emoji.nvim',
