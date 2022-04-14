@@ -163,6 +163,7 @@ return {
       }
     end,
   },
+  'rhysd/vim-syntax-codeowners', -- syntax support for CODEOWNERS file
 }
 
 -- vim: ts=2 sts=2 sw=2 et

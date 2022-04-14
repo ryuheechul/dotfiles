@@ -15,6 +15,7 @@ with pkgs;
   gcc # the GNU Compiler Collection
   unzip # The UnZip package contains ZIP extraction utilities
   curl # Curl is a command-line tool for transferring data specified with URL syntax
+  httpie # A command line HTTP client whose goal is to make CLI human-friendly
   zsh # my favorite shell interface
   git # to replace possible old git comes with OS
   bash # use latest bash
@@ -77,6 +78,7 @@ with pkgs;
   jsonnet # templating with json
   gh # official Github CLI
   pueue # long running task manager
+  ansifilter # ANSI sequence filter - like [ansi2txt](https://github.com/kilobyte/colorized-logs)
 
   # misc
   neofetch
