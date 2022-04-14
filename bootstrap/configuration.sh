@@ -109,6 +109,7 @@ ln -sf "${this_repo_path}/emacs.d/spacemacs" ~/.spacemacs
 
 # doom emacs
 git clone https://github.com/hlissner/doom-emacs ~/.doom-emacs.d || bash -c 'cd ~/.doom-emacs.d && git pull'
+ln -sf "${this_repo_path}/emacs.d/doom.d" ~/.config/doom
 ~/.doom-emacs.d/bin/doom -y install
 
 # chemecs to allow switching between configs like doom emacs and spacemacs
