@@ -832,38 +832,7 @@
                 "delay_milliseconds_before_open_device": 1000
             },
             "selected": true,
-            "simple_modifications": [
-                {
-                    "from": {
-                        "key_code": "left_shift"
-                    },
-                    "to": [
-                        {
-                            "sticky_modifier": {
-                                "left_shift": "toggle"
-                            }
-                        },
-                        {
-                            "key_code": "left_shift"
-                        }
-                    ]
-                },
-                {
-                    "from": {
-                        "key_code": "right_shift"
-                    },
-                    "to": [
-                        {
-                            "sticky_modifier": {
-                                "right_shift": "toggle"
-                            }
-                        },
-                        {
-                            "key_code": "right_shift"
-                        }
-                    ]
-                }
-            ],
+            "simple_modifications": [],
             "virtual_hid_keyboard": {
                 "caps_lock_delay_milliseconds": 0,
                 "country_code": 0,
