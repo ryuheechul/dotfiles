@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+basename "$(readlink -f ~/.base16_theme)" | sed s/^base16-// | sed s/.sh$// | tr -d "\n"

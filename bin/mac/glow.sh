@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-theme=$(printf '%s' "${BASE16_THEME}" | sed 's/solarized-//')
+theme=$(current-base16 | sed 's/solarized-//')
 
 glow -p -s "$theme" "$@"

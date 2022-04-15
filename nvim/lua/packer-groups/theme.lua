@@ -7,10 +7,17 @@ return {
   {
     'overcache/NeoSolarized',
     config = function()
-      vim.cmd [[
+      local handle = io.popen 'current-base16'
+      local result = handle:read '*a'
+      local theme_base = (result:gsub('solarized--', ''))
+      handle:close()
+
+      -- -- although below "works" it doesn't work well with my cached base16 shell eval - look at the end of ./shell_ext
+      -- local theme_base = (vim.env.BASE16_THEME:gsub('solarized--', ''))
+
+      vim.cmd([[
   colorscheme NeoSolarized
-  set background=light
-]]
+  set background=]] .. theme_base)
     end,
   },
   -- {

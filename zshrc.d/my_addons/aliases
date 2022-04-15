@@ -1,18 +1,26 @@
 # vim: set ft=zsh:
 
 # define functions first so that it doesn't get affected by aliases being defined here
-#
+
+# # although this one works, having a script is better use that it can be used elsewhere like in ../../nvim/lua/packer-groups/theme.lua
+# # so it has moved to ../../bin/local/current-base16
+# function current-base16 () {
+#   basename "$(readlink -f ~/.base16_theme)" | sed s/^base16-// | sed s/.sh$// | tr -d "\n"
+# }
+
 # this will return either `light` or `dark`
-function theme_tone () {
+function theme-tone () {
   # assuming I only use `solarized-*`
-  printenv BASE16_THEME | sed s/solarized-//
+  current-base16 | sed s/solarized-//
+  # although below "works" it doesn't work well with my cached base16 shell eval - look at the end of ./shell_ext
+  # printenv BASE16_THEME | sed s/solarized-//
 }
 
 cmd_gh="$(which gh)"
 
 # override gh to work better with current theme tone
 function gh () {
-  GLAMOUR_STYLE=$(theme_tone) ${cmd_gh} $@
+  GLAMOUR_STYLE=$(theme-tone) ${cmd_gh} $@
 }
 
 # when I don't feel liking adding `| less` at the end
