@@ -52,6 +52,14 @@ in
       qrcodegenSupport = false;
     })
   ]
+  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_BAT")
+  (with bat-extras; [
+    batman
+    batgrep
+    batdiff
+    batwatch
+    prettybat
+  ])
   # # this is actually not working great at least on ubuntu
   # # it's probably wise to follow https://tailscale.com/kb/1031/install-linux/ instead
   # ++ lib.optionals (checkEnv "MY_NIX_EXTRA_TAILSCALE")
