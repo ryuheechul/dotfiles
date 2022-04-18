@@ -44,7 +44,13 @@ in
   ]
   ++ lib.optionals (checkEnv "MY_NIX_EXTRA_EXERCISM")
   [
-  exercism # CLI for exercism.org
+    exercism # CLI for exercism.org
+  ]
+  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_NOTCURSES")
+  [  # since qrcodegen is marked broken
+    (pkgs.notcurses.override {
+      qrcodegenSupport = false;
+    })
   ]
   # # this is actually not working great at least on ubuntu
   # # it's probably wise to follow https://tailscale.com/kb/1031/install-linux/ instead

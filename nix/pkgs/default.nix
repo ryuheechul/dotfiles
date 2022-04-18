@@ -22,7 +22,24 @@ with pkgs;
   tmux # terminal multiplexer
   zellij # A terminal workspace with batteries included
   neovim # my favorite editor
-  emacs # emacs editor including GUI, `emacs -nw` to run as TUI
+  # emacs editor including GUI, `emacs -nw` to run as TUI
+  ((emacsPackagesFor emacs).emacsWithPackages (epkgs: [
+    epkgs.vterm
+  ]))
+  # above replace `emacs` to enable the use of libvterm
+  # `ncurses` comes with utilities below - this also enhances experiences with terminal on macOS (darwin) a lot better
+  # for example, although CLIs below exists on macOS, `infocmp` fails with `eterm-color` on macOS by default
+  # but `ncurses` installed via nix, now `infocmp` works so `lf` now has terminfo to access to render colors that matches with my other terminals
+  # - captoinfo, a termcap conversion tool
+  # - clear, utility for clearing the screen
+  # - infocmp, the terminfo decompiler
+  # - tabs, set tabs on a terminal
+  # - tic, the terminfo compiler
+  # - toe, list (table of) terminfo entries
+  # - tput, utility for retrieving terminal capabilities in shell scripts
+  # - tset, to initialize the terminal
+  ncurses
+
   starship # cross-shell prompt
   fzf # A command-line fuzzy finder
   # gotop # terminal based graphical activity monitor
