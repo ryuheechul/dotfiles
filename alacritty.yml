@@ -6,8 +6,9 @@ window:
     y: 22
 live_config_reload: true
 
-env:
-  TERM: xterm-256color
+env: {}
+# I shouldn't need to set this
+#   TERM: xterm-256color
 font:
   normal:
     family: JetBrainsMono Nerd Font

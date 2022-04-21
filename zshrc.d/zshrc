@@ -35,8 +35,6 @@ if [ -z "$MY_BASIC_ZSH_STUFF_LOADED" ] || [ -n "$FORCE_LOAD_MY_ZSH_STUFF" ]; the
   # bootstrap terminal
   alias shellwe="cd && neofetch && ~/.local/bin/tmux-attach-or-new.sh default"
 
-  # terminal and editor
-  [[ $TMUX = "" ]] && export TERM="xterm-256color"
   export EDITOR="nvim"
 
   # vi keybinding
@@ -53,11 +51,11 @@ setopt auto_cd
 
 ## to have an option of preventing loading things nested in tmux shell
 # if TMUX var is not set then...
-if [[ -z $TMUX ]]; then
+if test -z "${TMUX}"; then
   # if HOST_ALWAYS_USE_TMUX var is set then skip the rest
-  if [[ -n $HOST_ALWAYS_USE_TMUX ]]; then
+  if test -n "${HOST_ALWAYS_USE_TMUX}"; then
     # still give a chance to load if FORCE_LOAD_MY_ZSH_STUFF var is set
-    if [[ -n $FORCE_LOAD_MY_ZSH_STUFF ]]; then
+    if test -n "${FORCE_LOAD_MY_ZSH_STUFF}"; then
       _echo "\$HOST_ALWAYS_USE_TMUX is set but also \$FORCE_LOAD_MY_ZSH_STUFF is set too. Therefore keep loading."
     else
       _echo "skip loading the rest because \$HOST_ALWAYS_USE_TMUX is set"
@@ -70,9 +68,9 @@ fi
 
 ## now this is a one more circuit breaker in case of inside tmux
 # if ALL_MY_ZSH_STUFF_LOADED var is set then...
-if [[ -n $ALL_MY_ZSH_STUFF_LOADED ]]; then
+if test -n "${ALL_MY_ZSH_STUFF_LOADED}"; then
   # but also if FORCE_LOAD_MY_ZSH_STUFF var is set then...
-  if [[ -n $FORCE_LOAD_MY_ZSH_STUFF ]]; then
+  if test -n "${FORCE_LOAD_MY_ZSH_STUFF}"; then
     _echo "\$ALL_MY_ZSH_STUFF_LOADED is set but also \$FORCE_LOAD_MY_ZSH_STUFF is set too. Therefore keep loading."
   else
     _echo "skip loading the rest because \$ALL_MY_ZSH_STUFF_LOADED is set"
@@ -82,7 +80,7 @@ if [[ -n $ALL_MY_ZSH_STUFF_LOADED ]]; then
 fi
 
 # make it possible to cancel vi keybinding via $NO_VI_KEY_ON_ZSH
-if [[ -z $NO_VI_KEY_ON_ZSH ]]; then
+if test -z $NO_VI_KEY_ON_ZSH; then
   set -o vi
 else
   set -o emacs
@@ -94,7 +92,7 @@ fi
 export ADDON_D=~/.config/zshrc.d/my_addons
 for source_file in zinit lf_icons aliases shell_ext
 do
-[ -f $ADDON_D/$source_file ] && source $ADDON_D/$source_file
+test -f $ADDON_D/$source_file && source $ADDON_D/$source_file
 done
 unset ADDON_D
 

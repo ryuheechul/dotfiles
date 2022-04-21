@@ -61,8 +61,8 @@ else
 fi
 
 # in case of apple silicon because:
-# - nix currently only run with Rosetta 2 
-# - at least terminal and shell should run natively 
+# - nix currently only run with Rosetta 2
+# - at least terminal and shell should run natively
 # - to prevent being forced to run only Intel based apps as child processes of the shell and terminal
 if test "arm64" = "$(arch)"; then
   brew install zsh bash tmux
@@ -120,6 +120,19 @@ else
   export HOST_ALWAYS_USE_TMUX=1
 fi
 EOF
+
+# fixing for TERM=tmux-256color - thanks to https://gist.github.com/bbqtd/a4ac060d6f6b9ea6fe3aabe735aa9d95
+# another article for a same topic - https://gpanders.com/blog/the-definitive-guide-to-using-tmux-256color-on-macos/
+
+echo "Mitigating terminfo"
+temp_terminfo_dir=~/tmp/custom-terminfo
+rm -rf "${temp_terminfo_dir}"
+mkdir -p "${temp_terminfo_dir}"
+wget https://invisible-island.net/datafiles/current/terminfo.src.gz -O "${temp_terminfo_dir}/terminfo.src.gz"
+gunzip "${temp_terminfo_dir}/terminfo.src.gz"
+/usr/bin/tic -xe tmux-256color "${temp_terminfo_dir}/terminfo.src"
+
+echo 'Verify by running `/usr/bin/infocmp`'
 
 echo "All done with this script!"
 
