@@ -121,6 +121,14 @@ if (( $+commands[tag] )); then
   alias ag=tag
 fi
 
+# optional integration for https://github.com/akermu/emacs-libvterm#shell-side-configuration-files
+if test "${INSIDE_EMACS}" = 'vterm' \
+  && test -n "${EMACS_VTERM_PATH}" \
+  && test -f "${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh"
+then
+  source "${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh"
+fi
+
 # fallback any command to npx # disabled for now
 # source <(npx --shell-auto-fallback zsh)
 
