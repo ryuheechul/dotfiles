@@ -51,17 +51,6 @@ vim.api.nvim_exec(
   false
 )
 
--- Highlight on yank
-vim.api.nvim_exec(
-  [[
-  augroup YankHighlight
-    autocmd!
-    autocmd TextYankPost * silent! lua vim.highlight.on_yank()
-  augroup end
-]],
-  false
-)
-
 -- remember the last position and go to that line
 -- https://askubuntu.com/a/202077
 vim.cmd [[if has("autocmd")
@@ -78,5 +67,8 @@ vim.g.buftabline_show = 1
 -- this enables pseudo-transparency for popup-menu
 -- some plugins need to set `winblend` to have same effects.
 vim.opt.pumblend = 20
+
+-- sync clipboard with the system's one - https://stackoverflow.com/a/30691754/1570165
+vim.opt.clipboard = 'unnamedplus'
 
 -- vim: ts=2 sts=2 sw=2 et
