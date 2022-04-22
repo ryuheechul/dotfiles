@@ -133,6 +133,10 @@ alias whoami-aws="aws sts get-caller-identity"
 alias q="exit"
 alias e='${EDITOR} $(fzf)'
 
+# emacs
+alias doom="~/.doom-emacs.d/bin/doom"
+alias doom-sync="doom sync && rm ~/.doom-emacs.d/.local/env || true && echo 'attempted remove \`~/.doom-emacs.d/.local/env\` if any'"
+
 ## these are replaced by ../../bin/local/pb[paste|copy]
 #
 # # bring `pbcopy` and `pbpaste` to linux
