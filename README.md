@@ -23,7 +23,22 @@ Rest of my instruction will assume that you cloned to `~/dotfiles` though.
 
 ## Bootstrap
 
-### Platform foundation
+### Be Cautious of These Steps
+
+These scripts that you are about to run have a high probability of overwriting your exisiting folders and files especially other "dotfiles".
+Since the scripts are meant to not run interactively most of the time, there is a high chance it doesn't prompt to double check of what it is about to do.
+Therefore you must read what they do beforhand to avoid unwanted behavior.
+
+It also installs Nix the package manager, and it does create a volume on macOS to workaround the limitation that doesn't exist on Linux. This might affect across all user accounts locally.
+
+The safe ways to try these out are below:
+- run these inside virtual machines as it makes easy to "uninstall".
+- things might partially work on Github Codespaces if not all
+- I've run these inside containers before
+- https://github.com/ryuheechul/dotfiles-launchpad uses Vagrant and Docker container version to bootstrap the portable environment
+  - dotfiles-launchpad clones this repo as submodule and many times it's not up-to-date, FYI.
+
+### Platform Foundation
 
 `~/dotfiles/bootstrap/foundation/linux.sh` # recommended to look at an example below
 
@@ -38,7 +53,7 @@ or
 
 ### Examples
 
-#### linux
+#### Linux
 
 ```
 ~/dotfiles/bootstrap/foundation/linux.sh
@@ -63,7 +78,7 @@ source /etc/profile.d/user-shim-for-nix-path.sh
 ~/dotfiles/bootstrap/configuration.sh
 ```
 
-## Stuff that come with
+## Stuff That Come With
 
 All the source code here aim to be self explanatory.
 You can take a look at directories and files especially top level ones and `bootstrap/configuration.sh`, `nix/pkgs/`.

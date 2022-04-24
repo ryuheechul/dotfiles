@@ -47,7 +47,7 @@ zstyle ':autocomplete:*' fzf-completion yes
 # end of additional configuration for marlonrichert/zsh-autocomplete
 
 # now slow plugins can be loaded via ./znap
-CURR_DIR=~/.config/zshrc.d/my_addons
+CURR_DIR=~/.config/dfs-rhc/zshrc.d/my_addons
 zsh-defer zinit snippet "${CURR_DIR}/znap"
 
 # somehow this should be placed in the bottom to intefere others

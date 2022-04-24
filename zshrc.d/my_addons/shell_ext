@@ -121,14 +121,6 @@ if (( $+commands[tag] )); then
   alias ag=tag
 fi
 
-# optional integration for https://github.com/akermu/emacs-libvterm#shell-side-configuration-files
-if test "${INSIDE_EMACS}" = 'vterm' \
-  && test -n "${EMACS_VTERM_PATH}" \
-  && test -f "${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh"
-then
-  source "${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh"
-fi
-
 # fallback any command to npx # disabled for now
 # source <(npx --shell-auto-fallback zsh)
 
@@ -139,3 +131,9 @@ BASE16_SHELL="${HOME}/.config/base16-shell"
 
 # shim to workaround the issue with cached result of above
 export BASE16_THEME="$(current-base16)"
+
+# extra things to load for emacs for possible shell integration
+if test -n "${INSIDE_EMACS}"; then
+  to_source_for_emacs=~/.config/dfs-rhc/emacs.d/shell/source.zsh
+  test -f ${to_source_for_emacs} && source ${to_source_for_emacs}
+fi

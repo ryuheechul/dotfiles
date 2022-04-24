@@ -31,56 +31,55 @@ else
   exit 1
 fi
 
-# symlink to be read by zshrc
+# make sure ~/.config exist
 mkdir -p ~/.config
-ln -sf "${this_repo_path}/zshrc.d" ~/.config/zshrc.d
 
-# source dotfiles' zshrc
-echo "source ~/.config/zshrc.d/zshrc" >> ~/.zshrc
+# symlink this repo so it's discoverable no matter where this is located at
+# dfs-rhc: shorthand for dotfiles-ryuheechul
+ln -sf "${this_repo_path}" ~/.config/dfs-rhc
+
+dfs_rhc="~/.config/dfs-rhc"
 
 # source my gitconfig
 cat << EOF >> ~/.gitconfig
 [include]
-  path = "${this_repo_path}/gitconfig"
+  path = "${dfs_rhc}/gitconfig"
 EOF
 
 # symlink dotfiles/bin
 mkdir -p ~/.local
-ln -sf "${this_repo_path}/bin" ~/.local/dotfiles-bin
+ln -sf "${dfs_rhc}/bin" ~/.local/dotfiles-bin
 
 # additional bin from a separate repo
 git clone https://github.com/ryuheechul/bin.git ~/.local/my-bin || bash -c 'cd ~/.local/my-bin && git pull'
 
 # symlink gh config
 mkdir -p ~/.config/gh
-ln -sf "${this_repo_path}/gh/config.yml" ~/.config/gh/config.yml
+ln -sf "${dfs_rhc}/gh/config.yml" ~/.config/gh/config.yml
 
 # symlink batconfig
-ln -sf "${this_repo_path}/bat" ~/.config/bat
+ln -sf "${dfs_rhc}/bat" ~/.config/bat
 
 # alacritty
-ln -sf "${this_repo_path}/alacritty.yml" ~/.alacritty.yml
-
-# zinit
-zsh -c "source ~/.config/zshrc.d/my_addons/zinit"
+ln -sf "${dfs_rhc}/alacritty.yml" ~/.alacritty.yml
 
 # starship
-ln -sf "${this_repo_path}/starship.toml" ~/.config/starship.toml
+ln -sf "${dfs_rhc}/starship.toml" ~/.config/starship.toml
 
 # base16
 git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell || bash -c 'cd ~/.config/base16-shell && git pull'
 
 # lf
-ln -sf "${this_repo_path}/lf" ~/.config/lf
+ln -sf "${dfs_rhc}/lf" ~/.config/lf
 
 # tig
-ln -sf "${this_repo_path}/vim.tigrc" ~/.tigrc
+ln -sf "${dfs_rhc}/vim.tigrc" ~/.tigrc
 
 # gitmux
-ln -sf "${this_repo_path}/gitmux.conf" ~/.gitmux.conf
+ln -sf "${dfs_rhc}/gitmux.conf" ~/.gitmux.conf
 
 # tmux
-ln -sf "${this_repo_path}/tmux.conf" ~/.tmux.conf
+ln -sf "${dfs_rhc}/tmux.conf" ~/.tmux.conf
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm || bash -c 'cd ~/.tmux/plugins/tpm && git pull'
 tmux start-server && \
   tmux new-session -d && \
@@ -96,29 +95,38 @@ yarn config set prefix ~/.yarn
 ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
 PATH="${ASDF_DIR}/bin:${ASDF_DATA_DIR}/shims:${PATH}"
-ln -sf "${this_repo_path}/asdf/tool-versions" ~/.tool-versions
+ln -sf "${dfs_rhc}/asdf/tool-versions" ~/.tool-versions
 
 git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0 || true
 
 ## installing packages with asdf has been replaced with Nix - look at ../nix/pkgs.nix
 
+## zsh
+
+# source dotfiles' zshrc
+echo "source '${dfs_rhc}/zshrc.d/zshrc'" >> ~/.zshrc
+
+# source zinit now to avoid installing zsh plugins at initial usage
+zsh -c "source '${dfs_rhc}/zshrc.d/my_addons/zinit'"
+
 ## emacs
+
 # spacemacs
 git clone https://github.com/syl20bnr/spacemacs ~/.spacemacs.d || bash -c 'cd ~/.spacemacs.d && git pull'
-ln -sf "${this_repo_path}/emacs.d/spacemacs" ~/.spacemacs
+ln -sf "${dfs_rhc}/emacs.d/spacemacs" ~/.spacemacs
 
 # doom emacs
 git clone https://github.com/hlissner/doom-emacs ~/.doom-emacs.d || bash -c 'cd ~/.doom-emacs.d && git pull'
-ln -sf "${this_repo_path}/emacs.d/doom.d" ~/.config/doom
+ln -sf "${dfs_rhc}/emacs.d/doom.d" ~/.config/doom
 ~/.doom-emacs.d/bin/doom -y install
 
 # chemecs to allow switching between configs like doom emacs and spacemacs
 git clone https://github.com/plexus/chemacs2.git ~/.emacs.d || bash -c 'cd ~/.emacs.d && git pull'
-ln -sf "${this_repo_path}/emacs.d/emacs-profiles.el" ~/.emacs-profiles.el
+ln -sf "${dfs_rhc}/emacs.d/emacs-profiles.el" ~/.emacs-profiles.el
 
 ## (neo)vim
 # neovim - now this replace SpaceVim
-ln -sf "${this_repo_path}/nvim" ~/.config/nvim
+ln -sf "${dfs_rhc}/nvim" ~/.config/nvim
 
 # trigger neovim plugins install via command line
 if [ -z "${SKIP_INSTALL_VIM_PLUGINS}" ]; then
@@ -132,7 +140,7 @@ spacevim_ver="v1.6.0"
 git clone https://github.com/SpaceVim/SpaceVim ~/.SpaceVim || bash -c 'cd ~/.SpaceVim && git checkout master && git pull' \
   && cd ~/.SpaceVim \
   && git checkout ${spacevim_ver}
-ln -sf "${this_repo_path}/SpaceVim.d" ~/.SpaceVim.d
+ln -sf "${dfs_rhc}/SpaceVim.d" ~/.SpaceVim.d
 # shim vimrc
 ln -sf ~/.SpaceVim ~/.vim
 
