@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+nix eval nixpkgs.${1}.outPath | sed s/\\\"//g | tr -d '\n'

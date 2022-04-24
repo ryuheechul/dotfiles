@@ -35,34 +35,6 @@
 ;; (setq doom-theme 'doom-solarized-light)
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 12))
 
-(use-package! base16-theme
-  :config
-  ;; this works the best with me when it runs with `-nw`
-  ;; also if there is any issue with truecolor
-  ;; `export KONSOLE_DBUS_SESSION=1` might help - https://hoppsjots.org/emacs-24bit.html
-  (setq base16-theme-256-color-source 'colors)
-  ;; and with GUI version, somehow it looks different depends on
-  ;; which terminal that I use to run emacs - this was actually mitigated
-  ;; by setting COLORTERM=truecolor
-  ;; also setting TERM=eterm-256color worked the best with `lf`
-  ;; although some lines might look not properly aligned
-
-  ;; TODO: decide the tone based on the environemnt
-  ;; for example:
-  ;; - emacs has started with either light or dark tone - follow that
-  ;; - emacs has started with `-nw` follow the terminal tone via `current-base16`
-  (load-theme 'base16-solarized-light t))
-
-(setenv "COLORTERM" "truecolor")
-(setenv "FORCE_LOAD_MY_ZSH_STUFF" "1")
-(setenv "TERMINFO_DIRS"
-        (concat
-         (shell-command-to-string
-          "nix eval nixpkgs.ncurses.outPath | sed s/\\\"//g | tr -d '\n'")
-         "/share/terminfo"))
-(after! vterm
-  (setq vterm-term-environment-variable "eterm-color"))
-
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)

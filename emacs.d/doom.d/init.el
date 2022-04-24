@@ -189,4 +189,9 @@
 
        :config
        ;;literate
-       (default +bindings +smartparens))
+       (default +bindings +smartparens)
+
+       :my-custom          ; my own modules
+       vterm-theme         ; bring tighter integration with my existing tools
+       ;; (default +bindings +smartparens)
+       )

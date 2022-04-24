@@ -1,0 +1,12 @@
+# fail fast
+test -z "${INSIDE_DOOM_EMACS}" && return
+
+# continue after the condition is met above
+
+source ~/.config/dfs-rhc/emacs.d/doom.d/shell/source.zsh
+
+# detect the absence of eterm-color on darwin and install it
+if test "$(uname)" = "Darwin"; then
+  /usr/bin/infocmp eterm-color &> /dev/null \
+    || ~/.config/dfs-rhc/bin/mac/terminfo-eterm-color.sh
+fi
