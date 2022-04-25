@@ -14,13 +14,19 @@ test -z "${the_cmd}" && echo "no command is provided" && exit 1
 # make sure to have the directory for pid file
 mkdir -p /var/tmp/single-daemon
 
-# kill the old process one before start the new one
+# kill the old process's process group before starting the new one
+# why group instead of process? when it was just a process, it failed to kill any child (or processes in the group)
+# which is the undesired behavior of this script
+# more info on that can be found at http://morningcoffee.io/killing-a-process-and-all-of-its-descendants.html
 if test -f "${the_path}"; then
   the_pid="$(cat "${the_path}")"
+  # https://unix.stackexchange.com/a/232888/396504
+  the_pgid="$(ps "${the_pid}" -o pgid= | tr -d '\n')"
+
   # kill if the pid belongs to the binary
   ps -p "${the_pid}" | grep "${the_cmd}" >/dev/null \
     && echo "pid ${the_pid} was found for existing one so closing it first." \
-    && kill -9 "${the_pid}"
+    && kill -- "-${the_pgid}"
 fi
 
 # completely detach from terminal - https://stackoverflow.com/a/10408906/1570165
