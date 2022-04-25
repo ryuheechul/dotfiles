@@ -1,3 +1,15 @@
 #!/usr/bin/env bash
 
-nix eval nixpkgs.${1}.outPath | sed s/\\\"//g | tr -d '\n'
+set -e
+# # since the command below seems to not work very well across different nix versions
+# nix eval nixpkgs.${1}.outPath | sed s/\\\"//g | tr -d '\n'
+# # I come up with my own solution below
+
+# get bin path
+bin_path="$(which "${1}")"
+
+# error if it's not from .nix-profile/bin
+echo -n "${bin_path}" | grep '.nix-profile/bin' > /dev/null
+
+real_path="$(realpath "${bin_path}")"
+dirname "$(dirname "${real_path}")" | tr -d '\n'
