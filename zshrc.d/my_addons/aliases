@@ -47,10 +47,6 @@ function j() {
     dir="$(fasd -Rdl "$1" | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
 }
 
-# theme
-alias light="base16_solarized-light"
-alias dark="base16_solarized-dark"
-
 # replace htop with bottom
 alias htop="btm -b"
 # convinient way to print $PATH

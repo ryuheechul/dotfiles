@@ -132,6 +132,22 @@ BASE16_SHELL="${HOME}/.config/base16-shell"
 # shim to workaround the issue with cached result of above
 export BASE16_THEME="$(current-base16)"
 
+# helper functions to make theme tone changes and that to be followable by other tools
+_update_theme_changed_time() {
+  # let external tools to have a chance to follow the change and adopt to it
+  date +s > ~/.base16_theme.updated-time
+}
+
+light() {
+	base16_solarized-light
+  _update_theme_changed_time
+}
+
+dark() {
+	base16_solarized-dark
+  _update_theme_changed_time
+}
+
 # extra things to load for emacs for possible shell integration
 if test -n "${INSIDE_EMACS}"; then
   to_source_for_emacs=~/.config/dfs-rhc/emacs.d/shell/source.zsh

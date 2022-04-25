@@ -26,6 +26,9 @@
       "b"
       (lambda () (interactive) (toggle-doom-theme-tone)))
 
+(defun follow-theme-base16-shell ()
+  (switch-doom-theme (concat "base16-" (shell-command-to-string "current-base16"))))
+
 ;; use base16-theme package to enable base16 theme on emacs
 (use-package! base16-theme
   ;; ;; this makes lazy loading possible
@@ -41,7 +44,7 @@
   ;; which terminal that I use to run emacs - this was actually mitigated
   ;; by setting COLORTERM=truecolor
   ;; decide the tone based on ~/.base16_theme (by my `current-base16` command)
-  (switch-doom-theme (concat "base16-" (shell-command-to-string "current-base16"))))
+  (follow-theme-base16-shell))
 
 (setenv "INSIDE_DOOM_EMACS" "1")
 (setenv "FORCE_LOAD_MY_ZSH_STUFF" "1")
@@ -54,3 +57,14 @@
   (add-to-list
    'vterm-eval-cmds
    '("switch-theme" (lambda (theme) (switch-doom-theme theme)))))
+
+;; https://www.gnu.org/software/emacs/manual/html_node/elisp/File-Notifications.html
+(require 'filenotify)
+
+(file-notify-add-watch
+  ;; ;; this `file-notify-add-watch' actually can handle change on the symlink directory like below
+  ;; "~/.base16_theme" '(change) (lambda (event) (follow-theme-base16-shell))
+  ;; ;; however on my another watcher, ~/.config/dfs-rhc/bin/local/base16-shell-auto-reload-on-tmux can't
+  ;; ;; since it relys on entr and it doesn't support that - https://github.com/eradman/entr/issues/30
+  ;; ;; therefore we just watch the same file as other watchers to maintain the same logic across watchers
+  "~/.base16_theme.updated-time" '(change) (lambda (event) (follow-theme-base16-shell)))

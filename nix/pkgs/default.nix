@@ -16,6 +16,8 @@ with pkgs;
   gnumake # gnu make
   coreutils # like for readlink
   gnused # sed
+  ps
+  pstree # Show the set of running processes as a tree
   curl # Curl is a command-line tool for transferring data specified with URL syntax
   wget # useful for downloading files
   unzip # The UnZip package contains ZIP extraction utilities
