@@ -28,12 +28,17 @@ unalias light
 light() {
 	base16_solarized-light
   vterm_cmd switch-theme "base16-solarized-light"
+  # to cooperate with ../../../bin/local/base16-shell-auto-reload-on-tmux
+  date +s > ~/.base16_theme.updated-time
 }
 
+# TODO: dry these two functions into one?
 unalias dark
 dark() {
 	base16_solarized-dark
   vterm_cmd switch-theme "base16-solarized-dark"
+  # to cooperate with ../../../bin/local/base16-shell-auto-reload-on-tmux
+  date +s > ~/.base16_theme.updated-time
 }
 
 test "${DOOM_EMACS_THEME}" = "base16-solarized-dark" && dark || light

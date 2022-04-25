@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# A helper script to keep the same daemon with only one instance for same binary
+
+the_cmd="${1}"
+the_path="/var/tmp/single-daemon/${the_cmd}.pid"
+
+# early exits to prevent unwanted behaviors
+test -z "${the_cmd}" && echo "no command is provided" && exit 1
+! command -v "${the_cmd}" >/dev/null && echo "${the_cmd} is not found" && exit 1
+
+! test -x "$(command -v "${the_cmd}")" && echo "${the_cmd} is not executable" && exit 1
+
+# make sure to have the directory for pid file
+mkdir -p /var/tmp/single-daemon
+
+# kill the old process one before start the new one
+if test -f "${the_path}"; then
+  the_pid="$(cat "${the_path}")"
+  # kill if the pid belongs to the binary
+  ps -p "${the_pid}" | grep "${the_cmd}" >/dev/null \
+    && echo "pid ${the_pid} was found for existing one so closing it first." \
+    && kill -9 "${the_pid}"
+fi
+
+# completely detach from terminal - https://stackoverflow.com/a/10408906/1570165
+nohup ${the_cmd} </dev/null >/dev/null 2>&1 &
+
+# save pid for later and print it to stdout
+echo -n $! | tee "${the_path}"

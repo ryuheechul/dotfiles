@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# running this inside tmux will be limiting to only one session
+# therefore it's recommened to run this outside tmux
+
+# prevent failure when there is no such file (initially)
+touch ~/.base16_theme.updated-time
+
+echo "this process is to watch the base16-shell's theme change and apply automatically using tmux"
+
+# `entr -n` make it possible to run as daemon
+ls ~/.base16_theme.updated-time | entr -n bash -c 'tmux new-window "source ~/.base16_theme && exit"'
