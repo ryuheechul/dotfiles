@@ -71,7 +71,24 @@ alias gs="git status"
 alias tgs="tig status"
 alias gd="git diff"
 alias gdc="git diff --cached"
-alias gl="git pull --rebase"
+
+unalias gl
+# stash and stash pop when the status is not clean
+function gl () {
+  _git_status="$(git status -s)"
+
+  test -n "${_git_status}" && git stash
+
+  # avoid git stash pop when pull fails
+  git pull --rebase || {
+    test -n "${_git_status}" \
+      && echo "didn't run git stash pop due to git pull failed"
+    return
+  }
+
+  test -n "${_git_status}" && git stash pop
+}
+
 # this overwrites existing gap which is for git apply
 alias gap="git add -p"
 
