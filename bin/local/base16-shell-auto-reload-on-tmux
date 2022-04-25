@@ -8,5 +8,6 @@ touch ~/.base16_theme.updated-time
 
 echo "this process is to watch the base16-shell's theme change and apply automatically using tmux"
 
-# `entr -n` make it possible to run as daemon
-ls ~/.base16_theme.updated-time | entr -n bash -c 'tmux new-window "source ~/.base16_theme && exit"'
+# `-n`: non-interactive mode which makes possible to run as daemon
+# `-p`: "postpone" the first execution until the change is detected
+ls ~/.base16_theme.updated-time | entr -p -n bash -c 'tmux new-window "sleep 0.1 && source ~/.base16_theme && exit"'
