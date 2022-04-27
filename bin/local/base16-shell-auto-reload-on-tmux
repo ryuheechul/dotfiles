@@ -3,6 +3,15 @@
 # running this inside tmux will be limiting to only one session
 # therefore it's recommened to run this outside tmux
 
+# all these unsets simulate being outside of tmux
+# so now it should be safe to run this inside tmux
+unset TERM
+unset TERM_PROGRAM
+unset TMUX
+unset TMUX_PANE
+unset TMUX_PLUGIN_MANAGER_PATH
+unset tmux_version
+
 # prevent failure when there is no such file (initially)
 touch ~/.base16_theme.updated-time
 

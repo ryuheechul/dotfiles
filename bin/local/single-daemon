@@ -21,7 +21,7 @@ mkdir -p /var/tmp/single-daemon
 if test -f "${the_path}"; then
   the_pid="$(cat "${the_path}")"
   # https://unix.stackexchange.com/a/232888/396504
-  the_pgid="$(ps "${the_pid}" -o pgid= | tr -d '\n')"
+  the_pgid="$(ps "${the_pid}" -o pgid= | tr -d ' ')"
 
   # kill if the pid belongs to the binary
   ps -p "${the_pid}" | grep "${the_cmd}" >/dev/null \
