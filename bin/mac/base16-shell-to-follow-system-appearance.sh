@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+## subscribe changes on macOS system appearance and update base16-shell accordingly
+
+# discovered a good solution https://github.com/bouk/dark-mode-notify via https://www.stefanjudis.com/notes/a-terminal-script-to-get-notified-when-macos-changes-its-appearance-dark/
+
+# alternative ways that I considered and dropped:
+# - Shortcuts Automation - would have been an simple option except there is no such a thing yet for macOS although I don't find a way to manage the "code"
+# - https://lgerckens.de/shortery/ - seems like a nice app but requires using Shortcuts on top of purchasing the app
+# - python via https://github.com/ronaldoussoren/pyobjc - I'm not convinced to manage not just the script but also managing packages via virtualenv
+# - AppleScript - is it possible to do such a thing? even if that's possible...
+
+# Prior to this, I didn't know it was possible to run Swift code as if it was scripting lang via hashbang.
+# Also not only Swift code is readable and concise but also it can access macOS API's natively.
+# Thus, it became the most satisfying solution for me out of all the options that I explored for the purpose.
+
 ## clone dark-mode-notify
 
 # TODO: maybe find better location to manage this
