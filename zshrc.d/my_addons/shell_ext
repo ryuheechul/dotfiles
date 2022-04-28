@@ -98,8 +98,8 @@ ASDF_DIR=${ASDF_DIR:-${HOME}/.asdf}
 # discover user specific binaries and scripts
 export PATH="${HOME}/.local/bin:${PATH}"
 
-# ../../bin/local/ will be symlinked to this
-export PATH="${HOME}/.local/dotfiles-bin/local:${PATH}"
+# add ../../bin/local
+export PATH="${HOME}/.config/dfs-rhc/bin/local:${PATH}"
 
 # actually this wouldn't work.
 # so bootstrap script should be at its own repo

@@ -46,13 +46,6 @@ cat << EOF >> ~/.gitconfig
   path = "${dfs_rhc}/gitconfig"
 EOF
 
-# symlink dotfiles/bin
-mkdir -p ~/.local
-ln -sf "${dfs_rhc}/bin" ~/.local/dotfiles-bin
-
-# additional bin from a separate repo
-git clone https://github.com/ryuheechul/bin.git ~/.local/my-bin || bash -c 'cd ~/.local/my-bin && git pull'
-
 # symlink gh config
 mkdir -p ~/.config/gh
 ln -sf "${dfs_rhc}/gh/config.yml" ~/.config/gh/config.yml
