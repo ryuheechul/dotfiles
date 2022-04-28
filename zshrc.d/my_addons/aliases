@@ -73,7 +73,7 @@ alias gd="git diff"
 alias gdc="git diff --cached"
 
 unalias gl
-# stash and stash pop when the status is not clean
+# envelop `git pull` with `stash` and `stash pop` when the status is not clean
 function gl () {
   _git_status="$(git status -s)"
 

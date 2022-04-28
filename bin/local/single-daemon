@@ -2,8 +2,12 @@
 
 # A helper script to keep the same daemon with only one instance for same binary
 
-the_cmd="${1}"
-the_path="/var/tmp/single-daemon/${the_cmd}.pid"
+# current limitation of this script: it doesn' process args for the command - this may be mitigated in the future
+
+# cmd to expand ~ to $HOME
+the_cmd="${1/#\~/$HOME}"
+# only leave basename for pid in case the cmd comes with path
+the_path="/var/tmp/single-daemon/$(basename "${the_cmd}").pid"
 
 # early exits to prevent unwanted behaviors
 test -z "${the_cmd}" && echo "no command is provided" && exit 1
