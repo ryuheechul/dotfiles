@@ -107,14 +107,7 @@ alias cat='bat'
 alias k9s='TERM=xterm COLORTERM=256bit k9s'
 alias rg="rg -p -i" # ripgrep
 
-case "$(uname -s)" in
-  Darwin)
-    alias glow="~/dotfiles/bin/mac/glow.sh"
-    ;;
-  *)
-    alias glow="glow -p" # glow
-    ;;
-esac
+alias glow="~/.config/lf/glow.sh"
 
 alias fzfp='fzf --height 100% --preview "bat --style=numbers --color=always {}"'
 alias fzfpp='fzf|fpp'

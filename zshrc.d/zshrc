@@ -32,9 +32,6 @@ if [ -z "$MY_BASIC_ZSH_STUFF_LOADED" ] || [ -n "$FORCE_LOAD_MY_ZSH_STUFF" ]; the
 
   _load_brew
 
-  # bootstrap terminal
-  alias shellwe="cd && neofetch && ~/.local/bin/tmux-attach-or-new.sh default"
-
   export EDITOR="nvim"
 
   # vi keybinding

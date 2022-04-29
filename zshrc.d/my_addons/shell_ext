@@ -99,7 +99,7 @@ ASDF_DIR=${ASDF_DIR:-${HOME}/.asdf}
 export PATH="${HOME}/.local/bin:${PATH}"
 
 # add ../../bin/local
-export PATH="${HOME}/.config/dfs-rhc/bin/local:${PATH}"
+export PATH="${HOME}/.config/dfs-rhc/bin/discoverable:${PATH}"
 
 # actually this wouldn't work.
 # so bootstrap script should be at its own repo

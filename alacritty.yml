@@ -30,4 +30,4 @@ shell:
   program: /bin/bash
   args:
     - -c
-    - '~/.local/bin/tmux-attach-or-new.sh default'
+    - '~/.config/dfs-rhc/bin/tmux-attach-or-new.sh default'
