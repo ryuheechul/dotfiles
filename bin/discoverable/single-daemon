@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set -e
 # A helper script to keep the same daemon with only one instance for same binary
 
 # current limitation of this script: it doesn' process args for the command - this may be mitigated in the future
@@ -7,7 +8,7 @@
 # cmd to expand ~ to $HOME
 the_cmd="${1/#\~/$HOME}"
 # only leave basename for pid in case the cmd comes with path
-the_path="/var/tmp/single-daemon/$(basename "${the_cmd}").pid"
+the_path="${HOME}/tmp/single-daemon/$(basename "${the_cmd}").pid"
 
 # early exits to prevent unwanted behaviors
 test -z "${the_cmd}" && echo "no command is provided" && exit 1
@@ -16,7 +17,7 @@ test -z "${the_cmd}" && echo "no command is provided" && exit 1
 ! test -x "$(command -v "${the_cmd}")" && echo "${the_cmd} is not executable" && exit 1
 
 # make sure to have the directory for pid file
-mkdir -p /var/tmp/single-daemon
+mkdir -p "${HOME}/tmp/single-daemon"
 
 # kill the old process's process group before starting the new one
 # why group instead of process? when it was just a process, it failed to kill any child (or processes in the group)
