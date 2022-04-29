@@ -78,12 +78,6 @@ open https://github.com/keytty/shelter/releases
 brew tap homebrew/cask-fonts
 _install_cask font-jetbrains-mono-nerd-font
 
-####### theme #######
-
-echo "registering automatic theme switching"
-brew install crescentrose/sunshine/sunshine
-bin/mac/theme/register-to-launchd.sh
-
 echo "You might want to the followings:"
 # https://github.com/mathiasbynens/dotfiles/issues/711#issuecomment-278265644
 echo "System Preference > Accessibility > Display > Reduce Motion checkbox"

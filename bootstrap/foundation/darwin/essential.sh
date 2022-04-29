@@ -138,4 +138,4 @@ echo "All done with this script!"
 
 echo "You may continue the rest with $(readlink -f ./bootstrap/configuration.sh)"
 
-echo "Also optionally $(readlink -f ./bootstrap/foundation/mac/extra.sh)"
+echo "Also optionally $(readlink -f ./bootstrap/foundation/darwin/extra.sh)"
