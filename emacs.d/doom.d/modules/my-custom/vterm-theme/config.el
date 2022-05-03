@@ -68,3 +68,20 @@
   ;; ;; since it relys on entr and it doesn't support that - https://github.com/eradman/entr/issues/30
   ;; ;; therefore we just watch the same file as other watchers to maintain the same logic across watchers
   "~/.base16_theme.updated-time" '(change) (lambda (event) (follow-theme-base16-shell)))
+
+;; send ESC to `vterm` instead of `emacs` call `evil-collection-vterm-toggle-send-escape` to change that behavior
+(add-hook 'vterm-mode-hook #'evil-collection-vterm-toggle-send-escape)
+
+;; emulate `akinsho/toggleterm.nvim`
+(map! :leader
+      :g
+      "'"
+      #'+vterm/toggle)
+
+;; to let `christoomey/vim-tmux-navigator` to work properly (at least on GUI Emacs)
+(after! vterm
+  (evil-collection-define-key 'insert 'vterm-mode-map
+    ;; k and l are already taken care of by
+    ;; https://github.com/emacs-evil/evil-collection/blob/ca4c6172240321a06498390d7d6fa790033f7fc1/modes/vterm/evil-collection-vterm.el#L227-L228
+    (kbd "C-h") #'vterm--self-insert
+    (kbd "C-j") #'vterm--self-insert))

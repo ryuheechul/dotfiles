@@ -16,17 +16,23 @@
       (+workspace/close-window-or-workspace)
     (close-buffer-or-doom)))
 
-(define-key evil-normal-state-map (kbd "q") 'close-window-or-buffer)
+(define-key evil-normal-state-map (kbd "q") #'close-window-or-buffer)
 ;; alternatively the above could be as simple as below
-;; (define-key evil-normal-state-map (kbd "q") 'evil-quit)
+;; (define-key evil-normal-state-map (kbd "q") #'evil-quit)
 
 ;; switching buffer and windows
-(define-key evil-normal-state-map (kbd "<tab>") 'other-window)
+(define-key evil-normal-state-map (kbd "<tab>") #'other-window)
 
 (map! :leader
       :g
       "<tab>"
       'switch-to-next-buffer)
+
+;; emulate `christoomey/vim-tmux-navigator`
+(define-key evil-normal-state-map (kbd "C-h") #'evil-window-left)
+(define-key evil-normal-state-map (kbd "C-j") #'evil-window-down)
+(define-key evil-normal-state-map (kbd "C-k") #'evil-window-up)
+(define-key evil-normal-state-map (kbd "C-l") #'evil-window-right)
 
 ;; split window
 (map! :leader
@@ -48,4 +54,11 @@
       :prefix "f"
       :g
       "t"
-      'treemacs)
+      #'treemacs)
+
+;; clear highlight by search (/)
+(map! :leader
+      :prefix "s"
+      :g
+      "c"
+      #'evil-ex-nohighlight)
