@@ -33,7 +33,24 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-solarized-light)
-(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 12))
+(setq doom-font (font-spec :family "FiraMono Nerd Font Mono" :size 12)
+      ;; ;; There are several things I did to make fonts work "properly" (tested on GUI Emacs on macOS).
+      ;; ;; Prior to these patches, because of the (undesired) differences that I saw from Emacs compare to terminal,
+      ;; ;; I fulled myself to believe that maybe it was the limitations on any of these:
+      ;; ;; - eterm-color (TERMINFO)
+      ;; ;; - https://github.com/akermu/emacs-libvterm
+      ;; ;; - Emacs
+      ;; ;; Now I know that was not the case.
+      ;;
+      ;; 1. use `FiraMono Nerd Font` instead of `JetBrainsMono Nerd Font`
+      ;;    because somehow the height of glyphs can vary with JetBrainsMono even though they both come from Nerd Fonts.
+      ;;    (I don't have this issue with terminals that I use - Alacritty, iTerm, etc.)
+      ;; 2. enabling `unicode` module under :ui at ./init.el would fix misalignments on width in `vterm` (and probably others)
+      ;;    due to non-monospace (width) unicode fonts.
+      ;; 3. enabling `emoji` module under :ui at ./init.el would fix misalignments on height in emacs not just with `[v]term`
+      ;;    due to non-monospace (height) native emoji font like Apple Color Emoji.
+      ;; 4. adding the line below to use the font that I assign for glyphs instead of whatever the default that doom-emacs comes with for mono width.
+      doom-unicode-font doom-font)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.

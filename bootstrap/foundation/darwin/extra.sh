@@ -71,12 +71,10 @@ open https://github.com/keytty/shelter/releases
 
 ####### font #######
 
-## Maybe JetBrainsMono is enough? so comment this out for now
-# brew cask install homebrew/cask-fonts/font-hack-nerd-font
-
-# download nerd font patched jetbrains mono font
+# download nerd font patched jetbrains and fira mono fonts
 brew tap homebrew/cask-fonts
 _install_cask font-jetbrains-mono-nerd-font
+_install_cask font-fira-mono-nerd-font
 
 echo "You might want to the followings:"
 # https://github.com/mathiasbynens/dotfiles/issues/711#issuecomment-278265644
