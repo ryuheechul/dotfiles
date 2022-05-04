@@ -60,8 +60,9 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
 
-;; to trigger emacs to be full screen on start up - https://emacsredux.com/blog/2020/12/04/maximize-the-emacs-frame-on-startup/
-(add-hook 'window-setup-hook #'toggle-frame-fullscreen)
+(when IS-MAC
+  ;; to trigger emacs to be full screen on start up - https://emacsredux.com/blog/2020/12/04/maximize-the-emacs-frame-on-startup/
+  (add-hook 'window-setup-hook #'toggle-frame-fullscreen))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
