@@ -124,28 +124,41 @@ fi
 # fallback any command to npx # disabled for now
 # source <(npx --shell-auto-fallback zsh)
 
-BASE16_SHELL="${HOME}/.config/base16-shell"
-[ -n "${PS1}" ] && \
-    [ -s "${BASE16_SHELL}/profile_helper.sh" ] && \
-        _evalcache ${BASE16_SHELL}/profile_helper.sh
+# only load base16-shell when it's not opened via SSH
+if test -z "${SSH_TTY}" ; then
+  BASE16_SHELL="${HOME}/.config/base16-shell"
+  [ -n "${PS1}" ] && \
+      [ -s "${BASE16_SHELL}/profile_helper.sh" ] && \
+          _evalcache ${BASE16_SHELL}/profile_helper.sh
 
-# shim to workaround the issue with cached result of above
-export BASE16_THEME="$(current-base16)"
+  # shim to workaround the issue with cached result of above
+  export BASE16_THEME="$(current-base16)"
 
-# helper functions to make theme tone changes and that to be followable by other tools
-_update_theme_changed_time() {
-  # let external tools to have a chance to follow the change and adopt to it
-  date +s > ~/.base16_theme.updated-time
-}
+  # helper functions to make theme tone changes and that to be followable by other tools
+  _update_theme_changed_time() {
+    # let external tools to have a chance to follow the change and adopt to it
+    date +s > ~/.base16_theme.updated-time
+  }
+fi
+
+# TODO: DRY `light` and `dark`
 
 light() {
-	base16_solarized-light
-  _update_theme_changed_time
+  if test -z "${SSH_TTY}" ; then
+    base16_solarized-light
+    _update_theme_changed_time
+  else
+    echo 'base16-shell was not loaded given that the shell appears to be opened via SSH'
+  fi
 }
 
 dark() {
-	base16_solarized-dark
-  _update_theme_changed_time
+  if test -z "${SSH_TTY}" ; then
+    base16_solarized-dark
+    _update_theme_changed_time
+  else
+    echo 'base16-shell was not loaded given that the shell appears to be opened via SSH'
+  fi
 }
 
 # extra things to load for emacs for possible shell integration
