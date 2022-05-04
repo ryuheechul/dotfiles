@@ -19,10 +19,12 @@ source "${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh"
 export COLORTERM=truecolor
 export TERMINFO_DIRS="$(nix-outpath ncurses)/share/terminfo"
 
-# TODO: while replacing `e` is good `vi` is actually confusing so let me think about it
-alias vi='vterm_cmd find-file'
-alias e='vi $(fzf)'
+# stop using these alias for now - while replacing `e` is good `vi` is actually confusing so let me think about it
+# alias vi='vterm_cmd find-file'
+# alias e='vi $(fzf)'
 
+# sync in case of drift between Emacs and base16-shell
+# TODO: don't run any if they are same (which will be most of the time) to enhance the performance on loading the shell
 test "${DOOM_EMACS_THEME}" = "base16-solarized-dark" && dark || light
 
 echo "shell overriding for doom emacs has been completed."
