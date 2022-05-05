@@ -206,10 +206,8 @@
   ;; ...
   (mapc (lambda (x) (add-to-list 'doom-env-blacklist x))
         (mapcar (lambda (x) (format "^%s$" x))
-                '("TERM"
-                  "TERM_PROGRAM"
-                  "TMUX"
-                  "FZF_TMUX"
-                  "TMUX_PANE"
-                  "TMUX_PLUGIN_MANAGER_PATH"
-                  "tmux_version"))))
+                (string-lines
+                 (shell-command-to-string
+                  (concat
+                   doom-private-dir
+                   "shell/env-vars-to-exclude"))))))

@@ -8,14 +8,13 @@ else
 	return
 fi
 
+# https://unix.stackexchange.com/a/115431/396504
+script_d=${0:a:h}
+
 # because excluding these at `../init.el` wasn't enough when you run emacs from terminal inside tmux
-unset TERM
-unset TERM_PROGRAM
-unset TMUX
-unset FZF_TMUX
-unset TMUX_PANE
-unset TMUX_PLUGIN_MANAGER_PATH
-unset tmux_version
+for env_var in $(${script_d}/env-vars-to-exclude); do
+  unset "$env_var"
+done
 
 # optional integration for https://github.com/akermu/emacs-libvterm#shell-side-configuration-files
 source "${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh"
@@ -25,6 +24,7 @@ source "${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh"
 # export FORCE_LOAD_MY_ZSH_STUFF=1
 
 # any others can be set here
+export TERM=eterm-color
 export COLORTERM=truecolor
 export TERMINFO_DIRS="$(nix-outpath ncurses)/share/terminfo"
 

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# this will be used few places including ../init.el and ./source.zsh
+
+echo -n "TERM
+TERM_PROGRAM
+TMUX
+FZF_TMUX
+TMUX_PANE
+TMUX_PLUGIN_MANAGER_PATH
+tmux_version"
