@@ -37,3 +37,9 @@ export TERMINFO_DIRS="$(nix-outpath ncurses)/share/terminfo"
 test "${DOOM_EMACS_THEME}" = "base16-solarized-dark" && dark || light
 
 echo "shell overriding for doom emacs has been completed."
+
+# run command on start up requested from Emacs
+# TODO: this technically don't need to wait for all the things above, so consider moving up there to skip extra things to wait
+cmd_to_run="${INSIDE_EMACS_RUN_CMD_ON_START_UP}"
+unset INSIDE_EMACS_RUN_CMD_ON_START_UP
+test -n "${cmd_to_run}" && exec zsh -c "$cmd_to_run"

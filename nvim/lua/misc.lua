@@ -51,11 +51,16 @@ vim.api.nvim_exec(
   false
 )
 
--- remember the last position and go to that line
--- https://askubuntu.com/a/202077
-vim.cmd [[if has("autocmd")
+-- giving option to ignore this since the logic doesn't handle
+-- +[linenumber] arg on startup
+-- so use it like `my_nvim_forget_line_number=1 nvim +10 filename`
+if vim.env.my_nvim_forget_line_number == nil then
+  -- remember the last position and go to that line
+  -- https://askubuntu.com/a/202077
+  vim.cmd [[if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-endif]]
+  endif]]
+end
 
 -- show some hidden characters
 vim.o.listchars = [[tab:→\ ,eol:↵,trail:·,extends:↷,precedes:↶]]

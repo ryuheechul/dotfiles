@@ -85,3 +85,27 @@
     ;; https://github.com/emacs-evil/evil-collection/blob/ca4c6172240321a06498390d7d6fa790033f7fc1/modes/vterm/evil-collection-vterm.el#L227-L228
     (kbd "C-h") #'vterm--self-insert
     (kbd "C-j") #'vterm--self-insert))
+
+;; a hack to let zsh to run command on start up - conjunction with ../../../shell/source.zsh
+(defun vterm-with-cmd (cmd)
+  (setenv "INSIDE_EMACS_RUN_CMD_ON_START_UP" cmd)
+  ;; if to avoid opening in the full window - go with `(+vterm/toggle t)` instead
+  (+vterm/here nil)
+  (setenv "INSIDE_EMACS_RUN_CMD_ON_START_UP" nil))
+
+;; an option to fallback to neovim
+(defun open-in-neovim ()
+  (interactive)
+  (vterm-with-cmd (concat
+                   "my_nvim_forget_line_number=1 "
+                   "nvim +"
+                   (number-to-string (line-number-at-pos))
+                   " -- "
+                   buffer-file-name)))
+
+;; map the function above for convenience
+(map! :leader
+      :prefix "f"
+      :n
+      "n"
+      #'open-in-neovim)
