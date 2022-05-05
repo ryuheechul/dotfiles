@@ -78,9 +78,9 @@
       "'"
       #'+vterm/toggle)
 
-;; to let `christoomey/vim-tmux-navigator` to work properly (at least on GUI Emacs)
 (after! vterm
   (evil-collection-define-key 'insert 'vterm-mode-map
+    ;; to let `christoomey/vim-tmux-navigator` to work properly (at least on GUI Emacs)
     ;; k and l are already taken care of by
     ;; https://github.com/emacs-evil/evil-collection/blob/ca4c6172240321a06498390d7d6fa790033f7fc1/modes/vterm/evil-collection-vterm.el#L227-L228
     (kbd "C-h") #'vterm--self-insert

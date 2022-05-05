@@ -8,6 +8,15 @@ else
 	return
 fi
 
+# because excluding these at `../init.el` wasn't enough when you run emacs from terminal inside tmux
+unset TERM
+unset TERM_PROGRAM
+unset TMUX
+unset FZF_TMUX
+unset TMUX_PANE
+unset TMUX_PLUGIN_MANAGER_PATH
+unset tmux_version
+
 # optional integration for https://github.com/akermu/emacs-libvterm#shell-side-configuration-files
 source "${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh"
 

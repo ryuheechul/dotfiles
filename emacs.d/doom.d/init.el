@@ -196,3 +196,20 @@
        lab                 ; where my new configs will be added initially
        ;; (default +bindings +smartparens)
        )
+
+;; this section is for cli usages https://github.com/doomemacs/doomemacs/issues/2434#issuecomment-629572501
+(when noninteractive
+  ;; ignore term and tmux related env vars
+  ;; (mapc ... will result in the same effect as these example lines
+  ;; (add-to-list 'doom-env-blacklist "^TERM$")
+  ;; (add-to-list 'doom-env-blacklist "^TERM_PROGRAM$")
+  ;; ...
+  (mapc (lambda (x) (add-to-list 'doom-env-blacklist x))
+        (mapcar (lambda (x) (format "^%s$" x))
+                '("TERM"
+                  "TERM_PROGRAM"
+                  "TMUX"
+                  "FZF_TMUX"
+                  "TMUX_PANE"
+                  "TMUX_PLUGIN_MANAGER_PATH"
+                  "tmux_version"))))
