@@ -192,7 +192,7 @@
        (default +bindings +smartparens)
 
        :my-custom          ; my own modules
-       vterm-theme         ; bring tighter integration with my existing tools
+       vterm-enhance       ; bring tighter integration with my existing tools
        lab                 ; where my new configs will be added initially
        ;; (default +bindings +smartparens)
        )

@@ -17,7 +17,9 @@ for env_var in $(${script_d}/env-vars-to-exclude); do
 done
 
 # optional integration for https://github.com/akermu/emacs-libvterm#shell-side-configuration-files
-source "${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh"
+source "${script_d}/shim/emacs-vterm-zsh.zsh"
+# below is replaced with above to mitigate an issue
+# source "${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh"
 
 # these two must be set from emacs prior to launching terminal from emacs
 # export INSIDE_DOOM_EMACS=1
