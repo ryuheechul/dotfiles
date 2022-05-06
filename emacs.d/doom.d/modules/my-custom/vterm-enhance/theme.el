@@ -5,16 +5,41 @@
 
 ;; configs that makes vterm module even more usable in terms of aesthetics
 
+;; translate between base16-* and doom-*
+(defun base16-to-doom (theme)
+  (if (eq theme 'base16-solarized-dark)
+      'doom-solarized-dark
+    'doom-solarized-light))
+
+(defun doom-to-base16 (theme)
+  (if (eq theme 'doom-solarized-dark)
+      'base16-solarized-dark
+    'base16-solarized-light))
+
+;; a handle to inject doom-* instead of base16-* optionally
+(setq override-base16-with-doom t)
+
+(defun doom-theme-value ()
+  (let ((theme-val (symbol-value 'doom-theme)))
+    (if override-base16-with-doom
+        (doom-to-base16 theme-val)
+      theme-val)))
+
+(defun apply-theme (theme-name)
+  (load-theme
+   (if override-base16-with-doom (base16-to-doom theme-name) theme-name)
+   t))
+
 ;; use this instead of using load-theme directly to sync theme between emacs and base16-shell
 (defun switch-doom-theme (theme-name)
-  (load-theme (intern theme-name) t)
+  (apply-theme (intern theme-name))
   (setenv
    "DOOM_EMACS_THEME"
-   (symbol-name (symbol-value 'doom-theme))))
+   (symbol-name (doom-theme-value))))
 
 ;; toggle between light and dark
 (defun toggle-doom-theme-tone ()
-  (if (eq (symbol-value 'doom-theme) 'base16-solarized-dark)
+  (if (eq (doom-theme-value) 'base16-solarized-dark)
       (switch-doom-theme (symbol-name 'base16-solarized-light))
     (switch-doom-theme (symbol-name 'base16-solarized-dark))))
 
