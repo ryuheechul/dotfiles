@@ -8,6 +8,12 @@ else
 	return
 fi
 
+# fix cursor shape in the shell inside vterm - https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
+echo '\e[2 q'
+
+# this is a workaround that fixes cursors not changing properly between modes with eterm-color for neovim
+alias vi='TERM=xterm-256color nvim'
+
 # https://unix.stackexchange.com/a/115431/396504
 script_d=${0:a:h}
 
