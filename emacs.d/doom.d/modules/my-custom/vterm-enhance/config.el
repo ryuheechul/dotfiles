@@ -24,8 +24,23 @@
       "'"
       #'+vterm/toggle)
 
-;; reverse the the default keybinding for `t` and `T`
-(map! :leader :prefix "o" :g "t" #'+vterm/here)
+;; basically bring toggle to `+vterm/here'
+(defun vterm/full-w/toggle ()
+  (interactive)
+  ;; handle when vterm is not loaded yet too
+  (if (boundp 'vterm-buffer-name)
+      (let ((target-buffer (get-buffer vterm-buffer-name)))
+        (if (eq target-buffer nil)
+            (+vterm/here nil)
+          (if (doom-buried-buffer-p target-buffer)
+              (switch-to-buffer target-buffer)
+            ;; somehow `(bury-buffer target-buffer)` doesn't work
+            (bury-buffer))))
+    (+vterm/here nil)))
+
+;; reverse the the default keybinding for `t' and `T'
+(map! :leader :prefix "o" :g "t" #'vterm/full-w/toggle)
+;; TODO: `T' can be better used for running Tmux probably
 (map! :leader :prefix "o" :g "T" #'+vterm/toggle)
 
 (after! vterm
@@ -37,10 +52,17 @@
     (kbd "C-j") #'vterm--self-insert))
 
 ;; a hack to let zsh to run command on start up - conjunction with ../../../shell/source.zsh
+;; currently the assumption of this function is that run it in full window
+;; if to avoid opening in the full window - go with `(+vterm/toggle t)` instead
 (defun vterm-with-cmd (cmd)
+  ;; this will be read by ../../../shell/source.zsh
   (setenv "INSIDE_EMACS_RUN_CMD_ON_START_UP" cmd)
-  ;; if to avoid opening in the full window - go with `(+vterm/toggle t)` instead
+  ;; to avoid buffer collision with regular ones
+  (setq vterm-buffer-name "*vterm-with-cmd*")
   (+vterm/here nil)
+  ;; fix the global name back to normal - assuming the original name is `*vterm*`
+  (setq vterm-buffer-name "*vterm*")
+  ;; clean up this because it should be set only momentarily
   (setenv "INSIDE_EMACS_RUN_CMD_ON_START_UP" nil))
 
 ;; an option to fallback to neovim
@@ -64,8 +86,18 @@
       "n"
       #'open-in-neovim)
 
+;; this is more of an illusion of hiding than actual hiding (if there is such a thing)
+;; so it's probably not perfect but quite usable to handle both `+vterm/here` and `+vterm/toggle`
+(defun vterm/hide ()
+  (unless (not (eq major-mode 'vterm-mode))
+    (if (= (count-windows) 1)
+        ;; assuming it is a full window one
+        (vterm/full-w/toggle)
+      ;; assuming it is a popup vterm
+      (+vterm/toggle nil))))
+
 (after! vterm
-  ;; let `vterm/toggle` consumable from shell side
+  ;; let `vterm/hide` consumable from shell side
   (add-to-list
    'vterm-eval-cmds
-   '("vterm/toggle" (lambda () (+vterm/toggle nil)))))
+   '("vterm/hide" vterm/hide)))

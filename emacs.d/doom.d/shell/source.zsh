@@ -43,7 +43,7 @@ else
   export TERM=eterm-color
   # this way would prevent the shell to be actually closed and open again needlessly which makes toggle feel prompt (after initial opening)
   # when you need an actual exit, just type `exit`
-  alias q='vterm_cmd vterm/toggle && clear'
+  alias q='vterm_cmd vterm/hide && clear' # `clear` give you the illusion of opening the shell again (promptly) - don't use `clear` when debugging
 fi
 
 # stop using these alias for now - while replacing `e` is good `vi` is actually confusing so let me think about it
