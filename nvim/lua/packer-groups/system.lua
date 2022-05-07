@@ -9,7 +9,10 @@ return {
     config = function()
       -- augment terminal
       vim.cmd [[
-        let $FORCE_LOAD_MY_ZSH_STUFF = 1
+        " cleaner approach than $FORCE_LOAD_MY_ZSH_STUFF
+        let $UNSET_MY_BASIC_ZSH_STUFF_LOADED=1
+        let $UNSET_ALL_MY_ZSH_STUFF_LOADED=1
+
         let $NO_VI_KEY_ON_ZSH = 1
       ]]
 
