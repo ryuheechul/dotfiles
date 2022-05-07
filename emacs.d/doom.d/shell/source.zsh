@@ -27,10 +27,6 @@ for env_var in $(${script_d}/env-vars-to-exclude); do
   unset "$env_var"
 done
 
-# these two must be set from emacs prior to launching terminal from emacs
-# export INSIDE_DOOM_EMACS=1
-# export FORCE_LOAD_MY_ZSH_STUFF=1
-
 # any others can be set here
 export COLORTERM=truecolor
 export TERMINFO_DIRS="$(nix-outpath ncurses)/share/terminfo"

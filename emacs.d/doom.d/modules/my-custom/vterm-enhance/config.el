@@ -5,6 +5,10 @@
 
 ;; configs that makes vterm module even more usable and enables tighter integration with my other tools
 
+(setenv "INSIDE_DOOM_EMACS" "1")
+(setenv "UNSET_ALL_MY_ZSH_STUFF_LOADED" "1")
+(setenv "UNSET_MY_BASIC_ZSH_STUFF_LOADED" "1")
+
 ;; manage code related theme separately
 (load! "theme") ;; ./theme.el
 

@@ -71,9 +71,6 @@
   ;; decide the tone based on ~/.base16_theme (by my `current-base16` command)
   (follow-theme-base16-shell))
 
-(setenv "INSIDE_DOOM_EMACS" "1")
-(setenv "FORCE_LOAD_MY_ZSH_STUFF" "1")
-
 (after! vterm
   ;; setting TERM=eterm-256color worked best with `lf`
   ;; although some lines might look not properly aligned
