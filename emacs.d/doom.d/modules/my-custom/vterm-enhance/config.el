@@ -5,6 +5,9 @@
 
 ;; configs that makes vterm module even more usable and enables tighter integration with my other tools
 
+(setq tui-emacs (eq window-system nil))
+
+(if tui-emacs (setenv "TUI_EMACS" "1"))
 (setenv "INSIDE_DOOM_EMACS" "1")
 (setenv "UNSET_ALL_MY_ZSH_STUFF_LOADED" "1")
 (setenv "UNSET_MY_BASIC_ZSH_STUFF_LOADED" "1")
@@ -46,7 +49,7 @@
   (vterm-with-cmd
    (concat
     ;; this is a workaround that fixes the cursor is not changing shape properly between modes for neovim with TERM=eterm-color
-    "TERM=xterm-256color "
+    (if tui-emacs "" "TERM=xterm-256color ") ;; skip doing this for TUI becuase somehow it breaks the terminal graphics
     ;; this enables opening the same line in neovim as emacs
     "my_nvim_forget_line_number=1 "
     "nvim +"
