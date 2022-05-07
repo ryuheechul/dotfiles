@@ -38,7 +38,7 @@ mkdir -p ~/.config
 # dfs-rhc: shorthand for dotfiles-ryuheechul
 ln -sf "${this_repo_path}" ~/.config/dfs-rhc
 
-dfs_rhc="~/.config/dfs-rhc"
+dfs_rhc="${HOME}/.config/dfs-rhc"
 
 # source my gitconfig
 cat << EOF >> ~/.gitconfig
