@@ -35,12 +35,16 @@
 ;; an option to fallback to neovim
 (defun open-in-neovim ()
   (interactive)
-  (vterm-with-cmd (concat
-                   "my_nvim_forget_line_number=1 "
-                   "nvim +"
-                   (number-to-string (line-number-at-pos))
-                   " -- "
-                   buffer-file-name)))
+  (vterm-with-cmd
+   (concat
+    ;; this is a workaround that fixes the cursor is not changing shape properly between modes for neovim with TERM=eterm-color
+    "TERM=xterm-256color "
+    ;; this enables opening the same line in neovim as emacs
+    "my_nvim_forget_line_number=1 "
+    "nvim +"
+    (number-to-string (line-number-at-pos))
+    " -- "
+    buffer-file-name)))
 
 ;; map the function above for convenience
 (map! :leader
@@ -48,3 +52,9 @@
       :n
       "n"
       #'open-in-neovim)
+
+(after! vterm
+  ;; let `vterm/toggle` consumable from shell side
+  (add-to-list
+   'vterm-eval-cmds
+   '("vterm/toggle" (lambda () (+vterm/toggle nil)))))
