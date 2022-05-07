@@ -17,6 +17,10 @@
       "'"
       #'+vterm/toggle)
 
+;; reverse the the default keybinding for `t` and `T`
+(map! :leader :prefix "o" :g "t" #'+vterm/here)
+(map! :leader :prefix "o" :g "T" #'+vterm/toggle)
+
 (after! vterm
   (evil-collection-define-key 'insert 'vterm-mode-map
     ;; to let `christoomey/vim-tmux-navigator` to work properly (at least on GUI Emacs)
