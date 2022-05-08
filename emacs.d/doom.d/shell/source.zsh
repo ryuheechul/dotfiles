@@ -38,13 +38,19 @@ export TERMINFO_DIRS="$(nix-outpath ncurses)/share/terminfo"
 if test -n "${VIMRUNTIME}"; then
   export TERM=xterm-256color
   echo '[Info] You are in the term inside [neo]vim.'
-# vterm
-else
-  export TERM=eterm-color
-  # this way would prevent the shell to be actually closed and open again needlessly which makes toggle feel prompt (after initial opening)
-  # when you need an actual exit, just type `exit`
-  alias q='vterm_cmd vterm/hide && clear' # `clear` give you the illusion of opening the shell again (promptly) - don't use `clear` when debugging
+
+  # stop loading the rest in case in neovim
+  return
 fi
+# now these should for vterm inside emacs level only
+
+export TERM=eterm-color
+# this way would prevent the shell to be actually closed and open again needlessly which makes toggle feel prompt (after initial opening)
+# when you need an actual exit, just type `exit`
+alias q='vterm_cmd vterm/hide && clear' # `clear` give you the illusion of opening the shell again (promptly) - don't use `clear` when debugging
+
+# despite its name it should only work for the "full screen one"
+vterm_cmd vterm/unhide-mode-line
 
 # stop using these alias for now - while replacing `e` is good `vi` is actually confusing so let me think about it
 # alias vi='vterm_cmd find-file'

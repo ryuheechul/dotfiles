@@ -101,3 +101,19 @@
   (add-to-list
    'vterm-eval-cmds
    '("vterm/hide" vterm/hide)))
+
+;; these "undo" hiding modeline that is defined from ~/.doom-emacs.d/modules/term/vterm/autoload.el
+(after! hide-mode-line
+  (add-to-list
+   'hide-mode-line-excluded-modes
+   'vterm-mode))
+
+(defun vterm/full-w/turn-off-hide-mode-line ()
+  (if (string= (buffer-name) vterm-buffer-name)
+      (turn-off-hide-mode-line-mode)))
+
+(after! vterm
+  ;; let `vterm/hide` consumable from shell side
+  (add-to-list
+   'vterm-eval-cmds
+   '("vterm/unhide-mode-line" vterm/full-w/turn-off-hide-mode-line)))
