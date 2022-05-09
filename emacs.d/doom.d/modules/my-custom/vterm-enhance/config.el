@@ -34,8 +34,12 @@
             (+vterm/here nil)
           (if (doom-buried-buffer-p target-buffer)
               (switch-to-buffer target-buffer)
-            ;; somehow `(bury-buffer target-buffer)` doesn't work
-            (bury-buffer))))
+            ;; since bury-buffer doesn't do much when there is no other real buffer
+            ;; better to kill it instead
+            (if (< (length (doom-real-buffer-list)) 0)
+                ;; somehow `(bury-buffer target-buffer)` doesn't work
+                (bury-buffer)
+              (kill-this-buffer)))))
     (+vterm/here nil)))
 
 ;; reverse the the default keybinding for `t' and `T'
