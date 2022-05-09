@@ -14,6 +14,7 @@ with pkgs;
 [
   git # Distributed version control system
   gnumake # gnu make
+  gnugrep # GNU implementation of the Unix grep command
   coreutils # like for readlink
   gnused # sed
   ps
