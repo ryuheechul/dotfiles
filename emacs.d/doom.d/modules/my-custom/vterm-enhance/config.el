@@ -11,6 +11,7 @@
 (setenv "INSIDE_DOOM_EMACS" "1")
 (setenv "UNSET_ALL_MY_ZSH_STUFF_LOADED" "1")
 (setenv "UNSET_MY_BASIC_ZSH_STUFF_LOADED" "1")
+(setenv "UNSET_HOST_ALWAYS_USE_TMUX" "1")
 
 ;; manage code related theme separately
 (load! "theme") ;; ./theme.el
