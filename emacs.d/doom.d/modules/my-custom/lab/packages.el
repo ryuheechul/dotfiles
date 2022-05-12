@@ -2,3 +2,4 @@
 ;;; $DOOMDIR/modules/my-custom/lab/packages.el
 
 ;; install required package
+(package! real-auto-save)
