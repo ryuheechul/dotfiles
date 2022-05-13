@@ -63,8 +63,13 @@
       "c"
       #'evil-ex-nohighlight)
 
+;;; enhancing org-mode experience
+
 ;; enable real-auto-save-mode for org-mode
 (add-hook 'org-mode-hook 'real-auto-save-mode)
+
+;; why not
+(setq org-startup-with-inline-images t)
 
 ;; if this issue, https://github.com/magit/with-editor/issues/62 appears
 ;; these might resolve the issue and/or run `doom sync' to see if that helps
