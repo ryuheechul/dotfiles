@@ -52,6 +52,9 @@ alias q='vterm_cmd vterm/hide && clear' # `clear` give you the illusion of openi
 # despite its name it should only work for the "full screen one"
 vterm_cmd vterm/unhide-mode-line
 
+# lf doesn't seem to handle colors with eterm-color very well - this workaround seems to be the cleanest to approaches with color issue (especially with previewed files)
+alias lf='TERM=xterm-256color lf'
+
 # stop using these alias for now - while replacing `e` is good `vi` is actually confusing so let me think about it
 # alias vi='vterm_cmd find-file'
 # alias e='vi $(fzf)'

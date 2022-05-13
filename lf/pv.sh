@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-unset COLORTERM
-
 filename="$(basename "$1")"
 EXT="${filename##*.}"
 
@@ -14,5 +12,5 @@ if [ "${ext}" == "md" ]; then
   echo '`# Markdown: '"$1"'`via **glow**' | glow - -s dark
   ~/.config/lf/glow.sh "$1"
 else
-  bat --color=always --theme=base16 "$@"
+  bat --force-colorization "$@"
 fi

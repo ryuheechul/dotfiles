@@ -6,7 +6,7 @@ set icons
 
 # set previewer using bat
 set previewer ~/.config/lf/pv.sh
-map i $~/.config/lf/pv.sh "$f" | ~/.config/lf/less.sh
+map i $~/.config/lf/pv+pager.sh "$f"
 
 # type gh and go back to home directory
 map gh cd ~
@@ -17,7 +17,7 @@ map gh cd ~
 # use e to edit instead
 
 # l will open files with previewer
-cmd open $~/.config/lf/pv.sh "$fx" | ~/.config/lf/less.sh
+cmd open $~/.config/lf/pv+pager.sh "$fx"
 # enter will do samething as l
 map <enter> push l
 
