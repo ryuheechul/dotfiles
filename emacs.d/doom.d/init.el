@@ -57,7 +57,7 @@
        fold              ; (nigh) universal code folding
        ;;(format +onsave)  ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
-       ;;lispy             ; vim for lisp, for people who don't like vim
+       lispy             ; vim for lisp, for people who don't like vim
        ;;multiple-cursors  ; editing in many places at once
        ;;objed             ; text object editing for the innocent
        ;;parinfer          ; turn lisp into python, sort of
@@ -193,9 +193,9 @@
 
        :my-custom          ; my own modules
        vterm-enhance       ; bring tighter integration with my existing tools
-       lab                 ; where my new configs will be added initially
+       lab)                 ; where my new configs will be added initially
        ;; (default +bindings +smartparens)
-       )
+
 
 ;; this section is for cli usages https://github.com/doomemacs/doomemacs/issues/2434#issuecomment-629572501
 (when noninteractive
@@ -209,5 +209,6 @@
                 (string-lines
                  (shell-command-to-string
                   (concat
+                   "FOR_DOOM_SYNC_ENV=1 "
                    doom-private-dir
                    "shell/env-vars-to-exclude"))))))

@@ -2,6 +2,7 @@
 
 # this will be used few places including ../init.el and ./source.zsh
 
+# both for doom sync and on loading shell
 echo -n "TERM
 TERM_PROGRAM
 TERM_PROGRAM_VERSION
@@ -14,4 +15,20 @@ TMUX
 FZF_TMUX
 TMUX_PANE
 TMUX_PLUGIN_MANAGER_PATH
-tmux_version"
+tmux_version
+ALACRITTY_SOCKET
+ALACRITTY_LOG
+STARSHIP_SHELL
+STARSHIP_SESSION_KEY"
+
+# only for doom sync - things that I don't want shell to unset
+test -n "${FOR_DOOM_SYNC_ENV}" && \
+  echo -n "
+LANG
+LS_COLORS
+INSIDE_EMACS
+INSIDE_DOOM_EMACS
+EMACS_VTERM_PATH
+DOOM_EMACS_THEME
+PROOT
+TERMINFO_DIRS"
