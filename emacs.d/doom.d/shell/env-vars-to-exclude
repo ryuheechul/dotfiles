@@ -18,12 +18,13 @@ TMUX_PLUGIN_MANAGER_PATH
 tmux_version
 ALACRITTY_SOCKET
 ALACRITTY_LOG
-STARSHIP_SHELL
-STARSHIP_SESSION_KEY"
+"
 
 # only for doom sync - things that I don't want shell to unset
 test -n "${FOR_DOOM_SYNC_ENV}" && \
   echo -n "
+STARSHIP_SHELL
+STARSHIP_SESSION_KEY
 LANG
 LS_COLORS
 INSIDE_EMACS
