@@ -13,6 +13,11 @@
 (setenv "UNSET_MY_BASIC_ZSH_STUFF_LOADED" "1")
 (setenv "UNSET_HOST_ALWAYS_USE_TMUX" "1")
 
+;; this might pick up user installed (possibly newer version of zsh)
+;; (let ((shell-path (shell-command-to-string "which zsh")))
+;;   (setenv "SHELL" shell-path)
+;;   (setq vterm-shell shell-path))
+
 ;; manage code related theme separately
 (load! "theme") ;; ./theme.el
 

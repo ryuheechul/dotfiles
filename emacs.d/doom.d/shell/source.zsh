@@ -30,7 +30,7 @@ done
 
 # any others can be set here
 export COLORTERM=truecolor
-export TERMINFO_DIRS="$(nix-outpath ncurses)/share/terminfo"
+export TERMINFO_DIRS="$(nix-outpath infocmp)/share/terminfo"
 
 # for terminal inside neovim inside vterm
 

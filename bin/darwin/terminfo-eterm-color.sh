@@ -4,4 +4,4 @@
 /usr/bin/tic -x "$(nix-outpath emacs)/share/emacs/28.1/etc/e/eterm-color.ti"
 
 echo 'A "proper" `eterm-color` terminfo on this system (darwin) was missing and now it is installed by this script.'
-echo 'Restart the shell/terminal to take effect'
+echo 'You should restart the shell/terminal to apply the change.'
