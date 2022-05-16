@@ -9,14 +9,16 @@ let
   # when packages on unstable (in my case, <nixpkgs>) is literrally to unstable
   stable = import <nixpkgs-stable-darwin> {};
   pkgs = stable.pkgs;
-  starship = stable.pkgs.starship;
+  # commenting as the unstable channel one is working fine again
+  # starship = stable.pkgs.starship;
 
   # # these two lines are just examples
   # hello = stable.pkgs.hello;
   # bash = stable.pkgs.bash;
 in
   {
-    inherit starship;
+    # commenting as the unstable channel one is working fine again
+    # inherit starship;
     inherit amazon-ecs-cli;
     # # these two lines are just examples
     # inherit hello;
