@@ -5,16 +5,17 @@ set -e
 # nix eval nixpkgs.${1}.outPath | sed s/\\\"//g | tr -d '\n'
 # # I come up with my own solution below
 
-# this replace the previous version of a bunch of commands below
-# but this is still limited by binary file path so `ncurses` will not but work but `infocmp`
-nix-store -q "$(which "${1}")"
+# this attempted to replace a bunch of commands below but not worked well across different environment
+# nix-store -q "$(which "${1}")"
 
-## Previous version for abvoe
-# # get bin path
-# bin_path="$(which "${1}")"
-#
-# # error if it's not from .nix-profile/bin
-# echo -n "${bin_path}" | grep '.nix-profile/bin' > /dev/null
-#
-# real_path="$(realpath "${bin_path}")"
-# dirname "$(dirname "${real_path}")" | tr -d '\n'
+## Somehow this version still works the best
+## but this is still limited by binary file path so `ncurses` will not work but `infocmp` will work (to get ncurses store path)
+
+# get bin path
+bin_path="$(which "${1}")"
+
+# error if it's not from .nix-profile/bin
+echo -n "${bin_path}" | grep '.nix-profile/bin' > /dev/null
+
+real_path="$(realpath "${bin_path}")"
+dirname "$(dirname "${real_path}")" | tr -d '\n'
