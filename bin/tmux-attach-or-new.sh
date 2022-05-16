@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-if [[ -z "$1" ]]; then
-  echo "you will need to provide a session name. Try \`$0 [my-session-name]\`."
-  exit 1
-fi
-
 ## set path for nix otherwise tmux server can't access some binaries like `fpp`
 
 if [ -z "$(command -v nix)" ]; then
@@ -24,7 +19,8 @@ if test "Darwin" = "$(uname)" && test "arm64" = "$(arch)"; then
 fi
 
 SHELL=$(which zsh)
-session_name="$1"
+# set it `default` as default sessions name when no name is given
+session_name="${1:-default}"
 
 # recommended via https://stackoverflow.com/a/49134974/1570165
 tmux new-session -A -s "${session_name}"
