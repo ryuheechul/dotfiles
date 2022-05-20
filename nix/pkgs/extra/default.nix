@@ -5,6 +5,7 @@ let
   tag = import ../custom/tag {pkgs=pkgs;};
   tf-helper = import ../custom/tf-helper.nix {pkgs=pkgs;};
   gitwatch = import ../custom/gitwatch.nix {pkgs=pkgs;};
+  cfn-lint = pkgs.python3.pkgs.cfn-lint;
 in
   with pkgs;
   []
@@ -29,6 +30,7 @@ in
     awscli2 # aws cli
     ssm-session-manager-plugin # AWS SSM Plugin
     amazon-ecs-cli # aws ecs cli
+    cfn-lint # Checks cloudformation for practices and behaviour that could potentially be improved
   ]
   ++ lib.optionals (checkEnv "MY_NIX_EXTRA_CI")
   [
