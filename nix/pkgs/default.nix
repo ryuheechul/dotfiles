@@ -108,6 +108,7 @@ with pkgs;
 ] ++
   # helper
 [
+  fswatch # A cross-platform file change monitor with multiple backends
   watch # execute a program periodically
   entr # Run arbitrary commands when files change
   pueue # long running task manager

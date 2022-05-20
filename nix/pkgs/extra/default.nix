@@ -4,6 +4,7 @@ let
   checkEnv = import ../../utils/checkEnv.nix;
   tag = import ../custom/tag {pkgs=pkgs;};
   tf-helper = import ../custom/tf-helper.nix {pkgs=pkgs;};
+  gitwatch = import ../custom/gitwatch.nix {pkgs=pkgs;};
 in
   with pkgs;
   []
@@ -11,6 +12,7 @@ in
   [
     git-lfs # git extention for large file storage
     pre-commit # for managing multi-language pre-commit hooks
+    gitwatch # Watch a file or folder and automatically commit changes to a git repo easily.
   ]
   ++ lib.optionals (checkEnv "MY_NIX_EXTRA_GO")
   [
