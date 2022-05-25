@@ -14,6 +14,7 @@ with pkgs;
 [
   git # Distributed version control system
   gnumake # gnu make
+  earthly # Build automation for the container era
   gnugrep # GNU implementation of the Unix grep command
   coreutils # like for readlink
   gnused # sed

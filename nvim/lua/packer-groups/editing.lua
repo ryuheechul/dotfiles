@@ -20,6 +20,7 @@ return {
       local ft = require 'Comment.ft'
       -- correct comment character
       ft.set('mermaid', '%%%s')
+      ft.set('Earthfile', '#%s')
     end,
   },
   {
