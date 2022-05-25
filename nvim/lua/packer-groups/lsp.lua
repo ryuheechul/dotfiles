@@ -1,4 +1,5 @@
--- treesitter & lsp
+-- treesitter & lsp & other syntax highlighting stuff
+-- TODO: maybe I need to rename this file to something else
 return {
   -- Additional textobjects for treesitter
   'nvim-treesitter/nvim-treesitter-textobjects',
@@ -9,6 +10,8 @@ return {
     run = ':TSUpdate',
     config = require 'packer-groups.config.treesitter',
   },
+  -- Highlight Earthfile syntax
+  'earthly/earthly.vim',
   {
     'neovim/nvim-lspconfig', -- Collection of configurations for built-in LSP client
     requires = {

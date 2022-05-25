@@ -103,7 +103,9 @@ return {
           },
         },
         -- auto_open = true,
-        auto_close = false,
+        -- not available any more
+        -- https://github.com/kyazdani42/nvim-tree.lua/blob/b2ba6dea7105d9afabd3af08abd93947b851a90f/lua/nvim-tree/legacy.lua#L213-L218
+        -- auto_close = false,
         disable_netrw = false,
         hijack_netrw = false,
         open_on_setup = false,
