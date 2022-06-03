@@ -8,3 +8,5 @@
 
 ;; enables =org-gfm-export-to-markdown=
 (package! ox-gfm)
+;; open a scratch that match the mode to current buffer - https://github.com/ieure/scratch-el
+(package! scratch)
