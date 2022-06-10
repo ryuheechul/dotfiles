@@ -46,6 +46,10 @@ in
     nodePackages.cdktf-cli
     tf-helper
   ]
+  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_ERLANG")
+  [
+    elixir # A functional, meta-programming aware language built on top of the Erlang VM
+  ]
   ++ lib.optionals (checkEnv "MY_NIX_EXTRA_EXERCISM")
   [
     exercism # CLI for exercism.org
