@@ -6,6 +6,10 @@
 [pull]
   ff = only
 
+[status]
+  submoduleSummary = 5 # 5 means it will show up to 5 logs
+  # using -1 will mean it's infinite so it will show every log
+
 [diff]
   submodule = log
 
