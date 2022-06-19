@@ -1,0 +1,11 @@
+{
+  "minimal-nix": {
+    "prefix": "nix",
+    "body": [
+      "# vim: ft=bash",
+      "source_up",
+      "use nix"
+    ],
+    "description": "configure nix-shell via direnv"
+  }
+}

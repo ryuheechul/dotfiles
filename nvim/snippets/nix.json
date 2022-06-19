@@ -1,0 +1,16 @@
+{
+  "shell.nix": {
+    "prefix": "shell",
+    "body": [
+      "{ pkgs ? import <nixpkgs> {} }:",
+      "",
+      "with pkgs;",
+      "mkShell {",
+      "  buildInputs = [",
+      "    ${1:name}",
+      "  ];",
+      "}"
+    ],
+    "description": "minimal template for shell.nix"
+  }
+}

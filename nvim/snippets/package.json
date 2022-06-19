@@ -26,6 +26,18 @@
       },
       {
         "language": [
+          "bash"
+        ],
+        "path": "./direnv.json"
+      },
+      {
+        "language": [
+          "nix"
+        ],
+        "path": "./nix.json"
+      },
+      {
+        "language": [
           "sh",
           "bash",
           "zsh"
