@@ -111,11 +111,11 @@ return function()
   }
 
   -- load including'rafamadriz/friendly-snippets'
-  require('luasnip.loaders.from_vscode').load()
+  require('luasnip.loaders.from_vscode').lazy_load()
 
-  -- require("luasnip.loaders.from_vscode").load({ paths = { "./snippets" } }) -- Load snippets from my-snippets folder
+  -- require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } }) -- Load snippets from my-snippets folder
   -- not sure how to do relative path properly like above, so just doing the below for now instead
-  require('luasnip.loaders.from_vscode').load { paths = { '~/dotfiles/nvim/snippets' } } -- Load snippets from my-snippets folder
+  require('luasnip.loaders.from_vscode').lazy_load { paths = { '~/.config/dfs-rhc/nvim/snippets' } } -- Load snippets from my-snippets folder
 
   -- Every unspecified option will be set to the default.
   luasnip.config.set_config {
