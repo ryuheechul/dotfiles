@@ -14,7 +14,8 @@ return function()
       'dart',
       'dockerfile',
       'dot',
-      'elixir',
+      -- a possible related issue - https://github.com/nvim-treesitter/nvim-treesitter/issues/2913
+      -- 'elixir', -- disable for now to deal with slowness with treesitter
       'elm',
       'erlang',
       'fennel',
