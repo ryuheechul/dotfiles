@@ -21,6 +21,8 @@ let
     coverage
   ]);
 
+  # deno
+  bundle-deno = [ deno ];
   # nodejs
   bundle-nodejs-with-pkgs = (let
     nodejs = nodejs-14_x;
@@ -42,4 +44,7 @@ let
     sumneko-lua-language-server # Lua Language Server coded by Lua
   ];
 in
-  [ python-with-pkgs ] ++ bundle-nodejs-with-pkgs ++ for-lua
+  [ python-with-pkgs ] ++
+  bundle-nodejs-with-pkgs ++
+  for-lua ++
+  bundle-deno
