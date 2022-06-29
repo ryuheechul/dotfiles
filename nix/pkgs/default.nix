@@ -116,8 +116,8 @@ with pkgs;
   # taskell # CLI kanban
   jsonnet # templating with json
   ansifilter # ANSI sequence filter - like [ansi2txt](https://github.com/kilobyte/colorized-logs)
+  dos2unix # Convert text files with DOS or Mac line breaks to Unix line breaks and vice versa
   tldr # Simplified and community-driven man pages
-
 ]
 ++ (import ./lang.nix {pkgs=pkgs;})
 ++ (import ./extra/default.nix {pkgs=pkgs;})
