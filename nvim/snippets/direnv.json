@@ -7,5 +7,12 @@
       "use nix"
     ],
     "description": "configure nix-shell via direnv"
+  },
+  "source_env": {
+    "prefix": ".env",
+    "body": [
+      "test -f .env && source_env .env"
+    ],
+    "description": "source .env if .env exist"
   }
 }
