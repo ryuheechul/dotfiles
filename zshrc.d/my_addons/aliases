@@ -144,6 +144,8 @@ alias ddgr="ddgr -n 3"
 # commandify
 alias fulltimezsh="FORCE_LOAD_MY_ZSH_STUFF=1 timezsh"
 alias vzshrc="nvim ~/.zshrc"
+alias sshconfig="cat ~/.ssh/config"
+alias vsshconfig="nvim ~/.ssh/config"
 alias touchreadme="touch README.md"
 alias touchmakefile="touch Makefile"
 alias weather='curl wttr.in'
