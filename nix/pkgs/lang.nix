@@ -21,7 +21,7 @@ let
     coverage
   ]);
 
-  # deno
+  # deno - i should move this extra
   bundle-deno = [ deno ];
   # nodejs
   bundle-nodejs-with-pkgs = (let

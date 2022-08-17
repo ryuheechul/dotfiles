@@ -46,7 +46,6 @@ with pkgs;
   starship # cross-shell prompt
   tmux # terminal multiplexer
   zellij # A terminal workspace with batteries included
-
 ] ++
   # editor - mostly for neovim
 [
@@ -59,7 +58,6 @@ with pkgs;
   # clang-tools # Standalone command line tools for C++ development
   rust-analyzer # An experimental modular compiler frontend for the Rust language
   stylua # An opinionated Lua code formatter
-
 ] ++
 
   # modern tools - i.e. https://github.com/ibraheemdev/modern-unix
@@ -75,6 +73,8 @@ with pkgs;
   curlie # front-end to curl that tries to mimic httpie
   choose # a human-friendly and fast alternative to cut and (sometimes) awk
   jq # json processor
+  # not sure if sqlite is "modern" but keep it here so I can avoid having to build sqlite by an arbitrary npm package which happened quite often
+  sqlite # A self-contained, serverless, zero-configuration, transactional SQL database engine
 ] ++
   # viewer
 [
@@ -89,7 +89,6 @@ with pkgs;
   gping # ping with graph
   fpp # for tmux-fpp
   extract_url # for tmux-urlview
-
 ] ++
   # search
 [

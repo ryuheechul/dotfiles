@@ -21,7 +21,6 @@ in
     gopls # go language server
     gocode # auto completion for go
     gotools # updates your Go import lines, adding missing ones and removing unreferenced ones
-    gotags # ctags-compatible tag generator for Go
     delve # go debugger
   ]
   ++ lib.optionals (checkEnv "MY_NIX_EXTRA_AWS")
