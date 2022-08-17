@@ -137,7 +137,7 @@ if test -z "${SSH_TTY}" ; then
   # helper functions to make theme tone changes and that to be followable by other tools
   _update_theme_changed_time() {
     # let external tools to have a chance to follow the change and adopt to it
-    date +s > ~/.base16_theme.updated-time
+    date +%s > ~/.base16_theme.updated-time
   }
 fi
 

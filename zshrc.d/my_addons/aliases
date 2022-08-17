@@ -156,6 +156,9 @@ alias nisd="npm install --save-dev"
 alias whoami-aws="aws sts get-caller-identity"
 alias q="exit"
 alias e='${EDITOR} $(fzf)'
+alias jqstringify='jq ". | tostring"'
+alias jqfromjson='jq "fromjson"'
+alias usenodejs18='nix-shell -p nodejs-18_x'
 
 # emacs
 alias doom="~/.doom-emacs.d/bin/doom"
