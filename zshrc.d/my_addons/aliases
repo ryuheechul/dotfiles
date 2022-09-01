@@ -158,7 +158,8 @@ alias q="exit"
 alias e='${EDITOR} $(fzf)'
 alias jqstringify='jq ". | tostring"'
 alias jqfromjson='jq "fromjson"'
-alias usenodejs18='nix-shell -p nodejs-18_x'
+# more on it at https://www.cyberciti.biz/faq/unix-linux-check-if-port-is-in-use-command/
+alias listopenports='lsof -i -P -n | grep LISTEN'
 
 # emacs
 alias doom="~/.doom-emacs.d/bin/doom"
