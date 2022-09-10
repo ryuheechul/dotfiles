@@ -1,12 +1,11 @@
 ### how to keep the source of truth in dotfiles in wsl
-# clone dotfiles in windows file system like `%appdata%/dotfiles`
+# clone dotfiles in windows file system like `%appdata%/dotfiles-for-win`
 #
-# symlink from windows `cd %appdata%\Roaming\alacritty.yml && mklink ../dotfiles/alacritty.win.yml
+# symlink from windows via `cd %appdata%\alacritty && mklink alarcritty.yml ..\dotfiles-for-win\alacritty.win.yml`
 # then now tracking and applying can be done with one file thanks to symlinks
 #
-# symlink from wsl `ln -s /mnt/c/Users/[username]/Roaming/dotfiles ~/dotfiles` (so that I can edit dotfiles on wsl)
-# if to manage only one dotfiles repo locally but this is actually not good for performance
-# so it's better to have one dotfiles on windows and one dotfiles on wsl and sync via git when necessary
+# symlink from wsl `ln -s /mnt/c/Users/[windows username]/Roaming/dotfiles-for-win` (so that I can edit dotfiles on wsl)
+# keep one dotfiles on windows and one dotfiles on wsl and sync via git when necessary for better disk performance on wsl
 
 window:
   title: Alacritty
