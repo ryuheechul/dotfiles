@@ -11,6 +11,7 @@
 window:
   title: Alacritty
   decorations: full
+  startup_mode: Fullscreen
   padding:
     x: 0
     y: 0
@@ -34,9 +35,10 @@ font:
   size: 11.0
 key_bindings:
 # To cancel ctrl+shift c/v - https://www.reddit.com/r/linuxquestions/comments/iovvc2/comment/g4ghw6q/?utm_source=share&utm_medium=web2x&context=3
-  - key: C
-    mods: Control
-    action: Copy
+  # skipping with ctrl+c as this is necessary to SIGINT
+  # - key: C
+  #   mods: Control
+  #   action: Copy
   - key: V
     mods: Control
     action: Paste
