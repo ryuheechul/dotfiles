@@ -1,21 +1,64 @@
 # vim: set ft=zsh:
 
+function _tag {
+  return # comment here to debug performance
+  echo shell_ext $1
+  date +%s%N
+}
+
+_tag start
+
+# use cache to reduce number of export to speed up
+path_cache="${PATH}"
+
+function cache-path {
+  path_cache="${1}:${path_cache}"
+}
+
 function evalcache-clear {
   yes | _evalcache_clear
 }
 
 # to make it consumable for _evalcache
 function _evalable {
-  echo "$@"
+  # echo is the key to make it consumable
+  # subshell substituting is the key to cache the result
+  print "echo -n '$(${@})'"
+
+  # meaningless example of this function would be be low which was my mistake in the past
+  # echo "$@"
 }
 
+# alternative to call _evalable arch directly to produce better filename for cached results
 function _evalable_arch {
   _evalable arch
 }
 
-function _evalable_yarnglobalpath {
+function _evalable_fzf_share {
+  _evalable fzf-share
+}
+
+function _evalable_brew_prefix {
+  _evalable brew --prefix
+}
+
+function _evalable_path_grep_nix_profile {
+  function _path_grep_nix_profile {
+    path | grep nix-profile
+  }
+
+  _evalable _path_grep_nix_profile
+}
+
+function _evalable_yarn_global_path {
   _evalable yarn global bin
 }
+
+function _evalable_vivid_generate_solarized_light {
+  _evalable vivid generate solarized-light
+}
+
+_tag fn-def
 
 _arch="$(_evalcache _evalable_arch)"
 
@@ -26,13 +69,17 @@ test "${_arch}" = "arm64" && {
   export my_nvim_tabnine=1;
 }
 
+_tag arch
+
 # theme for bat
 export BAT_THEME="Solarized (light)"
 
 # set LS_COLORS with vivid
-if [ -n "${commands[vivid]}" ]; then
-  export LS_COLORS=$(vivid generate solarized-light)
+if test -n "${commands[vivid]}"; then
+  export LS_COLORS="$(_evalcache _evalable_vivid_generate_solarized_light)"
 fi
+
+_tag vivid
 
 # fzf + fd # fd ignores .gitignore files/directories by default
 # default
@@ -54,65 +101,87 @@ export FZF_ALT_C_COMMAND='fd -t d'
 export FZF_ALT_C_OPTS=''
 
 # better history search with fzf via https://nixos.wiki/wiki/Fzf
-if [ -n "${commands[fzf-share]}" ]; then
-  source "$(fzf-share)/key-bindings.zsh"
-  source "$(fzf-share)/completion.zsh"
+
+if test -n "${commands[fzf-share]}"; then
+  path_from_fzf_share="$(_evalcache _evalable_fzf_share)"
+  source "${path_from_fzf_share}/key-bindings.zsh"
+  source "${path_from_fzf_share}/completion.zsh"
 else # falling back to brew
   # in case of enabling with brew via https://github.com/junegunn/fzf#using-homebrew
-  if type brew &>/dev/null; then
+  if test -n "${commands[brew]}"; then
     [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
     # configuring completions for brew installed packages
     # this FPATH will be needed in ../zshrc and should be accessible this way too
-    FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+    FPATH="$(_evalcache _evalable_brew_prefix)/share/zsh/site-functions:$FPATH"
   fi
 fi
+
+_tag fzf
 
 ## binaries by language global packages, for example, npm, rust, go, etc.
 
 # making sure it supersedes like /bin /usr/bin /usr/local/bin
-export PATH="$(path | grep nix-profile):${PATH}"
+cache-path "$(_evalcache _evalable_path_grep_nix_profile)"
+
+_tag nix-path
 
 # rust
-if [ -n "${commands[cargo]}" ]; then
-  export PATH="${HOME}/.cargo/bin:${PATH}"
+if test -n "${commands[cargo]}"; then
+  cache-path "${HOME}/.cargo/bin"
 fi
+
+_tag cargo
 
 # golang
-if [ -n "${commands[go]}" ]; then
+if test -n "${commands[go]}"; then
   export GOPATH=${HOME}/go
-  export PATH="${GOPATH}/bin:${PATH}"
+  cache-path "${GOPATH}/bin"
 fi
+
+_tag go
 
 # yarn
-if [ -n "${commands[yarn]}" ]; then
+if test -n "${commands[yarn]}"; then
   # because yarn global bin is slow
-  _YARN_GLOBAL_PATH=$(_evalcache _evalable_yarnglobalpath)
-  export PATH="${_YARN_GLOBAL_PATH}:${PATH}"
+  cache-path "$(_evalcache _evalable_yarn_global_path)"
 fi
 
+_tag yarn
+
 # asdf
-ASDF_DIR=${ASDF_DIR:-${HOME}/.asdf}
+ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 # https://github.com/asdf-vm/asdf - version manager
 [ -f "${ASDF_DIR}/asdf.sh" ] && source "${ASDF_DIR}/asdf.sh"
 
+_tag asdf
+
 # discover user specific binaries and scripts
-export PATH="${HOME}/.local/bin:${PATH}"
+cache-path "${HOME}/.local/bin"
 
 # add ../../bin/local
-export PATH="${HOME}/.config/dfs-rhc/bin/discoverable:${PATH}"
+cache-path "${HOME}/.config/dfs-rhc/bin/discoverable"
 
 # actually this wouldn't work.
 # so bootstrap script should be at its own repo
 # and that should be sourced
 # ---
 # https://github.com/ryuheechul/bin will be clone to this
-export PATH="${HOME}/.local/my-bin:${PATH}"
+cache-path "${HOME}/.local/my-bin"
+
+export PATH="${path_cache}"
+_tag flush-path
+
+_tag path
 
 # starship
 _evalcache starship init zsh
 
+_tag starship
+
 # use direnv
 [ $commands[direnv] ] && _evalcache direnv hook zsh
+
+_tag direnv
 
 # for https://github.com/aykamko/tag
 if (( $+commands[tag] )); then
@@ -120,6 +189,8 @@ if (( $+commands[tag] )); then
   tag() { command tag "$@"; source ${TAG_ALIAS_FILE:-/tmp/tag_aliases} 2>/dev/null }
   alias ag=tag
 fi
+
+_tag tag
 
 # fallback any command to npx # disabled for now
 # source <(npx --shell-auto-fallback zsh)
@@ -144,7 +215,7 @@ fi
 # TODO: DRY `light` and `dark`
 
 light() {
-  if test -z "${SSH_TTY}" ; then
+  if test -z "${SSH_TTY}"; then
     base16_solarized-light
     _update_theme_changed_time
   else
@@ -153,7 +224,7 @@ light() {
 }
 
 dark() {
-  if test -z "${SSH_TTY}" ; then
+  if test -z "${SSH_TTY}"; then
     base16_solarized-dark
     _update_theme_changed_time
   else
@@ -161,8 +232,14 @@ dark() {
   fi
 }
 
+_tag base16
+
 # extra things to load for emacs for possible shell integration
 if test -n "${INSIDE_EMACS}"; then
   to_source_for_emacs=~/.config/dfs-rhc/emacs.d/shell/source.zsh
   test -f ${to_source_for_emacs} && source ${to_source_for_emacs}
 fi
+
+_tag emacs
+
+unfunction _tag

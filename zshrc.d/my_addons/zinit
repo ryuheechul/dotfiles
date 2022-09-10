@@ -15,28 +15,40 @@ autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 ### End of Zinit's installer chunk
 
+## things doesn't work with zsh-defer
 
-zinit snippet OMZL::directories.zsh
-# to enable case insensitive completion - https://github.com/ohmyzsh/ohmyzsh/blob/3f42700c0d65cf26470d1e165b8ed80dfff9efca/lib/completion.zsh#L23
-zinit snippet OMZL::completion.zsh
-# necessary for OMZP::git
-zinit snippet OMZL::git.zsh
+# git aliases like grt
+zinit snippet OMZP::git
+# j to jump around directory
+zinit snippet OMZP::fasd
 # to persist history
 zinit snippet OMZL::history.zsh
-
-zinit snippet OMZP::git
-zinit snippet OMZP::fasd
-
-zinit light mroth/evalcache
 # this seems to be not in effect because other similar plugins so disabling for now
 # zinit light Aloxaf/fzf-tab
-zinit light supercrabtree/k
-zinit light Tarrasch/zsh-bd
-zinit light paulirish/git-open
 
-# this load zsh-defer faster
+# cache to eval to enhance performance
+zinit light mroth/evalcache
+# this loads zsh-defer faster
 zinit light romkatv/zsh-defer
+
+## use zsh-defer for anything that's possible
+
 zsh-defer zinit load romkatv/zsh-defer
+
+zsh-defer zinit snippet OMZL::directories.zsh
+
+# to enable case insensitive completion - https://github.com/ohmyzsh/ohmyzsh/blob/3f42700c0d65cf26470d1e165b8ed80dfff9efca/lib/completion.zsh#L23
+zsh-defer zinit snippet OMZL::completion.zsh
+
+# # necessary for OMZP::git
+# zsh-defer zinit snippet OMZL::git.zsh
+
+# kind of like ls + git status
+zsh-defer zinit light supercrabtree/k
+# bd [n] to go up multi steps at once
+zsh-defer zinit light Tarrasch/zsh-bd
+# git open to open origin via browser
+zsh-defer zinit light paulirish/git-open
 
 # additional configuration for marlonrichert/zsh-autocomplete
 # these need to be defined before loading marlonrichert/zsh-autocomplete
@@ -51,5 +63,5 @@ CURR_DIR=~/.config/dfs-rhc/zshrc.d/my_addons
 zsh-defer zinit snippet "${CURR_DIR}/znap"
 
 # somehow this should be placed in the bottom to intefere others
-zinit ice as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
+zsh-defer zinit ice as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
    atpull'%atclone' pick"direnv" src"zhook.zsh"
