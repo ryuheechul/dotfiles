@@ -83,10 +83,13 @@ return {
   --   },
   {
     'anuvyklack/pretty-fold.nvim', -- easier to work with folded code
-    requires = 'anuvyklack/nvim-keymap-amend', -- only for preview
+    requires = {
+      'anuvyklack/nvim-keymap-amend', -- only for preview
+      'anuvyklack/fold-preview.nvim',
+    },
     config = function()
       require('pretty-fold').setup {}
-      require('pretty-fold.preview').setup()
+      require('fold-preview').setup {}
 
       -- let the code be folded by default
       -- useful with 'anuvyklack/pretty-fold.nvim'
