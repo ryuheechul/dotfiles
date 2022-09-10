@@ -40,8 +40,8 @@ zsh-defer zinit snippet OMZL::directories.zsh
 # to enable case insensitive completion - https://github.com/ohmyzsh/ohmyzsh/blob/3f42700c0d65cf26470d1e165b8ed80dfff9efca/lib/completion.zsh#L23
 zsh-defer zinit snippet OMZL::completion.zsh
 
-# # necessary for OMZP::git
-# zsh-defer zinit snippet OMZL::git.zsh
+# other git aliases like ggpush
+zsh-defer zinit snippet OMZL::git.zsh
 
 # kind of like ls + git status
 zsh-defer zinit light supercrabtree/k
