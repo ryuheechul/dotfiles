@@ -210,6 +210,7 @@ if test -z "${SSH_TTY}" ; then
     # let external tools to have a chance to follow the change and adopt to it
     date +%s > ~/.base16_theme.updated-time
   }
+  source ~/.base16_theme
 fi
 
 # TODO: DRY `light` and `dark`

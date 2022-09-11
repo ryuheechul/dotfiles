@@ -1,3 +1,11 @@
 #!/usr/bin/env bash
 
+# fallback to default when no file is discovered
+test ! -f ~/.base16_theme && {
+  # or an equivalent expression would be below
+  # test -f ~/.base16_theme || {
+  echo -n 'solarized-dark'
+  exit 0
+}
+
 basename "$(readlink -f ~/.base16_theme)" | sed s/^base16-// | sed s/.sh$// | tr -d "\n"

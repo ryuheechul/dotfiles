@@ -40,6 +40,10 @@ ln -sf "${this_repo_path}" ~/.config/dfs-rhc
 
 dfs_rhc="${HOME}/.config/dfs-rhc"
 
+# in case my bins are being used in the configuration step already
+# - one discovered usage is that `current-base16` is being used in ../nvim/lua/packer-groups/theme.lua
+export PATH="${dfs_rhc}/bin/discoverable:${PATH}"
+
 # source my gitconfig
 cat << EOF >> ~/.gitconfig
 [include]
@@ -60,7 +64,8 @@ ln -sf "${dfs_rhc}/alacritty.yml" ~/.alacritty.yml
 ln -sf "${dfs_rhc}/starship.toml" ~/.config/starship.toml
 
 # base16
-git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell || bash -c 'cd ~/.config/base16-shell && git pull'
+git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell \
+  || bash -c 'cd ~/.config/base16-shell && git pull && git checkout cd71822de1f9b53eea9beb9d94293985e9ad7122'
 
 # lf
 ln -sf "${dfs_rhc}/lf" ~/.config/lf
@@ -111,7 +116,7 @@ ln -sf "${dfs_rhc}/emacs.d/spacemacs" ~/.spacemacs
 # doom emacs
 git clone https://github.com/hlissner/doom-emacs ~/.doom-emacs.d || bash -c 'cd ~/.doom-emacs.d && git pull'
 ln -sf "${dfs_rhc}/emacs.d/doom.d" ~/.config/doom
-~/.doom-emacs.d/bin/doom -y install
+~/.doom-emacs.d/bin/doom -y install || true # let the failure of this command not to block the rest
 
 # chemecs to allow switching between configs like doom emacs and spacemacs
 git clone https://github.com/plexus/chemacs2.git ~/.emacs.d || bash -c 'cd ~/.emacs.d && git pull'

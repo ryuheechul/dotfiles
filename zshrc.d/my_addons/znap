@@ -26,4 +26,4 @@ zsh-defer znap fpath _gh 'gh completion -s zsh'
 # compctl -K    _pyenv pyenv
 
 # only way to preperly load this file again is to remove from zinit and open a new shell
-alias znap-reset="yes | zinit delete Users/${USER}--.config--dfs-rhc--zshrc.d--my_addons/znap"
+alias znap-reset="yes | zinit delete ${HOME:1}--.config--dfs-rhc--zshrc.d--my_addons/znap"
