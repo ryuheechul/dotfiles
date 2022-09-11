@@ -2,6 +2,33 @@
 
 # define functions first so that it doesn't get affected by aliases being defined here
 
+## these benches can be used to compare between different systems
+function bench () {
+  start=$(date +%s)
+  ${1}
+  end=$(date +%s)
+  echo "bench took $(($end-$start))s"
+}
+
+# from https://www.pcsuggest.com/benchmarking-linux-systems-with-simple-command-line-tools/
+function simple_test_cpu () {
+  i=0; while (( i < 9999999 )); do (( i ++ )); done
+}
+
+function simple_bench_cpu () {
+  bench simple_test_cpu
+}
+
+# from https://cloudzy.com/knowledge-base/test-disk-speed-in-linux/
+function simple_test_disk () {
+  sync; dd if=/dev/zero of=temp_disk_test_file bs=1M count=1024; sync
+  rm temp_disk_test_file
+}
+
+function simple_bench_disk () {
+  bench simple_test_disk
+}
+
 # # although this one works, having a script is better use that it can be used elsewhere like in ../../nvim/lua/packer-groups/theme.lua
 # # so it has moved to ../../bin/local/current-base16
 # function current-base16 () {
