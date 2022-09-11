@@ -25,10 +25,11 @@ sudo ./nix/bin/shim/path.sh
 ./nix/bin/init-home-manager.sh
 
 # install packages for current user
-home-manager switch
+MY_NIX_EXTRA_WSL=1 home-manager switch
 
 ./bin/wsl/create-pbcopypaste.sh
 ./bin/wsl/path.sh
+./bin/wsl/wslu.sh
 ./bin/wsl/install-wudo.sh
 
 echo "You may continue the rest with $(readlink -f ./bootstrap/configuration.sh)"

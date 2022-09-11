@@ -70,6 +70,11 @@ in
     batwatch
     prettybat
   ])
+  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_WSL")
+  [
+    wslu # A collection of utilities for Windows 10/11 Linux Subsystems
+         # which comes with wslview to enable opening a browser on Windows from terminal
+  ]
   # # this is actually not working great at least on ubuntu
   # # it's probably wise to follow https://tailscale.com/kb/1031/install-linux/ instead
   # ++ lib.optionals (checkEnv "MY_NIX_EXTRA_TAILSCALE")
