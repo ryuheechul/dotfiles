@@ -2,6 +2,12 @@
 
 # define functions first so that it doesn't get affected by aliases being defined here
 
+# to measure zsh performance - https://blog.mattclemente.com/2020/06/26/oh-my-zsh-slow-to-load.html
+function timezsh() {
+  shell=${1-$SHELL}
+  for i in $(seq 1 10); do /usr/bin/time $shell -i -c exit; done
+}
+
 ## these benches can be used to compare between different systems
 function bench () {
   start=$(date +%s)
@@ -29,27 +35,6 @@ function simple_bench_disk () {
   bench simple_test_disk
 }
 
-# # although this one works, having a script is better use that it can be used elsewhere like in ../../nvim/lua/packer-groups/theme.lua
-# # so it has moved to ../../bin/local/current-base16
-# function current-base16 () {
-#   basename "$(readlink -f ~/.base16_theme)" | sed s/^base16-// | sed s/.sh$// | tr -d "\n"
-# }
-
-# this will return either `light` or `dark`
-function theme-tone () {
-  # assuming I only use `solarized-*`
-  current-base16 | sed s/solarized-//
-  # although below "works" it doesn't work well with my cached base16 shell eval - look at the end of ./shell_ext
-  # printenv BASE16_THEME | sed s/solarized-//
-}
-
-cmd_gh="$(which gh)"
-
-# override gh to work better with current theme tone
-function gh () {
-  GLAMOUR_STYLE=$(theme-tone) ${cmd_gh} $@
-}
-
 # when I don't feel liking adding `| less` at the end
 function show () {
   $@ | less -r
@@ -60,18 +45,42 @@ function help () {
   show $@ --help
 }
 
-# to measure zsh performance - https://blog.mattclemente.com/2020/06/26/oh-my-zsh-slow-to-load.html
-function timezsh() {
-  shell=${1-$SHELL}
-  for i in $(seq 1 10); do /usr/bin/time $shell -i -c exit; done
-}
-
 # quickly jump via fsad - https://github.com/junegunn/fzf/wiki/examples#with-fasd-1
 unalias j 2>/dev/null
 function j() {
     [ $# -gt 0 ] && fasd_cd -d "$*" && return
     local dir
     dir="$(fasd -Rdl "$1" | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
+}
+
+if test "$(uname)" = "Darwin"; then
+  # getting notified on a job that takes some time (usually with `make`) turns out to be very helpful
+  function notify() {
+    /usr/bin/time -hp $@ \
+      && afplay /System/Library/Sounds/Funk.aiff \
+      || afplay /System/Library/Sounds/Purr.aiff
+    date
+  }
+
+  alias make='notify make'
+
+  # shorthand for other commands other than make - eg. `nt true` and `nt false`
+  alias nt='notify'
+fi
+
+# this will return either `light` or `dark`
+function theme-tone () {
+  # assuming I only use `solarized-*`
+  current-base16 | sed s/solarized-//
+  # although below "works" it doesn't work well with my cached base16 shell eval - look at the end of ./shell_ext
+  # printenv BASE16_THEME | sed s/solarized-//
+}
+
+_cmd_gh="$(which gh)"
+
+# override gh to work better with theme tone that is being used at that time
+function gh () {
+  GLAMOUR_STYLE=$(theme-tone) ${_cmd_gh} $@
 }
 
 # replace htop with bottom
