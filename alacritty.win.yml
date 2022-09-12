@@ -16,7 +16,14 @@ window:
     y: 0
 live_config_reload: true
 
-env: {}
+env:
+  # https://github.com/alacritty/alacritty/issues/2711#issuecomment-525027985
+  TERM: alacritty
+  # without this ubuntu-22.04 has issue with starship prompt
+  # https://github.com/starship/starship/issues/2176
+  # but unbuntu-20.04 works fine at the time of writing this
+  LC_ALL: C.UTF-8
+  WSLENV: TERM:LC_ALL
 font:
   normal:
     family: FiraCode NF
