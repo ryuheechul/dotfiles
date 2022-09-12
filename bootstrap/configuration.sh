@@ -56,6 +56,7 @@ ln -sf "${dfs_rhc}/gh/config.yml" ~/.config/gh/config.yml
 
 # symlink batconfig
 ln -sf "${dfs_rhc}/bat" ~/.config/bat
+bat cache --build || true
 
 # alacritty
 ln -sf "${dfs_rhc}/alacritty.yml" ~/.alacritty.yml

@@ -74,6 +74,8 @@ in
   [
     wslu # A collection of utilities for Windows 10/11 Linux Subsystems
          # which comes with wslview to enable opening a browser on Windows from terminal
+    ruby # An object-oriented language for quick and easy programming
+         # schasse/tmux-jump plugin requies it
   ]
   # # this is actually not working great at least on ubuntu
   # # it's probably wise to follow https://tailscale.com/kb/1031/install-linux/ instead
