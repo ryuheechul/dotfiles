@@ -25,6 +25,9 @@ return {
   {
     'heavenshell/vim-jsdoc', -- :JsDoc (at the function) to generate documentation based on function signature
     run = 'make install',
+    config = function ()
+      vim.g.jsdoc_formatter = 'tsdoc'
+    end
   },
 }
 

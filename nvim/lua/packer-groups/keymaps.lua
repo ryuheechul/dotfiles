@@ -33,6 +33,9 @@ vim.api.nvim_set_keymap('n', 'j', "v:count == 0 ? 'gj' : 'j'", { noremap = true,
 -- Y yank until the end of line
 vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
 
+-- , to repeat last normal command - https://stackoverflow.com/a/4789842/1570165
+vim.api.nvim_set_keymap('n', ',', '@:<CR>', { noremap = true })
+
 --- yup these above should go into which key one day definately!
 
 -- use which-key to accomodate visual assistant on key-bindings ../SpaceVim.d
@@ -68,9 +71,10 @@ return {
         P = { paste_before_here, 'paste before here' },
       }, { prefix = '<leader>' })
 
-      wk.register({
-        [' '] = { '', 'remove trailing whitespaces' },
-      }, { prefix = ',' })
+      -- this actually wasn't working - comment out until I revisit
+      -- wk.register({
+      --   [' '] = { '', 'remove trailing whitespaces' },
+      -- }, { prefix = ',' })
 
       wk.register({
         w = {
