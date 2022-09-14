@@ -22,6 +22,10 @@ return {
     requires = 'onsails/lspkind-nvim',
     config = require 'packer-groups.config.luasnip',
   },
+  {
+    'heavenshell/vim-jsdoc', -- :JsDoc (at the function) to generate documentation based on function signature
+    run = 'make install',
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et
