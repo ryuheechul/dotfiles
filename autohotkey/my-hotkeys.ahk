@@ -38,13 +38,15 @@ Space & k:: Up
 Space & l:: Right
 Space::Space ; without this Space will not work
 
-; since Alt is in position of Apple Cmd key these are usually:
+; since Alt is in position of Apple Cmd key I want these to be:
 !w::Send, ^w ; close window
 !r::Send, ^r ; refresh
 !c::Send, ^c ; copy
 !x::Send, ^x ; cut
 !v::Send, ^v ; paste
 !s::Send, ^s ; save
+!t::Send, ^t ; new tab
+!f::Send, ^f ; find
 !l::Send, ^l ; focus address bar
 !z::Send, ^z ; undo
 !+z::Send, ^+z ; redo

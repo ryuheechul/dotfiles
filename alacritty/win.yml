@@ -1,7 +1,7 @@
 ### how to keep the source of truth in dotfiles in wsl
 # clone dotfiles in windows file system like `%appdata%/dotfiles-for-win`
 #
-# symlink from windows via `cd %appdata%\alacritty && mklink alarcritty.yml ..\dotfiles-for-win\alacritty.win.yml`
+# symlink from windows via `cd %appdata%\alacritty && mklink alarcritty.yml ..\dotfiles-for-win\alacritty\win.yml`
 # then now tracking and applying can be done with one file thanks to symlinks
 #
 # symlink from wsl `ln -s /mnt/c/Users/[windows username]/Roaming/dotfiles-for-win` (so that I can edit dotfiles on wsl)
