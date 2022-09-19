@@ -39,6 +39,7 @@ Space & l:: Right
 Space::Space ; without this Space will not work
 
 ; since Alt is in position of Apple Cmd key I want these to be:
+!a::Send, ^a ; select all
 !w::Send, ^w ; close window
 !r::Send, ^r ; refresh
 !c::Send, ^c ; copy

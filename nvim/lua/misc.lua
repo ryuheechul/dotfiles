@@ -6,6 +6,9 @@ vim.o.inccommand = 'nosplit'
 --Set highlight on search
 vim.o.hlsearch = true
 
+--Set spell check
+vim.o.spell = true
+
 --Make line numbers default
 vim.wo.number = true
 
