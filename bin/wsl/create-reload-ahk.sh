@@ -19,4 +19,4 @@ EOF
 chmod +x "${target_path}"
 
 echo "Now you can run \`${target_path}\` to easily reload hot keys." 
-echo "Also \`my-hotkeys.ahk\` will be loaded on start up as well."
+echo "Also \`~/dotfiles/autohotkey/my-hotkeys.ahk\` will be loaded on start up as well."
