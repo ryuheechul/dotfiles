@@ -78,7 +78,7 @@ return {
 
       wk.register({
         w = {
-          m = { ':Goyo<CR>', 'maximize/minimize window' },
+          m = { ':WindowsMaximize<CR>', 'maximize/minimize window' },
           ['/'] = { ':vsplit<CR>', 'split window vertically' },
           ['-'] = { ':split<CR>', 'split window horizontally' },
         },

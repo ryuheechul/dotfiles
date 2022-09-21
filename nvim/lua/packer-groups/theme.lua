@@ -9,17 +9,21 @@ function Follow_base16_shell()
   -- instead of relying vim.env.BASE16_THEME
   -- `current-base16` response the most accurate value
   local handle = io.popen 'current-base16'
-  local result = handle:read '*a'
-  local theme_base = (result:gsub('solarized--', ''))
-  handle:close()
 
-  vim.api.nvim_set_option('background', theme_base)
+  if handle ~= nil then
+    local result = handle:read '*a'
+    local theme_base = (result:gsub('solarized--', ''))
+    handle:close()
+
+    vim.api.nvim_set_option('background', theme_base)
+  end
 end
 
 return {
   'joshdick/onedark.vim', -- Theme inspired by Atom
   {
-    'overcache/NeoSolarized',
+    -- NeoSolarized: A fixed solarized colorscheme for better truecolor support.
+    'JoveYu/NeoSolarized', -- using fork instead for this issue, https://github.com/overcache/NeoSolarized/issues/26
     requires = {
       'rktjmp/fwatch.nvim',
     },

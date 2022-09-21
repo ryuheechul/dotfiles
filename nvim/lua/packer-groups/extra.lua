@@ -7,12 +7,6 @@ return {
       require('headlines').setup()
     end,
   },
-  {
-    'beauwilliams/focus.nvim', -- automatically adjust the size for focused windows
-    config = function()
-      require('focus').setup()
-    end,
-  },
   -- stop using until https://github.com/sunjon/Shade.nvim/issues/6#issuecomment-1065939353 gets resolved
   -- {
   --   'sunjon/Shade.nvim', -- automatically dims not focused windows
@@ -51,7 +45,20 @@ return {
   -- },
   'RRethy/vim-illuminate', -- Highlight the same words at the cursor
   'haringsrob/nvim_context_vt', -- show context via virtual text
-  'junegunn/goyo.vim', -- a helper to focus on one window
+  {
+    -- Automatically expand width of the current window. Maximizes and restore it. And all this with nice animations!
+    'anuvyklack/windows.nvim',
+    -- this plugin basically replaces the plugins below for my use case
+    -- 'junegunn/goyo.vim', -- a helper to focus on one window
+    -- 'beauwilliams/focus.nvim', -- automatically adjust the size for focused windows
+    requires = {
+      'anuvyklack/middleclass',
+      -- 'anuvyklack/animation.nvim', disable since I don't need it
+    },
+    config = function()
+      require('windows').setup()
+    end,
+  },
   'p00f/nvim-ts-rainbow', -- differnciate parenthesis with colors
   {
     'felipec/vim-sanegx', -- `gx` to open url
