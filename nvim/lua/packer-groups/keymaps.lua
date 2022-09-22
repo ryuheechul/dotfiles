@@ -7,34 +7,34 @@
 -- vim.g.gutentags_ctags_tagfile = '.git/gutentags'
 
 -- because `use 'zhou13/vim-easyescape'` is too slow on startup
-vim.api.nvim_set_keymap('i', 'jk', '<Esc>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<Tab>', '<Cmd>wincmd w<CR>', { noremap = true, silent = true })
+vim.keymap.set('i', 'jk', '<Esc>', { noremap = true, silent = true })
+vim.keymap.set('n', '<Tab>', '<Cmd>wincmd w<CR>', { noremap = true, silent = true })
 
 -- indent right away without waiting in normal mode
-vim.api.nvim_set_keymap('n', '>', '>>', { noremap = true })
-vim.api.nvim_set_keymap('n', '<', '<<', { noremap = true })
+vim.keymap.set('n', '>', '>>', { noremap = true })
+vim.keymap.set('n', '<', '<<', { noremap = true })
 
 -- stay in visual mode after indentation in visual mode
-vim.api.nvim_set_keymap('v', '>', '>gv', { noremap = true })
-vim.api.nvim_set_keymap('v', '<', '<gv', { noremap = true })
+vim.keymap.set('v', '>', '>gv', { noremap = true })
+vim.keymap.set('v', '<', '<gv', { noremap = true })
 
 -- q to close
-vim.api.nvim_set_keymap('n', 'q', '<Cmd>q<CR>', { noremap = true })
+vim.keymap.set('n', 'q', '<Cmd>q<CR>', { noremap = true })
 
---Remap space as leader key
-vim.api.nvim_set_keymap('', '<Space>', '<Nop>', { noremap = true, silent = true })
+-- -- Remap space as leader key - comment out since I'm not sure what this really does for me
+-- vim.keymap.set('', '<Space>', '<Nop>', { noremap = true, silent = true })
 -- vim.g.mapleader = ' '
 -- vim.g.maplocalleader = ' '
 
---Remap for dealing with word wrap
-vim.api.nvim_set_keymap('n', 'k', "v:count == 0 ? 'gk' : 'k'", { noremap = true, expr = true, silent = true })
-vim.api.nvim_set_keymap('n', 'j', "v:count == 0 ? 'gj' : 'j'", { noremap = true, expr = true, silent = true })
+-- Remap for dealing with word wrap
+vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { noremap = true, expr = true, silent = true })
+vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { noremap = true, expr = true, silent = true })
 
 -- Y yank until the end of line
-vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
+vim.keymap.set('n', 'Y', 'y$', { noremap = true })
 
 -- , to repeat last normal command - https://stackoverflow.com/a/4789842/1570165
-vim.api.nvim_set_keymap('n', ',', '@:<CR>', { noremap = true })
+vim.keymap.set('n', ',', '@:<CR>', { noremap = true })
 
 --- yup these above should go into which key one day definately!
 

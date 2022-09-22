@@ -74,9 +74,8 @@ return {
 
         sources = {
           null_ls.builtins.formatting.stylua,
-          -- haven't tried these two yet so be prepared to tweak as I face using them
+          -- haven't tried this yet so be prepared to tweak as I face using them
           null_ls.builtins.diagnostics.eslint,
-          null_ls.builtins.completion.spell,
         },
       }
     end,
