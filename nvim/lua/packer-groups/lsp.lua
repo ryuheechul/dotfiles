@@ -16,7 +16,7 @@ return {
     'neovim/nvim-lspconfig', -- Collection of configurations for built-in LSP client
     requires = {
       'ray-x/lsp_signature.nvim', -- for floating signature hints
-      'folke/lua-dev.nvim',
+      'lukas-reineke/lsp-format.nvim', -- A wrapper around Neovims native LSP formatting
     },
     config = require 'packer-groups.config.lsp',
   },

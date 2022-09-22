@@ -36,7 +36,16 @@ return function(setup_default)
     cmd = { 'typescript-language-server', '--stdio', '--tsserver-path', 'tsserver' },
   })
 
-  local setup_sumneko_lua = merge(setup_default, (require('lua-dev').setup {}))
+  local setup_sumneko_lua = merge(setup_default, {
+    settings = {
+      Lua = {
+        diagnostics = {
+          -- Get the language server to recognize the `vim` global
+          globals = { 'vim' },
+        },
+      },
+    },
+  })
 
   -- Enable the following language servers with `setup_default`
   return {
