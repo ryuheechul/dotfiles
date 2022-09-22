@@ -1,3 +1,5 @@
+# ref: https://github.com/alacritty/alacritty/blob/master/alacritty.yml
+
 window:
   title: Alacritty
   decorations: transparent
@@ -5,6 +7,10 @@ window:
     x: 5
     y: 22
 live_config_reload: true
+
+key_bindings:
+  # https://www.joshmedeski.com/posts/macos-keyboard-shortcuts-for-tmux
+  - { key: K, mods: Command, chars: "\x01\x77" } # `^Aw`, pretty much `tmux lsw`
 
 env: {}
 # I shouldn't need to set this
