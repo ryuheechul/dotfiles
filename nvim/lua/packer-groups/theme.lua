@@ -20,16 +20,20 @@ function Follow_base16_shell()
 end
 
 return {
-  'joshdick/onedark.vim', -- Theme inspired by Atom
   {
     -- NeoSolarized: A fixed solarized colorscheme for better truecolor support.
     'JoveYu/NeoSolarized', -- using fork instead for this issue, https://github.com/overcache/NeoSolarized/issues/26
     requires = {
       'rktjmp/fwatch.nvim',
+      'sainnhe/everforest',
     },
     config = function()
       -- set a theme first
-      vim.cmd [[ colorscheme NeoSolarized ]]
+      if vim.env.my_nvim_theme_everforest ~= nil then
+        vim.cmd [[ colorscheme everforest ]]
+      else
+        vim.cmd [[ colorscheme NeoSolarized ]]
+      end
 
       -- comply with base16
       Follow_base16_shell()
