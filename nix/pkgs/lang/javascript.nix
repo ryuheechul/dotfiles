@@ -18,8 +18,8 @@ let
       pyright # lsp server for python
       typescript
       typescript-language-server
-      # extra packages via node2nix use nodejs-14_x until issue below is resolved
-      # https://github.com/svanderburg/node2nix/issues/236
+      # for https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#eslint
+      vscode-langservers-extracted
     ]) ++ (import ./node2nix { pkgs = pkgs; nodejs = nodejs; })
   );
 in

@@ -40,6 +40,11 @@ return function(setup_default)
     root_dir = lspconfig.util.root_pattern 'package.json',
   })
 
+  -- use :EslintFixAll to fix all - doesn't kick off automatically with format (on save)
+  local setup_eslint = merge(setup_default, {
+    root_dir = lspconfig.util.root_pattern 'package.json',
+  })
+
   local setup_denols = merge(setup_default, {
     root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc'),
   })
@@ -66,6 +71,7 @@ return function(setup_default)
     denols = setup_denols,
     sumneko_lua = setup_sumneko_lua,
     rnix = setup_rnix,
+    eslint = setup_eslint,
   }
 end
 
