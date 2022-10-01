@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  packages = import ./pkgs {};
+  packages = import ./pkgs { };
 in
 {
   # Let Home Manager install and manage itself.

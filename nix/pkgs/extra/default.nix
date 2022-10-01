@@ -2,20 +2,20 @@
 
 let
   checkEnv = import ../../utils/checkEnv.nix;
-  tag = import ../custom/tag {pkgs=pkgs;};
-  tf-helper = import ../custom/tf-helper.nix {pkgs=pkgs;};
-  gitwatch = import ../custom/gitwatch.nix {pkgs=pkgs;};
+  tag = import ../custom/tag { pkgs = pkgs; };
+  tf-helper = import ../custom/tf-helper.nix { pkgs = pkgs; };
+  gitwatch = import ../custom/gitwatch.nix { pkgs = pkgs; };
   cfn-lint = pkgs.python3.pkgs.cfn-lint;
 in
-  with pkgs;
-  []
-  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_GIT")
+with pkgs;
+[ ]
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_GIT")
   [
     git-lfs # git extention for large file storage
     pre-commit # for managing multi-language pre-commit hooks
     gitwatch # Watch a file or folder and automatically commit changes to a git repo easily.
   ]
-  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_GO")
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_GO")
   [
     go # golang
     gopls # go language server
@@ -23,7 +23,7 @@ in
     gotools # updates your Go import lines, adding missing ones and removing unreferenced ones
     delve # go debugger
   ]
-  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_AWS")
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_AWS")
   [
     # also consider installing `pipx install aws-shell`
     awscli2 # aws cli
@@ -31,38 +31,39 @@ in
     amazon-ecs-cli # aws ecs cli
     cfn-lint # Checks cloudformation for practices and behaviour that could potentially be improved
   ]
-  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_CI")
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_CI")
   [
     circleci-cli # circle ci cli # add checkEnv MY_NIX_EXTRA_CIRCLE_CI
   ]
-  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_TAG")
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_TAG")
   [
     tag
   ]
-  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_TERRAFORM")
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_TERRAFORM")
   [
     terraform
     nodePackages.cdktf-cli
     tf-helper
   ]
-  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_ERLANG")
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_ERLANG")
   [
     erlang # Programming language used for massively scalable soft real-time systems
     rebar3 # Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases
     elixir # A functional, meta-programming aware language built on top of the Erlang VM
     gleam # A statically typed language for the Erlang VM
   ]
-  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_EXERCISM")
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_EXERCISM")
   [
     exercism # CLI for exercism.org
   ]
-  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_NOTCURSES")
-  [  # since qrcodegen is marked broken
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_NOTCURSES")
+  [
+    # since qrcodegen is marked broken
     (pkgs.notcurses.override {
       qrcodegenSupport = false;
     })
   ]
-  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_BAT")
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_BAT")
   (with bat-extras; [
     batman
     batgrep
@@ -70,18 +71,18 @@ in
     batwatch
     prettybat
   ])
-  ++ lib.optionals (checkEnv "MY_NIX_EXTRA_WSL")
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_WSL")
   [
     wslu # A collection of utilities for Windows 10/11 Linux Subsystems
-         # which comes with wslview to enable opening a browser on Windows from terminal
+    # which comes with wslview to enable opening a browser on Windows from terminal
     ruby # An object-oriented language for quick and easy programming
-         # schasse/tmux-jump plugin requies it
+    # schasse/tmux-jump plugin requies it
   ]
   # add any package to try out (locally more permanent way than `nix-shell -p [package]`
-  ++ lib.optionals (builtins.pathExists ./local-only.nix) (import ./local-only.nix {pkgs=pkgs;})
-  # # this is actually not working great at least on ubuntu
-  # # it's probably wise to follow https://tailscale.com/kb/1031/install-linux/ instead
-  # ++ lib.optionals (checkEnv "MY_NIX_EXTRA_TAILSCALE")
-  # [
-  #   tailscale
-  # ]
+++ lib.optionals (builtins.pathExists ./local-only.nix) (import ./local-only.nix { pkgs = pkgs; })
+# # this is actually not working great at least on ubuntu
+# # it's probably wise to follow https://tailscale.com/kb/1031/install-linux/ instead
+# ++ lib.optionals (checkEnv "MY_NIX_EXTRA_TAILSCALE")
+# [
+#   tailscale
+# ]

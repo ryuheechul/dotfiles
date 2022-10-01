@@ -47,11 +47,10 @@ with pkgs;
   tmux # terminal multiplexer
   zellij # A terminal workspace with batteries included
 ] ++
-  # editor - mostly for neovim
+# editor - mostly for neovim
 [
   # emacs editor including GUI, `emacs -nw` to run as TUI
-  ((emacsPackagesFor (emacs.override { nativeComp = true; }))
-    .emacsWithPackages (epkgs: [ epkgs.vterm ]))
+  ((emacsPackagesFor (emacs.override { nativeComp = true; })).emacsWithPackages (epkgs: [ epkgs.vterm ]))
   # above replace `emacs` to enable the use of libvterm
   neovim # my favorite editor
   tree-sitter # An incremental parsing system for programming tools
@@ -60,7 +59,7 @@ with pkgs;
   stylua # An opinionated Lua code formatter
 ] ++
 
-  # modern tools - i.e. https://github.com/ibraheemdev/modern-unix
+# modern tools - i.e. https://github.com/ibraheemdev/modern-unix
 [
   fzf # A command-line fuzzy finder
   # gotop # terminal based graphical activity monitor
@@ -76,7 +75,7 @@ with pkgs;
   # not sure if sqlite is "modern" but keep it here so I can avoid having to build sqlite by an arbitrary npm package which happened quite often
   sqlite # A self-contained, serverless, zero-configuration, transactional SQL database engine
 ] ++
-  # viewer
+# viewer
 [
   vivid # LS_COLORS generator
   exa # modern ls
@@ -90,7 +89,7 @@ with pkgs;
   fpp # for tmux-fpp
   extract_url # for tmux-urlview
 ] ++
-  # search
+# search
 [
   ripgrep # modern grep
   silver-searcher # A code-searching tool similar to ack, but faster
@@ -98,7 +97,7 @@ with pkgs;
   fasd # Command-line productivity booster, offers quick access to files and directories
   fd # mordern find
 ] ++
-  # enhance git/github experience
+# enhance git/github experience
 [
   tig # Text-mode interface for git
   gfold # help keep track of your Git repositories locally
@@ -106,7 +105,7 @@ with pkgs;
   delta # syntax-highlighting pager for git
   gh # official Github CLI
 ] ++
-  # helper
+# helper
 [
   ipcalc # Simple IP network calculator
   fswatch # A cross-platform file change monitor with multiple backends
@@ -119,5 +118,5 @@ with pkgs;
   dos2unix # Convert text files with DOS or Mac line breaks to Unix line breaks and vice versa
   tldr # Simplified and community-driven man pages
 ]
-++ (import ./lang.nix {pkgs=pkgs;})
-++ (import ./extra/default.nix {pkgs=pkgs;})
+++ (import ./lang { pkgs = pkgs; })
+++ (import ./extra/default.nix { pkgs = pkgs; })

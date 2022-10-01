@@ -7,7 +7,7 @@ let
   amazon-ecs-cli = x86_64.pkgs.amazon-ecs-cli;
 
   # when packages on unstable (in my case, <nixpkgs>) is literrally to unstable
-  stable = import <nixpkgs-stable-darwin> {};
+  stable = import <nixpkgs-stable-darwin> { };
   pkgs = stable.pkgs;
   # commenting as the unstable channel one is working fine again
   # starship = stable.pkgs.starship;
@@ -16,13 +16,13 @@ let
   # hello = stable.pkgs.hello;
   # bash = stable.pkgs.bash;
 in
-  {
-    # commenting as the unstable channel one is working fine again
-    # inherit starship;
-    inherit amazon-ecs-cli;
-    # # these two lines are just examples
-    # inherit hello;
-    # inherit bash;
+{
+  # commenting as the unstable channel one is working fine again
+  # inherit starship;
+  inherit amazon-ecs-cli;
+  # # these two lines are just examples
+  # inherit hello;
+  # inherit bash;
 
-    # inherit stable.pkgs.hello # this wouldn't work
+  # inherit stable.pkgs.hello # this wouldn't work
 }

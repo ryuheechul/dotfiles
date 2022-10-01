@@ -1,4 +1,5 @@
-[ # goDeps is a list of Go dependencies.
+[
+  # goDeps is a list of Go dependencies.
   {
     # goPackagePath specifies Go package import path.
     goPackagePath = "github.com/fatih/color";
