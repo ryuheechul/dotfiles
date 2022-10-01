@@ -32,8 +32,16 @@ return function(setup_default)
   Example custom server
   Make runtime files discoverable to the server
   ]]
+
+  local lspconfig = require 'lspconfig'
+
   local setup_tsserver = merge(setup_default, {
     cmd = { 'typescript-language-server', '--stdio', '--tsserver-path', 'tsserver' },
+    root_dir = lspconfig.util.root_pattern 'package.json',
+  })
+
+  local setup_denols = merge(setup_default, {
+    root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc'),
   })
 
   local setup_sumneko_lua = merge(setup_default, {
@@ -47,13 +55,17 @@ return function(setup_default)
     },
   })
 
+  local setup_rnix = merge(setup_default, {})
+
   -- Enable the following language servers with `setup_default`
   return {
     clangd = setup_default,
     rust_analyzer = setup_default,
     pyright = setup_default,
     tsserver = setup_tsserver,
+    denols = setup_denols,
     sumneko_lua = setup_sumneko_lua,
+    rnix = setup_rnix,
   }
 end
 

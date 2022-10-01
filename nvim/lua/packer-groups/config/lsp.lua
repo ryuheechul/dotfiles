@@ -40,7 +40,7 @@ return function()
     vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
     -- this has nothing to do with format on save
-    vim.keymap.set('n', '<space>ff', vim.lsp.buf.formatting, bufopts)
+    vim.keymap.set('n', '<space>bf', vim.lsp.buf.formatting, bufopts)
   end
 
   -- nvim-cmp supports additional completion capabilities
@@ -59,7 +59,7 @@ return function()
   }
 
   -- delegate server specific setup to lsp-servers
-  local servers = require 'packer-groups.config.lsp-servers' (setup_default)
+  local servers = require 'packer-groups.config.lsp-servers'(setup_default)
 
   local lspconfig = require 'lspconfig'
   for server, setup in pairs(servers) do
