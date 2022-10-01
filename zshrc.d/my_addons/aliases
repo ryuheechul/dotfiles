@@ -8,6 +8,26 @@ function timezsh() {
   for i in $(seq 1 10); do /usr/bin/time $shell -i -c exit; done
 }
 
+## these are convenient functions for getting information from package.json
+## perhaps should be moved somewhere else than this file
+function grep-npm-packages-with-keyword () {
+  { echo '{' ; grep $1 package.json ; echo '}' } \
+    | jq -n -f /dev/stdin \
+    | jq -r 'keys | .[]' \
+    | xargs
+}
+
+function grep-deleted-npm-packages () {
+  function _grep-deleted-npm-packages () {
+    gd --unified=0 package.json | cat | egrep -- '^- ' | sed s/-//
+  }
+
+  { echo '{' ; _grep-deleted-npm-packages ; echo '}' } \
+    | jq -n -f /dev/stdin \
+    | jq -r 'keys | .[]' \
+    | xargs
+}
+
 ## these benches can be used to compare between different systems
 function bench () {
   start=$(date +%s)
