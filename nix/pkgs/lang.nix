@@ -24,10 +24,11 @@ let
   # deno - i should move this extra
   bundle-deno = [ deno ];
   # nodejs
+  nodejs = nodejs-18_x;
   bundle-nodejs-with-pkgs = (
   # node essentials
   [
-    nodejs-18_x
+    nodejs
     yarn
   # npm packages via nodePackages
   ] ++ (with nodePackages; [
@@ -38,7 +39,7 @@ let
     typescript-language-server
   # extra packages via node2nix use nodejs-14_x until issue below is resolved
   # https://github.com/svanderburg/node2nix/issues/236
-  ]) ++ (import ./node2nix {pkgs=pkgs; nodejs=nodejs-14_x;}));
+  ]) ++ (import ./node2nix {pkgs=pkgs; nodejs=nodejs;}));
 
   for-lua = [
     sumneko-lua-language-server # Lua Language Server coded by Lua

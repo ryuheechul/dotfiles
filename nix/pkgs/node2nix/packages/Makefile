@@ -1,3 +1,3 @@
 .PHONY: gen
 gen:
-	node2nix -14 -i node-packages.json
+	node2nix -18 -i node-packages.json
