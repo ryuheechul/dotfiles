@@ -69,6 +69,7 @@ test "${_arch}" = "arm64" && {
   export my_nvim_tabnine=1;
 }
 
+# currently it bring very poor performance issue so turning it off for now
 unset my_zsh_plugin_zsh_autocomplete;
 
 _tag arch

@@ -2,6 +2,11 @@
 
 # define functions first so that it doesn't get affected by aliases being defined here
 
+# treat alias like original command in terms of auto complete when they have same name
+# thanks to https://youtu.be/qSJ4FlsT0RU
+# so `alias make='notify make'` will autocomplete as if it was the original `make`
+setopt complete_aliases
+
 # to measure zsh performance - https://blog.mattclemente.com/2020/06/26/oh-my-zsh-slow-to-load.html
 function timezsh() {
   shell=${1-$SHELL}
@@ -96,12 +101,7 @@ function theme-tone () {
   # printenv BASE16_THEME | sed s/solarized-//
 }
 
-_cmd_gh="$(which gh)"
-
-# override gh to work better with theme tone that is being used at that time
-function gh () {
-  GLAMOUR_STYLE=$(theme-tone) ${_cmd_gh} $@
-}
+alias gh='GLAMOUR_STYLE=$(theme-tone) gh'
 
 # replace htop with bottom
 alias htop="btm -b"
