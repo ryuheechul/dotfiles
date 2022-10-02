@@ -1,0 +1,12 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 50de31a..0f87826 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -17,5 +17,5 @@ crossterm = "0.22"
+ bat = "0.19"
+ 
+ [[bin]]
+-name = "riffle"
+-path = "src/app/main.rs"
++name = "bat-riffle"
++path = "examples/bat-riffle.rs"

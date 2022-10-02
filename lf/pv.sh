@@ -27,6 +27,11 @@ else
   paging_flag=''
 
   if test -n "${LF_PV_WITH_PAGER}"; then
+    # use bat-riffle if exist
+    if test -n "$(command -v bat-riffle)"; then
+      bat-riffle "${@}"; exit 0
+    fi
+
     # basically get rid of `--quit-if-one-screen` option
     BAT_PAGER="less --RAW-CONTROL-CHARS --mouse -I"
 
