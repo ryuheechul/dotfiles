@@ -16,7 +16,10 @@
 # Uncomment the following line if you are using less version >= 551 and want to
 # enable mouse scrolling support in `bat` when running inside tmux. This might
 # disable text selection, unless you press shift.
---pager="less --RAW-CONTROL-CHARS --quit-if-one-screen --mouse -I"
+
+# setting `--pager` here make this not possible to be overridden from elsewhere
+# hence set this as `BAT_PAGER` from ~/.config/zshrc.d/my_addons/shell_ext
+# --pager="less --RAW-CONTROL-CHARS --quit-if-one-screen --mouse -I"
 
 --map-syntax='*.nomad:Terraform'
 --map-syntax='*tmux.conf:Tmux' # https://github.com/sharkdp/bat/issues/1703

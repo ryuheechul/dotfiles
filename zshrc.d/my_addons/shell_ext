@@ -69,10 +69,14 @@ test "${_arch}" = "arm64" && {
   export my_nvim_tabnine=1;
 }
 
+unset my_zsh_plugin_zsh_autocomplete;
+
 _tag arch
 
 # theme for bat
 export BAT_THEME="Solarized (light)"
+# set it as env var here instead of ~/.config/bat/config as the issue is described in the file
+export BAT_PAGER="less --RAW-CONTROL-CHARS --quit-if-one-screen --mouse -I"
 
 # set LS_COLORS with vivid
 if test -n "${commands[vivid]}"; then

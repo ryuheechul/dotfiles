@@ -8,9 +8,32 @@ EXT="${filename##*.}"
 # then `$ brew install bash`
 ext="${EXT,,}"
 
+lf_d="${HOME}/.config/lf"
+glow_sh="${lf_d}/glow.sh"
+less_sh="${lf_d}/less.sh"
+
 if [ "${ext}" == "md" ]; then
-  echo '`# Markdown: '"$1"'`via **glow**' | glow - -s dark
-  ~/.config/lf/glow.sh "$1"
+  function with-glow () {
+    echo '`# Markdown: '"$1"'` via **glow**' | ${glow_sh}
+    ${glow_sh} "$1"
+  }
+
+  if test -n "${LF_PV_WITH_PAGER}"; then
+    with-glow $1 | ${less_sh}
+  else
+    with-glow $1
+  fi
 else
-  bat --force-colorization "$@"
+  paging_flag=''
+
+  if test -n "${LF_PV_WITH_PAGER}"; then
+    # basically get rid of `--quit-if-one-screen` option
+    BAT_PAGER="less --RAW-CONTROL-CHARS --mouse -I"
+
+    # this might not be necessary as `auto` might still pick up paging
+    # but nothing wrong to set it explicitly
+    paging_flag='--paging=always'
+  fi
+
+  bat ${paging_flag} --force-colorization "$@"
 fi

@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-~/.config/lf/pv.sh "$@" | ~/.config/lf/less.sh
+LF_PV_WITH_PAGER=1 ~/.config/lf/pv.sh "$@"
