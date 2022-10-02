@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-6xvg76js+CHqn9Ia5DVU2ILTCQlzpA4lEhDVTrXWLRw=";
   };
 
-  cargoBuildFlags = [ "--bin=bat-riffle" ];
+  # # actually no need to override this
+  # cargoBuildFlags = [ "--bin=bat-riffle" ];
 
   cargoPatches = [
     ./update-cargo-lock.patch

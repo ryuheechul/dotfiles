@@ -1,6 +1,7 @@
 -- extra but nice
 
 return {
+  'tpope/vim-scriptease', -- A Vim plugin for Vim plugins `:Verbose` will be useful
   {
     'lukas-reineke/headlines.nvim', -- highlights headlines for markdown like files
     config = function()
