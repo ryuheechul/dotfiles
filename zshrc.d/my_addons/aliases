@@ -123,6 +123,7 @@ alias lt="ls -lah -T -L=3 --git --git-ignore"
 alias tree="exa -G -T --git-ignore"
 
 # git
+alias tig='TERM=xterm COLORTERM=256bit tig'
 alias gs="git status"
 alias tgs="tig status"
 alias gd="git diff"
