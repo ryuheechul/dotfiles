@@ -103,7 +103,8 @@ function theme-tone () {
 
 # https://www.stefanjudis.com/today-i-learned/suffix-aliases-in-zsh/
 alias -s md=glow
-alias -s {ts,js,json,yaml,yml,toml,lua,nix}=vi
+alias -s {ts,tsx,js,jsx,json,yaml,yml,toml}=vi
+alias -s {py,lux,nix}=vi
 alias -s {conf,}=lf
 alias -s {org,el}='emacsclient'
 alias -s git='git clone'
@@ -191,7 +192,11 @@ alias diff="git diff --no-index"
 alias less="less -r"
 alias cat='bat'
 alias k9s='TERM=xterm COLORTERM=256bit k9s'
-alias rg="rg -p -i" # ripgrep
+
+# ripgrep
+alias rg="rg -p -i"
+alias rgc="rg -C"
+alias rgc5="rgc 5"
 
 alias glow='glow -p -s "$(theme-tone)"'
 
