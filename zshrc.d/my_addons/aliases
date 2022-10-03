@@ -101,6 +101,13 @@ function theme-tone () {
   # printenv BASE16_THEME | sed s/solarized-//
 }
 
+# https://www.stefanjudis.com/today-i-learned/suffix-aliases-in-zsh/
+alias -s md=glow
+alias -s {ts,js,json,yaml,yml,toml,lua,nix}=vi
+alias -s {conf,}=lf
+alias -s {org,el}='emacsclient'
+alias -s git='git clone'
+
 alias gh='GLAMOUR_STYLE=$(theme-tone) gh'
 
 # replace htop with bottom
@@ -156,19 +163,25 @@ alias gfssh="ambr --no-parent-ignore 'https://' 'ssh://git@' .git/config"
 alias vim="nvim"
 alias vi="nvim"
 
+# open in terminal using daemon process (create if it doesn't exist yet)
+alias emacsclient="emacsclient -nw -c -a ''"
+
 # just a dirty hack to make `emacs` command to use a handle which work more smoothly
 # in terms of being able to activate the window like any other app on macOS
 typeset -f emacs &> /dev/null && unfunction emacs
-cmd_emacs="$(which emacs)"
+# cmd_emacs="$(which emacs)"
 function emacs () {
   if test $# -eq 0; then
     if test "$(uname)" = "Darwin"; then
       ~/.config/dfs-rhc/bin/darwin/open-gui-emacs.sh
     else
-      ${cmd_emacs}
+      # use emacsclient over `emacs`
+      # ${cmd_emacs}
+      emacsclient
     fi
   else
-    ${cmd_emacs} ${@}
+    # ${cmd_emacs} ${@}
+    emacsclient ${@}
   fi
 }
 
@@ -180,7 +193,7 @@ alias cat='bat'
 alias k9s='TERM=xterm COLORTERM=256bit k9s'
 alias rg="rg -p -i" # ripgrep
 
-alias glow="~/.config/lf/glow.sh"
+alias glow='glow -p -s "$(theme-tone)"'
 
 alias fzfp='fzf --height 100% --preview "bat --style=numbers --color=always {}"'
 alias fzfpp='fzf|fpp'

@@ -19,6 +19,8 @@ if [ "${ext}" == "md" ]; then
   }
 
   if test -n "${LF_PV_WITH_PAGER}"; then
+    # in the future, glow would come with opening editor from the page
+    # https://github.com/charmbracelet/glow/issues/182
     with-glow $1 | ${less_sh}
   else
     with-glow $1
