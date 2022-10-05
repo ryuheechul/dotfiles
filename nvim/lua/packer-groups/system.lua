@@ -177,15 +177,22 @@ return {
     'nvim-lualine/lualine.nvim',
     requires = {
       'kyazdani42/nvim-web-devicons',
-      'SmiteshP/nvim-gps',
+      'SmiteshP/nvim-navic', -- Simple winbar/statusline plugin that shows your current code context
     },
     config = function()
-      local gps = require 'nvim-gps'
+      local navic = require 'nvim-navic'
+      local winbar = {
+        lualine_a = {
+          { 'filename' },
+        },
+        lualine_b = {
+          { navic.get_location, cond = navic.is_available },
+        },
+      }
       require('lualine').setup {
+        winbar = winbar,
+        inactive_winbar = winbar,
         sections = {
-          lualine_c = {
-            { gps.get_location, cond = gps.is_available },
-          },
           lualine_x = {
             -- opening lua file makes lsp work, if I `:PackerCompile` during that time I get an error below
             --[[

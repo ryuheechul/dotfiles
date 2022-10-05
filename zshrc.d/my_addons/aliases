@@ -164,6 +164,10 @@ alias gfssh="ambr --no-parent-ignore 'https://' 'ssh://git@' .git/config"
 alias vim="nvim"
 alias vi="nvim"
 
+# useful when the status of packer seems not clean
+# for now, it only print the command not run
+alias clean-nvim-cmd='echo "rm -rf ~/.config/dfs-rhc/nvim/plugin/packer_compiled.lua ~/.local/share/nvim/site/pack ~/.cache/nvim/packer.nvim"'
+
 # open in terminal using daemon process (create if it doesn't exist yet)
 alias emacsclient="emacsclient -nw -c -a ''"
 

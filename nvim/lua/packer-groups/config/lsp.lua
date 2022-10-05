@@ -1,7 +1,5 @@
 -- LSP settings
 
-vim.o.winbar = "%f %{%v:lua.require'nvim-navic'.get_location()%}"
-
 return function()
   local lspformat = require 'lsp-format'
   local navic = require 'nvim-navic'
@@ -49,7 +47,7 @@ return function()
     vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
     -- this has nothing to do with format on save
-    vim.keymap.set('n', '<space>bf', vim.lsp.buf.formatting, bufopts)
+    vim.keymap.set('n', '<space>bf', vim.lsp.buf.format, bufopts)
   end
 
   -- nvim-cmp supports additional completion capabilities
