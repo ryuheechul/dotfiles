@@ -17,6 +17,8 @@ return {
     requires = {
       'ray-x/lsp_signature.nvim', -- for floating signature hints
       'lukas-reineke/lsp-format.nvim', -- A wrapper around Neovims native LSP formatting
+      'arkav/lualine-lsp-progress', -- LSP Progress lualine componenet
+      'SmiteshP/nvim-navic', -- Simple winbar/statusline plugin that shows your current code context
     },
     config = require 'packer-groups.config.lsp',
   },

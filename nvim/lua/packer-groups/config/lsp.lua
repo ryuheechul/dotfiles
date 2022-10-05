@@ -1,7 +1,11 @@
 -- LSP settings
 
+vim.o.winbar = "%f %{%v:lua.require'nvim-navic'.get_location()%}"
+
 return function()
   local lspformat = require 'lsp-format'
+  local navic = require 'nvim-navic'
+
   -- TODO: there is a duplication at ../editing.lua, should be resolved later
   lspformat.setup {}
 
@@ -19,12 +23,17 @@ return function()
     -- to enable format on save
     lspformat.on_attach(client)
 
+    if client.server_capabilities.documentSymbolProvider then
+      navic.attach(client, bufnr)
+    end
+
     -- Enable completion triggered by <c-x><c-o>
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local bufopts = { noremap = true, silent = true, buffer = bufnr }
+
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)

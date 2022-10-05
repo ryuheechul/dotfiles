@@ -2,8 +2,8 @@
 
 return {
   'tpope/vim-scriptease', -- A Vim plugin for Vim plugins `:Verbose` will be useful
-  {
-    'lukas-reineke/headlines.nvim', -- highlights headlines for markdown like files
+  { -- highlights headlines for markdown like files
+    'lukas-reineke/headlines.nvim',
     config = function()
       require('headlines').setup()
     end,
@@ -17,8 +17,8 @@ return {
   --     }
   --   end,
   -- },
-  {
-    'gelguy/wilder.nvim', -- A more adventurous wildmenu
+  { -- A more adventurous wildmenu
+    'gelguy/wilder.nvim',
     run = 'UpdateRemotePlugins',
     config = function()
       local wilder = require 'wilder'
@@ -33,8 +33,8 @@ return {
       )
     end,
   },
-  {
-    'kevinhwang91/nvim-bqf', -- Better quickfix window in Neovim, polish old quickfix window
+  { -- Better quickfix window in Neovim, polish old quickfix window
+    'kevinhwang91/nvim-bqf',
     ft = 'qf',
   },
   -- this doesn't work until treesitter markdown gets install and it's currently unstable and fails to install
@@ -46,8 +46,7 @@ return {
   -- },
   'RRethy/vim-illuminate', -- Highlight the same words at the cursor
   'haringsrob/nvim_context_vt', -- show context via virtual text
-  {
-    -- Automatically expand width of the current window. Maximizes and restore it. And all this with nice animations!
+  { -- Automatically expand width of the current window. Maximizes and restore it. And all this with nice animations!
     'anuvyklack/windows.nvim',
     -- this plugin basically replaces the plugins below for my use case
     -- 'junegunn/goyo.vim', -- a helper to focus on one window
@@ -61,18 +60,18 @@ return {
     end,
   },
   'p00f/nvim-ts-rainbow', -- differnciate parenthesis with colors
-  {
-    'felipec/vim-sanegx', -- `gx` to open url
+  { -- `gx` to open url
+    'felipec/vim-sanegx',
     event = 'BufRead',
   },
-  {
-    'nacro90/numb.nvim', -- let you peek lines without moving the cursor to the line
+  { -- let you peek lines without moving the cursor to the line
+    'nacro90/numb.nvim',
     config = function()
       require('numb').setup()
     end,
   },
-  {
-    'jghauser/mkdir.nvim', -- allow you to save at non existing directory
+  { -- allow you to save at non existing directory
+    'jghauser/mkdir.nvim',
     config = function()
       require 'mkdir'
     end,
@@ -89,8 +88,8 @@ return {
   --       vim.g.minimap_git_colors = 1
   --     end,
   --   },
-  {
-    'anuvyklack/pretty-fold.nvim', -- easier to work with folded code
+  { -- easier to work with folded code
+    'anuvyklack/pretty-fold.nvim',
     requires = {
       'anuvyklack/nvim-keymap-amend', -- only for preview
       'anuvyklack/fold-preview.nvim',
@@ -115,8 +114,8 @@ return {
   --     require('startup').setup()
   --   end,
   -- },
-  {
-    'luukvbaal/stabilize.nvim', -- prevents the contents being cramped on windows's open/close event
+  { -- prevents the contents being cramped on windows's open/close event
+    'luukvbaal/stabilize.nvim',
     config = function()
       require('stabilize').setup {
         -- by setting force to be false,
@@ -125,18 +124,9 @@ return {
       }
     end,
   },
-  {
-    'SmiteshP/nvim-gps',
-    requires = 'nvim-treesitter/nvim-treesitter',
-    config = function()
-      require('nvim-gps').setup()
-    end,
-  },
-  'arkav/lualine-lsp-progress',
   'sbulav/nredir.nvim', -- Redirect the output of Vim or external command to scratch buffer, in LUA
   -- telescope extensions
-  {
-    -- it could be anything but this was chosen to be the head here
+  { -- it could be anything but this was chosen to be the head here
     'crispgm/telescope-heading.nvim',
     requires = {
       -- setup for these at at ./system.lua
@@ -162,8 +152,13 @@ return {
       require('telescope').load_extension 'repo'
     end,
   },
-  {
-    -- pretty cool motion plugin that turns s/f/t to be supurchared.
+  { -- Extensible Neovim Scrollbar
+    'petertriho/nvim-scrollbar',
+    config = function()
+      require('scrollbar').setup()
+    end,
+  },
+  { -- pretty cool motion plugin that turns s/f/t to be supurchared.
     -- it takes some to get used to but it's quite powerful and reduce cognitive loads
     -- while it could be super efficient with predicting some potential normal future
     -- they call it "clairvoyant" ability!
