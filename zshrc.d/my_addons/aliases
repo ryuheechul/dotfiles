@@ -104,7 +104,7 @@ function theme-tone () {
 # https://www.stefanjudis.com/today-i-learned/suffix-aliases-in-zsh/
 alias -s md=glow
 alias -s {ts,tsx,js,jsx,json,yaml,yml,toml}=vi
-alias -s {py,lux,nix}=vi
+alias -s {py,lua,nix}=vi
 alias -s {conf,}=lf
 alias -s {org,el}='emacsclient'
 alias -s git='git clone'

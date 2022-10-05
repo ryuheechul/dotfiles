@@ -59,7 +59,7 @@ return function()
   }
 
   -- delegate server specific setup to lsp-servers
-  local servers = require 'packer-groups.config.lsp-servers'(setup_default)
+  local servers = require 'packer-groups.config.lsp-servers' (setup_default)
 
   local lspconfig = require 'lspconfig'
   for server, setup in pairs(servers) do
@@ -68,7 +68,8 @@ return function()
   -- this will allow more complicated lsp capabilities when I want
   -- require('navigator').setup { lsp = servers }
 
-  require('lsp_signature').setup() -- for floating signature hints
+  -- for floating signature hints
+  require('lsp_signature').setup {}
 end
 
 -- vim: ts=2 sts=2 sw=2 et
