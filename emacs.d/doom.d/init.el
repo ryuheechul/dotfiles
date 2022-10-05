@@ -199,7 +199,9 @@
 
 ;; this section is for cli usages https://github.com/doomemacs/doomemacs/issues/2434#issuecomment-629572501
 (when noninteractive
-  ;; ignore term and tmux related env vars
+  ;; ignore terminal and tmux related env vars
+  ;; define if not already exist - https://stackoverflow.com/a/7301151
+  (defvar doom-env-blacklist '())
   ;; (mapc ... will result in the same effect as these example lines
   ;; (add-to-list 'doom-env-blacklist "^TERM$")
   ;; (add-to-list 'doom-env-blacklist "^TERM_PROGRAM$")

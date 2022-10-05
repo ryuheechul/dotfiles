@@ -119,6 +119,7 @@ return {
           c = { ':PackerCompile<CR>', 'run :PackerCompile' },
           i = { ':PackerInstall<CR>', 'run :PackerInstall' },
           s = { ':PackerSync<CR>', 'run :PackerSync' },
+          u = { ':PackerUpdate<CR>', 'run :PackerUpdate' },
         },
         s = {
           name = '+Searching/Symbol',
