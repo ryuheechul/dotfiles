@@ -51,10 +51,7 @@ return function()
   end
 
   -- nvim-cmp supports additional completion capabilities
-  local capabilities = (function()
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    return require('cmp_nvim_lsp').update_capabilities(capabilities)
-  end)()
+  local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
   local setup_default = {
     on_attach = on_attach,
@@ -66,7 +63,7 @@ return function()
   }
 
   -- delegate server specific setup to lsp-servers
-  local servers = require 'packer-groups.config.lsp-servers' (setup_default)
+  local servers = require 'packer-groups.config.lsp-servers'(setup_default)
 
   local lspconfig = require 'lspconfig'
   for server, setup in pairs(servers) do
