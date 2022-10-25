@@ -72,6 +72,7 @@ with pkgs;
   curlie # front-end to curl that tries to mimic httpie
   choose # a human-friendly and fast alternative to cut and (sometimes) awk
   jq # json processor
+  jqp # a TUI playground for exploring jq
   # not sure if sqlite is "modern" but keep it here so I can avoid having to build sqlite by an arbitrary npm package which happened quite often
   sqlite # A self-contained, serverless, zero-configuration, transactional SQL database engine
 ] ++
