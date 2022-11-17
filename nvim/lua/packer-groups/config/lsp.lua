@@ -5,7 +5,11 @@ return function()
   local navic = require 'nvim-navic'
 
   -- TODO: there is a duplication at ../editing.lua, should be resolved later
-  lspformat.setup {}
+  lspformat.setup {
+    sql = {
+      exclude = { 'sqls' }, -- formatting doesn't seem to be very good so excluding for now
+    },
+  }
 
   -- Mappings.
   -- See `:help vim.diagnostic.*` for documentation on any of the below functions

@@ -74,6 +74,10 @@ with pkgs;
     batwatch
     prettybat
   ])
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_SQL")
+  [
+    sqls # SQL language server written in Go
+  ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_WSL")
   [
     wslu # A collection of utilities for Windows 10/11 Linux Subsystems

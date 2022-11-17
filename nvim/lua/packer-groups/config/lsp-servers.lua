@@ -62,6 +62,13 @@ return function(setup_default)
 
   local setup_rnix = merge(setup_default, {})
 
+  local setup_sqls = merge(setup_default, {
+    on_attach = function(client, bufnr)
+      require('sqls').on_attach(client, bufnr)
+      setup_default.on_attach(client, bufnr)
+    end,
+  })
+
   -- Enable the following language servers with `setup_default`
   return {
     clangd = setup_default,
@@ -72,6 +79,7 @@ return function(setup_default)
     sumneko_lua = setup_sumneko_lua,
     rnix = setup_rnix,
     eslint = setup_eslint,
+    sqls = setup_sqls,
   }
 end
 

@@ -33,6 +33,8 @@ return {
       vim.g.matchup_matchparen_hi_surround_always = 1
     end,
   },
+  -- Neovim plugin for sqls that leverages the built-in LSP client
+  'nanotee/sqls.nvim',
   {
     'McAuleyPenney/tidy.nvim', -- remove trailing whitespace when save
     event = 'BufWritePre',
