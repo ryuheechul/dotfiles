@@ -89,9 +89,6 @@ return {
     'kyazdani42/nvim-tree.lua',
     requires = 'kyazdani42/nvim-web-devicons',
     config = function()
-      -- `nvim_tree_callback` and `cb` is deprecated
-      local tree_cb = require('nvim-tree.config').nvim_tree_callback
-
       require('nvim-tree').setup {
         view = {
           side = 'right',
@@ -100,7 +97,6 @@ return {
             -- override default mappings
             list = {
               { key = { 'o', '<2-LeftMouse>', 'l', 'e' }, action = 'edit' },
-              -- { key = {"<2-RightMouse>", "<C-]>", "<CR>"}, cb = tree_cb("cd") },
               { key = { '-', 'h' }, action = 'dir_up' },
               { key = { '<Tab>' }, cb = ':wincmd w<CR>' },
               { key = { 'q' }, cb = ':q<CR>' },
@@ -124,55 +120,19 @@ return {
       return vim.env.my_nvim_ghost ~= nil
     end,
   }, -- https://github.com/fregante/GhostText
-  -- now nvim-cokeline takes over
-  'ap/vim-buftabline', -- simple and light tab (actually buffer) visualizer
-  -- {
-  --   'noib3/nvim-cokeline', -- customzing buftabline
-  --   requires = 'kyazdani42/nvim-web-devicons', -- If you want devicons
-  --   config = function()
-  --     local get_hex = require('cokeline/utils').get_hex
-  --     require('cokeline').setup {
-  --       default_hl = {
-  --         fg = function(buffer)
-  --           return buffer.is_focused and get_hex('ColorColumn', 'bg') or get_hex('Normal', 'fg')
-  --         end,
-  --         bg = function(buffer)
-  --           return buffer.is_focused and get_hex('Normal', 'fg') or get_hex('ColorColumn', 'bg')
-  --         end,
-  --       },
-  --
-  --       components = {
-  --         {
-  --           text = function(buffer)
-  --             return ' ' .. buffer.devicon.icon
-  --           end,
-  --           fg = function(buffer)
-  --             return buffer.devicon.color
-  --           end,
-  --         },
-  --         {
-  --           text = function(buffer)
-  --             return buffer.unique_prefix
-  --           end,
-  --           fg = get_hex('Comment', 'fg'),
-  --           style = 'italic',
-  --         },
-  --         {
-  --           text = function(buffer)
-  --             return buffer.filename .. ' '
-  --           end,
-  --         },
-  --         {
-  --           text = '',
-  --           delete_buffer_on_left_click = true,
-  --         },
-  --         {
-  --           text = ' ',
-  --         },
-  --       },
-  --     }
-  --   end,
-  -- },
+  { -- A snazzy bufferline for Neovim - an upgrade from 'ap/vim-buftabline'
+    'akinsho/bufferline.nvim',
+    tag = 'v3.*',
+    requires = 'nvim-tree/nvim-web-devicons',
+    config = function()
+      require('bufferline').setup {
+        options = {
+          diagnostics = 'nvim_lsp',
+          always_show_bufferline = false,
+        },
+      }
+    end,
+  },
   {
     'nvim-lualine/lualine.nvim',
     requires = {
