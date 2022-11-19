@@ -115,6 +115,7 @@ return {
         g = {
           b = { ':Git blame<CR>', 'toggle git blame' },
           d = { ':DiffviewOpen<CR>', 'show git diff' },
+          n = { ':Neogit<CR>', 'open Neogit' },
         },
         p = {
           c = { ':PackerCompile<CR>', 'run :PackerCompile' },
