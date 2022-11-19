@@ -107,14 +107,13 @@ return {
       vim.o.foldlevel = 2
     end,
   },
-  -- this seems to take up startup time unfortunately, so disable it until I really need it
-  -- {
-  --   'startup-nvim/startup.nvim', -- A highly configurable neovim startup screen
-  --   requires = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
-  --   config = function()
-  --     require('startup').setup()
-  --   end,
-  -- },
+  { -- a lua powered greeter like vim-startify / dashboard-nvim
+    'goolord/alpha-nvim',
+    requires = { 'kyazdani42/nvim-web-devicons' },
+    config = function()
+      require('alpha').setup(require('alpha.themes.theta').config)
+    end,
+  },
   { -- prevents the contents being cramped on windows's open/close event
     'luukvbaal/stabilize.nvim',
     config = function()
