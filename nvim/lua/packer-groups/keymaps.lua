@@ -19,7 +19,8 @@ vim.keymap.set('v', '>', '>gv', { noremap = true })
 vim.keymap.set('v', '<', '<gv', { noremap = true })
 
 -- q to close
-vim.keymap.set('n', 'q', '<Cmd>q<CR>', { noremap = true })
+-- use https://github.com/ojroques/nvim-bufdel
+vim.keymap.set('n', 'q', '<Cmd>BufDel<CR>', { noremap = true })
 
 -- -- Remap space as leader key - comment out since I'm not sure what this really does for me
 -- vim.keymap.set('', '<Space>', '<Nop>', { noremap = true, silent = true })
@@ -88,7 +89,8 @@ return {
         },
         ['<space>'] = { '<Cmd>lua require("telescope.builtin").buffers()<CR>', 'telescope: buffers' },
         ['<Tab>'] = { ':bn<CR>', 'rotate buffer' },
-        ["'"] = { ':ToggleTerm<CR>', 'open shell' },
+        ["'"] = { ':FloatermToggle<CR>', 'open Floaterm' },
+        ['/'] = { ':ToggleTerm<CR>', 'open ToggleTerm' },
         j = 'split args', -- only set a text for an already configured keymap
         ['<CR>'] = { '@q', 'macro q' }, -- setting a special key
         f = { -- set a nested structure

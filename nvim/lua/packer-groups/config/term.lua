@@ -22,8 +22,8 @@ return function()
     open_mapping = [[<c-\>]],
     hide_numbers = true, -- hide the number column in toggleterm buffers
     shade_filetypes = {},
-    shade_terminals = true,
-    shading_factor = 3, -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
+    shade_terminals = false,
+    shading_factor = 0, -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
     start_in_insert = true,
     insert_mappings = true, -- whether or not the open mapping applies in insert mode
     persist_size = true,
@@ -53,6 +53,7 @@ return function()
     -- -- disable this as it makes long press with `j` not rendering until sometime after the key release.
     -- -- see https://github.com/akinsho/toggleterm.nvim/issues/63 for more details
     -- vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
+    vim.keymap.set('n', 'q', [[<Cmd>close<CR>]], opts)
     vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
     vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
     vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)

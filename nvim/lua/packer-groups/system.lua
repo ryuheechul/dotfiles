@@ -3,11 +3,13 @@
 return {
   'christoomey/vim-system-copy', -- copy text to clipboard with `cp`
   'roxma/vim-tmux-clipboard', -- share clipboard with tmux
+  'ojroques/nvim-bufdel', -- A Neovim plugin to improve buffer deletion
   'christoomey/vim-tmux-navigator', -- navigate with tmux key binding
   {
     'akinsho/toggleterm.nvim', -- a great ergonomic terminal customization
     config = require 'packer-groups.config.term',
   },
+  'voldikss/vim-floaterm', -- 🌟 Terminal manager for (neo)vim
   { -- UI to select things (files, grep results, open buffers...)
     'nvim-telescope/telescope.nvim',
     requires = { 'nvim-lua/popup.nvim', 'nvim-lua/plenary.nvim' },

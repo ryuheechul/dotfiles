@@ -21,6 +21,7 @@ return function()
         ['gf'] = actions.focus_entry,
         ['<tab>'] = actions.focus_entry,
         ['<cr>'] = actions.focus_entry,
+        ['e'] = actions.focus_entry,
         ['h'] = actions.toggle_flatten_dirs,
         ['l'] = actions.focus_entry,
         -- instead of closing one buffer, do `DiffviewClose`

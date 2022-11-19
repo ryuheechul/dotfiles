@@ -22,8 +22,13 @@ cmd open $~/.config/lf/pv+pager.sh "$fx"
 map <enter> push l
 
 # f will fuzzy search file and open with nvim
-map f $nvim $(fzf)
-map e $nvim "$f"
+map f $$EDITOR $(fzf)
+# e will open the file with $EDITOR
+map e $$EDITOR "$f"
+
+# explanation about the above
+# first $ to indicate the start of command
+# second $ to reference env var
 
 # :q will quit lf just like vim
 cmd q push q

@@ -53,6 +53,7 @@ with pkgs;
   ((emacsPackagesFor (emacs.override { nativeComp = true; })).emacsWithPackages (epkgs: [ epkgs.vterm ]))
   # above replace `emacs` to enable the use of libvterm
   neovim # my favorite editor
+  neovim-remote # 👌 Support for --remote and friends.
   tree-sitter # An incremental parsing system for programming tools
   # clang-tools # Standalone command line tools for C++ development
   rust-analyzer # An experimental modular compiler frontend for the Rust language
