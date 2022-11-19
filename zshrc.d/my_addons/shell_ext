@@ -1,7 +1,7 @@
 # vim: set ft=zsh:
 
 function _tag {
-  return # comment here to debug performance
+  return # comment this out in order to debug performance
   echo shell_ext $1
   date +%s%N
 }
@@ -200,42 +200,64 @@ _tag tag
 # fallback any command to npx # disabled for now
 # source <(npx --shell-auto-fallback zsh)
 
-# only load base16-shell when it's not opened via SSH
-if test -z "${SSH_TTY}" ; then
+## base16-shell supports
+
+# helper functions to make theme tone changes and that to be followable by other tools
+_update_theme_changed_time() {
+  # let external tools to have a chance to follow the change and adopt to it
+  date +%s > ~/.base16_theme.updated-time
+}
+
+function should_skip_loading_base16_shell()
+{
+  if test -n "${SSH_TTY}" || test -n "${INSIDE_EMACS}" || test -n "${VIMRUNTIME}" ; then
+    return 0 # true
+  else
+    return 1 # false
+  fi
+}
+
+if should_skip_loading_base16_shell; then
+  true
+else
   BASE16_SHELL="${HOME}/.config/base16-shell"
   [ -n "${PS1}" ] && \
       [ -s "${BASE16_SHELL}/profile_helper.sh" ] && \
           _evalcache ${BASE16_SHELL}/profile_helper.sh
-
   # shim to workaround the issue with cached result of above
   export BASE16_THEME="$(current-base16)"
 
-  # helper functions to make theme tone changes and that to be followable by other tools
-  _update_theme_changed_time() {
-    # let external tools to have a chance to follow the change and adopt to it
-    date +%s > ~/.base16_theme.updated-time
-  }
   source ~/.base16_theme
 fi
 
-# TODO: DRY `light` and `dark`
+function _change_my_base16_theme() {
+  if test -n "${SSH_TTY}"; then
+    echo 'abort changing base16-shell when accessed via SSH'
+    return
+  fi
+
+  if should_skip_loading_base16_shell; then
+    # fallback to a manual way
+    ln -sf ~/.config/base16-shell/scripts/base16-solarized-${1}.sh ~/.base16_theme
+  else
+    # use the "native" functions when possible
+    if test "${1}" = "light"; then
+      base16_solarized-light
+    else
+      base16_solarized-dark
+    fi
+  fi
+
+  # update time to trigger notify subscribers
+  _update_theme_changed_time
+}
 
 light() {
-  if test -z "${SSH_TTY}"; then
-    base16_solarized-light
-    _update_theme_changed_time
-  else
-    echo 'base16-shell was not loaded given that the shell appears to be opened via SSH'
-  fi
+  _change_my_base16_theme light
 }
 
 dark() {
-  if test -z "${SSH_TTY}"; then
-    base16_solarized-dark
-    _update_theme_changed_time
-  else
-    echo 'base16-shell was not loaded given that the shell appears to be opened via SSH'
-  fi
+  _change_my_base16_theme dark
 }
 
 _tag base16
