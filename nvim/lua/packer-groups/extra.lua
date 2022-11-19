@@ -1,6 +1,7 @@
 -- extra but nice
 
 return {
+  'lewis6991/impatient.nvim', -- Improve startup time for Neovim
   'tpope/vim-scriptease', -- A Vim plugin for Vim plugins `:Verbose` will be useful
   { -- highlights headlines for markdown like files
     'lukas-reineke/headlines.nvim',
