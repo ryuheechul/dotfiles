@@ -175,6 +175,16 @@ return {
       require('scrollbar').setup()
     end,
   },
+  { -- NeoVim text object that finds diagnostics
+    -- example usages
+    -- cig - jump to the next diagnostic (or the one under the cursor) and CHANGE it (delete the text and enter insert mode)
+    -- v[g - visually select the previous diagnostic
+    -- d]g - delete the next diagnostic text (excluding any diagnostic under the cursor)
+    'andrewferrier/textobj-diagnostic.nvim',
+    config = function()
+      require('textobj-diagnostic').setup()
+    end,
+  },
   { -- pretty cool motion plugin that turns s/f/t to be supurchared.
     -- it takes some to get used to but it's quite powerful and reduce cognitive loads
     -- while it could be super efficient with predicting some potential normal future

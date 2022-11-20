@@ -53,6 +53,7 @@ return function()
     -- -- disable this as it makes long press with `j` not rendering until sometime after the key release.
     -- -- see https://github.com/akinsho/toggleterm.nvim/issues/63 for more details
     -- vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
+    vim.keymap.set('n', '<esc>', [[<Cmd>close<CR>]], opts)
     vim.keymap.set('n', 'q', [[<Cmd>close<CR>]], opts)
     vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
     vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
