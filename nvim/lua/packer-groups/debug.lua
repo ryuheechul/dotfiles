@@ -6,7 +6,7 @@ return {
     'folke/trouble.nvim', -- `:Trouble` to show current troubles in the buffer
     -- these are actually optional but I require to get benefits of them
     requires = {
-      'kyazdani42/nvim-web-devicons',
+      'nvim-tree/nvim-web-devicons',
       'folke/lsp-colors.nvim',
     },
     config = function()

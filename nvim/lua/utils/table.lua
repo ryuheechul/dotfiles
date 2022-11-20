@@ -21,3 +21,11 @@ return {
 -- print(
 -- merge(t1,t2)
 -- )
+--
+-- -- this will not work very well with dict-array-mixed-tables
+--
+-- -- in those cases just inserting at the end would be an workaround
+-- -- assuming `b` is fully array table
+-- for _, v in ipairs(b) do
+--   table.insert(c, v)
+-- end

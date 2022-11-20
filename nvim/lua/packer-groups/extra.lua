@@ -109,9 +109,26 @@ return {
   },
   { -- a lua powered greeter like vim-startify / dashboard-nvim
     'goolord/alpha-nvim',
-    requires = { 'kyazdani42/nvim-web-devicons' },
+    requires = { 'nvim-tree/nvim-web-devicons' },
     config = function()
-      require('alpha').setup(require('alpha.themes.theta').config)
+      local button = require('alpha.themes.dashboard').button
+      local theta_config = require('alpha.themes.theta').config
+      local layout = theta_config.layout
+      local buttons = layout[#layout]
+      buttons.val = {
+        -- based on https://github.com/goolord/alpha-nvim/blob/a858e4e7b0805835e61fab2b54704450427d47c3/lua/alpha/themes/theta.lua#LL166C5-L166C5
+        { type = 'text', val = 'Quick links', opts = { hl = 'SpecialComment', position = 'center' } },
+        { type = 'padding', val = 1 },
+        button('l', '  Luapad', '<cmd>Alpha<CR><cmd>Luapad<CR>'),
+        button('e', '  New file', '<cmd>ene<CR>'),
+        button('SPC f f', '  Find file'),
+        button('SPC f g', '  Live grep'),
+        button('c', '  Configuration', '<cmd>cd ~/.config/nvim/ <CR>'),
+        button('u', '  Update plugins', '<cmd>PackerSync<CR>'),
+        button('q', '  Quit', '<cmd>qa<CR>'),
+      }
+
+      require('alpha').setup(theta_config)
     end,
   },
   { -- prevents the contents being cramped on windows's open/close event

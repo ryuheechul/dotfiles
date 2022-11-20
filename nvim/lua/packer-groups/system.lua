@@ -28,8 +28,8 @@ return {
     end,
   },
   { -- A file explorer tree for neovim written in lua
-    'kyazdani42/nvim-tree.lua',
-    requires = 'kyazdani42/nvim-web-devicons',
+    'nvim-tree/nvim-tree.lua',
+    requires = 'nvim-tree/nvim-web-devicons',
     config = function()
       require('nvim-tree').setup {
         view = {
@@ -75,25 +75,28 @@ return {
       }
     end,
   },
+  { -- A VS Code like winbar for Neovim
+    'utilyre/barbecue.nvim',
+    requires = {
+      'neovim/nvim-lspconfig',
+      'SmiteshP/nvim-navic',
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      -- optionally uses it and otherwise it will fallback to lualine via the individual logic below
+      if vim.env.my_nvim_winbar_barbecue ~= nil then
+        require('barbecue').setup()
+      end
+    end,
+  },
   { -- A blazing fast and easy to configure Neovim statusline written in Lua
     'nvim-lualine/lualine.nvim',
     requires = {
-      'kyazdani42/nvim-web-devicons',
+      'nvim-tree/nvim-web-devicons',
       'SmiteshP/nvim-navic', -- Simple winbar/statusline plugin that shows your current code context
     },
     config = function()
-      local navic = require 'nvim-navic'
-      local winbar = {
-        lualine_a = {
-          { 'filename' },
-        },
-        lualine_b = {
-          { navic.get_location, cond = navic.is_available },
-        },
-      }
-      require('lualine').setup {
-        winbar = winbar,
-        inactive_winbar = winbar,
+      local lualine_setup = {
         sections = {
           lualine_x = {
             -- opening lua file makes lsp work, if I `:PackerCompile` during that time I get an error below
@@ -126,6 +129,23 @@ return {
           },
         },
       }
+
+      -- fallback to lualine when no preference is set for barbecue
+      if vim.env.my_nvim_winbar_barbecue == nil then
+        local navic = require 'nvim-navic'
+        local winbar = {
+          lualine_a = {
+            { 'filename' },
+          },
+          lualine_b = {
+            { navic.get_location, cond = navic.is_available },
+          },
+        }
+        lualine_setup.winbar = winbar
+        lualine_setup.inactive_winbar = winbar
+      end
+
+      require('lualine').setup(lualine_setup)
     end,
   },
 }
