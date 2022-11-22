@@ -215,6 +215,8 @@ alias dc="docker-compose"
 alias mp='multipass'
 alias tf='terraform'
 alias wttr='curl wttr.in'
+alias cht='CHTSH_QUERY_OPTIONS="style=friendly" cht.sh'
+alias chtsh='cht --shell'
 
 # web search
 alias googler="googler -n 3"

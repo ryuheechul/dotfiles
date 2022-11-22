@@ -119,6 +119,7 @@ with pkgs;
   ansifilter # ANSI sequence filter - like [ansi2txt](https://github.com/kilobyte/colorized-logs)
   dos2unix # Convert text files with DOS or Mac line breaks to Unix line breaks and vice versa
   tldr # Simplified and community-driven man pages
+  cht-sh # CLI client for cheat.sh, a community driven cheat sheet
 ]
 ++ (import ./lang { pkgs = pkgs; })
 ++ (import ./extra/default.nix { pkgs = pkgs; })
