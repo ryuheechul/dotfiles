@@ -18,9 +18,33 @@ vim.keymap.set('n', '<', '<<', { noremap = true })
 vim.keymap.set('v', '>', '>gv', { noremap = true })
 vim.keymap.set('v', '<', '<gv', { noremap = true })
 
--- q to close
--- use https://github.com/ojroques/nvim-bufdel
-vim.keymap.set('n', 'q', '<Cmd>BufDel<CR>', { noremap = true })
+function _G.my_smart_quit()
+  local current = vim.fn.bufnr '%'
+  local is_listed = vim.fn.buflisted(current)
+
+  -- debug this via `set bl` and `set nobl`
+  if is_listed == 0 then
+    -- so a buffer like help can simply close instead of quitting neovim
+    vim.cmd [[ close ]]
+  else
+    -- now it's time to delegate to BufDel for "regular" buffers
+    -- (using https://github.com/ojroques/nvim-bufdel)
+    -- but also close windows first if only single buffer left with multiple windows
+    -- to prevent closing abruptly when still multiple windows are present
+
+    local buflisted = vim.fn.getbufinfo { buflisted = 1 }
+    local wins = vim.api.nvim_list_wins()
+
+    if #wins > 1 and #buflisted < 2 then
+      vim.cmd [[ close ]]
+    else
+      vim.cmd [[ BufDel ]]
+    end
+  end
+end
+
+-- q to close in a smart way
+vim.keymap.set('n', 'q', '<Cmd>lua my_smart_quit()<CR>', { noremap = true })
 
 -- -- Remap space as leader key - comment out since I'm not sure what this really does for me
 -- vim.keymap.set('', '<Space>', '<Nop>', { noremap = true, silent = true })
