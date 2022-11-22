@@ -104,7 +104,7 @@ return {
       vim.o.foldmethod = 'expr'
       vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
       vim.o.foldminlines = 5
-      vim.o.foldlevel = 2
+      vim.o.foldlevelstart = 2
     end,
   },
   { -- a lua powered greeter like vim-startify / dashboard-nvim
