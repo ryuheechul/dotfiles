@@ -162,7 +162,7 @@ alias gfssh="ambr --no-parent-ignore 'https://' 'ssh://git@' .git/config"
 
 # editor
 alias vim="nvim"
-alias vi="nvim"
+alias vi="vim"
 
 # useful when the status of packer seems not clean
 # for now, it only print the command not run

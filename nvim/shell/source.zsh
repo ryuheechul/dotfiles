@@ -15,3 +15,5 @@ fi
 
 # so overriding for now
 export EDITOR='nvr --remote-tab'
+
+alias nvim='nvr --remote-tab'
