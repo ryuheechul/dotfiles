@@ -112,6 +112,8 @@ return {
       wk.register({
         w = {
           m = { ':WindowsMaximize<CR>', 'maximize/minimize window' },
+          v = { ':WindowsMaximizeVertical<CR>', 'maximize/minimize window vertically' },
+          h = { ':WindowsMaximizeHorizontal<CR>', 'maximize/minimize window horizontally' },
           ['/'] = { ':vsplit<CR>', 'split window vertically' },
           ['-'] = { ':split<CR>', 'split window horizontally' },
         },

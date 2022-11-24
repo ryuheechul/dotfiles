@@ -12,8 +12,8 @@ return {
   { 'kana/vim-textobj-entire', requires = { 'kana/vim-textobj-user' } },
   -- to fallback in case no treesitter
   { 'sgur/vim-textobj-parameter', requires = { 'kana/vim-textobj-user' } },
-  {
-    'numToStr/Comment.nvim', -- replacing 'tpope/vim-commentary'
+  { -- replacing 'tpope/vim-commentary'
+    'numToStr/Comment.nvim',
     config = function()
       require('Comment').setup()
 
@@ -23,9 +23,8 @@ return {
       ft.set('Earthfile', '#%s')
     end,
   },
-  {
-    'andymass/vim-matchup', -- kind of like vim-surround but not
-    -- enables `ds%` and `cs%` via vim-matchup
+  { -- kind of like vim-surround but not that enables `ds%` and `cs%` via vim-matchup
+    'andymass/vim-matchup',
     event = 'VimEnter',
     config = function()
       vim.g.matchup_surround_enabled = 1
@@ -33,55 +32,12 @@ return {
       vim.g.matchup_matchparen_hi_surround_always = 1
     end,
   },
-  -- Neovim plugin for sqls that leverages the built-in LSP client
-  'nanotee/sqls.nvim',
-  {
-    'McAuleyPenney/tidy.nvim', -- remove trailing whitespace when save
+  { -- remove trailing whitespace when save
+    'McAuleyPenney/tidy.nvim',
     event = 'BufWritePre',
   },
-  -- use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
-  {
-    'jose-elias-alvarez/null-ls.nvim',
-    requires = {
-      'lukas-reineke/lsp-format.nvim', -- A wrapper around Neovims native LSP formatting
-    },
-    config = function()
-      local null_ls = require 'null-ls'
-      local lspformat = require 'lsp-format'
-      -- TODO: there is a duplication at ../editing.lua, should be resolved later
-      lspformat.setup {}
-
-      null_ls.setup {
-        -- -- not using boilerplate from README to favor https://github.com/lukas-reineke/lsp-format.nvim
-        -- -- in fact this might the culprit for the issue below that ask between two on saving
-        -- -- https://www.reddit.com/r/neovim/comments/ubgi6h/nullls_issues/
-        --
-        -- you can reuse a shared lspconfig on_attach callback here
-        -- on_attach = function(client)
-        --   if client.resolved_capabilities.document_formatting then
-        --     vim.cmd [[
-        --     augroup LspFormatting
-        --         autocmd! * <buffer>
-        --         autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-        --     augroup END
-        --     ]]
-        --   end
-        -- end,
-
-        -- using lsp-format instead
-        on_attach = function(client)
-          -- to enable format on save
-          require('lsp-format').on_attach(client)
-        end,
-
-        sources = {
-          null_ls.builtins.formatting.stylua,
-        },
-      }
-    end,
-  },
-  {
-    'rmagatti/goto-preview', -- show preview when `gd`
+  { -- show preview when `gd`
+    'rmagatti/goto-preview',
     config = function()
       require('goto-preview').setup {}
     end,
@@ -105,6 +61,23 @@ return {
   -- | `dash-case` or `kebab-case`             | `gs-` or `gsk`  | `<Plug>CaserKebabCase`/`<Plug>CaserVKebabCase`           |
   -- | `Title-Dash-Case` or `Title-Kebab-Case` | `gsK`           | `<Plug>CaserTitleKebabCase`/`<Plug>CaserVTitleKebabCase` |
   -- | `dot.case`                              | `gs.`           | `<Plug>CaserDotCase`/`<Plug>CaserVDotCase`               |
+  { -- Multiple cursors plugin for vim/neovim
+    'mg979/vim-visual-multi',
+    config = function()
+      vim.g.VM_maps = {
+        ['Add Cursor Down'] = '<M-Down>',
+        ['Add Cursor Up'] = '<M-Up>',
+      }
+    end,
+    -- | keys            | description                             |
+    -- |-----------------|-----------------------------------------|
+    -- | Ctrl-N          | select words with                       |
+    -- | Alt-Down/Alt-Up | create cursors vertically with          |
+    -- | n/N             | to get next/previous occurrence         |
+    -- | q               | to skip current and get next occurrence |
+    -- | Q               | to remove current cursor/selection      |
+    -- | i,a,I,A         | start insert mode with                  |
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et

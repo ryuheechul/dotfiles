@@ -4,7 +4,6 @@ return function()
   local lspformat = require 'lsp-format'
   local navic = require 'nvim-navic'
 
-  -- TODO: there is a duplication at ../editing.lua, should be resolved later
   lspformat.setup {
     sql = {
       exclude = { 'sqls' }, -- formatting doesn't seem to be very good so excluding for now
@@ -67,7 +66,7 @@ return function()
   }
 
   -- delegate server specific setup to lsp-servers
-  local servers = require 'packer-groups.config.lsp-servers'(setup_default)
+  local servers = require 'packer-groups.config.lsp-servers' (setup_default)
 
   local lspconfig = require 'lspconfig'
   for server, setup in pairs(servers) do
