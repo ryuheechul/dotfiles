@@ -3,7 +3,17 @@
 return {
   'christoomey/vim-titlecase', -- `gz[il]` to titlecase [the whole line]
   'tpope/vim-surround', -- surround text with something like quotes
-  'AndrewRadev/splitjoin.vim', -- give you `gS` and `gJ`
+  { -- for splitting/joining blocks of code
+    'Wansmer/treesj',
+    -- with default keymaps:
+    -- <space>m - toggle
+    -- <space>j - join
+    -- <space>s - split (slow just because of <space>s is a prefix for other keys)
+    requires = { 'nvim-treesitter' },
+    config = function()
+      require('treesj').setup {}
+    end,
+  },
   'axelf4/vim-strip-trailing-whitespace', -- strip whitespace on save
   'tpope/vim-repeat', -- enhance `.` to repeat on non-native functionality like vim-surround
   'sheerun/vim-polyglot', -- one plugin to accomodate many different filetypes
