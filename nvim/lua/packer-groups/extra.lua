@@ -119,13 +119,12 @@ return {
         -- based on https://github.com/goolord/alpha-nvim/blob/a858e4e7b0805835e61fab2b54704450427d47c3/lua/alpha/themes/theta.lua#LL166C5-L166C5
         { type = 'text', val = 'Quick links', opts = { hl = 'SpecialComment', position = 'center' } },
         { type = 'padding', val = 1 },
-        button('l', '  Luapad', '<cmd>bd<CR><cmd>Luapad<CR>'),
-        button('e', '  New file', '<cmd>ene<CR>'),
+        button('nl', '  Luapad', '<cmd>bd<CR><cmd>Luapad<CR>'),
+        button('nf', '  New file', '<cmd>ene<CR>'),
         button('SPC f f', '  Find file'),
         button('SPC f g', '  Live grep'),
-        button('c', '  Configuration', '<cmd>cd ~/.config/nvim/ <CR>'),
-        button('u', '  Update plugins', '<cmd>PackerSync<CR>'),
-        button('q', '  Quit', '<cmd>qa<CR>'),
+        button('up', '  Update plugins', '<cmd>PackerUpdate<CR>'),
+        button('q', '  Quit'),
       }
 
       require('alpha').setup(theta_config)
