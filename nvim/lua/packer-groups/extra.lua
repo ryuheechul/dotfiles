@@ -197,6 +197,14 @@ return {
     end,
   },
   'rhysd/vim-syntax-codeowners', -- syntax support for CODEOWNERS file
+  { -- A markdown preview directly in your neovim
+    'ellisonleao/glow.nvim',
+    config = function()
+      require('glow').setup {
+        border = 'none',
+      }
+    end,
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et

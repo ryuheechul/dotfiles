@@ -20,6 +20,7 @@ local groups = {
   require 'packer-groups.theme',
   require 'packer-groups.git',
   require 'packer-groups.editing',
+  require 'packer-groups.syntax',
   require 'packer-groups.lsp',
   require 'packer-groups.completion',
   require 'packer-groups.debug',

@@ -1,14 +1,5 @@
--- treesitter & lsp & other syntax highlighting stuff
--- TODO: maybe I need to rename this file to something else
+-- lsp stuff
 return {
-  'earthly/earthly.vim', -- Highlight Earthfile syntax
-  'nvim-treesitter/nvim-treesitter-textobjects', -- Additional textobjects for treesitter
-  { -- Highlight, edit, and navigate code using a fast incremental parsing library
-    'nvim-treesitter/nvim-treesitter',
-    -- Parsers must be installed manually via :TSInstall
-    run = ':TSUpdate',
-    config = require 'packer-groups.config.treesitter',
-  },
   { -- Collection of configurations for built-in LSP client
     'neovim/nvim-lspconfig',
     requires = {

@@ -127,6 +127,14 @@ return function()
     rainbow = {
       enable = true,
     },
+    textsubjects = {
+      enable = true,
+      keymaps = {
+        ['.'] = 'textsubjects-smart',
+        [';'] = 'textsubjects-container-outer',
+        ['i;'] = 'textsubjects-container-inner',
+      },
+    },
   }
 end
 

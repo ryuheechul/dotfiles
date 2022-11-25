@@ -114,7 +114,8 @@ return {
             b = { '<Cmd>Telescope git_branches<CR>', 'branches' },
             s = { '<Cmd>Telescope git_status<CR>', 'status' },
           },
-          s = { ':w<CR>', 'save file' }, -- set a single command and text
+          n = { ':new<CR>', 'new file' },
+          s = { ':w<CR>', 'save file' },
           t = { ':NvimTreeToggle<CR>', 'toggle file tree' },
         },
         g = {
