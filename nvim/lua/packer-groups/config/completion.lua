@@ -20,6 +20,7 @@ return function()
     nvim_lua = '[lua]',
     path = '[path]',
     cmdline = '[cmd]',
+    cmdline_history = '[history]',
     luasnip = '[snip]',
     gh_issues = '[issues]',
     cmp_tabnine = '[TabNine]',
@@ -123,15 +124,17 @@ return function()
 
   -- a note on cmdline setup with `:`, `/`, `?`
   -- even previously a completion was already working both for Ex mode and search
-  -- however nvim-cmp's completion seems to be more powerful in the sense of the abilities
-  -- of choosing and showing the source as well as fuzzy searching
+  -- however nvim-cmp's completion seems to be more powerful in the sense of the abilities of:
+  -- - choosing and showing the source
+  -- - as well as fuzzy searching
 
   -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline(':', {
     mapping = cmp.mapping.preset.cmdline(),
     sources = cmp.config.sources({
-      { name = 'path' },
-    }, {
+      { name = 'path' }, -- 'path' should be in the first group not be shadowed by 'cmdline' and 'cmdline_history'
+    }, { -- grouping means when first group has suggestions it will stop looking until  suggested
+      { name = 'cmdline_history' },
       { name = 'cmdline' },
     }),
   })
@@ -139,7 +142,8 @@ return function()
   -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline({ '/', '?' }, {
     mapping = cmp.mapping.preset.cmdline(),
-    sources = {
+    sources = cmp.config.sources {
+      { name = 'cmdline_history' },
       { name = 'buffer' },
     },
   })

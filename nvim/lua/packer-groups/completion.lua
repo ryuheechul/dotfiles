@@ -9,6 +9,7 @@ return {
       'hrsh7th/cmp-buffer', -- nvim-cmp source for words in the buffer
       'hrsh7th/cmp-path', -- nvim-cmp source for path
       'hrsh7th/cmp-cmdline', -- nvim-cmp source for vim's cmdline
+      'dmitmel/cmp-cmdline-history', -- Source for nvim-cmp which reads results from command-line or search histories
       'L3MON4D3/LuaSnip', -- Snippets plugin
       'saadparwaiz1/cmp_luasnip', -- luasnip completion source for nvim-cmp
       'rafamadriz/friendly-snippets', -- Set of preconfigured snippets for different languages
