@@ -61,9 +61,26 @@ return {
     end,
   },
   'p00f/nvim-ts-rainbow', -- differnciate parenthesis with colors
-  { -- `gx` to open url
-    'felipec/vim-sanegx',
-    event = 'BufRead',
+  { -- Open the current word with custom openers, GitHub shorthands for example
+    'ofirgall/open.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'ofirgall/open-jira.nvim',
+    },
+    config = function()
+      require('open').setup {}
+      -- to open file instead, do `gf`
+      vim.keymap.set('n', 'gx', require('open').open_cword)
+
+      local jira_url = 'https://jira.atlassian.com/browse/'
+      if vim.env.my_nvim_jira_url ~= nil then
+        jira_url = vim.env.my_nvim_jira_url
+      end
+
+      require('open-jira').setup {
+        url = jira_url,
+      }
+    end,
   },
   { -- let you peek lines without moving the cursor to the line
     'nacro90/numb.nvim',
