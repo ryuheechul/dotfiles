@@ -38,7 +38,7 @@ vim.keymap.set('n', 'Y', 'y$', { noremap = true })
 -- , to repeat last normal command - https://stackoverflow.com/a/4789842/1570165
 vim.keymap.set('n', ',', '@:<CR>', { noremap = true })
 
---- yup these above should go into which key one day definately!
+--- yup these above should go into which key one day definitely!
 
 -- use which-key to accomodate visual assistant on key-bindings ../SpaceVim.d
 
@@ -115,6 +115,10 @@ return {
             s = { '<Cmd>Telescope git_status<CR>', 'status' },
           },
           n = { ':new<CR>', 'new file' },
+          r = {
+            require('gfold').pick_repo,
+            'pick repo',
+          },
           s = { ':w<CR>', 'save file' },
           t = { ':NvimTreeToggle<CR>', 'toggle file tree' },
         },

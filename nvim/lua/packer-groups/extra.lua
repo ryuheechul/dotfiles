@@ -234,6 +234,12 @@ return {
       }
     end,
   },
+  { -- using gfold to switch repo and have statusline component
+    'AckslD/nvim-gfold.lua',
+    config = function()
+      require('gfold').setup()
+    end,
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et
