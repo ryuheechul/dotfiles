@@ -205,6 +205,18 @@ return {
       }
     end,
   },
+  { -- Indent guides for Neovim
+    'lukas-reineke/indent-blankline.nvim',
+    config = function()
+      -- show some hidden characters - these are vim builtin options
+      vim.o.list = true
+      vim.o.listchars = [[tab:→\ ,eol:↵,trail:·,extends:↷,precedes:↶]]
+
+      require('indent_blankline').setup {
+        show_current_context = true,
+      }
+    end,
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et

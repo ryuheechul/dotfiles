@@ -124,7 +124,8 @@ return {
           n = { ':Neogit<CR>', 'open Neogit' },
         },
         p = {
-          c = { ':PackerCompile<CR>', 'run :PackerCompile' },
+          -- not only compile also generates helptags proactively in case of some missing helptags
+          c = { ':PackerCompile<CR>:helptags ALL<CR>', 'run :PackerCompile' },
           i = { ':PackerInstall<CR>', 'run :PackerInstall' },
           s = { ':PackerSync<CR>', 'run :PackerSync' },
           u = { ':PackerUpdate<CR>', 'run :PackerUpdate' },

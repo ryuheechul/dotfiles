@@ -29,11 +29,6 @@ local groups = {
   { -- leftovers
     -- comment since it creates more issue than a help for my usage
     -- 'ludovicchabant/vim-gutentags' -- Automatic tags management
-    --
-    -- Add indentation guides even on blank lines
-    -- comment until this issue gets resolved,
-    -- https://github.com/lukas-reineke/indent-blankline.nvim/issues/74
-    -- 'lukas-reineke/indent-blankline.nvim'
   },
 }
 

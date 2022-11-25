@@ -42,13 +42,6 @@ vim.wo.signcolumn = 'yes'
 vim.o.termguicolors = true
 vim.g.onedark_terminal_italics = 2
 
---Map blankline
-vim.g.indent_blankline_char = '┊'
-vim.g.indent_blankline_filetype_exclude = { 'help', 'packer' }
-vim.g.indent_blankline_buftype_exclude = { 'terminal', 'nofile' }
-vim.g.indent_blankline_char_highlight = 'LineNr'
-vim.g.indent_blankline_show_trailing_blankline_indent = false
-
 -- Highlight on yank
 vim.api.nvim_exec(
   [[
@@ -70,10 +63,6 @@ if vim.env.my_nvim_forget_line_number == nil then
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
   endif]]
 end
-
--- show some hidden characters
-vim.o.listchars = [[tab:→\ ,eol:↵,trail:·,extends:↷,precedes:↶]]
-vim.o.list = true
 
 -- only show when there is more than two files are open
 vim.g.buftabline_show = 1
