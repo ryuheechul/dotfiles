@@ -1,33 +1,36 @@
 -- completion & snippets
 
 return {
-  'hrsh7th/nvim-cmp', -- Autocompletion plugin
-  'hrsh7th/cmp-nvim-lsp',
-  'hrsh7th/cmp-nvim-lua',
-  'hrsh7th/cmp-buffer',
-  'hrsh7th/cmp-path',
-  -- 'hrsh7th/cmp-cmdline' -- I don't understand what this is yet so skip loading for now.
-  'saadparwaiz1/cmp_luasnip',
-  'rafamadriz/friendly-snippets',
-  {
-    'tzachar/cmp-tabnine', -- AI helper to type quicker
-    run = './install.sh',
-    requires = 'hrsh7th/nvim-cmp',
-    cond = function()
-      return vim.env.my_nvim_tabnine ~= nil
-    end,
+  { -- Autocompletion plugin
+    'hrsh7th/nvim-cmp',
+    requires = {
+      'hrsh7th/cmp-nvim-lsp', -- nvim-cmp source for neovim builtin LSP client
+      'hrsh7th/cmp-nvim-lua', -- nvim-cmp source for neovim Lua API
+      'hrsh7th/cmp-buffer', -- nvim-cmp source for words in the buffer
+      'hrsh7th/cmp-path', -- nvim-cmp source for path
+      -- 'hrsh7th/cmp-cmdline' -- I don't understand what this is for yet so skipping for now.
+      'L3MON4D3/LuaSnip', -- Snippets plugin
+      'saadparwaiz1/cmp_luasnip', -- luasnip completion source for nvim-cmp
+      'rafamadriz/friendly-snippets', -- Set of preconfigured snippets for different languages
+      'lukas-reineke/cmp-under-comparator', -- nvim-cmp comparator function for completion items that start with one or more underlines
+      'onsails/lspkind-nvim', -- vscode-like pictograms for neovim lsp completion items
+      { -- AI helper to type quicker
+        'tzachar/cmp-tabnine',
+        run = './install.sh',
+        requires = 'hrsh7th/nvim-cmp',
+        cond = function()
+          return vim.env.my_nvim_tabnine ~= nil
+        end,
+      },
+    },
+    config = require 'packer-groups.config.completion',
   },
-  {
-    'L3MON4D3/LuaSnip', -- Snippets plugin
-    requires = 'onsails/lspkind-nvim',
-    config = require 'packer-groups.config.luasnip',
-  },
-  {
-    'heavenshell/vim-jsdoc', -- :JsDoc (at the function) to generate documentation based on function signature
+  { -- :JsDoc (at the function) to generate documentation based on function signature
+    'heavenshell/vim-jsdoc',
     run = 'make install',
-    config = function ()
+    config = function()
       vim.g.jsdoc_formatter = 'tsdoc'
-    end
+    end,
   },
 }
 

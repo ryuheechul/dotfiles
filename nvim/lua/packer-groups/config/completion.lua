@@ -105,17 +105,30 @@ return function()
         return vim_item
       end,
     },
+    sorting = {
+      comparators = {
+        cmp.config.compare.offset,
+        cmp.config.compare.exact,
+        cmp.config.compare.score,
+        require('cmp-under-comparator').under,
+        cmp.config.compare.kind,
+        cmp.config.compare.sort_text,
+        cmp.config.compare.length,
+        cmp.config.compare.order,
+      },
+    },
     experimental = {
       ghost_text = true, -- this feature conflict to the copilot.vim's preview.
     },
   }
 
+  local from_vscode = require 'luasnip.loaders.from_vscode'
   -- load including'rafamadriz/friendly-snippets'
-  require('luasnip.loaders.from_vscode').lazy_load()
+  from_vscode.lazy_load()
 
   -- require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } }) -- Load snippets from my-snippets folder
   -- not sure how to do relative path properly like above, so just doing the below for now instead
-  require('luasnip.loaders.from_vscode').lazy_load { paths = { '~/.config/dfs-rhc/nvim/snippets' } } -- Load snippets from my-snippets folder
+  from_vscode.lazy_load { paths = { '~/.config/dfs-rhc/nvim/snippets' } } -- Load snippets from my-snippets folder
 
   -- Every unspecified option will be set to the default.
   luasnip.config.set_config {
