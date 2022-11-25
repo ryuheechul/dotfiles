@@ -41,8 +41,8 @@ local quit_listed = function()
   end
 end
 
--- this is the global handler - call it via `:lua my_smart_quit()`
-function _G.my_smart_quit()
+-- call it via `:lua require('utils.my-smart-quit')()`
+return function()
   local current = vim.fn.bufnr '%'
   local is_listed = vim.fn.buflisted(current) ~= 0
 

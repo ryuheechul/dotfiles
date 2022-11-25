@@ -140,7 +140,9 @@ return {
         button('nf', '  New file', '<cmd>ene<CR>'),
         button('SPC f f', '  Find file'),
         button('SPC f g', '  Live grep'),
-        button('up', '  Update plugins', '<cmd>PackerUpdate<CR>'),
+        button('pu', '  Update plugins', '<cmd>PackerUpdate<CR>'),
+        button('pi', '  Install plugins', '<cmd>PackerInstall<CR>'),
+        button('pc', '  Compile plugins', '<cmd>PackerCompile<CR>:helptags ALL<CR>'),
         button('q', '  Quit'),
       }
 

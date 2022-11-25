@@ -18,10 +18,8 @@ vim.keymap.set('n', '<', '<<', { noremap = true })
 vim.keymap.set('v', '>', '>gv', { noremap = true })
 vim.keymap.set('v', '<', '<gv', { noremap = true })
 
-require 'utils.my-smart-quit'
-
 -- q to close in a smart way
-vim.keymap.set('n', 'q', '<Cmd>lua my_smart_quit()<CR>', { noremap = true })
+vim.keymap.set('n', 'q', require 'utils.my-smart-quit', { noremap = true })
 
 -- -- Remap space as leader key - comment out since I'm not sure what this really does for me
 -- vim.keymap.set('', '<Space>', '<Nop>', { noremap = true, silent = true })
@@ -40,20 +38,31 @@ vim.keymap.set('n', ',', '@:<CR>', { noremap = true })
 
 --- yup these above should go into which key one day definitely!
 
--- use which-key to accomodate visual assistant on key-bindings ../SpaceVim.d
-
-function Toggle_background()
-  if vim.o.background == 'dark' then
-    vim.o.background = 'light'
-  else
-    vim.o.background = 'dark'
-  end
-end
-
+--- anything above here is not accessible from `config` function below
 return {
   {
     'folke/which-key.nvim', -- show key bindings just like SpaceVim
     config = function()
+      local cmdify = function(cmd)
+        -- favor this since this is combinable
+        return '<Cmd>' .. cmd .. '<CR>'
+
+        -- -- it's possible to use the bottom version but this is not combinable
+        -- return function()
+        --   vim.cmd(cmd)
+        -- end
+      end
+
+      local cmd_nohlsearch = cmdify 'nohlsearch'
+
+      local toggle_bg = function()
+        if vim.o.background == 'dark' then
+          vim.o.background = 'light'
+        else
+          vim.o.background = 'dark'
+        end
+      end
+
       local paste_after_here = '"*p'
       local paste_before_here = '"*P'
       if vim.fn.has 'unnamedplus' == 1 then
@@ -80,83 +89,94 @@ return {
 
       wk.register({
         w = {
-          m = { ':WindowsMaximize<CR>', 'maximize/minimize window' },
-          v = { ':WindowsMaximizeVertical<CR>', 'maximize/minimize window vertically' },
-          h = { ':WindowsMaximizeHorizontal<CR>', 'maximize/minimize window horizontally' },
-          ['/'] = { ':vsplit<CR>', 'split window vertically' },
-          ['-'] = { ':split<CR>', 'split window horizontally' },
+          m = { cmdify 'WindowsMaximize', 'maximize/minimize window' },
+          v = { cmdify 'WindowsMaximizeVertical', 'maximize/minimize window vertically' },
+          h = { cmdify 'WindowsMaximizeHorizontal', 'maximize/minimize window horizontally' },
+          ['/'] = { cmdify 'vsplit', 'split window vertically' },
+          ['-'] = { cmdify 'split', 'split window horizontally' },
         },
         b = {
-          b = { [[<Cmd>lua require('telescope.builtin').buffers()<CR>]], 'search buffer' },
-          d = { ':bd<CR>', 'close buffer' },
+          b = { require('telescope.builtin').buffers, 'search buffer' },
+          d = { cmdify 'bd', 'close buffer' },
         },
-        ['<space>'] = { '<Cmd>lua require("telescope.builtin").buffers()<CR>', 'telescope: buffers' },
-        ['<Tab>'] = { ':bn<CR>', 'rotate buffer' },
-        ["'"] = { ':FloatermToggle<CR>', 'open Floaterm' },
-        ['/'] = { ':ToggleTerm<CR>', 'open ToggleTerm' },
+        ['<space>'] = { require('telescope.builtin').buffers, 'telescope: buffers' },
+        ['<Tab>'] = { cmdify 'bn', 'rotate buffer' },
+        ["'"] = { cmd_nohlsearch .. cmdify 'FloatermToggle', 'open Floaterm' },
+        ['/'] = { cmd_nohlsearch .. cmdify 'ToggleTerm', 'open ToggleTerm' },
         j = 'split args', -- only set a text for an already configured keymap
         ['<CR>'] = { '@q', 'macro q' }, -- setting a special key
         f = { -- set a nested structure
           name = '+find',
-          b = { '<Cmd>Telescope buffers<CR>', 'buffers' },
-          h = { '<Cmd>Telescope help_tags<CR>', 'help tags' },
+          b = { cmdify 'Telescope buffers', 'buffers' },
+          h = { cmdify 'Telescope help_tags', 'help tags' },
           c = {
             name = '+commands',
-            c = { '<Cmd>Telescope commands<CR>', 'commands' },
-            h = { '<Cmd>Telescope command_history<CR>', 'history' },
+            c = { cmdify 'Telescope commands', 'commands' },
+            h = { cmdify 'Telescope command_history', 'history' },
           },
-          f = { '<Cmd>lua require("telescope.builtin").find_files({previewer = false})<CR>', 'find files' },
-          q = { '<Cmd>Telescope quickfix<CR>', 'quickfix' },
+          f = {
+            function()
+              require('telescope.builtin').find_files { previewer = false }
+            end,
+            'find files',
+          },
+          q = { cmdify 'Telescope quickfix', 'quickfix' },
           g = {
             name = '+git',
-            g = { '<Cmd>Telescope git_commits<CR>', 'commits' },
-            c = { '<Cmd>Telescope git_bcommits<CR>', 'bcommits' },
-            b = { '<Cmd>Telescope git_branches<CR>', 'branches' },
-            s = { '<Cmd>Telescope git_status<CR>', 'status' },
+            g = { cmdify 'Telescope git_commits', 'commits' },
+            c = { cmdify 'Telescope git_bcommits', 'bcommits' },
+            b = { cmdify 'Telescope git_branches', 'branches' },
+            s = { cmdify 'Telescope git_status', 'status' },
           },
-          n = { ':new<CR>', 'new file' },
-          r = {
-            require('gfold').pick_repo,
-            'pick repo',
-          },
-          s = { ':w<CR>', 'save file' },
-          t = { ':NvimTreeToggle<CR>', 'toggle file tree' },
+          n = { cmdify 'new', 'new file' },
+          r = { require('gfold').pick_repo, 'pick repo' },
+          s = { cmdify 'w', 'save file' },
+          t = { cmdify 'NvimTreeToggle', 'toggle file tree' },
         },
         g = {
-          b = { ':Git blame<CR>', 'toggle git blame' },
-          d = { ':DiffviewOpen<CR>', 'show git diff' },
-          n = { ':Neogit<CR>', 'open Neogit' },
+          b = { cmdify 'Git blame', 'toggle git blame' },
+          d = { cmdify 'DiffviewOpen', 'show git diff' },
+          n = { cmdify 'Neogit', 'open Neogit' },
         },
         p = {
           -- not only compile also generates helptags proactively in case of some missing helptags
-          c = { ':PackerCompile<CR>:helptags ALL<CR>', 'run :PackerCompile' },
-          i = { ':PackerInstall<CR>', 'run :PackerInstall' },
-          s = { ':PackerSync<CR>', 'run :PackerSync' },
-          u = { ':PackerUpdate<CR>', 'run :PackerUpdate' },
+          c = { cmdify 'PackerCompile' .. cmdify 'helptags ALL', 'run :PackerCompile' },
+          i = { cmdify 'PackerInstall', 'run :PackerInstall' },
+          s = { cmdify 'PackerSync', 'run :PackerSync' },
+          u = { cmdify 'PackerUpdate', 'run :PackerUpdate' },
         },
         s = {
           name = '+Searching/Symbol',
-          ['?'] = { '<Cmd>lua require("telescope.builtin").oldfiles()<CR>', 'old files' },
-          c = { '<Cmd>nohlsearch<CR>', 'clear hihglight' },
-          f = { '<Cmd>lua require("telescope.builtin").find_files({previewer = false})<CR>', 'find files' },
-          b = { '<Cmd>lua require("telescope.builtin").current_buffer_fuzzy_find()<CR>', 'current buffer fuzzy' },
-          h = { '<Cmd>lua require("telescope.builtin").help_tags()<CR>', 'help tags' },
-          t = { '<Cmd>lua require("telescope.builtin").tags()<CR>', 'tags' },
-          d = { '<Cmd>lua require("telescope.builtin").grep_string()<CR>', 'grep string' },
-          p = { '<Cmd>lua require("telescope.builtin").live_grep()<CR>', 'live grep' },
+          ['?'] = { require('telescope.builtin').oldfiles, 'old files' },
+          c = { cmd_nohlsearch, 'clear hihglight' },
+          f = {
+            function()
+              require('telescope.builtin').find_files { previewer = false }
+            end,
+            'find files',
+          },
+          b = { require('telescope.builtin').current_buffer_fuzzy_find, 'current buffer fuzzy' },
+          h = { require('telescope.builtin').help_tags, 'help tags' },
+          t = { require('telescope.builtin').tags, 'tags' },
+          d = { require('telescope.builtin').grep_string, 'grep string' },
+          p = { require('telescope.builtin').live_grep, 'live grep' },
           o = {
-            '<Cmd>lua require("telescope.builtin").tags{ only_current_buffer = true }<CR>',
+            function()
+              require('telescope.builtin').tags { only_current_buffer = true }
+            end,
             'tags only current buffer',
           },
           r = {
-            '<Cmd>lua require"telescope".extensions.repo.list{search_dirs = {"~/play"}}<CR>',
+            function()
+              require('telescope').extensions.repo.list { search_dirs = { '~/play' } }
+            end,
             'Telescope repo',
           },
         },
         t = {
           name = '+UI Toggles',
-          l = { '<Cmd>set list!<CR>', 'toggle-hidden-listchars' },
-          b = { '<Cmd>lua Toggle_background()<CR>', 'toggle-background' },
+          l = { cmdify 'set list!', 'toggle-hidden-listchars' },
+          b = { toggle_bg, 'toggle-background' },
         },
       }, { prefix = '<Space>' })
     end,
