@@ -76,7 +76,9 @@ return function()
   -- require('navigator').setup { lsp = servers }
 
   -- for floating signature hints
-  require('lsp_signature').setup {}
+  require('lsp_signature').setup {
+    floating_window = false, -- to let 'hrsh7th/cmp-nvim-lsp-signature-help' to overtake
+  }
 end
 
 -- vim: ts=2 sts=2 sw=2 et

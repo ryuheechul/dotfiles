@@ -5,6 +5,7 @@ return {
     'hrsh7th/nvim-cmp',
     requires = {
       'hrsh7th/cmp-nvim-lsp', -- nvim-cmp source for neovim builtin LSP client
+      'hrsh7th/cmp-nvim-lsp-signature-help', -- source for displaying function signatures with the current parameter emphasized
       'hrsh7th/cmp-nvim-lua', -- nvim-cmp source for neovim Lua API
       'hrsh7th/cmp-buffer', -- nvim-cmp source for words in the buffer
       'hrsh7th/cmp-path', -- nvim-cmp source for path
