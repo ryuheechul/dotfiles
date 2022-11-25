@@ -8,7 +8,7 @@ return {
       'hrsh7th/cmp-nvim-lua', -- nvim-cmp source for neovim Lua API
       'hrsh7th/cmp-buffer', -- nvim-cmp source for words in the buffer
       'hrsh7th/cmp-path', -- nvim-cmp source for path
-      -- 'hrsh7th/cmp-cmdline' -- I don't understand what this is for yet so skipping for now.
+      'hrsh7th/cmp-cmdline', -- nvim-cmp source for vim's cmdline
       'L3MON4D3/LuaSnip', -- Snippets plugin
       'saadparwaiz1/cmp_luasnip', -- luasnip completion source for nvim-cmp
       'rafamadriz/friendly-snippets', -- Set of preconfigured snippets for different languages

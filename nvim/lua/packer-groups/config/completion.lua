@@ -17,8 +17,9 @@ return function()
   local source_mapping = {
     buffer = '[buf]',
     nvim_lsp = '[LSP]',
-    nvim_lua = '[api]',
+    nvim_lua = '[lua]',
     path = '[path]',
+    cmdline = '[cmd]',
     luasnip = '[snip]',
     gh_issues = '[issues]',
     cmp_tabnine = '[TabNine]',
@@ -74,13 +75,11 @@ return function()
         end
       end, { 'i', 's' }),
     },
-    sources = {
+    sources = cmp.config.sources {
       { name = 'gh_issues' },
-      -- Could enable this only for lua, but nvim_lua handles that already.
-      { name = 'nvim_lua' },
+      { name = 'nvim_lua' }, -- Could have explicitly enabled this only for lua here, but nvim_lua handles that already.
       { name = 'nvim_lsp' },
       { name = 'path' },
-      -- { name = "cmdline" }, -- I don't understand what this is yet so skip loading for now.
       { name = 'luasnip' },
       { name = 'buffer', keyword_length = 4 },
       { name = 'cmp_tabnine', keyword_length = 4 },
@@ -122,11 +121,32 @@ return function()
     },
   }
 
-  local from_vscode = require 'luasnip.loaders.from_vscode'
-  -- load including'rafamadriz/friendly-snippets'
-  from_vscode.lazy_load()
+  -- a note on cmdline setup with `:`, `/`, `?`
+  -- even previously a completion was already working both for Ex mode and search
+  -- however nvim-cmp's completion seems to be more powerful in the sense of the abilities
+  -- of choosing and showing the source as well as fuzzy searching
 
-  -- require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } }) -- Load snippets from my-snippets folder
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline(':', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+      { name = 'path' },
+    }, {
+      { name = 'cmdline' },
+    }),
+  })
+
+  -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline({ '/', '?' }, {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+      { name = 'buffer' },
+    },
+  })
+
+  local from_vscode = require 'luasnip.loaders.from_vscode'
+  -- this loads including'rafamadriz/friendly-snippets'
+  from_vscode.lazy_load()
   -- not sure how to do relative path properly like above, so just doing the below for now instead
   from_vscode.lazy_load { paths = { '~/.config/dfs-rhc/nvim/snippets' } } -- Load snippets from my-snippets folder
 
