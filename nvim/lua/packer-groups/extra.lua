@@ -217,6 +217,20 @@ return {
       require('gfold').setup()
     end,
   },
+  { -- ✍️ All the npm/yarn commands I don't want to type
+    'vuki656/package-info.nvim',
+    requires = 'MunifTanjim/nui.nvim',
+    config = function()
+      require('package-info').setup {}
+
+      vim.keymap.set(
+        'n',
+        '<leader>nt',
+        require('package-info').toggle,
+        { silent = true, noremap = true, desc = 'toggle npm package versions' }
+      )
+    end,
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et
