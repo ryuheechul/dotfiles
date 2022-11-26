@@ -18,6 +18,11 @@ return {
       require('hlargs').setup()
     end,
   },
+  { -- A fast Neovim http client written in Lua
+    'rest-nvim/rest.nvim',
+    requires = { 'nvim-lua/plenary.nvim' },
+    config = require 'packer-groups.config.rest',
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et
