@@ -15,15 +15,16 @@ return function()
   end
 
   local source_mapping = {
+    path = '[path]',
+    spell = '[spell]',
     buffer = '[buf]',
+    cmdline = '[cmd]',
+    luasnip = '[snip]',
     nvim_lsp = '[LSP]',
     nvim_lua = '[lua]',
-    path = '[path]',
-    cmdline = '[cmd]',
-    cmdline_history = '[history]',
-    luasnip = '[snip]',
     gh_issues = '[issues]',
     cmp_tabnine = '[TabNine]',
+    cmdline_history = '[history]',
   }
 
   -- nvim-cmp setup
@@ -83,8 +84,16 @@ return function()
       { name = 'path' },
       { name = 'luasnip' },
       { name = 'buffer', keyword_length = 4 },
-      { name = 'cmp_tabnine', keyword_length = 4 },
       { name = 'nvim_lsp_signature_help' }, -- "overtake" `ray-x/lsp_signature.nvim` for arguments by turning off floating window
+      {
+        name = 'spell',
+        option = {
+          enable_in_context = function()
+            return require('cmp.config.context').in_treesitter_capture 'spell'
+          end,
+        },
+      },
+      { name = 'cmp_tabnine', keyword_length = 4 },
     },
     formatting = {
       -- -- this is simpler but less customization

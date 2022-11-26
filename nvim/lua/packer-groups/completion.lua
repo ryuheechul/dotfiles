@@ -4,18 +4,19 @@ return {
   { -- Autocompletion plugin
     'hrsh7th/nvim-cmp',
     requires = {
-      'hrsh7th/cmp-nvim-lsp', -- nvim-cmp source for neovim builtin LSP client
-      'hrsh7th/cmp-nvim-lsp-signature-help', -- source for displaying function signatures with the current parameter emphasized
-      'hrsh7th/cmp-nvim-lua', -- nvim-cmp source for neovim Lua API
-      'hrsh7th/cmp-buffer', -- nvim-cmp source for words in the buffer
-      'hrsh7th/cmp-path', -- nvim-cmp source for path
-      'hrsh7th/cmp-cmdline', -- nvim-cmp source for vim's cmdline
-      'dmitmel/cmp-cmdline-history', -- Source for nvim-cmp which reads results from command-line or search histories
       'L3MON4D3/LuaSnip', -- Snippets plugin
+      'f3fora/cmp-spell', -- spell source for nvim-cmp based on vim's spellsuggest
+      'hrsh7th/cmp-path', -- nvim-cmp source for path
+      'hrsh7th/cmp-buffer', -- nvim-cmp source for words in the buffer
+      'hrsh7th/cmp-cmdline', -- nvim-cmp source for vim's cmdline
+      'hrsh7th/cmp-nvim-lsp', -- nvim-cmp source for neovim builtin LSP client
+      'hrsh7th/cmp-nvim-lua', -- nvim-cmp source for neovim Lua API
+      'onsails/lspkind-nvim', -- vscode-like pictograms for neovim lsp completion items
       'saadparwaiz1/cmp_luasnip', -- luasnip completion source for nvim-cmp
+      'dmitmel/cmp-cmdline-history', -- Source for nvim-cmp which reads results from command-line or search histories
       'rafamadriz/friendly-snippets', -- Set of preconfigured snippets for different languages
       'lukas-reineke/cmp-under-comparator', -- nvim-cmp comparator function for completion items that start with one or more underlines
-      'onsails/lspkind-nvim', -- vscode-like pictograms for neovim lsp completion items
+      'hrsh7th/cmp-nvim-lsp-signature-help', -- source for displaying function signatures with the current parameter emphasized
       { -- AI helper to type quicker
         'tzachar/cmp-tabnine',
         run = './install.sh',
