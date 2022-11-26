@@ -88,6 +88,20 @@ return {
     -- | Q               | to remove current cursor/selection      |
     -- | i,a,I,A         | start insert mode with                  |
   },
+  { -- Space Age seD in neovim. A project wide find and replace plugin with sad & fzf
+    'ray-x/sad.nvim',
+    requires = 'ray-x/guihua.lua',
+    config = function()
+      require('sad').setup {}
+
+      vim.keymap.set(
+        'n',
+        '<space>sr',
+        ':Sad<CR>',
+        { silent = true, noremap = true, desc = 'search and replace in project' }
+      )
+    end,
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et

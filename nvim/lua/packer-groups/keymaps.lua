@@ -6,7 +6,7 @@
 -- put away `tags` according to https://github.com/ludovicchabant/vim-gutentags/issues/211
 -- vim.g.gutentags_ctags_tagfile = '.git/gutentags'
 
--- because `use 'zhou13/vim-easyescape'` is too slow on startup
+-- because `zhou13/vim-easyescape` is too slow on startup
 vim.keymap.set('i', 'jk', '<Esc>', { noremap = true, silent = true })
 vim.keymap.set('n', '<Tab>', '<Cmd>wincmd w<CR>', { noremap = true, silent = true })
 
@@ -166,7 +166,7 @@ return {
             end,
             'tags only current buffer',
           },
-          r = {
+          g = {
             function()
               require('telescope').extensions.repo.list { search_dirs = { '~/play' } }
             end,

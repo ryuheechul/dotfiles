@@ -97,6 +97,7 @@ with pkgs;
   silver-searcher # A code-searching tool similar to ack, but faster
   amber # A code search-and-replace tool - use it with `ambs` and `ambr`
   fasd # Command-line productivity booster, offers quick access to files and directories
+  sad # search and replace | Space Age seD - ex) `fd . | sad find replace`
   fd # mordern find
 ] ++
 # enhance git/github experience
