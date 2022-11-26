@@ -33,7 +33,12 @@ return function()
 
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
+
     local bufopts = { noremap = true, silent = true, buffer = bufnr }
+
+    local desc_opts = function(desc)
+      return require('utils.table').merge(bufopts, { desc = desc })
+    end
 
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
@@ -49,8 +54,9 @@ return function()
     vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
     vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+
     -- this has nothing to do with format on save
-    vim.keymap.set('n', '<space>bf', vim.lsp.buf.format, bufopts)
+    vim.keymap.set('n', '<space>bf', vim.lsp.buf.format, desc_opts 'format buffer')
   end
 
   -- nvim-cmp supports additional completion capabilities
@@ -66,7 +72,7 @@ return function()
   }
 
   -- delegate server specific setup to lsp-servers
-  local servers = require 'packer-groups.config.lsp-servers' (setup_default)
+  local servers = require 'packer-groups.config.lsp-servers'(setup_default)
 
   local lspconfig = require 'lspconfig'
   for server, setup in pairs(servers) do

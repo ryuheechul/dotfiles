@@ -118,6 +118,7 @@ return {
             h = { cmdify 'Telescope command_history', 'history' },
           },
           f = { require('telescope.builtin').find_files, 'find files' },
+          k = { require('telescope.builtin').keymaps, 'search keymaps' },
           q = { cmdify 'Telescope quickfix', 'quickfix' },
           g = {
             name = '+git',
@@ -128,15 +129,17 @@ return {
           },
           n = { cmdify 'new', 'new file' },
           r = { require('gfold').pick_repo, 'pick repo' },
+          t = { cmdify 'Telescope', 'telescope' },
           s = { cmdify 'w', 'save file' },
-          t = { cmdify 'NvimTreeToggle', 'toggle file tree' },
         },
         g = {
+          name = '+git',
           b = { cmdify 'Git blame', 'toggle git blame' },
           d = { cmdify 'DiffviewOpen', 'show git diff' },
           n = { cmdify 'Neogit', 'open Neogit' },
         },
         p = {
+          name = '+packer',
           -- not only compile also generates helptags proactively in case of some missing helptags
           c = { cmdify 'PackerCompile' .. cmdify 'helptags ALL', 'run :PackerCompile' },
           i = { cmdify 'PackerInstall', 'run :PackerInstall' },
@@ -168,8 +171,9 @@ return {
         },
         t = {
           name = '+UI Toggles',
-          l = { cmdify 'set list!', 'toggle-hidden-listchars' },
           b = { toggle_bg, 'toggle-background' },
+          f = { cmdify 'NvimTreeToggle', 'toggle file tree' },
+          l = { cmdify 'set list!', 'toggle-hidden-listchars' },
         },
       }, { prefix = '<Space>' })
     end,
