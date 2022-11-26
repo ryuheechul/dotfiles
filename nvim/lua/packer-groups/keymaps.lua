@@ -92,6 +92,7 @@ return {
 
       wk.register({
         w = {
+          name = '+windows',
           m = { cmdify 'WindowsMaximize', 'maximize/minimize window' },
           v = { cmdify 'WindowsMaximizeVertical', 'maximize/minimize window vertically' },
           h = { cmdify 'WindowsMaximizeHorizontal', 'maximize/minimize window horizontally' },
@@ -99,6 +100,7 @@ return {
           ['-'] = { cmdify 'split', 'split window horizontally' },
         },
         b = {
+          name = '+buffers',
           b = { require('telescope.builtin').buffers, 'search buffer' },
           d = { cmdify 'bd', 'close buffer' },
         },
@@ -128,15 +130,17 @@ return {
             s = { cmdify 'Telescope git_status', 'status' },
           },
           n = { cmdify 'new', 'new file' },
-          r = { require('gfold').pick_repo, 'pick repo' },
           t = { cmdify 'Telescope', 'telescope' },
           s = { cmdify 'w', 'save file' },
+          r = { require('telescope.builtin').oldfiles, 'recent files' },
         },
         g = {
           name = '+git',
           b = { cmdify 'Git blame', 'toggle git blame' },
           d = { cmdify 'DiffviewOpen', 'show git diff' },
+          g = { require('gfold').pick_repo, 'pick repo via gfold' },
           n = { cmdify 'Neogit', 'open Neogit' },
+          r = { cmdify 'Gcd', 'go to git root' },
         },
         p = {
           name = '+packer',
@@ -155,7 +159,7 @@ return {
           h = { require('telescope.builtin').help_tags, 'help tags' },
           t = { require('telescope.builtin').tags, 'tags' },
           d = { require('telescope.builtin').grep_string, 'grep string' },
-          p = { require('telescope.builtin').live_grep, 'live grep' },
+          p = { require('telescope.builtin').live_grep, 'live grep in project' },
           o = {
             function()
               require('telescope.builtin').tags { only_current_buffer = true }
