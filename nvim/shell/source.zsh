@@ -1,7 +1,10 @@
-# fail fast
 if test -z "${NVIM_LISTEN_ADDRESS}" || test -z "${commands[nvr]}"; then
+  # only proceed for terminals inside neovim
   return
 fi
+
+# so that fzf just within the terminal instead of using a new temp pane in tmux
+unset TMUX TMUX_PANE
 
 # simply close the window instead of exiting
 # which bringing back the shell much faster
