@@ -160,33 +160,6 @@ return {
     end,
   },
   'sbulav/nredir.nvim', -- Redirect the output of Vim or external command to scratch buffer, in LUA
-  -- telescope extensions
-  { -- it could be anything but this was chosen to be the head here
-    'crispgm/telescope-heading.nvim',
-    requires = {
-      -- setup for these at at ./system.lua
-      'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope.nvim',
-      -- end of dependencies and now other telescope extensions
-      {
-        'ANGkeith/telescope-terraform-doc.nvim',
-        -- temp workaround to deal with broken head
-        commit = '73291b564fed413ced13e890144d359793b3860c',
-      },
-      'camgraff/telescope-tmux.nvim',
-      'benfowler/telescope-luasnip.nvim',
-      'xiyaowong/telescope-emoji.nvim',
-      'cljoly/telescope-repo.nvim',
-    },
-    config = function()
-      require('telescope').load_extension 'heading'
-      require('telescope').load_extension 'terraform_doc'
-      require('telescope').load_extension 'tmux'
-      require('telescope').load_extension 'luasnip'
-      require('telescope').load_extension 'emoji'
-      require('telescope').load_extension 'repo'
-    end,
-  },
   { -- Extensible Neovim Scrollbar
     'petertriho/nvim-scrollbar',
     config = function()
@@ -236,6 +209,8 @@ return {
       }
     end,
   },
+  -- to improve the default vim.ui interfaces which something like nvim-gfold.lua can benefits from
+  'stevearc/dressing.nvim', -- basically does the same thing as `nvim-telescope/telescope-ui-select.nvim`
   { -- using gfold to switch repo and have statusline component
     'AckslD/nvim-gfold.lua',
     config = function()

@@ -89,6 +89,8 @@ return function()
         name = 'spell',
         option = {
           enable_in_context = function()
+            -- this essentially make spell suggestions are present in comments
+            -- with nvim-cmp but not with variables, for example.
             return require('cmp.config.context').in_treesitter_capture 'spell'
           end,
         },

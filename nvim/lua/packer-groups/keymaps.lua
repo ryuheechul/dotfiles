@@ -18,6 +18,9 @@ vim.keymap.set('n', '<', '<<', { noremap = true })
 vim.keymap.set('v', '>', '>gv', { noremap = true })
 vim.keymap.set('v', '<', '<gv', { noremap = true })
 
+-- replace builtin spell suggestions - see `:h z=`
+vim.keymap.set('n', 'z=', require('telescope.builtin').spell_suggest, { noremap = true })
+
 -- q to close in a smart way
 vim.keymap.set('n', 'q', require 'utils.my-smart-quit', { noremap = true })
 
@@ -114,12 +117,7 @@ return {
             c = { cmdify 'Telescope commands', 'commands' },
             h = { cmdify 'Telescope command_history', 'history' },
           },
-          f = {
-            function()
-              require('telescope.builtin').find_files { previewer = false }
-            end,
-            'find files',
-          },
+          f = { require('telescope.builtin').find_files, 'find files' },
           q = { cmdify 'Telescope quickfix', 'quickfix' },
           g = {
             name = '+git',
@@ -149,12 +147,7 @@ return {
           name = '+Searching/Symbol',
           ['?'] = { require('telescope.builtin').oldfiles, 'old files' },
           c = { cmd_nohlsearch, 'clear hihglight' },
-          f = {
-            function()
-              require('telescope.builtin').find_files { previewer = false }
-            end,
-            'find files',
-          },
+          f = { require('telescope.builtin').find_files, 'find files' },
           b = { require('telescope.builtin').current_buffer_fuzzy_find, 'current buffer fuzzy' },
           h = { require('telescope.builtin').help_tags, 'help tags' },
           t = { require('telescope.builtin').tags, 'tags' },
