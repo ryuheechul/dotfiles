@@ -92,7 +92,7 @@ return {
 
       wk.register({
         w = {
-          name = '+windows',
+          name = '+Windows/Workspace',
           m = { cmdify 'WindowsMaximize', 'maximize/minimize window' },
           v = { cmdify 'WindowsMaximizeVertical', 'maximize/minimize window vertically' },
           h = { cmdify 'WindowsMaximizeHorizontal', 'maximize/minimize window horizontally' },
@@ -100,7 +100,7 @@ return {
           ['-'] = { cmdify 'split', 'split window horizontally' },
         },
         b = {
-          name = '+buffers',
+          name = '+Buffers',
           b = { require('telescope.builtin').buffers, 'search buffer' },
           d = { cmdify 'bd', 'close buffer' },
         },
@@ -111,11 +111,11 @@ return {
         j = 'split args', -- only set a text for an already configured keymap
         ['<CR>'] = { '@q', 'macro q' }, -- setting a special key
         f = { -- set a nested structure
-          name = '+find',
+          name = '+Find',
           b = { cmdify 'Telescope buffers', 'buffers' },
           h = { cmdify 'Telescope help_tags', 'help tags' },
           c = {
-            name = '+commands',
+            name = '+Commands',
             c = { cmdify 'Telescope commands', 'commands' },
             h = { cmdify 'Telescope command_history', 'history' },
           },
@@ -123,7 +123,7 @@ return {
           k = { require('telescope.builtin').keymaps, 'search keymaps' },
           q = { cmdify 'Telescope quickfix', 'quickfix' },
           g = {
-            name = '+git',
+            name = '+Git',
             g = { cmdify 'Telescope git_commits', 'commits' },
             c = { cmdify 'Telescope git_bcommits', 'bcommits' },
             b = { cmdify 'Telescope git_branches', 'branches' },
@@ -135,7 +135,7 @@ return {
           r = { require('telescope.builtin').oldfiles, 'recent files' },
         },
         g = {
-          name = '+git',
+          name = '+Git',
           b = { cmdify 'Git blame', 'toggle git blame' },
           d = { cmdify 'DiffviewOpen', 'show git diff' },
           g = { require('gfold').pick_repo, 'pick repo via gfold' },
@@ -143,7 +143,7 @@ return {
           r = { cmdify 'Gcd', 'go to git root' },
         },
         p = {
-          name = '+packer',
+          name = '+Packer',
           -- not only compile also generates helptags proactively in case of some missing helptags
           c = { cmdify 'PackerCompile' .. cmdify 'helptags ALL', 'run :PackerCompile' },
           i = { cmdify 'PackerInstall', 'run :PackerInstall' },

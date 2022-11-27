@@ -40,20 +40,20 @@ return function()
       return require('utils.table').merge(bufopts, { desc = desc })
     end
 
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-    vim.keymap.set('n', '<S-k>', vim.lsp.buf.signature_help, bufopts)
-    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
-    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, desc_opts 'go to declaration')
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, desc_opts 'go to definition')
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, desc_opts 'hover')
+    vim.keymap.set('n', 'gj', vim.lsp.buf.implementation, desc_opts 'go to implementations')
+    vim.keymap.set('n', '<S-k>', vim.lsp.buf.signature_help, desc_opts 'signature help')
+    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, desc_opts 'add workspace')
+    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, desc_opts 'remove workspace')
     vim.keymap.set('n', '<space>wl', function()
       print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, bufopts)
-    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
-    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-    vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+    end, desc_opts 'list workspace')
+    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, desc_opts 'type definition')
+    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, desc_opts 'rename')
+    vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, desc_opts 'code action')
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, desc_opts 'go to references')
 
     -- this has nothing to do with format on save
     vim.keymap.set('n', '<space>bf', vim.lsp.buf.format, desc_opts 'format buffer')
@@ -72,7 +72,7 @@ return function()
   }
 
   -- delegate server specific setup to lsp-servers
-  local servers = require 'packer-groups.config.lsp-servers'(setup_default)
+  local servers = require 'packer-groups.config.lsp-servers' (setup_default)
 
   local lspconfig = require 'lspconfig'
   for server, setup in pairs(servers) do

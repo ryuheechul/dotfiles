@@ -59,18 +59,18 @@ return {
   --   run = 'nix-shell --run "cargo build --release"',
   -- },
   'arthurxavierx/vim-caser', -- convert between cases - https://github.com/arthurxavierx/vim-caser#usage
-  -- | Case                                    | Default Mapping | Plug Mapping (normal/visual)                             |
-  -- | --------------------------------------- | --------------- | -------------------------------------------------------- |
-  -- | `MixedCase` or `PascalCase`             | `gsm` or `gsp`  | `<Plug>CaserMixedCase`/`<Plug>CaserVMixedCase`           |
-  -- | `camelCase`                             | `gsc`           | `<Plug>CaserCamelCase`/`<Plug>CaserVCamelCase`           |
-  -- | `snake_case`                            | `gs_`           | `<Plug>CaserSnakeCase`/`<Plug>CaserVSnakeCase`           |
-  -- | `UPPER_CASE`                            | `gsu` or `gsU`  | `<Plug>CaserUpperCase`/`<Plug>CaserVUpperCase`           |
-  -- | `Title Case`                            | `gst`           | `<Plug>CaserTitleCase`/`<Plug>CaserVTitleCase`           |
-  -- | `Sentence case`                         | `gss`           | `<Plug>CaserSentenceCase`/`<Plug>CaserVSentenceCase`     |
-  -- | `space case`                            | `gs<space>`     | `<Plug>CaserSpaceCase`/`<Plug>CaserVSpaceCase`           |
-  -- | `dash-case` or `kebab-case`             | `gs-` or `gsk`  | `<Plug>CaserKebabCase`/`<Plug>CaserVKebabCase`           |
-  -- | `Title-Dash-Case` or `Title-Kebab-Case` | `gsK`           | `<Plug>CaserTitleKebabCase`/`<Plug>CaserVTitleKebabCase` |
-  -- | `dot.case`                              | `gs.`           | `<Plug>CaserDotCase`/`<Plug>CaserVDotCase`               |
+  -- | Default Mapping | Case                                    |
+  -- | --------------- | --------------------------------------- |
+  -- | `gsm` or `gsp`  | `MixedCase` or `PascalCase`             |
+  -- | `gsc`           | `camelCase`                             |
+  -- | `gs_`           | `snake_case`                            |
+  -- | `gsu` or `gsU`  | `UPPER_CASE`                            |
+  -- | `gst`           | `Title Case`                            |
+  -- | `gss`           | `Sentence case`                         |
+  -- | `gs<space>`     | `space case`                            |
+  -- | `gs-` or `gsk`  | `dash-case` or `kebab-case`             |
+  -- | `gsK`           | `Title-Dash-Case` or `Title-Kebab-Case` |
+  -- | `gs.`           | `dot.case`                              |
   { -- Multiple cursors plugin for vim/neovim
     'mg979/vim-visual-multi',
     config = function()
@@ -101,6 +101,10 @@ return {
         { silent = true, noremap = true, desc = 'search and replace in project' }
       )
     end,
+  },
+  { -- https://github.com/ziontee113/syntax-tree-surfer/tree/d6d518f48dcc4441b11ee3e6cefd48fa1e09568a
+    'ziontee113/syntax-tree-surfer',
+    config = require 'packer-groups.config.tree-surfer',
   },
 }
 
