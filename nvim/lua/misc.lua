@@ -1,5 +1,3 @@
--- originally from https://github.com/mjlbach/defaults.nvim/blob/73d4b205be5711b681ef2df9d171b1c55040803b/init.lua
-
 -- last status
 vim.o.ls = 0
 

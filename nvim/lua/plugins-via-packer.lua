@@ -48,16 +48,20 @@ local load_plugins = function(use)
   end
 end
 
-return require('packer').startup(function(use)
-  --- plugins from https://github.com/mjlbach/defaults.nvim/blob/73d4b205be5711b681ef2df9d171b1c55040803b/init.lua
+return require('packer').startup {
+  function(use)
+    load_plugins(use)
 
-  load_plugins(use)
-
-  -- Automatically set up your configuration after cloning packer.nvim
-  -- Put this at the end after all plugins
-  if packer_bootstrap then
-    require('packer').sync()
-  end
-end)
+    -- Automatically set up your configuration after cloning packer.nvim
+    -- Put this at the end after all plugins
+    if packer_bootstrap then
+      require('packer').sync()
+    end
+  end,
+  config = {
+    -- override this due to https://github.com/wbthomason/packer.nvim/issues/746
+    max_jobs = 64,
+  },
+}
 
 -- vim: ts=2 sts=2 sw=2 et
