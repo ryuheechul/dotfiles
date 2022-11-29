@@ -2,11 +2,6 @@
 
 # define functions first so that it doesn't get affected by aliases being defined here
 
-# treat alias like original command in terms of auto complete when they have same name
-# thanks to https://youtu.be/qSJ4FlsT0RU
-# so `alias make='notify make'` will autocomplete as if it was the original `make`
-setopt complete_aliases
-
 # to measure zsh performance - https://blog.mattclemente.com/2020/06/26/oh-my-zsh-slow-to-load.html
 function timezsh() {
   shell=${1-$SHELL}
@@ -85,6 +80,30 @@ if test "$(uname)" = "Darwin"; then
       && afplay /System/Library/Sounds/Funk.aiff \
       || afplay /System/Library/Sounds/Purr.aiff
     date
+  }
+
+  # able to hook up completions for arbitrary command arguments
+  # thanks to great hints from https://www.dolthub.com/blog/2021-11-15-zsh-completions-with-subcommands/
+  # but this does not work well with subcommands of the commands at the moment.
+  # but since `make` has no more depth it's OK for now.
+  _notify() {
+    local line state
+
+    _arguments -C "1: :->cmds" "*::arg:->args"
+
+    case "$state" in
+      cmds)
+        _exec # borrowing `_exec` completion function to list all commands
+        ;;
+      args)
+        _${line[1]} # assume the command has its own completion function like `_make` defined
+        ;;
+    esac
+  }
+
+  # so it's called when compdef is available later at ./znap
+  function _compdef_notify() {
+    compdef _notify notify
   }
 
   alias make='notify make'
