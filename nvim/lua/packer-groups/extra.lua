@@ -137,7 +137,7 @@ return {
         { type = 'text', val = 'Quick links', opts = { hl = 'SpecialComment', position = 'center' } },
         { type = 'padding', val = 1 },
         button('nl', '  Luapad', '<cmd>bd<CR><cmd>Luapad<CR>'),
-        button('nf', '  New file', '<cmd>ene<CR>'),
+        button('i', '  New file', '<cmd>ene<CR>'),
         button('SPC f f', '  Find file'),
         button('SPC f g', '  Live grep'),
         button('pu', '  Update plugins', '<cmd>PackerUpdate<CR>'),
