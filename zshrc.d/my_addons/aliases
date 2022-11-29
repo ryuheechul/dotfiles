@@ -167,8 +167,10 @@ alias vi="vim"
 ## special modes
 # start neovim purely without any plugins loaded
 alias vip='vi -u NONE'
+# start neovim to profile
+alias pim='NVIM_PROFILE=1 vi'
 # neovim with ghost
-alias vip='my_nvim_ghost=1 vi'
+alias vig='my_nvim_ghost=1 vi'
 
 # useful when the status of packer seems not clean
 # for now, it only print the command not run
