@@ -205,7 +205,8 @@ return {
       vim.o.listchars = [[tab:→\ ,eol:↵,trail:·,extends:↷,precedes:↶]]
 
       require('indent_blankline').setup {
-        show_current_context = true,
+        -- -- disable this related to https://github.com/lukas-reineke/indent-blankline.nvim/issues/440
+        -- show_current_context = true,
       }
     end,
   },
