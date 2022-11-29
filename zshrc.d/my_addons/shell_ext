@@ -65,7 +65,6 @@ _arch="$(_evalcache _evalable_arch)"
 # intel chip (at least not powerful ones) can't seem to handle this, so disabled for them for now
 test "${_arch}" = "arm64" && {
   export my_zsh_plugin_zsh_autocomplete=1;
-  export my_nvim_ghost=1;
   export my_nvim_tabnine=1;
 }
 
