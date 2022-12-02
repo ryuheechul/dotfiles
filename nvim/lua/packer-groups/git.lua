@@ -12,7 +12,8 @@ return {
     },
     config = require 'packer-groups.config.git',
   },
-  'airblade/vim-rooter', -- Changes Vim working directory to project root
+  -- Changes Vim working directory to project root
+  'airblade/vim-rooter', -- a replacement candidate, https://github.com/ahmedkhalf/project.nvim
   'tpope/vim-rhubarb', -- Fugitive-companion to interact with github
   -- Add git related info in the signs columns and popups
   {
