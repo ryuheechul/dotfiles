@@ -177,11 +177,6 @@ _tag flush-path
 
 _tag path
 
-# starship
-_evalcache starship init zsh
-
-_tag starship
-
 # use direnv
 [ $commands[direnv] ] && _evalcache direnv hook zsh
 

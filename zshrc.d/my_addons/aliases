@@ -101,10 +101,8 @@ if test "$(uname)" = "Darwin"; then
     esac
   }
 
-  # so it's called when compdef is available later at ./znap
-  function _compdef_notify() {
-    compdef _notify notify
-  }
+  # since compdef on regular sourcing doesn't seem to work
+  zsh-defer compdef _notify notify
 
   alias make='notify make'
 

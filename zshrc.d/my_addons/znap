@@ -7,10 +7,21 @@
 
 source ~/.local/share/zsh-snap/znap.zsh  # Start Znap
 
-# # `znap prompt` makes your prompt visible in just 15-40ms!
-# znap prompt sindresorhus/pure
+# starship
+# export STARSHIP_LOG=trace
+_evalcache starship init zsh # it used to be at ./shell_ext but moved here to show prompt quickly
+# `znap prompt` makes your prompt visible in just 15-40ms!
+znap prompt
 
-# `znap source` automatically downloads and starts your plugins.
+## `znap source` automatically downloads and starts your plugins.
+
+# kind of like ls + git status
+znap source supercrabtree/k
+# bd [n] to go up multi steps at once
+znap source Tarrasch/zsh-bd
+# git open to open origin via browser
+znap source paulirish/git-open
+
 znap source zsh-users/zsh-autosuggestions
 znap source zsh-users/zsh-syntax-highlighting
 # config for this is found at ./zinit
@@ -19,9 +30,7 @@ znap source zsh-users/zsh-syntax-highlighting
 test -n "${my_zsh_plugin_zsh_autocomplete}" \
     && znap source marlonrichert/zsh-autocomplete
 
-zsh-defer znap fpath _gh 'gh completion -s zsh'
-_compdef_notify
-
+test -f ${XDG_DATA_HOME:-~/.local/share}/zsh/site-functions/_gh || znap fpath _gh 'gh completion -s zsh'
 
 # # `znap function` lets you lazy-load features you don't always need.
 # znap function _pyenv pyenvn 'eval "$( pyenv init - --no-rehash )"'
