@@ -47,7 +47,7 @@ vim.api.nvim_exec(
     autocmd!
     autocmd TextYankPost * silent! lua vim.highlight.on_yank()
   augroup end
-]],
+]] ,
   false
 )
 
@@ -71,5 +71,8 @@ vim.opt.pumblend = 20
 
 -- sync clipboard with the system's one - https://stackoverflow.com/a/30691754/1570165
 vim.opt.clipboard = 'unnamedplus'
+
+-- to assist ../shell/source.zsh
+vim.env.NVIM_LISTEN_ADDRESS = vim.v.servername
 
 -- vim: ts=2 sts=2 sw=2 et
