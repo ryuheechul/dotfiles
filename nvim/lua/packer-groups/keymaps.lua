@@ -145,7 +145,7 @@ return {
         p = {
           name = '+Packer',
           -- not only compile also generates helptags proactively in case of some missing helptags
-          c = { cmdify 'PackerCompile' .. cmdify 'helptags ALL', 'run :PackerCompile' },
+          c = { cmdify 'LuaCacheClear' .. cmdify 'PackerCompile' .. cmdify 'helptags ALL', 'run :PackerCompile' },
           i = { cmdify 'PackerInstall', 'run :PackerInstall' },
           s = { cmdify 'PackerSync', 'run :PackerSync' },
           u = { cmdify 'PackerUpdate', 'run :PackerUpdate' },
