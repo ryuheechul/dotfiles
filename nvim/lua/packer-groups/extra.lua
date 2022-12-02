@@ -46,7 +46,6 @@ return {
   --   end,
   -- },
   'RRethy/vim-illuminate', -- Highlight the same words at the cursor
-  'haringsrob/nvim_context_vt', -- show context via virtual text
   { -- Automatically expand width of the current window. Maximizes and restore it. And all this with nice animations!
     'anuvyklack/windows.nvim',
     -- this plugin basically replaces the plugins below for my use case

@@ -23,6 +23,14 @@ return {
     requires = { 'nvim-lua/plenary.nvim' },
     config = require 'packer-groups.config.rest',
   },
+  -- turn off due to occasional lags
+  -- 'haringsrob/nvim_context_vt', -- show context via virtual text
+  { -- Show code context
+    'nvim-treesitter/nvim-treesitter-context',
+    requires = {
+      'nvim-treesitter/nvim-treesitter',
+    },
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et
