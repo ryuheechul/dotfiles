@@ -30,6 +30,15 @@ return function()
   -- nvim-cmp setup
   local cmp = require 'cmp'
   cmp.setup {
+    performance = {
+      -- This is the interval used to group up completions from different sources for filtering and displaying.
+      debounce = 300,
+      -- This is used to delay filtering and displaying completions.
+      throttle = 60,
+      -- Sets the timeout of candidate fetching process. The nvim-cmp will wait to display the most prioritized source.
+      fetching_timeout = 200,
+      -- but things above are not about debouncing on triggering. That is tracked at here, https://github.com/hrsh7th/nvim-cmp/issues/598
+    },
     snippet = {
       expand = function(args)
         luasnip.lsp_expand(args.body)

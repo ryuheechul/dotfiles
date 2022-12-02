@@ -4,6 +4,12 @@ vim.o.ls = 0
 -- command height
 vim.o.ch = 0
 
+-- When this option is set, the screen will not be redrawn while executing macros, registers and other commands that have not been typed.
+-- Also, updating the window title is postponed.
+vim.o.lazyredraw = false
+-- lazyredraw seems to cause more lags (especially with nvim-cmp) than not with my setup.
+-- possibly it might work better with certain terminals than not so I might consider branching this out per terminal
+
 --Incremental live completion
 vim.o.inccommand = 'nosplit'
 
@@ -47,7 +53,7 @@ vim.api.nvim_exec(
     autocmd!
     autocmd TextYankPost * silent! lua vim.highlight.on_yank()
   augroup end
-]] ,
+]],
   false
 )
 

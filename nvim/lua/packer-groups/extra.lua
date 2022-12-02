@@ -45,7 +45,16 @@ return {
   --     require 'follow-md-links'
   --   end,
   -- },
-  'RRethy/vim-illuminate', -- Highlight the same words at the cursor
+  {
+    'RRethy/vim-illuminate', -- Highlight the same words at the cursor
+    config = function()
+      require('illuminate').configure {
+        delay = 100,
+      }
+      -- paused when it brought lags from with lazyredraw
+      -- require('illuminate').pause() -- comment out as nolazyredraw seemed to resolved that issue.
+    end,
+  },
   { -- Automatically expand width of the current window. Maximizes and restore it. And all this with nice animations!
     'anuvyklack/windows.nvim',
     -- this plugin basically replaces the plugins below for my use case
@@ -162,7 +171,11 @@ return {
   { -- Extensible Neovim Scrollbar
     'petertriho/nvim-scrollbar',
     config = function()
-      require('scrollbar').setup()
+      require('scrollbar').setup {
+        -- don't show by default until this issue gets resolved, https://github.com/petertriho/nvim-scrollbar/issues/72
+        -- also `set nolazyredraw` didn't help unlike the case for vim-illuminate and nvim-cmp
+        show = false,
+      }
     end,
   },
   { -- NeoVim text object that finds diagnostics
