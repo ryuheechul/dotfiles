@@ -244,6 +244,20 @@ return {
       )
     end,
   },
+  { -- 🧞 Pluggable framework for using AI code assistance in Neovim
+    -- at the visually selected sentence(s)
+    -- <leader>mcs | code complete
+    -- <leader>mds | generate docstring
+    -- <leader>mas | alter code
+    'jameshiew/nvim-magic',
+    config = function()
+      require('nvim-magic').setup()
+    end,
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'MunifTanjim/nui.nvim',
+    },
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et
