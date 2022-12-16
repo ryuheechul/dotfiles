@@ -107,6 +107,7 @@ with pkgs;
   git-filter-repo # quickly rewrite git repository history - read https://stackoverflow.com/a/69947947/1570165 for usage
   delta # syntax-highlighting pager for git
   gh # official Github CLI
+  act # Run your GitHub Actions locally
 ] ++
 # helper
 [
