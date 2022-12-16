@@ -47,15 +47,20 @@ vim.o.termguicolors = true
 vim.g.onedark_terminal_italics = 2
 
 -- Highlight on yank
-vim.api.nvim_exec(
-  [[
-  augroup YankHighlight
-    autocmd!
-    autocmd TextYankPost * silent! lua vim.highlight.on_yank()
-  augroup end
-]],
-  false
-)
+local yankHighlightGrp = vim.api.nvim_create_augroup('YankHighlight', {})
+vim.api.nvim_create_autocmd('TextYankPost', {
+  pattern = '*',
+  command = 'silent! lua vim.highlight.on_yank()',
+  group = yankHighlightGrp,
+})
+
+-- Maximize on git commit message editing
+local gitGrp = vim.api.nvim_create_augroup('MyGitAUG', {})
+vim.api.nvim_create_autocmd('BufReadPost', {
+  pattern = 'COMMIT_EDITMSG',
+  command = 'WindowsMaximize',
+  group = gitGrp,
+})
 
 -- giving option to ignore this since the logic doesn't handle
 -- +[linenumber] arg on startup
