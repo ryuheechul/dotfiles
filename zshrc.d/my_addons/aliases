@@ -258,6 +258,7 @@ alias weather='curl wttr.in'
 alias shebang='echo "#!/usr/bin/env bash" | pbcopy ; pbpaste'
 alias executable='chmod +x'
 alias lf='UNSET_ALL_MY_ZSH_STUFF_LOADED=1 lf'
+alias quickvenv='python3 -m venv "${MY_QUICK_VENV_PATH:-.venv}" && source "${MY_QUICK_VENV_PATH:-.venv}/bin/activate"'
 
 alias nis="npm install --save"
 alias nisd="npm install --save-dev"
