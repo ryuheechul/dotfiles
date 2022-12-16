@@ -172,9 +172,8 @@ return {
     'petertriho/nvim-scrollbar',
     config = function()
       require('scrollbar').setup {
-        -- don't show by default until this issue gets resolved, https://github.com/petertriho/nvim-scrollbar/issues/72
-        -- also `set nolazyredraw` didn't help unlike the case for vim-illuminate and nvim-cmp
-        show = false,
+        -- currently this is the most optimal way for me to deal with this issue, https://github.com/petertriho/nvim-scrollbar/issues/72
+        throttle_ms = 2000,
       }
     end,
   },
