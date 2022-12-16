@@ -23,6 +23,17 @@ local quit_unlisted = function()
   end
 end
 
+local try_bufdel = function()
+  local is_curr_buf_modifiable = vim.api.nvim_buf_get_option(0, 'modifiable')
+
+  -- this helps to close "support" windows e.g. the ones from `vim.lsp.buf.references`
+  if is_curr_buf_modifiable == false then
+    vim.cmd [[ q ]]
+  else
+    vim.cmd [[ BufDel ]]
+  end
+end
+
 -- aka file buffers
 local quit_listed = function()
   local wins = vim.api.nvim_list_wins()
@@ -33,11 +44,11 @@ local quit_listed = function()
   if not is_one_buffer_with_multi_wins then
     -- now it's time to delegate to BufDel for file buffers
     -- (using https://github.com/ojroques/nvim-bufdel)
-    vim.cmd [[ BufDel ]]
+    try_bufdel()
   else
     -- but also close windows first if only single buffer left with multiple windows
     -- to prevent closing abruptly when still multiple windows are present
-    vim.cmd [[ close ]]
+    vim.cmd [[ q ]]
   end
 end
 
