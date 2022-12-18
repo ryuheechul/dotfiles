@@ -106,8 +106,16 @@ return {
         },
         ['<space>'] = { require('telescope.builtin').buffers, 'telescope: buffers' },
         ['<Tab>'] = { cmdify 'bn', 'rotate buffer' },
-        ["'"] = { cmd_nohlsearch .. cmdify 'FloatermToggle', 'open Floaterm' },
-        ['/'] = { cmd_nohlsearch .. cmdify 'ToggleTerm', 'open ToggleTerm' },
+        ["'"] = {
+          -- use count 9 to be independent from the horizontal one
+          cmd_nohlsearch .. cmdify '9ToggleTerm direction=float',
+          'open ToggleTerm direction=float',
+        },
+        ['/'] = {
+          -- use count 8 to be independent from the float one
+          cmd_nohlsearch .. cmdify '8ToggleTerm direction=horizontal',
+          'open ToggleTerm direction=horizontal',
+        },
         j = 'split args', -- only set a text for an already configured keymap
         ['<CR>'] = { '@q', 'macro q' }, -- setting a special key
         f = { -- set a nested structure

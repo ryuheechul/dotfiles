@@ -2,6 +2,9 @@
 
 return function()
   local lualine_setup = {
+    disabled_filetypes = {
+      winbar = { 'toggleterm' },
+    },
     sections = {
       lualine_x = {
         -- opening lua file makes lsp work, if I `:PackerCompile` during that time I get an error below

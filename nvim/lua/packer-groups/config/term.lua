@@ -10,6 +10,13 @@ return function()
         let $NO_VI_KEY_ON_ZSH = 1
       ]]
 
+  -- e.g. calc_length('columns'|'lines', 0.[1-9])
+  local calc_length = function(opt, ratio)
+    return function()
+      return math.floor(vim.o[opt] * ratio)
+    end
+  end
+
   require('toggleterm').setup {
     -- size can be a number or function which is passed the current terminal
     size = function(term)
@@ -37,9 +44,9 @@ return function()
       -- the 'curved' border is a custom border type
       -- not natively supported but implemented in this plugin.
       border = 'single', -- | 'double' | 'shadow' | 'curved' | ... other options supported by win open
-      -- width = <value>,
-      -- height = <value>,
-      winblend = 3,
+      width = calc_length('columns', 0.6),
+      height = calc_length('lines', 0.6),
+      winblend = 0,
       highlights = {
         border = 'Normal',
         background = 'Normal',

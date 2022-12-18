@@ -9,7 +9,11 @@ return {
     'akinsho/toggleterm.nvim',
     config = require 'packer-groups.config.term',
   },
-  'voldikss/vim-floaterm', -- 🌟 Terminal manager for (neo)vim
+  --- although floaterm was cool to use and convenient, I met a weird dead-end performance issue on typing only with the combination of followings
+  --- bufferline.nvim (only when tab is visible) + pyright lsp (with many files unlisted) + vim-floaterm activated (even after closed the term)
+  --- therefore I just use toggleterm instead to mimic the usage of floaterm
+  --- indirectly related issue - https://github.com/neovim/neovim/issues/21452
+  -- 'voldikss/vim-floaterm', -- 🌟 Terminal manager for (neo)vim
   { -- UI to select things (files, grep results, open buffers...)
     'nvim-telescope/telescope.nvim',
     requires = {
