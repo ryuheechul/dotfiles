@@ -47,7 +47,7 @@ vim.o.termguicolors = true
 vim.g.onedark_terminal_italics = 2
 
 -- Highlight on yank
-local yankHighlightGrp = vim.api.nvim_create_augroup('YankHighlight', {})
+local yankHighlightGrp = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
   command = 'silent! lua vim.highlight.on_yank()',
@@ -55,7 +55,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- Maximize on git commit message editing
-local gitGrp = vim.api.nvim_create_augroup('MyGitAUG', {})
+local gitGrp = vim.api.nvim_create_augroup('MyGitAUG', { clear = true })
 vim.api.nvim_create_autocmd('BufReadPost', {
   pattern = 'COMMIT_EDITMSG',
   command = 'WindowsMaximize',
