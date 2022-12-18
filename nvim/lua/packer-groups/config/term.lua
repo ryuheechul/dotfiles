@@ -1,19 +1,30 @@
 -- term settings
 
 return function()
-  -- augment terminal
-  vim.cmd [[
-        " cleaner approach than $FORCE_LOAD_MY_ZSH_STUFF
-        let $UNSET_MY_BASIC_ZSH_STUFF_LOADED=1
-        let $UNSET_ALL_MY_ZSH_STUFF_LOADED=1
-
-        let $NO_VI_KEY_ON_ZSH = 1
-      ]]
+  --- augment terminal with env vars
+  -- cleaner approach than $FORCE_LOAD_MY_ZSH_STUFF
+  vim.env.UNSET_MY_BASIC_ZSH_STUFF_LOADED = 1
+  vim.env.UNSET_ALL_MY_ZSH_STUFF_LOADED = 1
+  vim.env.NO_VI_KEY_ON_ZSH = 1
 
   -- e.g. calc_length('columns'|'lines', 0.[1-9])
   local calc_length = function(opt, ratio)
     return function()
       return math.floor(vim.o[opt] * ratio)
+    end
+  end
+
+  -- based on https://github.com/akinsho/toggleterm.nvim/blob/b02a1674bd0010d7982b056fd3df4f717ff8a57a/lua/toggleterm.lua#L77-L81
+  local function focus_nth_term(num)
+    local terms = require 'toggleterm.terminal'
+    local lazy = require 'toggleterm.lazy'
+    local ui = lazy.require 'toggleterm.ui'
+    local term = terms.get_or_create_term(num)
+    ui.update_origin_window(term.window)
+
+    -- avoid opening another one when it's already open
+    if not term:is_open() then
+      term:open()
     end
   end
 
@@ -67,6 +78,30 @@ return function()
     vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
   end
 
-  -- if you only want these mappings for toggle term use term://*toggleterm#* instead
-  vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
+  local termGrp = vim.api.nvim_create_augroup('MyTerm', { clear = true })
+  -- used to be `vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'`
+  vim.api.nvim_create_autocmd('TermOpen', {
+    -- if you only want these mappings for toggle term use term://*toggleterm#* instead
+    pattern = 'term://*',
+    callback = set_terminal_keymaps,
+    group = termGrp,
+  })
+
+  -- setup an handler to bring the most recent terminal back
+  vim.api.nvim_create_autocmd('TermEnter', {
+    pattern = 'term://*',
+    callback = function()
+      local bufnr = vim.api.nvim_get_current_buf()
+      local bufname = vim.api.nvim_buf_get_name(bufnr)
+
+      local termnr_str = string.match(bufname, 'toggleterm#(%d+)$')
+      local termnr = tonumber(termnr_str)
+
+      -- this global function gets updated every time so whoever calls `:lua FocusRecentToggleTerm()` can bring the most recent terminal back to focus
+      function _G.FocusRecentToggleTerm()
+        focus_nth_term(termnr)
+      end
+    end,
+    group = termGrp,
+  })
 end

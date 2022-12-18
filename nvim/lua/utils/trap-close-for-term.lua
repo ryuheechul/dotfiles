@@ -30,8 +30,7 @@ return function()
           vim.cmd [[ tabclose ]]
         end
 
-        -- TODO: for now assume that it's coming from floating one but this should be addressed
-        vim.cmd [[ 9ToggleTerm ]]
+        FocusRecentToggleTerm()
       end, 1)
     end,
     group = ttGrp,
