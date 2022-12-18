@@ -181,6 +181,9 @@ return {
             'Telescope repo',
           },
         },
+        r = {
+          name = '+Run/Debug',
+        },
         t = {
           name = '+UI Toggles',
           b = { toggle_bg, 'toggle-background' },

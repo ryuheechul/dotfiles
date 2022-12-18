@@ -24,6 +24,14 @@ return {
     'weilbith/nvim-code-action-menu', -- enables `:CodeActionMenu`
     cmd = 'CodeActionMenu',
   },
+  { -- Debug Adapter Protocol client implementation for Neovim
+    'mfussenegger/nvim-dap',
+    requires = {
+      -- Debug adapter for Neovim lua files (including plugins)
+      'jbyuki/one-small-step-for-vimkind',
+    },
+    config = require 'packer-groups.config.dap',
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et
