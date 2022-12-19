@@ -29,6 +29,7 @@ return {
     requires = {
       -- Debug adapter for Neovim lua files (including plugins)
       'jbyuki/one-small-step-for-vimkind',
+      'rcarriga/nvim-dap-ui',
     },
     config = require 'packer-groups.config.dap',
   },

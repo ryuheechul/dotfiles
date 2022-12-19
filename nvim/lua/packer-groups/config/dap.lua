@@ -20,17 +20,17 @@ return function()
 
     -- for debuggee - Neovim instance A that wants to be debugged
     -- so launch this at the neovim client that is a debuggee which also runs the server that debugger client can attach
-    vim.keymap.set('n', '<space>rl', function()
+    vim.keymap.set('n', '<leader>ro', function()
       require('osv').launch { port = 8086 }
     end, { noremap = true, desc = 'DAP OSV launch' })
 
     -- for debugger - Neovim instance B that will debug instance A
-    vim.keymap.set('n', '<space>rc', dap.continue, { noremap = true, desc = 'DAP continue' })
-    vim.keymap.set('n', '<space>rr', dap.repl.toggle, { noremap = true, desc = 'DAP repl toggle' })
-    vim.keymap.set('n', '<space>rb', dap.toggle_breakpoint, { noremap = true, desc = 'DAP toggle breakpoint' })
-    vim.keymap.set('n', '<space>rso', dap.step_over, { noremap = true, desc = 'DAP step over' })
-    vim.keymap.set('n', '<space>rsi', dap.step_into, { noremap = true, desc = 'DAP step into' })
-    vim.keymap.set('n', '<space>rh', require('dap.ui.widgets').hover, { noremap = true, desc = 'DAP hover' })
+    vim.keymap.set('n', '<leader>rc', dap.continue, { noremap = true, desc = 'DAP continue' })
+    -- vim.keymap.set('n', '<leader>rr', dap.repl.toggle, { noremap = true, desc = 'DAP repl toggle' })
+    vim.keymap.set('n', '<leader>rb', dap.toggle_breakpoint, { noremap = true, desc = 'DAP toggle breakpoint' })
+    vim.keymap.set('n', '<leader>rso', dap.step_over, { noremap = true, desc = 'DAP step over' })
+    vim.keymap.set('n', '<leader>rsi', dap.step_into, { noremap = true, desc = 'DAP step into' })
+    vim.keymap.set('n', '<leader>rh', require('dap.ui.widgets').hover, { noremap = true, desc = 'DAP hover' })
     -- .exit               Closes the REPL
     -- .c or .continue     Same as |dap.continue|
     -- .n or .next         Same as |dap.step_over|
@@ -49,5 +49,22 @@ return function()
     -- .reverse-continue   Same as |dap.reverse_continue|
   end
 
+  local dapui = function()
+    local dap, dapui = require 'dap', require 'dapui'
+    dapui.setup()
+    dap.listeners.after.event_initialized['dapui_config'] = function()
+      dapui.open()
+    end
+    dap.listeners.before.event_terminated['dapui_config'] = function()
+      dapui.close()
+    end
+    dap.listeners.before.event_exited['dapui_config'] = function()
+      dapui.close()
+    end
+
+    vim.keymap.set('n', '<leader>ru', dapui.toggle, { noremap = true, desc = 'DAP UI toggle' })
+  end
+
   nlua()
+  dapui()
 end

@@ -85,6 +85,9 @@ return {
       wk.register({
         p = { paste_after_here, 'paste after here' },
         P = { paste_before_here, 'paste before here' },
+        r = {
+          name = '+Run/Debug',
+        },
       }, { prefix = '<leader>' })
 
       -- this actually wasn't working - comment out until I revisit
@@ -184,7 +187,7 @@ return {
           },
         },
         r = {
-          name = '+Run/Debug',
+          name = '+Rename',
         },
         t = {
           name = '+UI Toggles',
