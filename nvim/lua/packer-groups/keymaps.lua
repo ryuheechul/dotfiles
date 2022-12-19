@@ -10,9 +10,11 @@
 vim.keymap.set('i', 'jk', '<Esc>', { noremap = true, silent = true })
 vim.keymap.set('n', '<Tab>', '<Cmd>wincmd w<CR>', { noremap = true, silent = true })
 
--- indent right away without waiting in normal mode
-vim.keymap.set('n', '>', '>>', { noremap = true })
-vim.keymap.set('n', '<', '<<', { noremap = true })
+--- disabling this as this interfered with something like `>ap`
+--- and the original purpose wasn't working as intended either anyway
+-- -- indent right away without waiting in normal mode
+-- vim.keymap.set('n', '>', '>>', { noremap = true })
+-- vim.keymap.set('n', '<', '<<', { noremap = true })
 
 -- stay in visual mode after indentation in visual mode
 vim.keymap.set('v', '>', '>gv', { noremap = true })
