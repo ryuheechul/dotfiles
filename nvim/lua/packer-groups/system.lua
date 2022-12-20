@@ -31,6 +31,7 @@ return {
       'benfowler/telescope-luasnip.nvim',
       'xiyaowong/telescope-emoji.nvim',
       'cljoly/telescope-repo.nvim',
+      'nvim-telescope/telescope-dap.nvim',
     },
     config = function()
       local telescope = require 'telescope'
@@ -55,7 +56,7 @@ return {
         },
       }
 
-      local exts = { 'heading', 'terraform_doc', 'tmux', 'luasnip', 'emoji', 'repo' }
+      local exts = { 'heading', 'terraform_doc', 'tmux', 'luasnip', 'emoji', 'repo', 'dap' }
 
       for _, ext in ipairs(exts) do
         telescope.load_extension(ext)

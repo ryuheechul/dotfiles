@@ -15,4 +15,4 @@ alias q="clear; nvr --remote-send '<esc>:q<cr>'"
 # for programs like lf
 export EDITOR='nvr -c "lua require(\"utils.trap-close-for-term\")()" --remote-tab-wait'
 # for shell
-alias nvim='nvr -c "lua require(\"utils.trap-close-for-term\")()" --remote-tab-wait'
+alias nvim='nvr --remote-tab'

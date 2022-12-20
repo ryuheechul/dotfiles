@@ -27,9 +27,11 @@ return {
   { -- Debug Adapter Protocol client implementation for Neovim
     'mfussenegger/nvim-dap',
     requires = {
-      -- Debug adapter for Neovim lua files (including plugins)
-      'jbyuki/one-small-step-for-vimkind',
-      'rcarriga/nvim-dap-ui',
+      'jbyuki/one-small-step-for-vimkind', -- Debug adapter for Neovim lua files (including plugins)
+      'rcarriga/nvim-dap-ui', -- A UI for nvim-dap
+      -- adds virtual text support to nvim-dap. nvim-treesitter is used to find variable definitions.
+      'theHamsta/nvim-dap-virtual-text',
+      'anuvyklack/keymap-layer.nvim', -- Create a key layer in Neovim
     },
     config = require 'packer-groups.config.dap',
   },

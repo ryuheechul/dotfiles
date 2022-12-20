@@ -25,28 +25,10 @@ return function()
     end, { noremap = true, desc = 'DAP OSV launch' })
 
     -- for debugger - Neovim instance B that will debug instance A
-    vim.keymap.set('n', '<leader>rc', dap.continue, { noremap = true, desc = 'DAP continue' })
-    -- vim.keymap.set('n', '<leader>rr', dap.repl.toggle, { noremap = true, desc = 'DAP repl toggle' })
-    vim.keymap.set('n', '<leader>rb', dap.toggle_breakpoint, { noremap = true, desc = 'DAP toggle breakpoint' })
-    vim.keymap.set('n', '<leader>rso', dap.step_over, { noremap = true, desc = 'DAP step over' })
-    vim.keymap.set('n', '<leader>rsi', dap.step_into, { noremap = true, desc = 'DAP step into' })
     vim.keymap.set('n', '<leader>rh', require('dap.ui.widgets').hover, { noremap = true, desc = 'DAP hover' })
-    -- .exit               Closes the REPL
-    -- .c or .continue     Same as |dap.continue|
-    -- .n or .next         Same as |dap.step_over|
-    -- .into               Same as |dap.step_into|
-    -- .into_target        Same as |dap.step_into{askForTargets=true}|
-    -- .out                Same as |dap.step_out|
-    -- .up                 Same as |dap.up|
-    -- .down               Same as |dap.down|
-    -- .goto               Same as |dap.goto_|
-    -- .scopes             Prints the variables in the current scopes
-    -- .threads            Prints all threads
-    -- .frames             Print the stack frames
-    -- .capabilities       Print the capabilities of the debug adapter
-    -- .b or .back         Same as |dap.step_back|
-    -- .rc or
-    -- .reverse-continue   Same as |dap.reverse_continue|
+
+    -- rely most of dap commands via Telescope instead of keybindings - currently it's mapped to <space>fd
+    -- also with quick_debug keymap layer
   end
 
   local dapui = function()
@@ -74,7 +56,23 @@ return function()
           position = 'bottom',
         },
       },
+      controls = {
+        -- enabled = vim.fn.exists '+winbar' == 1,
+        enabled = 1,
+        element = 'console',
+        icons = {
+          pause = '',
+          play = '',
+          step_into = '',
+          step_over = '',
+          step_out = '',
+          step_back = '',
+          run_last = '',
+          terminate = '',
+        },
+      },
     }
+
     dap.listeners.after.event_initialized['dapui_config'] = function()
       dapui.open()
     end
@@ -88,6 +86,42 @@ return function()
     vim.keymap.set('n', '<leader>ru', dapui.toggle, { noremap = true, desc = 'DAP UI toggle' })
   end
 
+  local layer_keys = function()
+    local dap = require 'dap'
+    local KeyLayer = require 'keymap-layer'
+
+    local m = { 'n' } -- modes
+    local quick_debug = KeyLayer {
+      enter = {},
+      layer = {
+        { m, 't', dap.toggle_breakpoint, { noremap = true, desc = 'DAP toggle breakpoints' } },
+        { m, 'i', dap.step_into, { noremap = true, desc = 'DAP step into' } },
+        { m, 'o', dap.step_out, { noremap = true, desc = 'DAP step out' } },
+        { m, 'n', dap.step_over, { noremap = true, desc = 'DAP step over' } },
+        { m, 'p', dap.step_back, { noremap = true, desc = 'DAP step back' } },
+        { m, 'c', dap.continue, { noremap = true, desc = 'DAP continue' } },
+        { m, 'q', dap.continue, { noremap = true, desc = 'DAP continue' } },
+      },
+      exit = {},
+      config = {
+        on_enter = function()
+          print 'Enter quick debug layer'
+          -- vim.bo.modifiable = false
+        end,
+        on_exit = function()
+          print 'Exit quick debug layer'
+        end,
+      },
+    }
+    -- my_dap_kb: my dap keybindings
+    dap.listeners.after.event_stopped['my_dap_kb'] = function(--[[ session, body ]])
+      quick_debug:activate()
+    end
+    dap.listeners.after.event_continued['my_dap_kb'] = function(--[[ session, body ]])
+      quick_debug:exit()
+    end
+  end
+
   local attach_python = function()
     local dap = require 'dap'
     local host = vim.env.DAP_PYTHON_REMOTE_HOST or 'localhost'
@@ -98,8 +132,25 @@ return function()
     local localRoot = vim.fn.getcwd()
     -- Wherever your Python code lives in the container.
     local remoteRoot = vim.env.DAP_PYTHON_REMOTE_ROOT or '/app'
+    local adapter = { type = 'server', host = host, port = port }
 
-    local pythonAttachConfig = {
+    local pathMappings = {
+      {
+        localRoot = localRoot,
+        remoteRoot = remoteRoot,
+      },
+    }
+
+    local also_packages = vim.env.DAP_PYTHON_LOCAL_ROOT_PACKAGE ~= nil and vim.env.DAP_PYTHON_REMOTE_ROOT_PACKAGE ~= nil
+
+    if also_packages then
+      table.insert(pathMappings, {
+        localRoot = vim.env.DAP_PYTHON_LOCAL_ROOT_PACKAGE,
+        remoteRoot = vim.env.DAP_PYTHON_REMOTE_ROOT_PACKAGE,
+      })
+    end
+
+    local config = {
       type = 'python',
       request = 'attach',
       connect = {
@@ -109,20 +160,23 @@ return function()
       mode = 'remote',
       name = 'Remote Attached Debugger',
       cwd = vim.fn.getcwd(),
-      pathMappings = {
-        {
-          localRoot = localRoot,
-          remoteRoot = remoteRoot,
-        },
-      },
+      pathMappings = pathMappings,
     }
-    local session = dap.attach(host, portnr, pythonAttachConfig)
+
+    if also_packages then
+      config.justMyCode = false
+    end
+
+    local session = dap.attach(adapter, config)
     if session == nil then
       io.write 'Error launching adapter'
     end
   end
 
-  vim.keymap.set('n', '<leader>rd', attach_python, { noremap = true, desc = 'attach to python' })
+  vim.keymap.set('n', '<leader>ra', attach_python, { noremap = true, desc = 'attach to python' })
   nlua()
   dapui()
+  require('nvim-dap-virtual-text').setup()
+
+  layer_keys()
 end

@@ -132,6 +132,7 @@ return {
             c = { cmdify 'Telescope commands', 'commands' },
             h = { cmdify 'Telescope command_history', 'history' },
           },
+          d = { require('telescope').extensions.dap.commands, 'dap commands' },
           f = { require('telescope.builtin').find_files, 'find files' },
           k = { require('telescope.builtin').keymaps, 'search keymaps' },
           q = { cmdify 'Telescope quickfix', 'quickfix' },

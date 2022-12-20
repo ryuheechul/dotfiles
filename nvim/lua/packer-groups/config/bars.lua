@@ -2,8 +2,17 @@
 
 return function()
   local lualine_setup = {
-    disabled_filetypes = {
-      winbar = { 'toggleterm' },
+    options = {
+      disabled_filetypes = {
+        winbar = {
+          'toggleterm',
+          'dapui_watches',
+          'dapui_stacks',
+          'dapui_breakpoints',
+          'dapui_scopes',
+          'dapui_console',
+        },
+      },
     },
     sections = {
       lualine_x = {
