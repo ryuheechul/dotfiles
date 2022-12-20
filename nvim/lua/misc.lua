@@ -62,6 +62,18 @@ vim.api.nvim_create_autocmd('BufReadPost', {
   group = gitGrp,
 })
 
+-- fix key maps on help buffer so it works like `less`
+local helpGrp = vim.api.nvim_create_augroup('MyHelpAUG', { clear = true })
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'help',
+  callback = function()
+    -- nowait only works with buffer mapping
+    vim.keymap.set('n', 'd', '<C-d>', { noremap = true, silent = true, buffer = true, nowait = true })
+    vim.keymap.set('n', 'b', '<C-b>', { noremap = true, silent = true, buffer = true, nowait = true })
+  end,
+  group = helpGrp,
+})
+
 -- giving option to ignore this since the logic doesn't handle
 -- +[linenumber] arg on startup
 -- so use it like `my_nvim_forget_line_number=1 nvim +10 filename`
