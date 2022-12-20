@@ -51,7 +51,30 @@ return function()
 
   local dapui = function()
     local dap, dapui = require 'dap', require 'dapui'
-    dapui.setup()
+    dapui.setup {
+      -- since I don't want repl to be there due to ungraceful workflow I override `layouts` to get rid of it
+      layouts = {
+        {
+          -- You can change the order of elements in the sidebar
+          elements = {
+            -- Provide IDs as strings or tables with "id" and "size" keys
+            { id = 'scopes', size = 0.25 }, -- percent
+            { id = 'breakpoints', size = 0.25 },
+            { id = 'stacks', size = 0.25 },
+            { id = 'watches', size = 0.25 },
+          },
+          size = 40, -- columns
+          position = 'left',
+        },
+        {
+          elements = {
+            'console',
+          },
+          size = 10, -- columns
+          position = 'bottom',
+        },
+      },
+    }
     dap.listeners.after.event_initialized['dapui_config'] = function()
       dapui.open()
     end
@@ -65,6 +88,41 @@ return function()
     vim.keymap.set('n', '<leader>ru', dapui.toggle, { noremap = true, desc = 'DAP UI toggle' })
   end
 
+  local attach_python = function()
+    local dap = require 'dap'
+    local host = vim.env.DAP_PYTHON_REMOTE_HOST or 'localhost'
+    local port = vim.env.DAP_PYTHON_REMOTE_PORT or '5678'
+    local portnr = tonumber(port)
+
+    -- Wherever your Python code lives locally.
+    local localRoot = vim.fn.getcwd()
+    -- Wherever your Python code lives in the container.
+    local remoteRoot = vim.env.DAP_PYTHON_REMOTE_ROOT or '/app'
+
+    local pythonAttachConfig = {
+      type = 'python',
+      request = 'attach',
+      connect = {
+        port = portnr,
+        host = host,
+      },
+      mode = 'remote',
+      name = 'Remote Attached Debugger',
+      cwd = vim.fn.getcwd(),
+      pathMappings = {
+        {
+          localRoot = localRoot,
+          remoteRoot = remoteRoot,
+        },
+      },
+    }
+    local session = dap.attach(host, portnr, pythonAttachConfig)
+    if session == nil then
+      io.write 'Error launching adapter'
+    end
+  end
+
+  vim.keymap.set('n', '<leader>rd', attach_python, { noremap = true, desc = 'attach to python' })
   nlua()
   dapui()
 end
