@@ -27,10 +27,15 @@ local try_bufdel = function()
   local is_curr_buf_modifiable = vim.api.nvim_buf_get_option(0, 'modifiable')
 
   -- this helps to close "support" windows e.g. the ones from `vim.lsp.buf.references`
-  if is_curr_buf_modifiable == false then
+  if not is_curr_buf_modifiable then
     vim.cmd [[ q ]]
   else
-    vim.cmd [[ BufDel ]]
+    local ok = pcall(vim.cmd, 'BufDel')
+    -- when it fails, it's assumed that it's something like Luapad that doesn't work very well with BufDel
+    -- so fall back to `bd!` instead
+    if not ok then
+      vim.cmd [[ bd! ]]
+    end
   end
 end
 

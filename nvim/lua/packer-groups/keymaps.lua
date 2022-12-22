@@ -88,6 +88,7 @@ return {
         r = {
           name = '+Run/Debug',
         },
+        l = { cmdify 'Luapad', 'open Luapad' },
       }, { prefix = '<leader>' })
 
       -- this actually wasn't working - comment out until I revisit
