@@ -212,9 +212,11 @@ return function()
   local attach_keymap = function()
     local attach_to_debuggee = function()
       local ft = vim.bo.filetype
+      local allowList = { javascript = true, typescript = true, lua = true }
+
       if ft == 'python' then
         attach_python()
-      elseif ft == 'javascript' or ft == 'typescript' then
+      elseif allowList[ft] then
         -- currently only assume it's node
         local dap = require 'dap'
         -- dap.continue will trigger adapter and debugger to be active
