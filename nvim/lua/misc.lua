@@ -74,6 +74,17 @@ vim.api.nvim_create_autocmd('FileType', {
   group = helpGrp,
 })
 
+-- always maximize the window for help buffer when help buffer is focused
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = '*',
+  callback = function()
+    if vim.bo.filetype == 'help' then
+      vim.cmd [[ WindowsMaximize ]]
+    end
+  end,
+  group = helpGrp,
+})
+
 -- giving option to ignore this since the logic doesn't handle
 -- +[linenumber] arg on startup
 -- so use it like `my_nvim_forget_line_number=1 nvim +10 filename`
