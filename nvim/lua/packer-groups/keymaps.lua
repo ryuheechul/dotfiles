@@ -156,6 +156,7 @@ return {
           g = { require('gfold').pick_repo, 'pick repo via gfold' },
           n = { cmdify 'Neogit', 'open Neogit' },
           r = { cmdify 'Gcd', 'go to git root' },
+          x = { cmdify 'GBrowse', 'open file in browser' },
         },
         p = {
           name = '+Packer',
