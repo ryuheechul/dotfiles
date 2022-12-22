@@ -150,6 +150,9 @@ return function()
       })
     end
 
+    -- Except the ones that has special meaning to nvim-dap, the rest will be passed directly to adapters. Visit the links below
+    -- https://github.com/mfussenegger/nvim-dap/blob/6f2ea9e33b48a51849ec93c6c38148a5372018e4/lua/dap/session.lua#L1519
+    -- https://github.com/mfussenegger/nvim-dap/blob/6f2ea9e33b48a51849ec93c6c38148a5372018e4/lua/dap/session.lua#L1452
     local config = {
       type = 'python',
       request = 'attach',
@@ -169,13 +172,67 @@ return function()
 
     local session = dap.attach(adapter, config)
     if session == nil then
-      io.write 'Error launching adapter'
+      io.write 'Error attaching adapter'
     end
   end
 
-  vim.keymap.set('n', '<leader>ra', attach_python, { noremap = true, desc = 'attach to python' })
+  local setup_vscode_js = function()
+    -- debugger_path is relying on ../debug.lua to install it
+    require('dap-vscode-js').setup {
+      -- node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
+      -- debugger_path = "(runtimedir)/site/pack/packer/opt/vscode-js-debug", -- Path to vscode-js-debug installation.
+      -- debugger_cmd = { "js-debug-adapter" }, -- Command to use to launch the debug server. Takes precedence over `node_path` and `debugger_path`.
+      adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
+      -- log_file_path = "(stdpath cache)/dap_vscode_js.log" -- Path for file logging
+      -- log_file_level = false -- Logging level for output to file. Set to false to disable file logging.
+      -- log_console_level = vim.log.levels.ERROR -- Logging level for output to console. Set to false to disable console output.
+    }
+
+    -- add path for container if applicable, skip this if it's in the same host
+    local remoteRoot = vim.env.DAP_NODEJS_REMOTE_ROOT or '${workspaceFolder}'
+
+    -- currently this works as expected for docker containers that expose port to 9229
+    -- this is a bit different from an example from https://github.com/mxsdev/nvim-dap-vscode-js
+    -- I frankly have no idea why this works clearly yet but hooray it works!
+    local attachConfig = {
+      type = 'pwa-node',
+      request = 'attach',
+      name = 'Attach',
+      localRoot = '${workspaceFolder}',
+      remoteRoot = remoteRoot,
+    }
+
+    for _, language in ipairs { 'typescript', 'javascript' } do
+      require('dap').configurations[language] = {
+        -- skipping setting a config for launch (file) as I'm currently not using that
+        attachConfig,
+      }
+    end
+  end
+
+  local attach_keymap = function()
+    local attach_to_debuggee = function()
+      local ft = vim.bo.filetype
+      if ft == 'python' then
+        attach_python()
+      elseif ft == 'javascript' or ft == 'typescript' then
+        -- currently only assume it's node
+        local dap = require 'dap'
+        -- dap.continue will trigger adapter and debugger to be active
+        -- also relying on setup_vscode_js for adapters to be setup
+        dap.continue()
+      else
+        print('current there is no support for ' .. ft .. ' file type')
+      end
+    end
+
+    vim.keymap.set('n', '<leader>ra', attach_to_debuggee, { noremap = true, desc = 'attach to debuggee' })
+  end
+
   nlua()
   dapui()
+  setup_vscode_js()
+  attach_keymap()
   require('nvim-dap-virtual-text').setup()
 
   layer_keys()
