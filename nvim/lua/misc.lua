@@ -65,11 +65,13 @@ vim.api.nvim_create_autocmd('BufReadPost', {
 -- fix key maps on help buffer so it works like `less`
 local helpGrp = vim.api.nvim_create_augroup('MyHelpAUG', { clear = true })
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'help',
+  -- for now, including `checkhealth` and `qf` (for e.g. `gd` and `gr`) too
+  pattern = { 'help', 'checkhealth', 'qf' },
   callback = function()
     -- nowait only works with buffer mapping
     vim.keymap.set('n', 'd', '<C-d>', { noremap = true, silent = true, buffer = true, nowait = true })
     vim.keymap.set('n', 'b', '<C-b>', { noremap = true, silent = true, buffer = true, nowait = true })
+    vim.keymap.set('n', '<Esc>', require 'utils.my-smart-quit', { noremap = true, silent = true, buffer = true })
   end,
   group = helpGrp,
 })
