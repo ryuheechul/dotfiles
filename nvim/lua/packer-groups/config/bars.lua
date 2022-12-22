@@ -55,6 +55,7 @@ return function()
         { 'filename' },
       },
       lualine_b = {
+        { require('utils.keymap-layer').get_summary, cond = require('utils.keymap-layer').determine_active },
         { navic.get_location, cond = navic.is_available },
       },
     }

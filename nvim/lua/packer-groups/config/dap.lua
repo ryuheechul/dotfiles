@@ -25,8 +25,6 @@ return function()
     end, { noremap = true, desc = 'DAP OSV launch' })
 
     -- for debugger - Neovim instance B that will debug instance A
-    vim.keymap.set('n', '<leader>rh', require('dap.ui.widgets').hover, { noremap = true, desc = 'DAP hover' })
-
     -- rely most of dap commands via Telescope instead of keybindings - currently it's mapped to <space>fd
     -- also with quick_debug keymap layer
   end
@@ -94,13 +92,14 @@ return function()
     local quick_debug = KeyLayer {
       enter = {},
       layer = {
-        { m, 't', dap.toggle_breakpoint, { noremap = true, desc = 'DAP toggle breakpoints' } },
-        { m, 'i', dap.step_into, { noremap = true, desc = 'DAP step into' } },
-        { m, 'o', dap.step_out, { noremap = true, desc = 'DAP step out' } },
-        { m, 'n', dap.step_over, { noremap = true, desc = 'DAP step over' } },
-        { m, 'p', dap.step_back, { noremap = true, desc = 'DAP step back' } },
-        { m, 'c', dap.continue, { noremap = true, desc = 'DAP continue' } },
-        { m, 'q', dap.continue, { noremap = true, desc = 'DAP continue' } },
+        { m, 'p', require('dap.ui.widgets').hover, { noremap = true, desc = 'hover' } },
+        { m, 't', dap.toggle_breakpoint, { noremap = true, desc = 'tgl breakpoints' } },
+        { m, 'i', dap.step_into, { noremap = true, desc = 'step into' } },
+        { m, 'o', dap.step_out, { noremap = true, desc = 'step out' } },
+        { m, 'n', dap.step_over, { noremap = true, desc = 'step over' } },
+        { m, 'p', dap.step_back, { noremap = true, desc = 'step back' } },
+        { m, 'c', dap.continue, { noremap = true, desc = 'continue' } },
+        { m, 'q', dap.continue, { noremap = true, desc = 'continue' } },
       },
       exit = {},
       config = {
