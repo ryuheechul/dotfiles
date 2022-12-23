@@ -12,9 +12,27 @@ return function()
           'dapui_scopes',
           'dapui_console',
         },
+        statusline = {},
       },
     },
     sections = {
+      lualine_c = {
+        {
+          require('gitblame').get_current_blame_text,
+          cond = function()
+            local ft = vim.bo.filetype
+            local ignored_fts = vim.g.gitblame_ignored_filetypes
+
+            for _, ignored_ft in ipairs(ignored_fts) do
+              if ft == ignored_ft then
+                return false
+              end
+            end
+
+            return require('gitblame').is_blame_text_available()
+          end,
+        },
+      },
       lualine_x = {
         -- opening lua file makes lsp work, if I `:PackerCompile` during that time I get an error below
         --[[

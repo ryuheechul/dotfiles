@@ -257,6 +257,22 @@ return {
       'MunifTanjim/nui.nvim',
     },
   },
+  { -- Git Blame plugin for Neovim written in Lua
+    'f-person/git-blame.nvim',
+    config = function()
+      -- initially don't show with virtual text
+      vim.g.gitblame_display_virtual_text = 0
+      vim.g.gitblame_ignored_filetypes = { 'gitcommit' }
+      -- toggle virtual text
+      vim.keymap.set('n', '<space>gb', function()
+        if vim.g.gitblame_display_virtual_text == 0 then
+          vim.g.gitblame_display_virtual_text = 1
+        else
+          vim.g.gitblame_display_virtual_text = 0
+        end
+      end, { silent = true, noremap = true, desc = 'toggle git blame virtual text' })
+    end,
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et

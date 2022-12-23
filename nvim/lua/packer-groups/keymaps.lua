@@ -161,7 +161,10 @@ return {
         },
         g = {
           name = '+Git',
-          b = { cmdify 'Git blame', 'toggle git blame' },
+          b = {
+            name = '+Blame',
+            b = { cmdify 'Git blame', 'toggle git blame pane' },
+          },
           d = { cmdify 'DiffviewOpen', 'show git diff' },
           g = { require('gfold').pick_repo, 'pick repo via gfold' },
           n = { cmdify 'Neogit', 'open Neogit' },
