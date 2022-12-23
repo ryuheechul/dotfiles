@@ -55,7 +55,21 @@ return function()
         { 'filename' },
       },
       lualine_b = {
-        { require('utils.keymap-layer').get_summary, cond = require('utils.keymap-layer').determine_active },
+        { require('utils.keymap-layer-info').get_summary, cond = require('utils.keymap-layer-info').determine_active },
+        {
+          function()
+            local msg = '{}'
+            local status = require('dap').status()
+            if status and string.len(status) > 0 then
+              msg = msg .. ' ' .. status
+            end
+            return msg
+          end,
+          cond = function()
+            local is_session_active = not not require('dap').session()
+            return is_session_active
+          end,
+        },
         { navic.get_location, cond = navic.is_available },
       },
     }

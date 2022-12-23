@@ -26,10 +26,10 @@ return function()
 
     -- for debugger - Neovim instance B that will debug instance A
     -- rely most of dap commands via Telescope instead of keybindings - currently it's mapped to <space>fd
-    -- also with quick_debug keymap layer
+    -- also quick_debug keymap layer supports even quicker interactions with debugger
   end
 
-  local dapui = function()
+  local setup_dapui = function()
     local dap, dapui = require 'dap', require 'dapui'
     dapui.setup {
       -- since I don't want repl to be there due to ungraceful workflow I override `layouts` to get rid of it
@@ -71,25 +71,48 @@ return function()
       },
     }
 
-    dap.listeners.after.event_initialized['dapui_config'] = function()
+    local dapui_event_id = 'my_dapui_config'
+
+    local before = dap.listeners.before
+    local after = dap.listeners.after
+
+    after.event_initialized[dapui_event_id] = function(--[[ session, body ]])
       dapui.open()
     end
-    dap.listeners.before.event_terminated['dapui_config'] = function()
+
+    after.event_stopped[dapui_event_id] = function()
+      dapui.open()
+    end
+
+    before.event_terminated[dapui_event_id] = function()
       dapui.close()
     end
-    dap.listeners.before.event_exited['dapui_config'] = function()
+
+    before.event_exited[dapui_event_id] = function()
       dapui.close()
     end
 
     vim.keymap.set('n', '<leader>ru', dapui.toggle, { noremap = true, desc = 'DAP UI toggle' })
+
+    local dapGrp = vim.api.nvim_create_augroup('MyDAPAUG', { clear = true })
+    -- although `quit_debug` could do the same but there is no guarantee so this is an insurance
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = { 'dapui_*' },
+      callback = function()
+        vim.keymap.set('n', 'q', function()
+          require('dapui').close()
+        end, { noremap = true, silent = true, buffer = true, desc = 'close dap-ui' })
+      end,
+      group = dapGrp,
+    })
   end
 
   local layer_keys = function()
     local dap = require 'dap'
     local KeyLayer = require 'keymap-layer'
-
     local m = { 'n' } -- modes
-    local quick_debug = KeyLayer {
+
+    local quick_debug_kl = KeyLayer {
       enter = {},
       layer = {
         { m, 'p', require('dap.ui.widgets').hover, { noremap = true, desc = 'hover' } },
@@ -99,25 +122,67 @@ return function()
         { m, 'n', dap.step_over, { noremap = true, desc = 'step over' } },
         { m, 'p', dap.step_back, { noremap = true, desc = 'step back' } },
         { m, 'c', dap.continue, { noremap = true, desc = 'continue' } },
-        { m, 'q', dap.continue, { noremap = true, desc = 'continue' } },
+        { m, 'q', dap.disconnect, { noremap = true, desc = 'disconnect' } },
       },
       exit = {},
       config = {
         on_enter = function()
           print 'Enter quick debug layer'
-          -- vim.bo.modifiable = false
         end,
         on_exit = function()
           print 'Exit quick debug layer'
         end,
       },
     }
-    -- my_dap_kb: my dap keybindings
-    dap.listeners.after.event_stopped['my_dap_kb'] = function(--[[ session, body ]])
-      quick_debug:activate()
+
+    local smart_quit_debug = function()
+      local ft = vim.bo.filetype
+      if ft:match '^dapui_.*' then
+        require('dapui').close()
+      else
+        dap.disconnect()
+      end
     end
-    dap.listeners.after.event_continued['my_dap_kb'] = function(--[[ session, body ]])
-      quick_debug:exit()
+
+    -- to prevent file buffer to close and disconnect dap instead
+    local quit_debug_kl = KeyLayer {
+      enter = {},
+      layer = {
+        { m, 'q', smart_quit_debug, { noremap = true, desc = 'disconnect' } },
+      },
+      exit = {},
+      config = {
+        on_enter = function()
+          print 'Enter quit debug layer'
+        end,
+        on_exit = function()
+          print 'Exit quit debug layer'
+        end,
+      },
+    }
+
+    local dap_event_id = 'my_dap_kb'
+
+    local after = dap.listeners.after
+
+    after.event_initialized[dap_event_id] = function(--[[ session, body ]])
+      quit_debug_kl:activate()
+      quick_debug_kl:activate()
+    end
+    after.event_terminated[dap_event_id] = function()
+      quick_debug_kl:exit()
+      quit_debug_kl:exit()
+    end
+    after.event_exited[dap_event_id] = function()
+      quick_debug_kl:exit()
+      quit_debug_kl:exit()
+    end
+
+    after.event_stopped[dap_event_id] = function()
+      quick_debug_kl:activate()
+    end
+    after.event_continued[dap_event_id] = function()
+      quick_debug_kl:exit()
     end
   end
 
@@ -231,7 +296,7 @@ return function()
   end
 
   nlua()
-  dapui()
+  setup_dapui()
   setup_vscode_js()
   attach_keymap()
   require('nvim-dap-virtual-text').setup()
