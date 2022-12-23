@@ -241,6 +241,8 @@ return function()
   end
 
   local setup_vscode_js = function()
+    -- one thing to note vscode-js-debug itself works as a server with an address and a port while it attaches to nodejs process via host:port
+    -- and dap-vscode-js handles to run and connecting to vscode-js-debug server
     -- debugger_path is relying on ../debug.lua to install it
     require('dap-vscode-js').setup {
       -- node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
@@ -254,16 +256,21 @@ return function()
 
     -- add path for container if applicable, skip this if it's in the same host
     local remoteRoot = vim.env.DAP_NODEJS_REMOTE_ROOT or '${workspaceFolder}'
+    local host = vim.env.DAP_NODEJS_REMOTE_HOST or 'localhost'
+    local port = vim.env.DAP_NODEJS_REMOTE_PORT or '9229'
 
-    -- currently this works as expected for docker containers that expose port to 9229
-    -- this is a bit different from an example from https://github.com/mxsdev/nvim-dap-vscode-js
-    -- I frankly have no idea why this works clearly yet but hooray it works!
+    -- options should match with the ones from:
+    -- - https://github.com/microsoft/vscode-js-debug/blob/3477c7fe738e3ae5fc176f2e939c21d0cc703b8f/src/configuration.ts#L268
+    -- - https://github.com/microsoft/vscode-js-debug/blob/3477c7fe738e3ae5fc176f2e939c21d0cc703b8f/src/configuration.ts#L512
+    -- except possibly `type`, `name` that is for dap plugin
     local attachConfig = {
       type = 'pwa-node',
       request = 'attach',
       name = 'Attach',
       localRoot = '${workspaceFolder}',
       remoteRoot = remoteRoot,
+      port = port,
+      address = host,
     }
 
     for _, language in ipairs { 'typescript', 'javascript' } do
