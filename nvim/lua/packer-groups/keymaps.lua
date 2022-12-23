@@ -7,8 +7,8 @@
 -- vim.g.gutentags_ctags_tagfile = '.git/gutentags'
 
 -- because `zhou13/vim-easyescape` is too slow on startup
-vim.keymap.set('i', 'jk', '<Esc>', { noremap = true, silent = true })
-vim.keymap.set('n', '<Tab>', '<Cmd>wincmd w<CR>', { noremap = true, silent = true })
+vim.keymap.set('i', 'jk', '<Esc>', { noremap = true, silent = true, desc = 'shortcut to <Esc>' })
+vim.keymap.set('n', '<Tab>', '<Cmd>wincmd w<CR>', { noremap = true, silent = true, desc = 'go to next window' })
 
 --- disabling this as this interfered with something like `>ap`
 --- and the original purpose wasn't working as intended either anyway
@@ -17,14 +17,14 @@ vim.keymap.set('n', '<Tab>', '<Cmd>wincmd w<CR>', { noremap = true, silent = tru
 -- vim.keymap.set('n', '<', '<<', { noremap = true })
 
 -- stay in visual mode after indentation in visual mode
-vim.keymap.set('v', '>', '>gv', { noremap = true })
-vim.keymap.set('v', '<', '<gv', { noremap = true })
+vim.keymap.set('v', '>', '>gv', { noremap = true, desc = 'indent to >' })
+vim.keymap.set('v', '<', '<gv', { noremap = true, desc = 'indent to <' })
 
 -- replace builtin spell suggestions - see `:h z=`
-vim.keymap.set('n', 'z=', require('telescope.builtin').spell_suggest, { noremap = true })
+vim.keymap.set('n', 'z=', require('telescope.builtin').spell_suggest, { noremap = true, desc = 'fix spelling' })
 
 -- q to close in a smart way
-vim.keymap.set('n', 'q', require 'utils.my-smart-quit', { noremap = true })
+vim.keymap.set('n', 'q', require 'utils.my-smart-quit', { noremap = true, desc = 'quit smarter' })
 
 -- -- Remap space as leader key - comment out since I'm not sure what this really does for me
 -- vim.keymap.set('', '<Space>', '<Nop>', { noremap = true, silent = true })
@@ -32,14 +32,24 @@ vim.keymap.set('n', 'q', require 'utils.my-smart-quit', { noremap = true })
 -- vim.g.maplocalleader = ' '
 
 -- Remap for dealing with word wrap
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { noremap = true, expr = true, silent = true })
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { noremap = true, expr = true, silent = true })
+vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", {
+  noremap = true,
+  expr = true,
+  silent = true,
+  desc = 'to work better with word wrap',
+})
+vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", {
+  noremap = true,
+  expr = true,
+  silent = true,
+  desc = 'to work better with word wrap',
+})
 
 -- Y yank until the end of line
-vim.keymap.set('n', 'Y', 'y$', { noremap = true })
+vim.keymap.set('n', 'Y', 'y$', { noremap = true, desc = 'yank until the end of line' })
 
 -- , to repeat last normal command - https://stackoverflow.com/a/4789842/1570165
-vim.keymap.set('n', ',', '@:<CR>', { noremap = true })
+vim.keymap.set('n', ',', '@:<CR>', { noremap = true, desc = 'repeat last normal command' })
 
 --- yup these above should go into which key one day definitely!
 
