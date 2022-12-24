@@ -52,6 +52,9 @@ return function(setup_default)
   local setup_sumneko_lua = merge(setup_default, {
     settings = {
       Lua = {
+        runtime = {
+          version = 'LuaJIT',
+        },
         diagnostics = {
           -- Get the language server to recognize the `vim` global
           globals = { 'vim' },
