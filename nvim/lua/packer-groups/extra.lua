@@ -155,6 +155,8 @@ return {
       }
 
       require('alpha').setup(theta_config)
+
+      require('utils.packer-auto-compile').wakup_alpha_if_applicable()
     end,
   },
   { -- prevents the contents being cramped on windows's open/close event

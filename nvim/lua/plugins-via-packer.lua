@@ -32,30 +32,20 @@ local groups = {
   },
 }
 
-local function _values(t) -- via https://stackoverflow.com/a/39991824/1570165
-  local i = 0
-  return function()
-    i = i + 1
-    return t[i]
-  end
-end
+local pac = require 'utils.packer-auto-compile'
 
-local load_plugins = function(use)
-  for group in _values(groups) do
-    for plugin in _values(group) do
-      use(plugin)
-    end
-  end
-end
+-- since lua cache loaded function's content it's not easy to load this function itself with autocmd without loading the whole file which is inefficient
+-- so for now restarting the nvim the best way to change the behaviour of this function
+pac.setup_autocompile()
 
 return require('packer').startup {
   function(use)
-    load_plugins(use)
+    pac.load_plugins(use, groups)
 
-    -- Automatically set up your configuration after cloning packer.nvim
-    -- Put this at the end after all plugins
     if packer_bootstrap then
       require('packer').sync()
+    else
+      pac.compile_on_start_up_if_necessary()
     end
   end,
   config = {

@@ -6,7 +6,7 @@ return {
   -- local t2 = { a = 1, c = 3 }
   --
   -- print(
-  -- merge(t1,t2)
+  --   merge(t1,t2) -- basically same as vim.tbl_extend("force",a,b)
   -- )
   --
   -- -- this will not work very well with dict-array-mixed-tables
