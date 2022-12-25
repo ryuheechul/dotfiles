@@ -11,28 +11,14 @@ local ensure_packer = function()
 end
 
 local packer_bootstrap = ensure_packer()
+local pac = require 'utils.packer-auto-compile'
 
 local groups = {
   { -- packer itself
     'wbthomason/packer.nvim', -- Package manager
   },
-  require 'packer-groups.system',
-  require 'packer-groups.theme',
-  require 'packer-groups.git',
-  require 'packer-groups.editing',
-  require 'packer-groups.syntax',
-  require 'packer-groups.lsp',
-  require 'packer-groups.completion',
-  require 'packer-groups.debug',
-  require 'packer-groups.extra',
-  require 'packer-groups.keymaps',
-  { -- leftovers
-    -- comment since it creates more issue than a help for my usage
-    -- 'ludovicchabant/vim-gutentags' -- Automatic tags management
-  },
+  unpack(pac.require_groups()),
 }
-
-local pac = require 'utils.packer-auto-compile'
 
 -- since lua cache loaded function's content it's not easy to load this function itself with autocmd without loading the whole file which is inefficient
 -- so for now restarting the nvim the best way to change the behaviour of this function
@@ -44,8 +30,6 @@ return require('packer').startup {
 
     if packer_bootstrap then
       require('packer').sync()
-    else
-      pac.compile_on_start_up_if_necessary()
     end
   end,
   config = {

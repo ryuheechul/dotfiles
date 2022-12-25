@@ -73,6 +73,10 @@ return function()
 
   -- delegate server specific setup to lsp-servers
   local servers = require 'packer-groups.config.lsp-servers' (setup_default)
+  -- this is to prevent the old server with stale config to keep running
+  -- to play nice with ../../utils/packer-auto-compile.lua
+  -- also wrap with `pcall` since the first time there is no this cmd is available.
+  pcall(vim.cmd.LspStop)
 
   local lspconfig = require 'lspconfig'
   for server, setup in pairs(servers) do
