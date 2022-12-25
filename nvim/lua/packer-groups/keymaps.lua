@@ -166,7 +166,7 @@ return {
             b = { cmdify 'Git blame', 'toggle git blame pane' },
           },
           d = { cmdify 'DiffviewOpen', 'show git diff' },
-          g = { require('gfold').pick_repo, 'pick repo via gfold' },
+          -- g = { require('gfold').pick_repo, 'pick repo via gfold' },
           n = { cmdify 'Neogit', 'open Neogit' },
           r = { cmdify 'Gcd', 'go to git root' },
           x = { cmdify 'GBrowse', 'open file in browser' },

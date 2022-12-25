@@ -3,7 +3,10 @@
 
 -- to improve startup time
 -- this doesn't fail when `impatient` doesn't exist yet while `require 'impatient'` fails
-pcall(require, 'impatient')
+local ok, impaitent = pcall(require, 'impatient')
+if ok and vim.env.NVIM_CACHE_PROFILE ~= nil then
+  impaitent.enable_profile()
+end
 
 -- via ./lua
 require 'plugins-via-packer'

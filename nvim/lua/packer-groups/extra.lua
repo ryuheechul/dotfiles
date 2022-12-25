@@ -227,6 +227,9 @@ return {
   'stevearc/dressing.nvim', -- basically does the same thing as `nvim-telescope/telescope-ui-select.nvim`
   { -- using gfold to switch repo and have statusline component
     'AckslD/nvim-gfold.lua',
+    -- because I'm not really using it yet and it makes big difference on start up for some reason
+    -- so until I start using it I will defer optimizing this plugin at start up
+    opt = true,
     config = function()
       require('gfold').setup()
     end,

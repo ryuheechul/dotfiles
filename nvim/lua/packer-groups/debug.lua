@@ -17,7 +17,15 @@ return {
       }
     end,
   },
-  { 'michaelb/sniprun', run = 'bash ./install.sh' },
+  {
+    'michaelb/sniprun',
+    run = 'bash ./install.sh',
+    opt = true,
+    -- until there is more update on https://github.com/michaelb/sniprun/issues/54
+    cond = function()
+      return vim.fn.has 'linux' == 1
+    end,
+  },
   -- maybe one day this becomes useful
   -- { 'rcarriga/vim-ultest', requires = { 'vim-test/vim-test' }, run = ':UpdateRemotePlugins' },
   {

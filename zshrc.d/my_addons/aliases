@@ -182,10 +182,16 @@ alias pathnvimpacker='echo "~/.local/share/nvim/site/pack/packer" | pbcopy ; pbp
 alias vim="nvim"
 alias vi="vim"
 
+_dotfilepath="$(readlink -f ~/.config/dfs-rhc)"
+_perflogpath="${_dotfilepath}/.perf.log"
 ## special modes
 # start neovim purely without any plugins loaded
 alias vip='vi -u NONE'
-# start neovim to profile
+# measure startup time
+alias vips="rm -f ${_perflogpath} && vi --startuptime ${_perflogpath} ${_perflogpath}"
+# to enable LuaCacheProfile
+alias cim='NVIM_CACHE_PROFILE=1 vi'
+# start neovim to profile interactively
 alias pim='NVIM_PROFILE=1 vi'
 # neovim with ghost
 alias vig='my_nvim_ghost=1 vi'
