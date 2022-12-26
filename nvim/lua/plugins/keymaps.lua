@@ -178,9 +178,11 @@ M.plugins = {
         },
         l = {
           name = '+Lazy',
+          l = { cmdify 'Lazy', 'run :Lazy' },
+          p = { cmdify 'Lazy profile', 'run :Lazy profile' },
           i = { cmdify 'Lazy install', 'run :Lazy install' },
-          s = { cmdify 'Lazy sync', 'run :Lazy sync' },
           u = { cmdify 'Lazy update', 'run :Lazy update' },
+          s = { cmdify 'Lazy sync', 'run :Lazy sync' },
         },
         s = {
           name = '+Searching/Symbol',

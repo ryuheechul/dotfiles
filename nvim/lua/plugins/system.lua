@@ -140,6 +140,7 @@ return {
       'nvim-tree/nvim-web-devicons',
       'SmiteshP/nvim-navic', -- Simple winbar/statusline plugin that shows your current code context
     },
+    event = 'FocusGained',
     config = require 'plugins.config.bars',
   },
   { -- A lua profiler for neovim that is discovered thanks to https://www.reddit.com/r/neovim/comments/xicxox/comment/ip2hprd

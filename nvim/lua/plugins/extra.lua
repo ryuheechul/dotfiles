@@ -155,8 +155,10 @@ return {
         button('i', '  New file', '<cmd>ene<CR>'),
         button('SPC f f', '  Find file'),
         button('SPC f g', '  Live grep'),
-        button('lu', '  Update plugins', '<cmd>Lazy update<CR>'),
+        button('ll', '  Install plugins', '<cmd>Lazy<CR>'),
+        button('lp', '  Install plugins', '<cmd>Lazy profile<CR>'),
         button('li', '  Install plugins', '<cmd>Lazy install<CR>'),
+        button('lu', '  Update plugins', '<cmd>Lazy update<CR>'),
         button('q', '  Quit'),
       }
 
