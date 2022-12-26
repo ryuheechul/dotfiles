@@ -1,5 +1,5 @@
 -- to bridge between keymap-layer and winbar on lualine
--- usage: `{ require('utils.keymap-layer').get_summary, cond = require('utils.keymap-layer').determine_active }`
+-- usage: `{ require('utils.keymap-layer').get_summary, enabled = require('utils.keymap-layer').determine_active }`
 return {
   determine_active = function()
     local activelayer = _G.active_keymap_layer

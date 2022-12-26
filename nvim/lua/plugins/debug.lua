@@ -22,7 +22,7 @@ return {
     build = 'bash ./install.sh',
     lazy = true,
     -- until there is more update on https://github.com/michaelb/sniprun/issues/54
-    cond = function()
+    enabled = function()
       return vim.fn.has 'linux' == 1
     end,
   },

@@ -21,7 +21,7 @@ return {
         'tzachar/cmp-tabnine',
         build = './install.sh',
         dependencies = 'hrsh7th/nvim-cmp',
-        cond = function()
+        enabled = function()
           return vim.env.my_nvim_tabnine ~= nil
         end,
       },
