@@ -103,7 +103,7 @@ return {
   { -- https://github.com/fregante/GhostText
     'subnut/nvim-ghost.nvim',
     build = ':call nvim_ghost#installer#install()',
-    enabled = function()
+    cond = function()
       return vim.env.my_nvim_ghost ~= nil
     end,
   },
