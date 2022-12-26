@@ -5,6 +5,9 @@ local M = {}
 -- this should be a function (not a variable) so it re-requires when needed
 function M.require_groups()
   return {
+    { -- packer itself
+      'wbthomason/packer.nvim', -- Package manager
+    },
     require 'packer-groups.system',
     require 'packer-groups.theme',
     require 'packer-groups.git',
@@ -30,6 +33,8 @@ local myvimrc_dir = vim.fs.dirname(vim.env.MYVIMRC)
 local things_to_be_compiled_via_packer = myvimrc_dir .. '/lua/packer-groups/*'
 
 function M.reload_packer_group_for()
+  vim.cmd [[doautocmd User MyPackerAutoCompilePre]]
+
   for module, _ in pairs(package.loaded) do
     -- only need to invalidate my modules related to package setups
     if module:match '^packer%-groups%.' then
@@ -54,10 +59,13 @@ end
 -- - https://github.com/wbthomason/packer.nvim/issues/955
 function M.setup_autocompile()
   local packer_group = vim.api.nvim_create_augroup('MyPackerAG', { clear = true })
+
+  local debounced_callback = require('throttle-debounce').throttle_leading(function()
+    M.reload_packer_group_for()
+  end, 500)
+
   vim.api.nvim_create_autocmd('BufWritePost', {
-    callback = function()
-      M.reload_packer_group_for()
-    end,
+    callback = debounced_callback,
     group = packer_group,
     pattern = {
       things_to_be_compiled_via_packer,

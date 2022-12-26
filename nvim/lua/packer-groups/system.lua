@@ -137,6 +137,9 @@ return {
     'stevearc/profile.nvim',
     config = require 'packer-groups.config.profile',
   },
+  { -- Functions that allow you to call a function not more than once in a given timeframe.
+    'ryuheechul/throttle-debounce.nvim', -- use my fork until this PR gets merged - https://github.com/runiq/neovim-throttle-debounce/pull/1
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et

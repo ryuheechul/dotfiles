@@ -13,20 +13,13 @@ end
 local packer_bootstrap = ensure_packer()
 local pac = require 'utils.packer-auto-compile'
 
-local groups = {
-  { -- packer itself
-    'wbthomason/packer.nvim', -- Package manager
-  },
-  unpack(pac.require_groups()),
-}
-
 -- since lua cache loaded function's content it's not easy to load this function itself with autocmd without loading the whole file which is inefficient
 -- so for now restarting the nvim the best way to change the behaviour of this function
 pac.setup_autocompile()
 
 return require('packer').startup {
   function(use)
-    pac.load_plugins(use, groups)
+    pac.load_plugins(use, pac.require_groups())
 
     if packer_bootstrap then
       require('packer').sync()

@@ -73,11 +73,6 @@ return function()
 
   -- delegate server specific setup to lsp-servers
   local servers = require 'packer-groups.config.lsp-servers' (setup_default)
-  -- this is to prevent the old server with stale config to keep running
-  -- to play nice with ../../utils/packer-auto-compile.lua
-  -- also wrap with `pcall` since the first time there is no this cmd is available.
-  pcall(vim.cmd.LspStop)
-
   local lspconfig = require 'lspconfig'
   for server, setup in pairs(servers) do
     lspconfig[server].setup(setup)
@@ -89,6 +84,23 @@ return function()
   require('lsp_signature').setup {
     floating_window = false, -- to let 'hrsh7th/cmp-nvim-lsp-signature-help' to overtake
   }
+
+  -- autostart of lspconfig doesn't allow more servers to running without cleaning up old ones
+  -- so we make sure to stop the old one first
+  local setup_autostart_shim = function()
+    local lsp_group = vim.api.nvim_create_augroup('MyLspAG', { clear = true })
+    vim.api.nvim_create_autocmd('User', {
+      callback = function(args)
+        if args.file == 'MyPackerAutoCompilePre' then
+          print 'packer-auto-compile.compile has been triggered'
+          vim.cmd.LspStop()
+        end
+      end,
+      group = lsp_group,
+    })
+  end
+
+  setup_autostart_shim()
 end
 
 -- vim: ts=2 sts=2 sw=2 et

@@ -2,7 +2,12 @@
 
 return {
   'lewis6991/impatient.nvim', -- Improve startup time for Neovim
-  'tpope/vim-scriptease', -- A Vim plugin for Vim plugins `:Verbose` will be useful
+  { -- A Vim plugin for Vim plugins `:Verbose` will be useful
+    'tpope/vim-scriptease',
+    config = function()
+      vim.keymap.set('n', '<space>fm', [[:Messages<CR>]], { noremap = true, silent = true, desc = '' })
+    end,
+  },
   { -- highlights headlines for markdown like files
     'lukas-reineke/headlines.nvim',
     config = function()
@@ -78,7 +83,7 @@ return {
     config = function()
       require('open').setup {}
       -- to open file instead, do `gf`
-      vim.keymap.set('n', 'gx', require('open').open_cword)
+      vim.keymap.set('n', 'gx', require('open').open_cword, { noremap = true, silent = true, desc = 'open cword' })
 
       local jira_url = 'https://jira.atlassian.com/browse/'
       if vim.env.my_nvim_jira_url ~= nil then
