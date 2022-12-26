@@ -5,7 +5,7 @@ return {
   {
     'folke/trouble.nvim', -- `:Trouble` to show current troubles in the buffer
     -- these are actually optional but I require to get benefits of them
-    requires = {
+    dependencies = {
       'nvim-tree/nvim-web-devicons',
       'folke/lsp-colors.nvim',
     },
@@ -19,22 +19,22 @@ return {
   },
   {
     'michaelb/sniprun',
-    run = 'bash ./install.sh',
-    opt = true,
+    build = 'bash ./install.sh',
+    lazy = true,
     -- until there is more update on https://github.com/michaelb/sniprun/issues/54
     cond = function()
       return vim.fn.has 'linux' == 1
     end,
   },
   -- maybe one day this becomes useful
-  -- { 'rcarriga/vim-ultest', requires = { 'vim-test/vim-test' }, run = ':UpdateRemotePlugins' },
+  -- { 'rcarriga/vim-ultest', dependencies = { 'vim-test/vim-test' }, build = ':UpdateRemotePlugins' },
   {
     'weilbith/nvim-code-action-menu', -- enables `:CodeActionMenu`
     cmd = 'CodeActionMenu',
   },
   { -- Debug Adapter Protocol client implementation for Neovim
     'mfussenegger/nvim-dap',
-    requires = {
+    dependencies = {
       'anuvyklack/keymap-layer.nvim', -- Create a key layer in Neovim
       'jbyuki/one-small-step-for-vimkind', -- Debug adapter for Neovim lua files (including plugins)
       'rcarriga/nvim-dap-ui', -- A UI for nvim-dap
@@ -42,18 +42,18 @@ return {
       'theHamsta/nvim-dap-virtual-text',
       { -- nvim-dap adapter for vscode-js-debug
         'mxsdev/nvim-dap-vscode-js',
-        requires = {
+        dependencies = {
           { -- The VS Code JavaScript debugger
             'microsoft/vscode-js-debug',
-            opt = true,
-            tag = 'v1.74.1',
+            lazy = true, -- since this is not a real plugin
+            version = 'v1.74.1',
             -- since it's not on npm registry, building directly borrowing power of nix-shell to satisfy dev dependencies
-            run = "nix-shell --command 'npm i --legacy-peer-deps && npm run compile' ~/.config/dfs-rhc/nvim/shell/shell.nix",
+            build = "nix-shell --command 'npm i --legacy-peer-deps && npm run compile' ~/.config/dfs-rhc/nvim/shell/shell.nix",
           },
         },
       },
     },
-    config = require 'packer-groups.config.dap',
+    config = require 'plugins.config.dap',
   },
 }
 

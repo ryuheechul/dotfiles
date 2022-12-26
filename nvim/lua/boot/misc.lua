@@ -54,14 +54,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = yankHighlightGrp,
 })
 
--- Maximize on git commit message editing
-local gitGrp = vim.api.nvim_create_augroup('MyGitAUG', { clear = true })
-vim.api.nvim_create_autocmd('BufReadPost', {
-  pattern = 'COMMIT_EDITMSG',
-  command = 'WindowsMaximize',
-  group = gitGrp,
-})
-
 -- fix key maps on help buffer so it works like `less`
 local helpGrp = vim.api.nvim_create_augroup('MyHelpAUG', { clear = true })
 vim.api.nvim_create_autocmd('FileType', {

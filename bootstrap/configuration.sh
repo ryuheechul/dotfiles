@@ -41,7 +41,7 @@ ln -sf "${this_repo_path}" ~/.config/dfs-rhc
 dfs_rhc="${HOME}/.config/dfs-rhc"
 
 # in case my bins are being used in the configuration step already
-# - one discovered usage is that `current-base16` is being used in ../nvim/lua/packer-groups/theme.lua
+# - one discovered usage is that `current-base16` is being used in ../nvim/lua/plugins/theme.lua
 export PATH="${dfs_rhc}/bin/discoverable:${PATH}"
 
 # source my gitconfig
@@ -130,7 +130,7 @@ ln -sf "${dfs_rhc}/nvim" ~/.config/nvim
 # trigger neovim plugins install via command line
 if [ -z "${SKIP_INSTALL_VIM_PLUGINS}" ]; then
   # since I'm not sure about this command to work very well and it's ok to fail for now anyway let it not cause disruption on failure
-  nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync' || true
+  nvim --headless "+Lazy! restore" +qa
   nvim --headless -c 'UpdateRemotePlugins' -c q || true
 fi
 

@@ -57,7 +57,7 @@ return function(setup_default)
         },
         diagnostics = {
           -- Get the language server to recognize the `vim` global
-          globals = { 'vim' },
+          globals = { 'vim', 'require' },
         },
       },
     },

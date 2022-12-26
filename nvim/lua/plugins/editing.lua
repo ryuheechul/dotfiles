@@ -9,7 +9,7 @@ return {
     -- <space>m - toggle
     -- <space>j - join
     -- <space>s - split (slow just because of <space>s is a prefix for other keys)
-    requires = { 'nvim-treesitter' },
+    dependencies = { 'nvim-treesitter' },
     config = function()
       require('treesj').setup {}
     end,
@@ -17,11 +17,11 @@ return {
   'axelf4/vim-strip-trailing-whitespace', -- strip whitespace on save
   'tpope/vim-repeat', -- enhance `.` to repeat on non-native functionality like vim-surround
   'sheerun/vim-polyglot', -- one plugin to accomodate many different filetypes
-  { 'kana/vim-textobj-line', requires = { 'kana/vim-textobj-user' } },
+  { 'kana/vim-textobj-line', dependencies = { 'kana/vim-textobj-user' } },
   -- for more text objects, visit https://github.com/kana/vim-textobj-user/wiki
-  { 'kana/vim-textobj-entire', requires = { 'kana/vim-textobj-user' } },
+  { 'kana/vim-textobj-entire', dependencies = { 'kana/vim-textobj-user' } },
   -- to fallback in case no treesitter
-  { 'sgur/vim-textobj-parameter', requires = { 'kana/vim-textobj-user' } },
+  { 'sgur/vim-textobj-parameter', dependencies = { 'kana/vim-textobj-user' } },
   { -- replacing 'tpope/vim-commentary'
     'numToStr/Comment.nvim',
     config = function()
@@ -61,7 +61,7 @@ return {
   'gpanders/nvim-parinfer', -- editing helper for lisp family langs
   -- {
   --   'eraserhd/parinfer-rust', -- editing helper for lisp family langs
-  --   run = 'nix-shell --run "cargo build --release"',
+  --   build = 'nix-shell --run "cargo build --release"',
   -- },
   'arthurxavierx/vim-caser', -- convert between cases - https://github.com/arthurxavierx/vim-caser#usage
   -- | Default Mapping | Case                                    |
@@ -95,7 +95,7 @@ return {
   },
   { -- Space Age seD in neovim. A project wide find and replace plugin with sad & fzf
     'ray-x/sad.nvim',
-    requires = 'ray-x/guihua.lua',
+    dependencies = 'ray-x/guihua.lua',
     config = function()
       require('sad').setup {}
 
@@ -109,7 +109,7 @@ return {
   },
   { -- https://github.com/ziontee113/syntax-tree-surfer/tree/d6d518f48dcc4441b11ee3e6cefd48fa1e09568a
     'ziontee113/syntax-tree-surfer',
-    config = require 'packer-groups.config.tree-surfer',
+    config = require 'plugins.config.tree-surfer',
   },
 }
 

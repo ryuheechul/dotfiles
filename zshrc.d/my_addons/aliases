@@ -178,7 +178,7 @@ alias gap="git add -p"
 alias gfssh="ambr --no-parent-ignore 'https://' 'ssh://git@' .git/config"
 
 # editor
-alias pathnvimpacker='echo "~/.local/share/nvim/site/pack/packer" | pbcopy ; pbpaste'
+alias pathnvimlazy='echo "~/.local/share/nvim/lazy" | pbcopy ; pbpaste'
 alias vim="nvim"
 alias vi="vim"
 
@@ -186,6 +186,7 @@ _dotfilepath="$(readlink -f ~/.config/dfs-rhc)"
 _perflogpath="${_dotfilepath}/.perf.log"
 ## special modes
 # start neovim purely without any plugins loaded
+alias vil='my_nvim_plugins_default_to_lazy=1 vi'
 alias vip='vi -u NONE'
 # measure startup time
 alias vips="rm -f ${_perflogpath} && vi --startuptime ${_perflogpath} ${_perflogpath}"
@@ -196,9 +197,9 @@ alias pim='NVIM_PROFILE=1 vi'
 # neovim with ghost
 alias vig='my_nvim_ghost=1 vi'
 
-# useful when the status of packer seems not clean
+# useful when the status of lazy.nvim seems not clean
 # for now, it only print the command not run
-alias clean-nvim-cmd='echo "rm -rf ~/.config/dfs-rhc/nvim/plugin/packer_compiled.lua ~/.local/share/nvim/site/pack ~/.cache/nvim/packer.nvim"'
+alias clean-nvim-cmd='echo "rm -rf  ~/.local/share/nvim/lazy ~/.cache/nvim/lazy"'
 
 # open in terminal using daemon process (create if it doesn't exist yet)
 alias emacsclient="emacsclient -nw -c -a ''"

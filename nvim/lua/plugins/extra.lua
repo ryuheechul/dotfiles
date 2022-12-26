@@ -25,7 +25,7 @@ return {
   -- },
   { -- A more adventurous wildmenu
     'gelguy/wilder.nvim',
-    run = 'UpdateRemotePlugins',
+    build = 'UpdateRemotePlugins',
     config = function()
       local wilder = require 'wilder'
       wilder.setup { modes = { ':', '/', '?' } }
@@ -62,10 +62,11 @@ return {
   },
   { -- Automatically expand width of the current window. Maximizes and restore it. And all this with nice animations!
     'anuvyklack/windows.nvim',
+    event = 'FocusGained',
     -- this plugin basically replaces the plugins below for my use case
     -- 'junegunn/goyo.vim', -- a helper to focus on one window
     -- 'beauwilliams/focus.nvim', -- automatically adjust the size for focused windows
-    requires = {
+    dependencies = {
       'anuvyklack/middleclass',
       -- 'anuvyklack/animation.nvim', disable since I don't need it
     },
@@ -76,7 +77,7 @@ return {
   'p00f/nvim-ts-rainbow', -- differnciate parenthesis with colors
   { -- Open the current word with custom openers, GitHub shorthands for example
     'ofirgall/open.nvim',
-    requires = {
+    dependencies = {
       'nvim-lua/plenary.nvim',
       'ofirgall/open-jira.nvim',
     },
@@ -109,7 +110,7 @@ return {
   },
   -- it's little finicky so commenting out for now
   -- { 'wfxr/minimap.vim', provide minimap on the side
-  --     run = 'cargo install --locked code-minimap',
+  --     build = 'cargo install --locked code-minimap',
   --     config = function()
   --       vim.g.minimap_width = 6
   --       vim.g.minimap_auto_start = 1
@@ -121,7 +122,7 @@ return {
   --   },
   { -- easier to work with folded code
     'anuvyklack/pretty-fold.nvim',
-    requires = {
+    dependencies = {
       'anuvyklack/nvim-keymap-amend', -- only for preview
       'anuvyklack/fold-preview.nvim',
     },
@@ -139,7 +140,8 @@ return {
   },
   { -- a lua powered greeter like vim-startify / dashboard-nvim
     'goolord/alpha-nvim',
-    requires = { 'nvim-tree/nvim-web-devicons' },
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    event = 'VimEnter',
     config = function()
       local button = require('alpha.themes.dashboard').button
       local theta_config = require('alpha.themes.theta').config
@@ -153,9 +155,8 @@ return {
         button('i', '  New file', '<cmd>ene<CR>'),
         button('SPC f f', '  Find file'),
         button('SPC f g', '  Live grep'),
-        button('pu', '  Update plugins', '<cmd>PackerUpdate<CR>'),
-        button('pi', '  Install plugins', '<cmd>PackerInstall<CR>'),
-        button('pc', '  Compile plugins', '<cmd>PackerCompile<CR>:helptags ALL<CR>'),
+        button('lu', '  Update plugins', '<cmd>Lazy update<CR>'),
+        button('li', '  Install plugins', '<cmd>Lazy install<CR>'),
         button('q', '  Quit'),
       }
 
@@ -232,14 +233,14 @@ return {
     'AckslD/nvim-gfold.lua',
     -- because I'm not really using it yet and it makes big difference on start up for some reason
     -- so until I start using it I will defer optimizing this plugin at start up
-    opt = true,
+    enabled = false,
     config = function()
       require('gfold').setup()
     end,
   },
   { -- ✍️ All the npm/yarn commands I don't want to type
     'vuki656/package-info.nvim',
-    requires = 'MunifTanjim/nui.nvim',
+    dependencies = 'MunifTanjim/nui.nvim',
     config = function()
       require('package-info').setup {}
 
@@ -260,7 +261,7 @@ return {
     config = function()
       require('nvim-magic').setup()
     end,
-    requires = {
+    dependencies = {
       'nvim-lua/plenary.nvim',
       'MunifTanjim/nui.nvim',
     },

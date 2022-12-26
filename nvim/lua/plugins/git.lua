@@ -5,12 +5,12 @@ return {
 
   { -- magit for neovim
     'TimUntersberger/neogit',
-    requires = {
+    dependencies = {
       -- Single tabpage interface for easily cycling through diffs for all modified files for any git rev
       'sindrets/diffview.nvim',
       'nvim-lua/plenary.nvim',
     },
-    config = require 'packer-groups.config.git',
+    config = require 'plugins.config.git',
   },
   -- Changes Vim working directory to project root
   'airblade/vim-rooter', -- a replacement candidate, https://github.com/ahmedkhalf/project.nvim
@@ -18,7 +18,7 @@ return {
   -- Add git related info in the signs columns and popups
   {
     'lewis6991/gitsigns.nvim',
-    requires = { 'nvim-lua/plenary.nvim' },
+    dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('gitsigns').setup {
         signs = {

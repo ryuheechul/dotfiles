@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# usages
+# - zoom in: tmux-zoom
+# - zoom out: tmux-zoom out
+
+# copied from https://superuser.com/a/1110035/1174289
+
+function zoom-in() {
+  # Zoom in the current pane ONLY if it is not currently zoomed.
+  # Requires tmux version >= 1.8
+
+  tmux list-panes -F '#F' | grep -q Z || tmux resize-pane -Z
+}
+
+function zoom-out() {
+  # Zoom out the current pane ONLY if it is not currently zoomed.
+  # Requires tmux version >= 1.8
+
+  tmux list-panes -F '#F' | grep -q Z && tmux resize-pane -Z
+}
+
+if test "${1}" == "out"; then
+  zoom-out
+else
+  zoom-in
+fi

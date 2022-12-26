@@ -5,7 +5,7 @@
 -- this function seems to be global in order to be called from below
 -- I could wrap the whole thing in a function to have a closure effect
 -- but I'm lazy and why not have this function to be available in command line as well
-function Follow_base16_shell()
+local follow_base16_shell = function()
   -- instead of relying vim.env.BASE16_THEME
   -- `current-base16` response the most accurate value
   local handle = io.popen 'current-base16'
@@ -23,11 +23,11 @@ return {
   {
     -- NeoSolarized: A fixed solarized colorscheme for better truecolor support.
     'JoveYu/NeoSolarized', -- using fork instead for this issue, https://github.com/overcache/NeoSolarized/issues/26
-    requires = {
+    dependencies = {
       'rktjmp/fwatch.nvim',
       'sainnhe/everforest',
     },
-    config = function()
+    init = function()
       -- set a theme first
       if vim.env.my_nvim_theme_everforest ~= nil then
         vim.cmd [[ colorscheme everforest ]]
@@ -36,7 +36,7 @@ return {
       end
 
       -- comply with base16
-      Follow_base16_shell()
+      follow_base16_shell()
 
       -- set up a callback on file change so it can correct the theme tone by itself
       local fwatch = require 'fwatch'
@@ -45,7 +45,7 @@ return {
         on_event = function()
           -- use `defer_fn` to avoid [blahblah] must not be called in a lua loop callback
           vim.defer_fn(function()
-            Follow_base16_shell()
+            follow_base16_shell()
           end, 1)
         end,
       })

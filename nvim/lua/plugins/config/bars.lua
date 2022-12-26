@@ -34,16 +34,6 @@ return function()
         },
       },
       lualine_x = {
-        -- opening lua file makes lsp work, if I `:PackerCompile` during that time I get an error below
-        --[[
-            Error executing vim.schedule lua callback: ...ine-lsp-progress/lua/lualine/components/lsp_progress.lua:80: attempt to index a nil value
-            stack traceback:
-            ...ine-lsp-progress/lua/lualine/components/lsp_progress.lua:80: in function 'progress_callback'
-            ...ine-lsp-progress/lua/lualine/components/lsp_progress.lua:133: in function 'handler'
-            ...eovim-unwrapped-0.6.1/share/nvim/runtime/lua/vim/lsp.lua:735: in function 'cb'
-            vim.lua:285: in function <vim.lua:285>
-            ]]
-        -- so just wait for that to finish and do compile/sync
         {
           'filename',
           file_status = true, -- Displays file status (readonly status, modified status)

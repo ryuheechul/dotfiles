@@ -1,8 +1,6 @@
 -- DAP settings
 
 return function()
-  -- wonder why this function doesn't work when it's at the top level of this file when ../../utils/my-smart-quit.lua seems to work just fine
-  -- probably because how packer works
   local nlua = function()
     local dap = require 'dap'
 
@@ -246,7 +244,7 @@ return function()
     -- debugger_path is relying on ../debug.lua to install it
     require('dap-vscode-js').setup {
       -- node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
-      -- debugger_path = "(runtimedir)/site/pack/packer/opt/vscode-js-debug", -- Path to vscode-js-debug installation.
+      debugger_path = vim.fn.stdpath 'data' .. '/lazy/vscode-js-debug', -- Path to vscode-js-debug installation.
       -- debugger_cmd = { "js-debug-adapter" }, -- Command to use to launch the debug server. Takes precedence over `node_path` and `debugger_path`.
       adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
       -- log_file_path = "(stdpath cache)/dap_vscode_js.log" -- Path for file logging

@@ -1,6 +1,6 @@
 {
-  "Packer-package-install": {
-    "prefix": "pi",
+  "lazy-package-install": {
+    "prefix": "li",
     "body": [
       "{",
       "  '${1:name}',",
@@ -9,6 +9,6 @@
       "  end,",
       "},"
     ],
-    "description": "packer package install"
+    "description": "lazy package install"
   }
 }

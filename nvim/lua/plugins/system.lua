@@ -1,13 +1,22 @@
 -- system level plugins or regarding integration
 
 return {
-  'christoomey/vim-system-copy', -- copy text to clipboard with `cp`
-  'roxma/vim-tmux-clipboard', -- share clipboard with tmux
-  'ojroques/nvim-bufdel', -- A Neovim plugin to improve buffer deletion
-  'christoomey/vim-tmux-navigator', -- navigate with tmux key binding
+  -- two plugins below are probably no longer necessary due to `vim.opt.clipboard = 'unnamedplus'`
+  -- 'christoomey/vim-system-copy', -- copy text to clipboard with `cp`
+  -- 'roxma/vim-tmux-clipboard', -- share clipboard with tmux
+  { -- A Neovim plugin to improve buffer deletion
+    'ojroques/nvim-bufdel',
+    event = 'VimEnter',
+    config = function()
+      -- q to close in a smart way
+      vim.keymap.set('n', 'q', require 'utils.my-smart-quit', { noremap = true, desc = 'quit smarter' })
+    end,
+  },
+  { 'christoomey/vim-tmux-navigator', event = 'VimEnter' }, -- navigate with tmux key binding
   { -- a great ergonomic terminal customization
     'akinsho/toggleterm.nvim',
-    config = require 'packer-groups.config.term',
+    config = require 'plugins.config.term',
+    event = 'FocusGained',
   },
   --- although floaterm was cool to use and convenient, I met a weird dead-end performance issue on typing only with the combination of followings
   --- bufferline.nvim (only when tab is visible) + pyright lsp (with many files unlisted) + vim-floaterm activated (even after closed the term)
@@ -16,7 +25,7 @@ return {
   -- 'voldikss/vim-floaterm', -- 🌟 Terminal manager for (neo)vim
   { -- UI to select things (files, grep results, open buffers...)
     'nvim-telescope/telescope.nvim',
-    requires = {
+    dependencies = {
       -- beginning of core dependencies
       'nvim-lua/plenary.nvim',
       'nvim-lua/popup.nvim',
@@ -65,7 +74,7 @@ return {
   },
   { -- A file explorer tree for neovim written in lua
     'nvim-tree/nvim-tree.lua',
-    requires = 'nvim-tree/nvim-web-devicons',
+    dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
       require('nvim-tree').setup {
         view = {
@@ -93,15 +102,15 @@ return {
   }, -- enhanced filetree replacing netrw
   { -- https://github.com/fregante/GhostText
     'subnut/nvim-ghost.nvim',
-    run = ':call nvim_ghost#installer#install()',
+    build = ':call nvim_ghost#installer#install()',
     cond = function()
       return vim.env.my_nvim_ghost ~= nil
     end,
   },
   { -- A snazzy bufferline for Neovim - an upgrade from 'ap/vim-buftabline'
     'akinsho/bufferline.nvim',
-    tag = 'v3.*',
-    requires = 'nvim-tree/nvim-web-devicons',
+    version = 'v3.*',
+    dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
       require('bufferline').setup {
         options = {
@@ -113,7 +122,7 @@ return {
   },
   { -- A VS Code like winbar for Neovim
     'utilyre/barbecue.nvim',
-    requires = {
+    dependencies = {
       'neovim/nvim-lspconfig',
       'SmiteshP/nvim-navic',
       'nvim-tree/nvim-web-devicons',
@@ -127,15 +136,15 @@ return {
   },
   { -- A blazing fast and easy to configure Neovim statusline written in Lua
     'nvim-lualine/lualine.nvim',
-    requires = {
+    dependencies = {
       'nvim-tree/nvim-web-devicons',
       'SmiteshP/nvim-navic', -- Simple winbar/statusline plugin that shows your current code context
     },
-    config = require 'packer-groups.config.bars',
+    config = require 'plugins.config.bars',
   },
   { -- A lua profiler for neovim that is discovered thanks to https://www.reddit.com/r/neovim/comments/xicxox/comment/ip2hprd
     'stevearc/profile.nvim',
-    config = require 'packer-groups.config.profile',
+    config = require 'plugins.config.profile',
   },
   { -- Functions that allow you to call a function not more than once in a given timeframe.
     'ryuheechul/throttle-debounce.nvim', -- use my fork until this PR gets merged - https://github.com/runiq/neovim-throttle-debounce/pull/1

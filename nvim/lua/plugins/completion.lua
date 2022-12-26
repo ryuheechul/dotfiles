@@ -3,7 +3,7 @@
 return {
   { -- Autocompletion plugin
     'hrsh7th/nvim-cmp',
-    requires = {
+    dependencies = {
       'L3MON4D3/LuaSnip', -- Snippets plugin
       'f3fora/cmp-spell', -- spell source for nvim-cmp based on vim's spellsuggest
       'hrsh7th/cmp-path', -- nvim-cmp source for path
@@ -19,18 +19,18 @@ return {
       'hrsh7th/cmp-nvim-lsp-signature-help', -- source for displaying function signatures with the current parameter emphasized
       { -- AI helper to type quicker
         'tzachar/cmp-tabnine',
-        run = './install.sh',
-        requires = 'hrsh7th/nvim-cmp',
+        build = './install.sh',
+        dependencies = 'hrsh7th/nvim-cmp',
         cond = function()
           return vim.env.my_nvim_tabnine ~= nil
         end,
       },
     },
-    config = require 'packer-groups.config.completion',
+    config = require 'plugins.config.completion',
   },
   { -- :JsDoc (at the function) to generate documentation based on function signature
     'heavenshell/vim-jsdoc',
-    run = 'make install',
+    build = 'make install',
     config = function()
       vim.g.jsdoc_formatter = 'tsdoc'
     end,
