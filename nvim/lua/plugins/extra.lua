@@ -155,8 +155,8 @@ return {
         button('i', '  New file', '<cmd>ene<CR>'),
         button('SPC f f', '  Find file'),
         button('SPC f g', '  Live grep'),
-        button('ll', '  Install plugins', '<cmd>Lazy<CR>'),
-        button('lp', '  Install plugins', '<cmd>Lazy profile<CR>'),
+        button('ll', '  Lazy plugin manager', '<cmd>Lazy<CR>'),
+        button('lp', '  Profile plugins', '<cmd>Lazy profile<CR>'),
         button('li', '  Install plugins', '<cmd>Lazy install<CR>'),
         button('lu', '  Update plugins', '<cmd>Lazy update<CR>'),
         button('q', '  Quit'),
@@ -282,6 +282,13 @@ return {
           vim.g.gitblame_display_virtual_text = 0
         end
       end, { silent = true, noremap = true, desc = 'toggle git blame virtual text' })
+    end,
+  },
+  { -- 🍁 Fun little plugin that can be used as a screensaver and on your dashboard
+    'folke/drop.nvim',
+    event = 'FocusGained',
+    config = function()
+      require('drop').setup { theme = ({ 'xmas', 'stars', 'leaves', 'snow' })[math.random(1, 4)] }
     end,
   },
 }

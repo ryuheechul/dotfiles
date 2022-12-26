@@ -8,9 +8,22 @@ local close_telescope_in_mind = function()
   end
 end
 
+-- extend vim.api.nvim_list_wins
+local list_wins = function()
+  local wins = vim.api.nvim_list_wins()
+
+  return vim.tbl_filter(function(win)
+    local is_valid = vim.api.nvim_win_is_valid(win)
+    -- in case there is a "hidden" window like 'folke/drop.nvim'
+    local is_focusable = vim.api.nvim_win_get_config(win).focusable
+
+    return is_valid and is_focusable
+  end, wins)
+end
+
 -- when they are not buflisted meaning when they are not file buffers
 local quit_unlisted = function()
-  local wins = vim.api.nvim_list_wins()
+  local wins = list_wins()
   local is_there_only_one_window = #wins < 2
 
   if is_there_only_one_window then
@@ -41,7 +54,7 @@ end
 
 -- aka file buffers
 local quit_listed = function()
-  local wins = vim.api.nvim_list_wins()
+  local wins = list_wins()
 
   local buflisted = vim.fn.getbufinfo { buflisted = 1 }
   local is_one_buffer_with_multi_wins = #wins > 1 and #buflisted < 2
