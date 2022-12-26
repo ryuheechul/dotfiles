@@ -52,6 +52,7 @@ return function()
     end, desc_opts 'list workspace')
     vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, desc_opts 'type definition')
     vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, desc_opts 'rename')
+    vim.keymap.set('n', '<space>rc', ':CodeActionMenu<CR>', desc_opts ':CodeActionMenu')
     vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, desc_opts 'code action')
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, desc_opts 'go to references')
 
