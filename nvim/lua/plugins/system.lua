@@ -16,7 +16,7 @@ return {
   { -- a great ergonomic terminal customization
     'akinsho/toggleterm.nvim',
     config = require 'plugins.config.term',
-    event = 'FocusGained',
+    event = 'VeryLazy',
   },
   --- although floaterm was cool to use and convenient, I met a weird dead-end performance issue on typing only with the combination of followings
   --- bufferline.nvim (only when tab is visible) + pyright lsp (with many files unlisted) + vim-floaterm activated (even after closed the term)
@@ -25,6 +25,7 @@ return {
   -- 'voldikss/vim-floaterm', -- 🌟 Terminal manager for (neo)vim
   { -- UI to select things (files, grep results, open buffers...)
     'nvim-telescope/telescope.nvim',
+    event = 'VeryLazy',
     dependencies = {
       -- beginning of core dependencies
       'nvim-lua/plenary.nvim',
@@ -74,6 +75,7 @@ return {
   },
   { -- A file explorer tree for neovim written in lua
     'nvim-tree/nvim-tree.lua',
+    event = 'VeryLazy',
     dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
       require('nvim-tree').setup {
@@ -109,6 +111,7 @@ return {
   },
   { -- A snazzy bufferline for Neovim - an upgrade from 'ap/vim-buftabline'
     'akinsho/bufferline.nvim',
+    event = 'VeryLazy',
     version = 'v3.*',
     dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
@@ -127,12 +130,11 @@ return {
       'SmiteshP/nvim-navic',
       'nvim-tree/nvim-web-devicons',
     },
-    config = function()
-      -- optionally uses it and otherwise it will fallback to lualine via the individual logic below
-      if vim.env.my_nvim_winbar_barbecue ~= nil then
-        require('barbecue').setup()
-      end
+    event = 'VeryLazy',
+    cond = function()
+      return vim.env.my_nvim_winbar_barbecue ~= nil
     end,
+    config = true,
   },
   { -- A blazing fast and easy to configure Neovim statusline written in Lua
     'nvim-lualine/lualine.nvim',
@@ -146,6 +148,9 @@ return {
   { -- A lua profiler for neovim that is discovered thanks to https://www.reddit.com/r/neovim/comments/xicxox/comment/ip2hprd
     'stevearc/profile.nvim',
     config = require 'plugins.config.profile',
+    cond = function()
+      return vim.env.NVIM_PROFILE ~= nil
+    end,
   },
   { -- Functions that allow you to call a function not more than once in a given timeframe.
     'runiq/neovim-throttle-debounce',
