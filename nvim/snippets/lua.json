@@ -11,5 +11,18 @@
       "},"
     ],
     "description": "lazy package install"
+  },
+  "create autocmd": {
+    "prefix": "au",
+    "body": [
+      "local ${1:var} = vim.api.nvim_create_augroup('${2:name}', { clear = true })",
+      "vim.api.nvim_create_autocmd('${3:event}', {",
+      "  callback = function ()",
+      "    ${4:function}",
+      "  end,",
+      "  group = ${1},",
+      "})"
+    ],
+    "description": "create nvim autocmd"
   }
 }
