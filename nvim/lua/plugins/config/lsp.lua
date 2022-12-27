@@ -125,10 +125,11 @@ function M.lspconfig()
   -- this will allow more complicated lsp capabilities when I want
   -- require('navigator').setup { lsp = servers }
 
+  -- -- skip this to favor noice.nvim
   -- for floating signature hints
-  require('lsp_signature').setup {
-    floating_window = false, -- to let 'hrsh7th/cmp-nvim-lsp-signature-help' to overtake
-  }
+  -- require('lsp_signature').setup {
+  --   floating_window = false, -- to let 'hrsh7th/cmp-nvim-lsp-signature-help' to overtake
+  -- }
 end
 
 return M

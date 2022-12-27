@@ -12,7 +12,7 @@ return {
       'folke/neodev.nvim',
     },
     config = require('plugins.config.lsp').lspconfig,
-    event = 'FileType',
+    event = 'VeryLazy',
   },
   { -- use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
     'jose-elias-alvarez/null-ls.nvim',
