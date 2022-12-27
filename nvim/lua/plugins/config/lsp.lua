@@ -1,14 +1,57 @@
 -- LSP settings
 
-return function()
-  local lspformat = require 'lsp-format'
-  local navic = require 'nvim-navic'
+local M = {}
 
-  lspformat.setup {
+function M.setup_lsp_format()
+  require('lsp-format').setup {
     sql = {
       exclude = { 'sqls' }, -- formatting doesn't seem to be very good so excluding for now
     },
+    lua = {
+      exclude = { 'sumneko_lua' }, -- to let only null_ls with stylua to format
+    },
   }
+end
+
+function M.null_ls()
+  local null_ls = require 'null-ls'
+
+  -- being ok with calling this twice to maintain the independence for null_ls and lspconfig to each other
+  M.setup_lsp_format()
+  null_ls.setup {
+    -- -- not using boilerplate from README to favor https://github.com/lukas-reineke/lsp-format.nvim
+    -- -- in fact this might the culprit for the issue below that ask between two on saving
+    -- -- https://www.reddit.com/r/neovim/comments/ubgi6h/nullls_issues/
+    --
+    -- you can reuse a shared lspconfig on_attach callback here
+    -- on_attach = function(client)
+    --   if client.resolved_capabilities.document_formatting then
+    --     vim.cmd [[
+    --     augroup LspFormatting
+    --         autocmd! * <buffer>
+    --         autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+    --     augroup END
+    --     ]]
+    --   end
+    -- end,
+
+    -- using lsp-format instead to enable format on save
+    on_attach = function(client)
+      require('lsp-format').on_attach(client)
+    end,
+
+    sources = {
+      null_ls.builtins.formatting.stylua,
+    },
+  }
+end
+
+function M.lspconfig()
+  require('neodev').setup()
+  -- being ok with calling this twice to maintain the independence for null_ls and lspconfig to each other
+  M.setup_lsp_format()
+
+  local navic = require 'nvim-navic'
 
   -- Mappings.
   -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -22,7 +65,8 @@ return function()
   -- after the language server attaches to the current buffer
   local on_attach = function(client, bufnr)
     -- to enable format on save
-    lspformat.on_attach(client)
+
+    require('lsp-format').on_attach(client)
 
     if client.server_capabilities.documentSymbolProvider then
       navic.attach(client, bufnr)
@@ -73,7 +117,7 @@ return function()
   }
 
   -- delegate server specific setup to lsp-servers
-  local servers = require 'plugins.config.lsp-servers' (setup_default)
+  local servers = require 'plugins.config.lsp-servers'(setup_default)
   local lspconfig = require 'lspconfig'
   for server, setup in pairs(servers) do
     lspconfig[server].setup(setup)
@@ -87,4 +131,5 @@ return function()
   }
 end
 
+return M
 -- vim: ts=2 sts=2 sw=2 et

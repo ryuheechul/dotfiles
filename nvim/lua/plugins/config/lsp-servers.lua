@@ -50,8 +50,13 @@ return function(setup_default)
   })
 
   local setup_sumneko_lua = merge(setup_default, {
+    single_file_support = true,
     settings = {
       Lua = {
+        completion = {
+          workspaceWord = true,
+          callSnippet = 'Both',
+        },
         runtime = {
           version = 'LuaJIT',
         },

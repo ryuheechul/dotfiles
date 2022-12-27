@@ -148,7 +148,7 @@ return {
     config = require 'plugins.config.profile',
   },
   { -- Functions that allow you to call a function not more than once in a given timeframe.
-    'ryuheechul/throttle-debounce.nvim', -- use my fork until this PR gets merged - https://github.com/runiq/neovim-throttle-debounce/pull/1
+    'runiq/neovim-throttle-debounce',
   },
 }
 
