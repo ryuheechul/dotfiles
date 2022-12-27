@@ -4,6 +4,7 @@
     "body": [
       "{",
       "  '${1:name}',",
+      "  event = 'VeryLazy',",
       "  config = function ()",
       "    ${0}",
       "  end,",
