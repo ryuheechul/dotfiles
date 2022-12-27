@@ -16,6 +16,7 @@ return {
   },
   { -- use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
     'jose-elias-alvarez/null-ls.nvim',
+    event = 'VeryLazy',
     dependencies = {
       'lukas-reineke/lsp-format.nvim', -- A wrapper around Neovims native LSP formatting
     },

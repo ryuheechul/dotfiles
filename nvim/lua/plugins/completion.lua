@@ -3,6 +3,7 @@
 return {
   { -- Autocompletion plugin
     'hrsh7th/nvim-cmp',
+    event = 'VeryLazy',
     dependencies = {
       'L3MON4D3/LuaSnip', -- Snippets plugin
       'f3fora/cmp-spell', -- spell source for nvim-cmp based on vim's spellsuggest
@@ -30,6 +31,7 @@ return {
   },
   { -- :JsDoc (at the function) to generate documentation based on function signature
     'heavenshell/vim-jsdoc',
+    ft = { 'typescript', 'javascript' },
     build = 'make install',
     config = function()
       vim.g.jsdoc_formatter = 'tsdoc'

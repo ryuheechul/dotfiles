@@ -6,9 +6,6 @@ return {
   { -- A Vim plugin for Vim plugins `:Verbose` will be useful
     'tpope/vim-scriptease',
     event = 'VeryLazy',
-    config = function()
-      vim.keymap.set('n', '<space>fm', [[:Messages<CR>]], { noremap = true, silent = true, desc = '' })
-    end,
   },
   { -- highlights headlines for markdown like files
     'lukas-reineke/headlines.nvim',
@@ -340,6 +337,21 @@ return {
           lsp_doc_border = false, -- add a border to hover docs and signature help
         },
       }
+
+      vim.keymap.set(
+        'n',
+        '<space>fm',
+        ':Noice telescope<CR>',
+        { noremap = true, silent = true, desc = 'List Noice messages' }
+      )
+
+      local noice_group = vim.api.nvim_create_augroup('MyNoiceAG', { clear = true })
+      vim.api.nvim_create_autocmd('CursorMoved', {
+        callback = function()
+          require('notify').dismiss()
+        end,
+        group = noice_group,
+      })
     end,
     dependencies = {
       'MunifTanjim/nui.nvim',

@@ -64,7 +64,7 @@ M.plugins = {
   {
     'folke/which-key.nvim', -- show key bindings just like SpaceVim
     init = M.init,
-    event = 'VimEnter',
+    event = 'VeryLazy',
     config = function()
       local cmdify = M.cmdify
 
