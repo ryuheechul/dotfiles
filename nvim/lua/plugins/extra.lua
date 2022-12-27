@@ -1,18 +1,19 @@
 -- extra but nice
 
 return {
-  'lewis6991/impatient.nvim', -- Improve startup time for Neovim
+  -- not necessary anymore with lazy.nvim https://github.com/folke/lazy.nvim/discussions/150
+  -- 'lewis6991/impatient.nvim', -- Improve startup time for Neovim
   { -- A Vim plugin for Vim plugins `:Verbose` will be useful
     'tpope/vim-scriptease',
+    event = 'VeryLazy',
     config = function()
       vim.keymap.set('n', '<space>fm', [[:Messages<CR>]], { noremap = true, silent = true, desc = '' })
     end,
   },
   { -- highlights headlines for markdown like files
     'lukas-reineke/headlines.nvim',
-    config = function()
-      require('headlines').setup()
-    end,
+    ft = { 'markdown', 'org' },
+    config = true,
   },
   -- stop using until https://github.com/sunjon/Shade.nvim/issues/6#issuecomment-1065939353 gets resolved
   -- {
@@ -54,6 +55,7 @@ return {
   -- },
   {
     'RRethy/vim-illuminate', -- Highlight the same words at the cursor
+    event = 'VeryLazy',
     config = function()
       require('illuminate').configure {
         delay = 100,
@@ -72,13 +74,15 @@ return {
       'anuvyklack/middleclass',
       -- 'anuvyklack/animation.nvim', disable since I don't need it
     },
-    config = function()
-      require('windows').setup()
-    end,
+    config = true,
   },
-  'p00f/nvim-ts-rainbow', -- differnciate parenthesis with colors
+  { -- differnciate parenthesis with colors
+    'p00f/nvim-ts-rainbow',
+    event = 'VeryLazy',
+  },
   { -- Open the current word with custom openers, GitHub shorthands for example
     'ofirgall/open.nvim',
+    event = 'VeryLazy',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'ofirgall/open-jira.nvim',
@@ -100,12 +104,14 @@ return {
   },
   { -- let you peek lines without moving the cursor to the line
     'nacro90/numb.nvim',
+    event = 'VeryLazy',
     config = function()
       require('numb').setup()
     end,
   },
   { -- allow you to save at non existing directory
     'jghauser/mkdir.nvim',
+    event = 'BufWritePre',
     config = function()
       require 'mkdir'
     end,
@@ -124,6 +130,7 @@ return {
   --   },
   { -- easier to work with folded code
     'anuvyklack/pretty-fold.nvim',
+    event = 'VeryLazy',
     dependencies = {
       'anuvyklack/nvim-keymap-amend', -- only for preview
       'anuvyklack/fold-preview.nvim',
@@ -169,6 +176,7 @@ return {
   },
   { -- prevents the contents being cramped on windows's open/close event
     'luukvbaal/stabilize.nvim',
+    event = 'VeryLazy',
     config = function()
       require('stabilize').setup {
         -- by setting force to be false,
@@ -177,9 +185,13 @@ return {
       }
     end,
   },
-  'sbulav/nredir.nvim', -- Redirect the output of Vim or external command to scratch buffer, in LUA
+  {
+    'sbulav/nredir.nvim', -- Redirect the output of Vim or external command to scratch buffer, in LUA
+    cmd = 'Nredir',
+  },
   { -- Extensible Neovim Scrollbar
     'petertriho/nvim-scrollbar',
+    event = 'VeryLazy',
     config = function()
       require('scrollbar').setup {
         -- currently this is the most optimal way for me to deal with this issue, https://github.com/petertriho/nvim-scrollbar/issues/72
@@ -193,25 +205,32 @@ return {
     -- v[g - visually select the previous diagnostic
     -- d]g - delete the next diagnostic text (excluding any diagnostic under the cursor)
     'andrewferrier/textobj-diagnostic.nvim',
+    event = 'VeryLazy',
     config = function()
       require('textobj-diagnostic').setup()
     end,
   },
-  { -- pretty cool motion plugin that turns s/f/t to be supurchared.
+  { -- pretty cool motion plugin that turns s/f/t to be supercharged.
     -- it takes some to get used to but it's quite powerful and reduce cognitive loads
     -- while it could be super efficient with predicting some potential normal future
     -- they call it "clairvoyant" ability!
     -- my favorite is `f<enter>` to go to the end of the line
     'ggandor/lightspeed.nvim',
+    event = 'VeryLazy',
     config = function()
       require('lightspeed').setup {
         ignore_case = true,
       }
     end,
   },
-  'rhysd/vim-syntax-codeowners', -- syntax support for CODEOWNERS file
+  {
+    -- syntax support for CODEOWNERS file
+    'rhysd/vim-syntax-codeowners',
+    ft = 'CODEOWNERS',
+  },
   { -- A markdown preview directly in your neovim
     'ellisonleao/glow.nvim',
+    ft = 'markdown',
     config = function()
       require('glow').setup {
         border = 'none',
@@ -220,6 +239,7 @@ return {
   },
   { -- Indent guides for Neovim
     'lukas-reineke/indent-blankline.nvim',
+    event = 'VeryLazy',
     config = function()
       -- show some hidden characters - these are vim builtin options
       vim.o.list = true
@@ -232,7 +252,10 @@ return {
     end,
   },
   -- to improve the default vim.ui interfaces which something like nvim-gfold.lua can benefits from
-  'stevearc/dressing.nvim', -- basically does the same thing as `nvim-telescope/telescope-ui-select.nvim`
+  {
+    'stevearc/dressing.nvim', -- basically does the same thing as `nvim-telescope/telescope-ui-select.nvim`
+    event = 'VeryLazy',
+  },
   { -- using gfold to switch repo and have statusline component
     'AckslD/nvim-gfold.lua',
     -- because I'm not really using it yet and it makes big difference on start up for some reason
@@ -244,6 +267,7 @@ return {
   },
   { -- ✍️ All the npm/yarn commands I don't want to type
     'vuki656/package-info.nvim',
+    ft = 'json',
     dependencies = 'MunifTanjim/nui.nvim',
     config = function()
       require('package-info').setup {}
@@ -262,6 +286,7 @@ return {
     -- <leader>mds | generate docstring
     -- <leader>mas | alter code
     'jameshiew/nvim-magic',
+    event = 'VeryLazy',
     config = function()
       require('nvim-magic').setup()
     end,
@@ -272,6 +297,7 @@ return {
   },
   { -- Git Blame plugin for Neovim written in Lua
     'f-person/git-blame.nvim',
+    event = 'VeryLazy',
     config = function()
       -- initially don't show with virtual text
       vim.g.gitblame_display_virtual_text = 0
@@ -293,7 +319,7 @@ return {
       require('drop').setup { theme = ({ 'xmas', 'stars', 'leaves', 'snow' })[math.random(1, 4)] }
     end,
   },
-  {
+  { -- 💥 completely replaces the UI for messages, cmdline and the popupmenu
     'folke/noice.nvim',
     event = 'VeryLazy',
     config = function()

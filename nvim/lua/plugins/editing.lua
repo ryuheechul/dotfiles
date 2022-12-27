@@ -15,7 +15,9 @@ return {
   },
   { 'tpope/vim-repeat', event = 'VeryLazy' }, -- enhance `.` to repeat on non-native functionality like vim-surround
   { -- one plugin to accomodate many different filetypes
-    'sheerun/vim-polyglot', -- couldn't figure out how to work this with lazy loading option yet
+    'sheerun/vim-polyglot',
+    -- couldn't figure out how to work this with lazy loading option yet
+    lazy = false,
   },
   { 'kana/vim-textobj-line', dependencies = { 'kana/vim-textobj-user' }, event = 'VeryLazy' },
   -- for more text objects, visit https://github.com/kana/vim-textobj-user/wiki
