@@ -87,19 +87,23 @@ return {
   { -- Multiple cursors plugin for vim/neovim
     'mg979/vim-visual-multi',
     event = 'VeryLazy',
-    config = function()
+    init = function()
       vim.g.VM_maps = {
         ['Add Cursor Down'] = '<M-Down>',
         ['Add Cursor Up'] = '<M-Up>',
+        ['Find Under'] = '<C-m>',
+        ['Find Subword Under'] = '<C-m>',
+        ['Skip Region'] = 's',
+        ['Remove Region'] = 'r',
       }
     end,
     -- | keys            | description                             |
     -- |-----------------|-----------------------------------------|
-    -- | Ctrl-N          | select words with                       |
+    -- | Ctrl-M          | select words with                       |
     -- | Alt-Down/Alt-Up | create cursors vertically with          |
     -- | n/N             | to get next/previous occurrence         |
-    -- | q               | to skip current and get next occurrence |
-    -- | Q               | to remove current cursor/selection      |
+    -- | s               | to skip current and get next occurrence |
+    -- | r               | to remove current cursor/selection      | -- exit VM with one more r after reset
     -- | i,a,I,A         | start insert mode with                  |
   },
   { -- Space Age seD in neovim. A project wide find and replace plugin with sad & fzf

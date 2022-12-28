@@ -29,13 +29,20 @@ return {
     },
     config = require 'plugins.config.completion',
   },
-  { -- :JsDoc (at the function) to generate documentation based on function signature
-    'heavenshell/vim-jsdoc',
-    ft = { 'typescript', 'javascript' },
-    build = 'make install',
-    config = function()
-      vim.g.jsdoc_formatter = 'tsdoc'
+  { -- A better annotation generator. Supports multiple languages and annotation conventions
+    'danymat/neogen',
+    -- follow only stable versions
+    version = '*',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      'L3MON4D3/LuaSnip',
+    },
+    init = function()
+      vim.keymap.set('n', '<Leader>gd', function()
+        require('neogen').generate()
+      end, { noremap = true, silent = true, desc = 'generate a docstring on cursor for multiple languages' })
     end,
+    config = { snippet_engine = 'luasnip' },
   },
 }
 

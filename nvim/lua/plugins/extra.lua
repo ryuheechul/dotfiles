@@ -280,6 +280,24 @@ return {
       'MunifTanjim/nui.nvim',
     },
   },
+  { -- Blazingly fast AI code generation, editing and completion
+    'dense-analysis/neural',
+    event = 'VeryLazy',
+    dependencies = {
+      'MunifTanjim/nui.nvim',
+      'ElPiloto/significant.nvim',
+    },
+    config = {
+      mappings = {
+        prompt = '<C-Space>',
+        swift = '<C-n>',
+      },
+      open_ai = {
+        api_key = vim.env.OPENAI_API_KEY,
+      },
+      ui = { icon = '' },
+    },
+  },
   { -- Git Blame plugin for Neovim written in Lua
     'f-person/git-blame.nvim',
     event = 'VeryLazy',
@@ -350,6 +368,11 @@ return {
         lsp_doc_border = false, -- add a border to hover docs and signature help
       },
     },
+  },
+  { -- A minimalist autoclose plugin
+    'm4xshen/autoclose.nvim',
+    event = 'VeryLazy',
+    config = true,
   },
 }
 

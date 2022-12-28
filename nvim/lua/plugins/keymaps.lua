@@ -88,6 +88,9 @@ local config = function()
     r = {
       name = '+Run/Debug',
     },
+    g = {
+      name = '+Generate',
+    },
     l = { cmdify 'Luapad', 'open Luapad' },
   }, { prefix = '<leader>' })
 
