@@ -372,7 +372,7 @@ return {
   { -- A minimalist autoclose plugin
     'm4xshen/autoclose.nvim',
     event = 'VeryLazy',
-    config = true,
+    config = {},
   },
 }
 

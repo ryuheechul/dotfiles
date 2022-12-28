@@ -41,6 +41,7 @@ return {
       'theHamsta/nvim-dap-virtual-text',
       { -- nvim-dap adapter for vscode-js-debug
         'mxsdev/nvim-dap-vscode-js',
+        version = '*',
         dependencies = {
           { -- The VS Code JavaScript debugger
             'microsoft/vscode-js-debug',
