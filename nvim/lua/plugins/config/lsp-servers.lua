@@ -77,6 +77,10 @@ return function(setup_default)
     end,
   })
 
+  local setup_jsonls = merge(setup_default, {})
+  --Enable (broadcasting) snippet capability for completion
+  setup_jsonls.capabilities.textDocument.completion.completionItem.snippetSupport = true
+
   -- Enable the following language servers with `setup_default`
   return {
     clangd = setup_default,
@@ -88,6 +92,7 @@ return function(setup_default)
     rnix = setup_rnix,
     eslint = setup_eslint,
     sqls = setup_sqls,
+    jsonls = setup_jsonls,
   }
 end
 

@@ -10,6 +10,13 @@ return {
       'nanotee/sqls.nvim', -- Neovim plugin for sqls that leverages the built-in LSP client
       -- 💻 Neovim setup for init.lua and plugin development with full signature help, docs and completion for the nvim lua API.
       'folke/neodev.nvim',
+      {
+        'williamboman/mason-lspconfig.nvim',
+        dependencies = { 'williamboman/mason.nvim', config = true },
+        config = {
+          ensure_installed = { 'sumneko_lua', 'jsonls' },
+        },
+      },
     },
     config = require('plugins.config.lsp').lspconfig,
     event = 'VeryLazy',
