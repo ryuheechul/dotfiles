@@ -47,7 +47,6 @@ function M.null_ls()
 end
 
 function M.lspconfig()
-  require('neodev').setup()
   -- being ok with calling this twice to maintain the independence for null_ls and lspconfig to each other
   M.setup_lsp_format()
 

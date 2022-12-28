@@ -9,7 +9,7 @@ return {
       'SmiteshP/nvim-navic', -- Simple winbar/statusline plugin that shows your current code context
       'nanotee/sqls.nvim', -- Neovim plugin for sqls that leverages the built-in LSP client
       -- 💻 Neovim setup for init.lua and plugin development with full signature help, docs and completion for the nvim lua API.
-      'folke/neodev.nvim',
+      { 'folke/neodev.nvim', config = true },
       {
         'williamboman/mason-lspconfig.nvim',
         dependencies = { 'williamboman/mason.nvim', config = true },

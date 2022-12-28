@@ -64,6 +64,10 @@ return function(setup_default)
           -- Get the language server to recognize the `vim` global
           globals = { 'vim', 'require' },
         },
+        workspace = {
+          -- to make it stop asking me about this and that
+          checkThirdParty = false,
+        },
       },
     },
   })
