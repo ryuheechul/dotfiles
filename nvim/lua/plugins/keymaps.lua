@@ -1,8 +1,6 @@
 -- keymaps
 
-local M = {}
-
-function M.cmdify(cmd)
+local cmdify = function(cmd)
   -- favor this since this is combinable
   return '<Cmd>' .. cmd .. '<CR>'
 
@@ -12,7 +10,7 @@ function M.cmdify(cmd)
   -- end
 end
 
-function M.init()
+local init = function()
   --- my keymaps to to accomodate my muscle memory with ../SpaceVim.d
   --- these don't require which-key
 
@@ -31,7 +29,7 @@ function M.init()
   vim.keymap.set('v', '<', '<gv', { noremap = true, desc = 'indent to <' })
 
   -- replace builtin spell suggestions - see `:h z=`
-  vim.keymap.set('n', 'z=', M.cmdify 'Telescope spell_suggest', { noremap = true, desc = 'fix spelling' })
+  vim.keymap.set('n', 'z=', cmdify 'Telescope spell_suggest', { noremap = true, desc = 'fix spelling' })
 
   -- -- Remap space as leader key - comment out since I'm not sure what this really does for me
   -- vim.keymap.set('', '<Space>', '<Nop>', { noremap = true, silent = true })
@@ -59,169 +57,162 @@ function M.init()
   vim.keymap.set('n', ',', '@:<CR>', { noremap = true, desc = 'repeat last normal command' })
 end
 
+local toggle_bg = function()
+  if vim.o.background == 'dark' then
+    vim.o.background = 'light'
+  else
+    vim.o.background = 'dark'
+  end
+end
+
+local config = function()
+  local cmd_nohlsearch = cmdify 'nohlsearch'
+
+  local paste_after_here = '"*p'
+  local paste_before_here = '"*P'
+  if vim.fn.has 'unnamedplus' == 1 then
+    paste_after_here = '"+p'
+    paste_before_here = '"+P'
+  end
+
+  local wk = require 'which-key'
+  wk.setup {
+    window = {
+      winblend = 20,
+    },
+  }
+
+  wk.register({
+    p = { paste_after_here, 'paste after here' },
+    P = { paste_before_here, 'paste before here' },
+    r = {
+      name = '+Run/Debug',
+    },
+    l = { cmdify 'Luapad', 'open Luapad' },
+  }, { prefix = '<leader>' })
+
+  wk.register({
+    w = {
+      name = '+Windows/Workspace',
+      m = { cmdify '!tmux-zoom' .. cmdify 'WindowsMaximize', 'maximize/minimize window' },
+      v = { cmdify 'WindowsMaximizeVertical', 'maximize/minimize window vertically' },
+      h = { cmdify 'WindowsMaximizeHorizontal', 'maximize/minimize window horizontally' },
+      ['/'] = { cmdify 'vsplit', 'split window vertically' },
+      ['-'] = { cmdify 'split', 'split window horizontally' },
+    },
+    b = {
+      name = '+Buffers',
+      b = { cmdify 'Telescope buffers', 'search buffer' },
+      d = { cmdify 'bd', 'close buffer' },
+    },
+    ['<space>'] = { cmdify 'Telescope buffers', 'telescope: buffers' },
+    ['<Tab>'] = { cmdify 'bn', 'rotate buffer' },
+    ["'"] = {
+      -- use count 9 to be independent from the horizontal one
+      cmd_nohlsearch .. cmdify '9ToggleTerm direction=float',
+      'open ToggleTerm direction=float',
+    },
+    ['/'] = {
+      -- use count 8 to be independent from the float one
+      cmd_nohlsearch .. cmdify '8ToggleTerm direction=horizontal',
+      'open ToggleTerm direction=horizontal',
+    },
+    j = 'split args', -- only set a text for an already configured keymap
+    ['<CR>'] = { '@q', 'macro q' }, -- setting a special key
+    f = { -- set a nested structure
+      name = '+Find',
+      b = { cmdify 'Telescope buffers', 'buffers' },
+      h = { cmdify 'Telescope help_tags', 'help tags' },
+      c = {
+        name = '+Commands',
+        c = { cmdify 'Telescope commands', 'commands' },
+        h = { cmdify 'Telescope command_history', 'history' },
+      },
+      d = {
+        function()
+          require('telescope').extensions.dap.commands()
+        end,
+        'dap commands',
+      },
+      f = { cmdify 'Telescope find_files', 'find files' },
+      k = { cmdify 'Telescope keymaps', 'search keymaps' },
+      q = { cmdify 'Telescope quickfix', 'quickfix' },
+      g = {
+        name = '+Git',
+        g = { cmdify 'Telescope git_commits', 'commits' },
+        c = { cmdify 'Telescope git_bcommits', 'bcommits' },
+        b = { cmdify 'Telescope git_branches', 'branches' },
+        s = { cmdify 'Telescope git_status', 'status' },
+      },
+      n = { cmdify 'new', 'new file' },
+      t = { cmdify 'Telescope', 'telescope' },
+      s = { cmdify 'w', 'save file' },
+      r = { cmdify 'Telescope oldfiles', 'recent files' },
+    },
+    g = {
+      name = '+Git',
+      b = {
+        name = '+Blame',
+        b = { cmdify 'Git blame', 'toggle git blame pane' },
+      },
+      d = { cmdify 'DiffviewOpen', 'show git diff' },
+      -- g = { require('gfold').pick_repo, 'pick repo via gfold' },
+      n = { cmdify 'Neogit', 'open Neogit' },
+      r = { cmdify 'Gcd', 'go to git root' },
+      x = { cmdify 'GBrowse', 'open file in browser' },
+    },
+    l = {
+      name = '+Lazy',
+      l = { cmdify 'Lazy', 'run :Lazy' },
+      p = { cmdify 'Lazy profile', 'run :Lazy profile' },
+      i = { cmdify 'Lazy install', 'run :Lazy install' },
+      u = { cmdify 'Lazy update', 'run :Lazy update' },
+      s = { cmdify 'Lazy sync', 'run :Lazy sync' },
+    },
+    s = {
+      name = '+Searching/Symbol',
+      ['?'] = { cmdify 'Telescope oldfiles', 'old files' },
+      c = { cmd_nohlsearch, 'clear hihglight' },
+      f = { cmdify 'Telescope find_files', 'find files' },
+      b = { cmdify 'Telescope current_buffer_fuzzy_find', 'current buffer fuzzy' },
+      h = { cmdify 'Telescope help_tags', 'help tags' },
+      t = { cmdify 'Telescope tags', 'tags' },
+      d = { cmdify 'Telescope grep_string', 'grep string' },
+      p = { cmdify 'Telescope live_grep', 'live grep in project' },
+      o = {
+        function()
+          require('telescope.builtin').tags { only_current_buffer = true }
+        end,
+        'tags only current buffer',
+      },
+      g = {
+        function()
+          require('telescope').extensions.repo.list { search_dirs = { '~/play' } }
+        end,
+        'Telescope repo',
+      },
+    },
+    r = {
+      name = '+Rename',
+    },
+    t = {
+      name = '+UI Toggles',
+      b = { toggle_bg, 'toggle-background' },
+      f = { cmdify 'NvimTreeToggle', 'toggle file tree' },
+      l = { cmdify 'set list!', 'toggle-hidden-listchars' },
+    },
+  }, { prefix = '<Space>' })
+end
+
 --- anything above here is not accessible from `config` function below
-M.plugins = {
+return {
   {
     'folke/which-key.nvim', -- show key bindings just like SpaceVim
-    init = M.init,
+    init = init,
     event = 'VeryLazy',
-    config = function()
-      local cmdify = M.cmdify
-
-      local cmd_nohlsearch = cmdify 'nohlsearch'
-
-      local toggle_bg = function()
-        if vim.o.background == 'dark' then
-          vim.o.background = 'light'
-        else
-          vim.o.background = 'dark'
-        end
-      end
-
-      local paste_after_here = '"*p'
-      local paste_before_here = '"*P'
-      if vim.fn.has 'unnamedplus' == 1 then
-        paste_after_here = '"+p'
-        paste_before_here = '"+P'
-      end
-
-      local wk = require 'which-key'
-      wk.setup {
-        window = {
-          winblend = 20,
-        },
-      }
-
-      wk.register({
-        p = { paste_after_here, 'paste after here' },
-        P = { paste_before_here, 'paste before here' },
-        r = {
-          name = '+Run/Debug',
-        },
-        l = { cmdify 'Luapad', 'open Luapad' },
-      }, { prefix = '<leader>' })
-
-      -- this actually wasn't working - comment out until I revisit
-      -- wk.register({
-      --   [' '] = { '', 'remove trailing whitespaces' },
-      -- }, { prefix = ',' })
-
-      wk.register({
-        w = {
-          name = '+Windows/Workspace',
-          m = { cmdify '!tmux-zoom' .. cmdify 'WindowsMaximize', 'maximize/minimize window' },
-          v = { cmdify 'WindowsMaximizeVertical', 'maximize/minimize window vertically' },
-          h = { cmdify 'WindowsMaximizeHorizontal', 'maximize/minimize window horizontally' },
-          ['/'] = { cmdify 'vsplit', 'split window vertically' },
-          ['-'] = { cmdify 'split', 'split window horizontally' },
-        },
-        b = {
-          name = '+Buffers',
-          b = { cmdify 'Telescope buffers', 'search buffer' },
-          d = { cmdify 'bd', 'close buffer' },
-        },
-        ['<space>'] = { cmdify 'Telescope buffers', 'telescope: buffers' },
-        ['<Tab>'] = { cmdify 'bn', 'rotate buffer' },
-        ["'"] = {
-          -- use count 9 to be independent from the horizontal one
-          cmd_nohlsearch .. cmdify '9ToggleTerm direction=float',
-          'open ToggleTerm direction=float',
-        },
-        ['/'] = {
-          -- use count 8 to be independent from the float one
-          cmd_nohlsearch .. cmdify '8ToggleTerm direction=horizontal',
-          'open ToggleTerm direction=horizontal',
-        },
-        j = 'split args', -- only set a text for an already configured keymap
-        ['<CR>'] = { '@q', 'macro q' }, -- setting a special key
-        f = { -- set a nested structure
-          name = '+Find',
-          b = { cmdify 'Telescope buffers', 'buffers' },
-          h = { cmdify 'Telescope help_tags', 'help tags' },
-          c = {
-            name = '+Commands',
-            c = { cmdify 'Telescope commands', 'commands' },
-            h = { cmdify 'Telescope command_history', 'history' },
-          },
-          d = {
-            function()
-              require('telescope').extensions.dap.commands()
-            end,
-            'dap commands',
-          },
-          f = { cmdify 'Telescope find_files', 'find files' },
-          k = { cmdify 'Telescope keymaps', 'search keymaps' },
-          q = { cmdify 'Telescope quickfix', 'quickfix' },
-          g = {
-            name = '+Git',
-            g = { cmdify 'Telescope git_commits', 'commits' },
-            c = { cmdify 'Telescope git_bcommits', 'bcommits' },
-            b = { cmdify 'Telescope git_branches', 'branches' },
-            s = { cmdify 'Telescope git_status', 'status' },
-          },
-          n = { cmdify 'new', 'new file' },
-          t = { cmdify 'Telescope', 'telescope' },
-          s = { cmdify 'w', 'save file' },
-          r = { cmdify 'Telescope oldfiles', 'recent files' },
-        },
-        g = {
-          name = '+Git',
-          b = {
-            name = '+Blame',
-            b = { cmdify 'Git blame', 'toggle git blame pane' },
-          },
-          d = { cmdify 'DiffviewOpen', 'show git diff' },
-          -- g = { require('gfold').pick_repo, 'pick repo via gfold' },
-          n = { cmdify 'Neogit', 'open Neogit' },
-          r = { cmdify 'Gcd', 'go to git root' },
-          x = { cmdify 'GBrowse', 'open file in browser' },
-        },
-        l = {
-          name = '+Lazy',
-          l = { cmdify 'Lazy', 'run :Lazy' },
-          p = { cmdify 'Lazy profile', 'run :Lazy profile' },
-          i = { cmdify 'Lazy install', 'run :Lazy install' },
-          u = { cmdify 'Lazy update', 'run :Lazy update' },
-          s = { cmdify 'Lazy sync', 'run :Lazy sync' },
-        },
-        s = {
-          name = '+Searching/Symbol',
-          ['?'] = { cmdify 'Telescope oldfiles', 'old files' },
-          c = { cmd_nohlsearch, 'clear hihglight' },
-          f = { cmdify 'Telescope find_files', 'find files' },
-          b = { cmdify 'Telescope current_buffer_fuzzy_find', 'current buffer fuzzy' },
-          h = { cmdify 'Telescope help_tags', 'help tags' },
-          t = { cmdify 'Telescope tags', 'tags' },
-          d = { cmdify 'Telescope grep_string', 'grep string' },
-          p = { cmdify 'Telescope live_grep', 'live grep in project' },
-          o = {
-            function()
-              require('telescope.builtin').tags { only_current_buffer = true }
-            end,
-            'tags only current buffer',
-          },
-          g = {
-            function()
-              require('telescope').extensions.repo.list { search_dirs = { '~/play' } }
-            end,
-            'Telescope repo',
-          },
-        },
-        r = {
-          name = '+Rename',
-        },
-        t = {
-          name = '+UI Toggles',
-          b = { toggle_bg, 'toggle-background' },
-          f = { cmdify 'NvimTreeToggle', 'toggle file tree' },
-          l = { cmdify 'set list!', 'toggle-hidden-listchars' },
-        },
-      }, { prefix = '<Space>' })
-    end,
+    config = config,
   },
   -- 'b0o/mapx.nvim', -- see if I would like to use this when keymapping code need optimized
 }
-
-return M.plugins
 
 -- vim: ts=2 sts=2 sw=2 et

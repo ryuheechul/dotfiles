@@ -19,24 +19,23 @@ return {
     event = 'VeryLazy',
     config = require 'plugins.config.git',
   },
-  -- Changes Vim working directory to project root
-  { 'airblade/vim-rooter', event = 'VeryLazy' }, -- a replacement candidate, https://github.com/ahmedkhalf/project.nvim
-  -- Add git related info in the signs columns and popups
-  {
+  { -- Changes Vim working directory to project root
+    'airblade/vim-rooter', -- a replacement candidate, https://github.com/ahmedkhalf/project.nvim
+    event = 'VeryLazy',
+  },
+  { -- Add git related info in the signs columns and popups
     'lewis6991/gitsigns.nvim',
     event = 'VeryLazy',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function()
-      require('gitsigns').setup {
-        signs = {
-          add = { hl = 'GitGutterAdd', text = '+' },
-          change = { hl = 'GitGutterChange', text = '~' },
-          delete = { hl = 'GitGutterDelete', text = '_' },
-          topdelete = { hl = 'GitGutterDelete', text = '‾' },
-          changedelete = { hl = 'GitGutterChange', text = '~' },
-        },
-      }
-    end,
+    config = {
+      signs = {
+        add = { hl = 'GitGutterAdd', text = '+' },
+        change = { hl = 'GitGutterChange', text = '~' },
+        delete = { hl = 'GitGutterDelete', text = '_' },
+        topdelete = { hl = 'GitGutterDelete', text = '‾' },
+        changedelete = { hl = 'GitGutterChange', text = '~' },
+      },
+    },
   },
 }
 

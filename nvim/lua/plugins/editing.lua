@@ -57,9 +57,7 @@ return {
   { -- show preview when `gd`
     'rmagatti/goto-preview',
     event = 'VeryLazy',
-    config = function()
-      require('goto-preview').setup {}
-    end,
+    config = true,
   },
   -- choosing `nvim-parinfer` over `parinfer-rust` for now
   {

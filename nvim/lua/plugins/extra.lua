@@ -129,13 +129,15 @@ return {
     'anuvyklack/pretty-fold.nvim',
     event = 'VeryLazy',
     dependencies = {
-      'anuvyklack/nvim-keymap-amend', -- only for preview
-      'anuvyklack/fold-preview.nvim',
+      {
+        'anuvyklack/fold-preview.nvim',
+        dependencies = {
+          'anuvyklack/nvim-keymap-amend',
+        },
+        config = true,
+      },
     },
-    config = function()
-      require('pretty-fold').setup {}
-      require('fold-preview').setup {}
-
+    init = function()
       -- let the code be folded by default
       -- useful with 'anuvyklack/pretty-fold.nvim'
       vim.o.foldmethod = 'expr'
@@ -143,6 +145,7 @@ return {
       vim.o.foldminlines = 5
       vim.o.foldlevelstart = 2
     end,
+    config = true,
   },
   { -- a lua powered greeter like vim-startify / dashboard-nvim
     'goolord/alpha-nvim',
@@ -174,13 +177,11 @@ return {
   { -- prevents the contents being cramped on windows's open/close event
     'luukvbaal/stabilize.nvim',
     event = 'VeryLazy',
-    config = function()
-      require('stabilize').setup {
-        -- by setting force to be false,
-        -- it does not stabilize window when the content will be hidden behind the new windows
-        force = false,
-      }
-    end,
+    config = {
+      -- by setting force to be false,
+      -- it does not stabilize window when the content will be hidden behind the new windows
+      force = false,
+    },
   },
   {
     'sbulav/nredir.nvim', -- Redirect the output of Vim or external command to scratch buffer, in LUA
@@ -189,12 +190,10 @@ return {
   { -- Extensible Neovim Scrollbar
     'petertriho/nvim-scrollbar',
     event = 'VeryLazy',
-    config = function()
-      require('scrollbar').setup {
-        -- currently this is the most optimal way for me to deal with this issue, https://github.com/petertriho/nvim-scrollbar/issues/72
-        throttle_ms = 2000,
-      }
-    end,
+    config = {
+      -- currently this is the most optimal way for me to deal with this issue, https://github.com/petertriho/nvim-scrollbar/issues/72
+      throttle_ms = 2000,
+    },
   },
   { -- NeoVim text object that finds diagnostics
     -- example usages
@@ -203,9 +202,7 @@ return {
     -- d]g - delete the next diagnostic text (excluding any diagnostic under the cursor)
     'andrewferrier/textobj-diagnostic.nvim',
     event = 'VeryLazy',
-    config = function()
-      require('textobj-diagnostic').setup()
-    end,
+    config = true,
   },
   { -- pretty cool motion plugin that turns s/f/t to be supercharged.
     -- it takes some to get used to but it's quite powerful and reduce cognitive loads
@@ -214,11 +211,9 @@ return {
     -- my favorite is `f<enter>` to go to the end of the line
     'ggandor/lightspeed.nvim',
     event = 'VeryLazy',
-    config = function()
-      require('lightspeed').setup {
-        ignore_case = true,
-      }
-    end,
+    config = {
+      ignore_case = true,
+    },
   },
   {
     -- syntax support for CODEOWNERS file
@@ -228,25 +223,22 @@ return {
   { -- A markdown preview directly in your neovim
     'ellisonleao/glow.nvim',
     ft = 'markdown',
-    config = function()
-      require('glow').setup {
-        border = 'none',
-      }
-    end,
+    config = {
+      border = 'none',
+    },
   },
   { -- Indent guides for Neovim
     'lukas-reineke/indent-blankline.nvim',
     event = 'VeryLazy',
-    config = function()
+    init = function()
       -- show some hidden characters - these are vim builtin options
       vim.o.list = true
       vim.o.listchars = [[tab:→\ ,eol:↵,trail:·,extends:↷,precedes:↶]]
-
-      require('indent_blankline').setup {
-        -- -- disable this related to https://github.com/lukas-reineke/indent-blankline.nvim/issues/440
-        -- show_current_context = true,
-      }
     end,
+    config = {
+      -- -- disable this related to https://github.com/lukas-reineke/indent-blankline.nvim/issues/440
+      -- show_current_context = true,
+    },
   },
   -- to improve the default vim.ui interfaces which something like nvim-gfold.lua can benefits from
   {
@@ -258,9 +250,7 @@ return {
     -- because I'm not really using it yet and it makes big difference on start up for some reason
     -- so until I start using it I will defer optimizing this plugin at start up
     enabled = false,
-    config = function()
-      require('gfold').setup()
-    end,
+    config = true,
   },
   { -- ✍️ All the npm/yarn commands I don't want to type
     'vuki656/package-info.nvim',
@@ -284,9 +274,7 @@ return {
     -- <leader>mas | alter code
     'jameshiew/nvim-magic',
     event = 'VeryLazy',
-    config = function()
-      require('nvim-magic').setup()
-    end,
+    config = true,
     dependencies = {
       'nvim-lua/plenary.nvim',
       'MunifTanjim/nui.nvim',
@@ -318,26 +306,14 @@ return {
   },
   { -- 💥 completely replaces the UI for messages, cmdline and the popupmenu
     'folke/noice.nvim',
+    dependencies = { -- Functions that allow you to call a function not more than once in a given timeframe.
+      'runiq/neovim-throttle-debounce',
+      'MunifTanjim/nui.nvim',
+      -- optional nicer look
+      'rcarriga/nvim-notify',
+    },
     event = 'VeryLazy',
-    config = function()
-      require('noice').setup {
-        lsp = {
-          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
-          override = {
-            ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
-            ['vim.lsp.util.stylize_markdown'] = true,
-            ['cmp.entry.get_documentation'] = true,
-          },
-        },
-        -- you can enable a preset for easier configuration
-        presets = {
-          command_palette = true, -- position the cmdline and popupmenu together
-          long_message_to_split = true, -- long messages will be sent to a split
-          inc_rename = false, -- enables an input dialog for inc-rename.nvim
-          lsp_doc_border = false, -- add a border to hover docs and signature help
-        },
-      }
-
+    init = function()
       vim.keymap.set(
         'n',
         '<space>fm',
@@ -345,18 +321,34 @@ return {
         { noremap = true, silent = true, desc = 'List Noice messages' }
       )
 
+      local throttle = require('throttle-debounce').throttle_leading
+
+      local throttled_callback = throttle(function()
+        require('notify').dismiss()
+      end, 500)
+
       local noice_group = vim.api.nvim_create_augroup('MyNoiceAG', { clear = true })
       vim.api.nvim_create_autocmd('CursorMoved', {
-        callback = function()
-          require('notify').dismiss()
-        end,
+        callback = throttled_callback,
         group = noice_group,
       })
     end,
-    dependencies = {
-      'MunifTanjim/nui.nvim',
-      -- optional nicer look
-      'rcarriga/nvim-notify',
+    config = {
+      lsp = {
+        -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+        override = {
+          ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
+          ['vim.lsp.util.stylize_markdown'] = true,
+          ['cmp.entry.get_documentation'] = true,
+        },
+      },
+      -- you can enable a preset for easier configuration
+      presets = {
+        command_palette = true, -- position the cmdline and popupmenu together
+        long_message_to_split = true, -- long messages will be sent to a split
+        inc_rename = false, -- enables an input dialog for inc-rename.nvim
+        lsp_doc_border = false, -- add a border to hover docs and signature help
+      },
     },
   },
 }

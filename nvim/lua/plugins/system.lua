@@ -77,30 +77,28 @@ return {
     'nvim-tree/nvim-tree.lua',
     event = 'VeryLazy',
     dependencies = 'nvim-tree/nvim-web-devicons',
-    config = function()
-      require('nvim-tree').setup {
-        view = {
-          side = 'right',
-          mappings = {
-            custom_only = false,
-            -- override default mappings
-            list = {
-              { key = { 'o', '<2-LeftMouse>', 'l', 'e' }, action = 'edit' },
-              { key = { '-', 'h' }, action = 'dir_up' },
-              { key = { '<Tab>' }, cb = ':wincmd w<CR>' },
-              { key = { 'q' }, cb = ':q<CR>' },
-            },
+    config = {
+      view = {
+        side = 'right',
+        mappings = {
+          custom_only = false,
+          -- override default mappings
+          list = {
+            { key = { 'o', '<2-LeftMouse>', 'l', 'e' }, action = 'edit' },
+            { key = { '-', 'h' }, action = 'dir_up' },
+            { key = { '<Tab>' }, cb = ':wincmd w<CR>' },
+            { key = { 'q' }, cb = ':q<CR>' },
           },
         },
-        -- auto_open = true,
-        -- not available any more
-        -- https://github.com/kyazdani42/nvim-tree.lua/blob/b2ba6dea7105d9afabd3af08abd93947b851a90f/lua/nvim-tree/legacy.lua#L213-L218
-        -- auto_close = false,
-        disable_netrw = false,
-        hijack_netrw = false,
-        open_on_setup = false,
-      }
-    end,
+      },
+      -- auto_open = true,
+      -- not available any more
+      -- https://github.com/kyazdani42/nvim-tree.lua/blob/b2ba6dea7105d9afabd3af08abd93947b851a90f/lua/nvim-tree/legacy.lua#L213-L218
+      -- auto_close = false,
+      disable_netrw = false,
+      hijack_netrw = false,
+      open_on_setup = false,
+    },
   }, -- enhanced filetree replacing netrw
   { -- https://github.com/fregante/GhostText
     'subnut/nvim-ghost.nvim',
@@ -114,14 +112,12 @@ return {
     event = 'VeryLazy',
     version = 'v3.*',
     dependencies = 'nvim-tree/nvim-web-devicons',
-    config = function()
-      require('bufferline').setup {
-        options = {
-          diagnostics = 'nvim_lsp',
-          always_show_bufferline = false,
-        },
-      }
-    end,
+    config = {
+      options = {
+        diagnostics = 'nvim_lsp',
+        always_show_bufferline = false,
+      },
+    },
   },
   { -- A VS Code like winbar for Neovim
     'utilyre/barbecue.nvim',
@@ -151,9 +147,6 @@ return {
     cond = function()
       return vim.env.NVIM_PROFILE ~= nil
     end,
-  },
-  { -- Functions that allow you to call a function not more than once in a given timeframe.
-    'runiq/neovim-throttle-debounce',
   },
 }
 
