@@ -132,7 +132,7 @@ return {
       {
         'anuvyklack/fold-preview.nvim',
         dependencies = {
-          'anuvyklack/nvim-keymap-amend',
+          'anuvyklack/keymap-amend.nvim',
         },
         config = true,
       },
