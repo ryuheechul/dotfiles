@@ -40,6 +40,7 @@
   "lsp-colors.nvim": { "branch": "main", "commit": "4e6da1984d23da88a947805866580c48fc3cc8d7" },
   "lsp-format.nvim": { "branch": "master", "commit": "ca0df5c8544e51517209ea7b86ecc522c98d4f0a" },
   "lsp_signature.nvim": { "branch": "master", "commit": "1979f1118e2b38084e7c148f279eed6e9300a342" },
+  "lspcontainers.nvim": { "branch": "main", "commit": "b01e19356d4a407d5d45d8f26388d59276e84929" },
   "lspkind-nvim": { "branch": "master", "commit": "c68b3a003483cf382428a43035079f78474cd11e" },
   "lualine-lsp-progress": { "branch": "master", "commit": "56842d097245a08d77912edf5f2a69ba29f275d7" },
   "lualine.nvim": { "branch": "master", "commit": "32a7382a75a52e8ad05f4cec7eeb8bbfbe80d461" },

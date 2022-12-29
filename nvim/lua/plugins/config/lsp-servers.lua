@@ -85,11 +85,62 @@ return function(setup_default)
   --Enable (broadcasting) snippet capability for completion
   setup_jsonls.capabilities.textDocument.completion.completionItem.snippetSupport = true
 
+  -- determine if it's with container or localhost
+  -- read more on that at ../../../remote-container.md
+  local gen_setup_pyright = function()
+    local volume_name = vim.env.LSP_PYRIGHT_ADDITIONAL_VOLUME
+    local path_in_container = vim.env.LSP_PYRIGHT_VOLUME_CONTAINER_PATH
+
+    -- in case with no container use
+    if not volume_name and not path_in_container then
+      return setup_default
+    end
+
+    -- to be able to go to a definitions for third party packages, mount the volume from code running container
+    -- assuming this volume is prepared - read more from ../../../remote-container.md
+    local mount = 'type=volume,src=' .. volume_name .. ',dst=' .. path_in_container .. ',readonly'
+
+    -- custom config based on https://github.com/lspcontainers/lspcontainers.nvim#advanced-configuration
+    local cmd = require('lspcontainers').command('pyright', {
+      -- to achieve an additional "volume mount" (with --mount) as well as "bind mount" (with --volume)
+      cmd_builder = function(runtime, volume, image)
+        return {
+          runtime,
+          'container',
+          'run',
+          '--interactive',
+          '--rm',
+          '--network=none',
+          '--workdir=' .. volume,
+          -- pyright container would mount the source code directory as the same path with the one from host
+          '--volume='
+            .. volume
+            .. ':'
+            .. volume
+            .. ':z',
+          '--mount=' .. mount,
+          -- mount,
+          image,
+        }
+      end,
+    })
+
+    return merge(setup_default, {
+      -- based on the example from https://github.com/lspcontainers/lspcontainers.nvim#pyright
+      before_init = function(params)
+        params.processId = vim.NIL
+      end,
+
+      cmd = cmd,
+      root_dir = require('lspconfig/util').root_pattern('.git', vim.fn.getcwd()),
+    })
+  end
+
   -- Enable the following language servers with `setup_default`
   return {
     clangd = setup_default,
     rust_analyzer = setup_default,
-    pyright = setup_default,
+    pyright = gen_setup_pyright(),
     tsserver = setup_tsserver,
     denols = setup_denols,
     sumneko_lua = setup_sumneko_lua,
