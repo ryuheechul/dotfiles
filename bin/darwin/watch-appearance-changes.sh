@@ -10,9 +10,12 @@
 # therefore use timeout to have a side effect of having separate process group id
 # This method was discovered at https://unix.stackexchange.com/a/403193/396504
 
-export FORCE_LOAD_MY_ZSH_STUFF=1
+
 exec zsh -lc '
-source ~/.zshrc
-timeout 5s single-daemon base16-shell-auto-reload-on-tmux
-timeout 5s single-daemon ~/.config/dfs-rhc/bin/darwin/base16-shell-to-follow-system-appearance.sh
-'
+export UNSET_ALL_MY_ZSH_STUFF_LOADED=1
+source ~/.config/dfs-rhc/zshrc.d/zshrc
+timeout 5s single-daemon base16-shell-auto-reload-on-tmux || true
+timeout 5s single-daemon ~/.config/dfs-rhc/bin/darwin/base16-shell-to-follow-system-appearance.sh || true
+exit
+' >/dev/null 2>&1 &
+# some how going into background is necessary to prevent hanging with automator https://apple.stackexchange.com/a/340443/368485

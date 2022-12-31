@@ -34,5 +34,5 @@ export PATH="$(brew --prefix swift)/bin:${PATH}"
 
 ## run dark-mode-notify.swift to fix base16-shell based on system's theme
 # `dark` and `light` are my custom zsh functions so there are some stuff to load the functions like exporting variable and source my ~/.zshrc.
-export FORCE_LOAD_MY_ZSH_STUFF=1
-~/.dark-mode-notify/dark-mode-notify.swift zsh -lc 'source ~/.zshrc; test "${DARKMODE}" = 1 && dark || light'
+export UNSET_ALL_MY_ZSH_STUFF_LOADED=1
+~/.dark-mode-notify/dark-mode-notify.swift zsh -lc 'source ~/.config/dfs-rhc/zshrc.d/zshrc; test "${DARKMODE}" = 1 && dark || light'
