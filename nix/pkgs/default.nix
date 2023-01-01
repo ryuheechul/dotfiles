@@ -14,6 +14,7 @@ with pkgs;
 [
   git # Distributed version control system
   gnumake # gnu make
+  time # Tool that runs programs and summarizes the system resources they use
   earthly # Build automation for the container era
   gnugrep # GNU implementation of the Unix grep command
   coreutils # like for readlink

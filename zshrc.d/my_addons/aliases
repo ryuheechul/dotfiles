@@ -74,12 +74,27 @@ function j() {
 }
 
 if test "$(uname)" = "Darwin"; then
+  function _sound_for_return() {
+    expr $? = 0 && afplay /System/Library/Sounds/Funk.aiff || afplay /System/Library/Sounds/Purr.aiff
+  }
+
   # getting notified on a job that takes some time (usually with `make`) turns out to be very helpful
   function notify() {
-    /usr/bin/time -hp $@ \
-      && afplay /System/Library/Sounds/Funk.aiff \
-      || afplay /System/Library/Sounds/Purr.aiff
+    start_time=$(date +%s)
+
+    env time -p $@
+    ret=$?
+
+    # skip making sound for under 2 seconds
+    test $(expr $(date +%s) - ${start_time}) -gt 2 && {
+      expr ${ret} = 0 ; _sound_for_return
+    }
+
+    # print the date just before exit
     date
+
+    # return the original result
+    return ${ret}
   }
 
   # able to hook up completions for arbitrary command arguments
