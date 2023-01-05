@@ -53,6 +53,7 @@ return {
   { -- remove trailing whitespace when save
     'mcauley-penney/tidy.nvim',
     event = 'BufWritePre',
+    config = true,
   },
   { -- show preview when `gd`
     'rmagatti/goto-preview',
