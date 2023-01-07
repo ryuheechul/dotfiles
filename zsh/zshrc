@@ -99,7 +99,7 @@ function _tag_zshrc {
 _tag_zshrc addon-starts-here
 # source from seperate files to organize better
 ADDON_D="${my_zsh_d}/my_addons"
-for source_file in zinit aliases shell_ext options lf_icons
+for source_file in zinit aliases shell_ext options
 do
   test -f $ADDON_D/$source_file && source $ADDON_D/$source_file
   _tag_zshrc $source_file
