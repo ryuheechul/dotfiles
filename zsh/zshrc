@@ -1,13 +1,16 @@
 # vim: set ft=zsh:
 
 # escape hatches for editors (that can be opened via/and inside shell) that has has its own terminal emulator that runs will run this shell
-test -n "${UNSET_MY_BASIC_ZSH_STUFF_LOADED}" && unset MY_BASIC_ZSH_STUFF_LOADED && unset UNSET_MY_BASIC_ZSH_STUFF_LOADED
-test -n "${UNSET_ALL_MY_ZSH_STUFF_LOADED}"   && unset ALL_MY_ZSH_STUFF_LOADED   && unset UNSET_ALL_MY_ZSH_STUFF_LOADED
-test -n "${UNSET_HOST_ALWAYS_USE_TMUX}"      && unset HOST_ALWAYS_USE_TMUX      && unset UNSET_HOST_ALWAYS_USE_TMUX
+test -z "${IGNORE_UNSET_MY_BASIC_ZSH_STUFF_LOADED}" && test -n "${UNSET_MY_BASIC_ZSH_STUFF_LOADED}" && unset MY_BASIC_ZSH_STUFF_LOADED && unset UNSET_MY_BASIC_ZSH_STUFF_LOADED
+test -z "${IGNORE_UNSET_ALL_MY_ZSH_STUFF_LOADED}"   && test -n "${UNSET_ALL_MY_ZSH_STUFF_LOADED}"   && unset ALL_MY_ZSH_STUFF_LOADED   && unset UNSET_ALL_MY_ZSH_STUFF_LOADED
+test -z "${IGNORE_UNSET_HOST_ALWAYS_USE_TMUX}"      && test -n "${UNSET_HOST_ALWAYS_USE_TMUX}"      && unset HOST_ALWAYS_USE_TMUX      && unset UNSET_HOST_ALWAYS_USE_TMUX
+
+unset IGNORE_UNSET_MY_BASIC_ZSH_STUFF_LOADED
+unset IGNORE_UNSET_ALL_MY_ZSH_STUFF_LOADED
+unset IGNORE_UNSET_HOST_ALWAYS_USE_TMUX
 
 ## basics
 
-export my_zsh_d="${XDG_CONFIG_HOME}/dfs-rhc/zsh"
 # to make sure my custom path supersedes default ones like /bin /usr/bin /usr/local/bin
 float_nix_path=1 source "${my_zsh_d}/path/set-basic"
 

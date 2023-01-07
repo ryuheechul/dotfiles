@@ -1,5 +1,10 @@
 # vim: set ft=zsh:
 
+# source this file (even multiple times when needed to make sure the order of path is ensured)
+
+# avoid $PATH polluted by duplicates - also new ones take precedence
+typeset -U path
+
 # convinient way to print $PATH
 alias printpath='echo ${path} | tr " " "\n"'
 
@@ -21,6 +26,8 @@ add-to-path "${HOME}/.local/bin"
 # https://github.com/ryuheechul/bin will be clone to this
 add-to-path "${HOME}/.local/my-bin"
 
+# my custom scripts that should work on any platform
 add-to-path "${dfs_rhc}/bin/discoverable"
 
+# my custom scripts that should work on darwin
 test "$(uname)" = "Darwin" && add-to-path "${dfs_rhc}/bin/darwin"

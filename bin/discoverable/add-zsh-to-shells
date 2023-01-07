@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# see here for context - https://github.com/fish-shell/fish-shell/issues/989
+
 should_be_latest_zsh="${1:-$(which zsh)}"
 
 # only add if not already exist
