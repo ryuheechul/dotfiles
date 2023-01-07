@@ -18,8 +18,6 @@ autoload -Uz _zinit
 zinit light mroth/evalcache
 # this loads zsh-defer faster
 zinit light romkatv/zsh-defer
-## use zsh-defer for anything that's possible to speed up
-zsh-defer zinit load romkatv/zsh-defer
 
 # git aliases like grt
 zinit snippet OMZP::git
