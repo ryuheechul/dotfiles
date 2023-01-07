@@ -40,5 +40,5 @@ test -f ${XDG_DATA_HOME:-~/.local/share}/zsh/site-functions/_gh || znap fpath _g
 # compctl -K    _pyenv pyenv
 
 # only way to preperly load this file again is to remove from zinit and open a new shell
-alias znap-reset="yes | zinit delete ${HOME:1}--.config--dfs-rhc--zshrc.d--my_addons/znap"
+alias znap-reset="yes | zinit delete ${HOME:1}--.config--dfs-rhc--zsh--my_addons/znap"
 alias znap-update="pushd ${znap_path} ; git pull ; popd"

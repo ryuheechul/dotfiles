@@ -1,0 +1,30 @@
+# vim: set ft=zsh:
+
+export BASE16_SHELL="${XDG_CONFIG_HOME}/base16-shell"
+
+function _change_my_base16_theme() {
+  # helper functions to make theme tone changes and that to be followable by other tools
+  _update_theme_changed_time() {
+    # let external tools to have a chance to follow the change and adopt to it
+    date +%s > ~/.base16_theme.updated-time
+  }
+
+  if test -n "${SSH_TTY}"; then
+    echo 'abort changing base16-shell when accessed via SSH'
+    return
+  fi
+
+  # change theme manually - by coping how base16-shell theme change works
+  ln -sf "${BASE16_SHELL}/scripts/base16-solarized-${1}.sh" ~/.base16_theme
+
+  # update time to trigger notify subscribers
+  _update_theme_changed_time
+}
+
+light() {
+  _change_my_base16_theme light
+}
+
+dark() {
+  _change_my_base16_theme dark
+}

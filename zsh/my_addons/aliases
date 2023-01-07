@@ -145,8 +145,6 @@ alias gh='GLAMOUR_STYLE=$(theme-tone) gh'
 
 # replace htop with bottom
 alias htop="btm -b"
-# convinient way to print $PATH
-alias path='echo ${PATH} | tr : "\n"'
 # overwrite essential stuff
 alias which="which -a"
 alias ping="gping"

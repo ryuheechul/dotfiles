@@ -102,11 +102,14 @@ git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0 || tru
 
 ## zsh
 
+# source dotfiles' env
+echo "source '${dfs_rhc}/sh/zsh/env'" >> ~/.zshenv
+
 # source dotfiles' zshrc
-echo "source '${dfs_rhc}/zshrc.d/zshrc'" >> ~/.zshrc
+echo "source '${dfs_rhc}/zsh/zshrc'" >> ~/.zshrc
 
 # source zinit now to avoid installing zsh plugins at initial usage
-zsh -c "source '${dfs_rhc}/zshrc.d/my_addons/zinit'"
+zsh -c "source '${dfs_rhc}/zsh/my_addons/zinit'"
 
 ## emacs
 

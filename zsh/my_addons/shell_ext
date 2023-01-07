@@ -42,14 +42,6 @@ function _evalable_brew_prefix {
   _evalable brew --prefix
 }
 
-function _evalable_path_grep_nix_profile {
-  function _path_grep_nix_profile {
-    path | grep nix-profile
-  }
-
-  _evalable _path_grep_nix_profile
-}
-
 function _evalable_yarn_global_path {
   _evalable yarn global bin
 }
@@ -124,11 +116,6 @@ _tag fzf
 
 ## binaries by language global packages, for example, npm, rust, go, etc.
 
-# making sure it supersedes like /bin /usr/bin /usr/local/bin
-cache-path "$(_evalcache _evalable_path_grep_nix_profile)"
-
-_tag nix-path
-
 # rust
 if test -n "${commands[cargo]}"; then
   cache-path "${HOME}/.cargo/bin"
@@ -159,19 +146,6 @@ ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 
 _tag asdf
 
-# discover user specific binaries and scripts
-cache-path "${HOME}/.local/bin"
-
-# add ../../bin/local
-cache-path "${HOME}/.config/dfs-rhc/bin/discoverable"
-
-# actually this wouldn't work.
-# so bootstrap script should be at its own repo
-# and that should be sourced
-# ---
-# https://github.com/ryuheechul/bin will be clone to this
-cache-path "${HOME}/.local/my-bin"
-
 export PATH="${path_cache}"
 _tag flush-path
 
@@ -196,12 +170,6 @@ _tag tag
 
 ## base16-shell supports
 
-# helper functions to make theme tone changes and that to be followable by other tools
-_update_theme_changed_time() {
-  # let external tools to have a chance to follow the change and adopt to it
-  date +%s > ~/.base16_theme.updated-time
-}
-
 function should_skip_loading_base16_shell()
 {
   if test -n "${SSH_TTY}" || test -n "${INSIDE_EMACS}" || test -n "${VIMRUNTIME}" ; then
@@ -214,7 +182,7 @@ function should_skip_loading_base16_shell()
 if should_skip_loading_base16_shell; then
   true
 else
-  BASE16_SHELL="${HOME}/.config/base16-shell"
+  BASE16_SHELL="${BASE16_SHELL:-${HOME}/.config/base16-shell}"
   [ -n "${PS1}" ] && \
       [ -s "${BASE16_SHELL}/profile_helper.sh" ] && \
           _evalcache ${BASE16_SHELL}/profile_helper.sh
@@ -223,36 +191,6 @@ else
 
   source ~/.base16_theme
 fi
-
-function _change_my_base16_theme() {
-  if test -n "${SSH_TTY}"; then
-    echo 'abort changing base16-shell when accessed via SSH'
-    return
-  fi
-
-  if should_skip_loading_base16_shell; then
-    # fallback to a manual way
-    ln -sf ~/.config/base16-shell/scripts/base16-solarized-${1}.sh ~/.base16_theme
-  else
-    # use the "native" functions when possible
-    if test "${1}" = "light"; then
-      base16_solarized-light
-    else
-      base16_solarized-dark
-    fi
-  fi
-
-  # update time to trigger notify subscribers
-  _update_theme_changed_time
-}
-
-light() {
-  _change_my_base16_theme light
-}
-
-dark() {
-  _change_my_base16_theme dark
-}
 
 _tag base16
 
