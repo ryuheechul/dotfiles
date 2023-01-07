@@ -1,32 +1,26 @@
 # vim: set ft=zsh:
 
 # convinient way to print $PATH
-alias path='echo ${PATH} | tr : "\n"'
+alias printpath='echo ${path} | tr " " "\n"'
 
-# should always start with $PATH
-path_cache="${PATH}"
-
-function _cache-path {
-  path_cache="${1}:${path_cache}"
+function add-to-path {
+  path=("${1}" ${path})
 }
 
 dfs_rhc="${XDG_CONFIG_HOME}/dfs-rhc"
 
-test -n "${float_nix_path}" && _cache-path $(path | grep nix-profile)
+test -n "${float_nix_path}" && add-to-path $(printpath | grep nix-profile)
 
 # discover user specific binaries and scripts
-_cache-path "${HOME}/.local/bin"
+add-to-path "${HOME}/.local/bin"
 
 # actually this wouldn't work.
 # so bootstrap script should be at its own repo
 # and that should be sourced
 # ---
 # https://github.com/ryuheechul/bin will be clone to this
-_cache-path "${HOME}/.local/my-bin"
+add-to-path "${HOME}/.local/my-bin"
 
-_cache-path "${dfs_rhc}/bin/discoverable"
+add-to-path "${dfs_rhc}/bin/discoverable"
 
-test "$(uname)" = "Darwin" && _cache-path "${dfs_rhc}/bin/darwin"
-
-# flush caching
-export PATH="${path_cache}"
+test "$(uname)" = "Darwin" && add-to-path "${dfs_rhc}/bin/darwin"
