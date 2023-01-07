@@ -32,13 +32,13 @@ zinit snippet OMZL::history.zsh
 CURR_DIR="${XDG_CONFIG_HOME}/dfs-rhc/zsh/my_addons"
 zinit snippet "${CURR_DIR}/znap"
 
-zsh-defer zinit snippet OMZL::directories.zsh
+zinit snippet OMZL::directories.zsh
 
 # to enable case insensitive completion - https://github.com/ohmyzsh/ohmyzsh/blob/3f42700c0d65cf26470d1e165b8ed80dfff9efca/lib/completion.zsh#L23
-zsh-defer zinit snippet OMZL::completion.zsh
+zinit snippet OMZL::completion.zsh
 
 # other git aliases like ggpush
-zsh-defer zinit snippet OMZL::git.zsh
+zinit snippet OMZL::git.zsh
 
 # additional configuration for marlonrichert/zsh-autocomplete
 # these need to be defined before loading marlonrichert/zsh-autocomplete
