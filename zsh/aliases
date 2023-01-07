@@ -1,0 +1,8 @@
+# vim: set ft=zsh:
+
+# aliases that is should be available for non-interactive shell too
+
+alias version='echo -n "current shell: "
+print ${ZSH_VERSION}
+echo -n \$\("which zsh) = $(/usr/bin/which zsh): "
+zsh --version'

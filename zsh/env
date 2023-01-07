@@ -19,3 +19,5 @@ esac
 
 #`light` and `dark` - helper function to change theme
 source "${dfs_rhc}/zsh/fn/theme"
+
+source "${dfs_rhc}/zsh/aliases"

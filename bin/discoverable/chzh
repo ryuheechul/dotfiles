@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# this is a chsh helper to make zsh to be the default shell
+
+echo 'with current zsh information below;'
+zsh -c 'version'
+
+should_be_latest_zsh="${1:-$(which zsh)}"
+
+echo
+echo "trying to set \`${should_be_latest_zsh}\` as the default shell for user \`${USER}\`"
+
+# make sure to have shell path added to /etc/shell via ./add-zsh-to-shells
+sudo add-zsh-to-shells "${should_be_latest_zsh}"
+
+chsh -s "${should_be_latest_zsh}"
