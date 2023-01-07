@@ -1,0 +1,14 @@
+# vim: set ft=zsh:
+
+# extra things to load for emacs for seamless integration
+if test -n "${INSIDE_EMACS}"; then
+  to_source_for_emacs="${my_dot_d}/emacs.d/shell/source.zsh"
+  test -f ${to_source_for_emacs} && source ${to_source_for_emacs}
+fi
+
+# extra things to load for neovim for seamless integration
+
+if test -n "${NVIM_LISTEN_ADDRESS}" && test -n "${commands[nvr]}"; then
+  to_source_for_neovim="${my_dot_d}/nvim/shell/source.zsh"
+  test -f ${to_source_for_neovim} && source ${to_source_for_neovim}
+fi

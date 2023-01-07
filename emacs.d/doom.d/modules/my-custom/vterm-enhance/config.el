@@ -7,11 +7,29 @@
 
 (setq tui-emacs (eq window-system nil))
 
-(if tui-emacs (setenv "TUI_EMACS" "1"))
-(setenv "INSIDE_DOOM_EMACS" "1")
-(setenv "UNSET_ALL_MY_ZSH_STUFF_LOADED" "1")
-(setenv "UNSET_MY_BASIC_ZSH_STUFF_LOADED" "1")
-(setenv "UNSET_HOST_ALWAYS_USE_TMUX" "1")
+(defun prep-env-to-quickly-open-with-neovim ()
+  (setenv "ALL_MY_ZSH_STUFF_LOADED" "1")
+  (setenv "fast_shell_in_editor" "1")
+  (setenv "IGNORE_UNSET_ALL_MY_ZSH_STUFF_LOADED" "1"))
+
+(defun undo-env-to-quickly-open-with-neovim ()
+  (setenv "INSIDE_EMACS_RUN_CMD_ON_START_UP" nil)
+  (setenv "ALL_MY_ZSH_STUFF_LOADED" nil)
+  (setenv "fast_shell_in_editor" nil)
+  (setenv "IGNORE_UNSET_ALL_MY_ZSH_STUFF_LOADED" nil))
+
+(defun prep-env-for-term ()
+  (if tui-emacs (setenv "TUI_EMACS" "1"))
+  ;; canceling potential pollutions
+  (undo-env-to-quickly-open-with-neovim)
+  ;; desired default
+  (setenv "INSIDE_DOOM_EMACS" "1")
+  (setenv "UNSET_ALL_MY_ZSH_STUFF_LOADED" "1")
+  (setenv "UNSET_MY_BASIC_ZSH_STUFF_LOADED" "1")
+  (setenv "UNSET_HOST_ALWAYS_USE_TMUX" "1"))
+
+;; important to call on startup too
+(prep-env-for-term)
 
 ;; this might pick up user installed (possibly newer version of zsh)
 ;; (let ((shell-path (shell-command-to-string "which zsh")))
@@ -28,11 +46,17 @@
 (map! :leader
       :g
       "'"
-      #'+vterm/toggle)
+      #'wrapped/vterm/toggle)
+
+(defun wrapped/vterm/toggle ()
+  (interactive)
+  (prep-env-for-term)
+  (+vterm/toggle nil))
 
 ;; basically bring toggle to `+vterm/here'
 (defun vterm/full-w/toggle ()
   (interactive)
+  (prep-env-for-term)
   ;; handle when vterm is not loaded yet too
   (if (boundp 'vterm-buffer-name)
       (let ((target-buffer (get-buffer vterm-buffer-name)))
@@ -52,7 +76,7 @@
 ;; reverse the the default keybinding for `t' and `T'
 (map! :leader :prefix "o" :g "t" #'vterm/full-w/toggle)
 ;; TODO: `T' can be better used for running Tmux probably
-(map! :leader :prefix "o" :g "T" #'+vterm/toggle)
+(map! :leader :prefix "o" :g "T" #'wrapped/vterm/toggle)
 
 (after! vterm
   (evil-collection-define-key 'insert 'vterm-mode-map
@@ -79,6 +103,7 @@
 ;; an option to fallback to neovim
 (defun open-in-neovim ()
   (interactive)
+  (prep-env-to-quickly-open-with-neovim)
   (vterm-with-cmd
    (concat
     ;; this is a workaround that fixes the cursor is not changing shape properly between modes for neovim with TERM=eterm-color
