@@ -71,6 +71,9 @@ git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shel
 # lf
 ln -sf "${dfs_rhc}/lf" ~/.config/lf
 
+# viddy
+ln -sf "${dfs_rhc}/viddy.toml" ~/.viddy.toml
+
 # tig
 ln -sf "${dfs_rhc}/vim.tigrc" ~/.tigrc
 

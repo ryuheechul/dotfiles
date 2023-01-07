@@ -91,6 +91,7 @@ with pkgs;
   gping # ping with graph
   fpp # for tmux-fpp
   extract_url # for tmux-urlview
+  viu # A command-line application to view images from the terminal written in Rust
 ] ++
 # search
 [
@@ -115,6 +116,7 @@ with pkgs;
   ipcalc # Simple IP network calculator
   fswatch # A cross-platform file change monitor with multiple backends
   watch # execute a program periodically
+  viddy # A modern watch command
   entr # Run arbitrary commands when files change
   pueue # long running task manager
   # taskell # CLI kanban
@@ -123,6 +125,7 @@ with pkgs;
   dos2unix # Convert text files with DOS or Mac line breaks to Unix line breaks and vice versa
   tldr # Simplified and community-driven man pages
   cht-sh # CLI client for cheat.sh, a community driven cheat sheet
+  mosh # Mobile shell
 ]
 ++ (import ./lang { pkgs = pkgs; })
 ++ (import ./extra/default.nix { pkgs = pkgs; })

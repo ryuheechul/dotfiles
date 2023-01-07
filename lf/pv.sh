@@ -2,19 +2,25 @@
 
 filename="$(basename "$1")"
 EXT="${filename##*.}"
-
 # lowercasing
 # if this doesn't work check if you bash is old like 3.x on like on macOS
 # then `$ brew install bash`
 ext="${EXT,,}"
 
-lf_d="${HOME}/.config/lf"
+lf_d="${XDG_CONFIG_HOME}/lf"
 glow_sh="${lf_d}/glow.sh"
 less_sh="${lf_d}/less.sh"
 
-if [ "${ext}" == "md" ]; then
+title ()
+{
+  echo '_'"${1}"'_ via **'"${2}"'**: `'"${3}"'`
+
+---' | ${glow_sh}
+}
+
+markdown-via-glow () {
   function with-glow () {
-    echo '`# Markdown: '"$1"'` via **glow**' | ${glow_sh}
+    title Markdown glow "${1}"
     ${glow_sh} "$1"
   }
 
@@ -25,9 +31,24 @@ if [ "${ext}" == "md" ]; then
   else
     with-glow $1
   fi
-else
-  paging_flag=''
+}
 
+image-via-viu () {
+  with-viu ()
+  {
+    title Image viu "${1}"
+    viu "${1}"
+  }
+
+  if test -n "${LF_PV_WITH_PAGER}"; then
+    with-viu "${1}" | ${less_sh}
+  else
+    with-viu "${1}"
+  fi
+}
+
+rest-via-bat () {
+  paging_flag=''
   if test -n "${LF_PV_WITH_PAGER}"; then
     # use bat-riffle if exist
     if test -n "$(command -v bat-riffle)"; then
@@ -43,4 +64,16 @@ else
   fi
 
   bat ${paging_flag} --force-colorization "$@"
-fi
+}
+
+case "${ext}" in
+  md)
+    markdown-via-glow "${1}"
+    ;;
+  jpg|jpeg|png|gif)
+    image-via-viu "${1}"
+    ;;
+  *)
+    rest-via-bat "${1}"
+    ;;
+esac
