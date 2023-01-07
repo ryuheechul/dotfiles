@@ -31,73 +31,77 @@ else
   exit 1
 fi
 
-# make sure ~/.config exist
-mkdir -p ~/.config
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+
+echo "[INFO] \$XDG_CONFIG_HOME: ${XDG_CONFIG_HOME}"
+
+# make sure ${XDG_CONFIG_HOME} exist
+mkdir -p "${XDG_CONFIG_HOME}"
 
 # symlink this repo so it's discoverable no matter where this is located at
 # dfs-rhc: shorthand for dotfiles-ryuheechul
-ln -sf "${this_repo_path}" ~/.config/dfs-rhc
+ln -sf "${this_repo_path}" "${XDG_CONFIG_HOME}/dfs-rhc"
 
-dfs_rhc="${HOME}/.config/dfs-rhc"
+dfs_rhc="${XDG_CONFIG_HOME}/dfs-rhc"
 
 # in case my bins are being used in the configuration step already
 # - one discovered usage is that `current-base16` is being used in ../nvim/lua/plugins/theme.lua
 export PATH="${dfs_rhc}/bin/discoverable:${PATH}"
 
 # source my gitconfig
-cat << EOF >> ~/.gitconfig
+cat << EOF >> "${HOME}/.gitconfig"
 [include]
   path = "${dfs_rhc}/gitconfig"
 EOF
 
 # symlink gh config
-mkdir -p ~/.config/gh
-ln -sf "${dfs_rhc}/gh/config.yml" ~/.config/gh/config.yml
+mkdir -p "${XDG_CONFIG_HOME}/gh"
+ln -sf "${dfs_rhc}/gh/config.yml" "${XDG_CONFIG_HOME}/gh/config.yml"
 
 # symlink batconfig
-ln -sf "${dfs_rhc}/bat" ~/.config/bat
+ln -sf "${dfs_rhc}/bat" "${XDG_CONFIG_HOME}/bat"
 bat cache --build || true
 
 # alacritty
-ln -sf "${dfs_rhc}/alacritty.yml" ~/.alacritty.yml
+ln -sf "${dfs_rhc}/alacritty.yml" "${HOME}/.alacritty.yml"
 
 # starship
-ln -sf "${dfs_rhc}/starship.toml" ~/.config/starship.toml
+ln -sf "${dfs_rhc}/starship.toml" "${XDG_CONFIG_HOME}/starship.toml"
 
 # base16
-git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell \
-  || bash -c 'cd ~/.config/base16-shell && git pull && git checkout cd71822de1f9b53eea9beb9d94293985e9ad7122'
+git clone https://github.com/chriskempson/base16-shell.git "${XDG_CONFIG_HOME}/base16-shell" \
+  || bash -c 'cd "${XDG_CONFIG_HOME}/base16-shell" && git pull && git checkout cd71822de1f9b53eea9beb9d94293985e9ad7122'
 
 # lf
-ln -sf "${dfs_rhc}/lf" ~/.config/lf
+ln -sf "${dfs_rhc}/lf" "${XDG_CONFIG_HOME}/lf"
 
 # viddy
-ln -sf "${dfs_rhc}/viddy.toml" ~/.config/viddy.toml
+ln -sf "${dfs_rhc}/viddy.toml" "${XDG_CONFIG_HOME}/viddy.toml"
 
 # tig
-ln -sf "${dfs_rhc}/vim.tigrc" ~/.tigrc
+ln -sf "${dfs_rhc}/vim.tigrc" "${HOME}/.tigrc"
 
 # gitmux
-ln -sf "${dfs_rhc}/gitmux.conf" ~/.gitmux.conf
+ln -sf "${dfs_rhc}/gitmux.conf" "${HOME}/.gitmux.conf"
 
 # tmux
-ln -sf "${dfs_rhc}/tmux.conf" ~/.tmux.conf
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm || bash -c 'cd ~/.tmux/plugins/tpm && git pull'
+ln -sf "${dfs_rhc}/tmux.conf" "${HOME}/.tmux.conf"
+git clone https://github.com/tmux-plugins/tpm "${HOME}/.tmux/plugins/tpm" || bash -c 'cd "${HOME}/.tmux/plugins/tpm" && git pull'
 tmux start-server && \
   tmux new-session -d && \
   sleep 1 && \
-  ~/.tmux/plugins/tpm/bin/install_plugins && \
+  "${HOME}/.tmux/plugins/tpm/bin/install_plugins" && \
   sleep 1 && \
   tmux kill-server || true
 
 # avoid using `/usr/local/bin` as a global path for yarn
-yarn config set prefix ~/.yarn
+yarn config set prefix "${HOME}/.yarn"
 
 # install asdf
 ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
 PATH="${ASDF_DIR}/bin:${ASDF_DATA_DIR}/shims:${PATH}"
-ln -sf "${dfs_rhc}/asdf/tool-versions" ~/.tool-versions
+ln -sf "${dfs_rhc}/asdf/tool-versions" "${HOME}/.tool-versions"
 
 git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0 || true
 
@@ -106,10 +110,10 @@ git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0 || tru
 ## zsh
 
 # source dotfiles' env
-echo "source '${dfs_rhc}/sh/zsh/env'" >> ~/.zshenv
+echo "source '${dfs_rhc}/sh/zsh/env'" >> "${HOME}/.zshenv"
 
 # source dotfiles' zshrc
-echo "source '${dfs_rhc}/zsh/zshrc'" >> ~/.zshrc
+echo "source '${dfs_rhc}/zsh/zshrc'" >> "${HOME}/.zshrc"
 
 # source zinit now to avoid installing zsh plugins at initial usage
 zsh -c "source '${dfs_rhc}/zsh/my_addons/zinit'"
@@ -117,21 +121,21 @@ zsh -c "source '${dfs_rhc}/zsh/my_addons/zinit'"
 ## emacs
 
 # spacemacs
-git clone https://github.com/syl20bnr/spacemacs ~/.spacemacs.d || bash -c 'cd ~/.spacemacs.d && git pull'
-ln -sf "${dfs_rhc}/emacs.d/spacemacs" ~/.spacemacs
+git clone https://github.com/syl20bnr/spacemacs "${HOME}/.spacemacs.d" || bash -c 'cd "${HOME}/.spacemacs.d" && git pull'
+ln -sf "${dfs_rhc}/emacs.d/spacemacs" "${HOME}/.spacemacs"
 
 # doom emacs
-git clone https://github.com/hlissner/doom-emacs ~/.doom-emacs.d || bash -c 'cd ~/.doom-emacs.d && git pull'
-ln -sf "${dfs_rhc}/emacs.d/doom.d" ~/.config/doom
-~/.doom-emacs.d/bin/doom -y install || true # let the failure of this command not to block the rest
+git clone https://github.com/hlissner/doom-emacs "${HOME}/.doom-emacs.d" || bash -c 'cd "${HOME}/.doom-emacs.d" && git pull'
+ln -sf "${dfs_rhc}/emacs.d/doom.d" "${XDG_CONFIG_HOME}/doom"
+"${HOME}/.doom-emacs.d/bin/doom" -y install || true # let the failure of this command not to block the rest
 
 # chemecs to allow switching between configs like doom emacs and spacemacs
-git clone https://github.com/plexus/chemacs2.git ~/.emacs.d || bash -c 'cd ~/.emacs.d && git pull'
-ln -sf "${dfs_rhc}/emacs.d/emacs-profiles.el" ~/.emacs-profiles.el
+git clone https://github.com/plexus/chemacs2.git "${HOME}/.emacs.d" || bash -c 'cd "${HOME}/.emacs.d" && git pull'
+ln -sf "${dfs_rhc}/emacs.d/emacs-profiles.el" "${HOME}/.emacs-profiles.el"
 
 ## (neo)vim
 # neovim - now this replace SpaceVim
-ln -sf "${dfs_rhc}/nvim" ~/.config/nvim
+ln -sf "${dfs_rhc}/nvim" "${XDG_CONFIG_HOME}/nvim"
 
 # trigger neovim plugins install via command line
 if [ -z "${SKIP_INSTALL_VIM_PLUGINS}" ]; then
@@ -142,11 +146,11 @@ fi
 
 # SpaceVim - this still may be used for vim but not with nvim
 spacevim_ver="v1.6.0"
-git clone https://github.com/SpaceVim/SpaceVim ~/.SpaceVim || bash -c 'cd ~/.SpaceVim && git checkout master && git pull' \
-  && cd ~/.SpaceVim \
+git clone https://github.com/SpaceVim/SpaceVim "${HOME}/.SpaceVim" || bash -c 'cd "${HOME}/.SpaceVim" && git checkout master && git pull' \
+  && cd "${HOME}/.SpaceVim" \
   && git checkout ${spacevim_ver}
-ln -sf "${dfs_rhc}/SpaceVim.d" ~/.SpaceVim.d
+ln -sf "${dfs_rhc}/SpaceVim.d" "${HOME}/.SpaceVim.d"
 # shim vimrc
-ln -sf ~/.SpaceVim ~/.vim
+ln -sf "${HOME}/.SpaceVim" "${HOME}/.vim"
 
 echo "configuration.sh seemed to have run successfully!"
