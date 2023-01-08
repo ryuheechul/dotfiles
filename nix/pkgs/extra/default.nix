@@ -78,6 +78,18 @@ with pkgs;
   [
     sqls # SQL language server written in Go
   ]
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_PODMAN")
+  [
+    podman # A program for managing pods, containers and container images
+    # ```
+    # export MY_NIX_EXTRA_PODMAN=1 # to include podman at `home-manager switch`
+    #
+    # # follow instruction on machine init & start - https://podman.io/getting-started/installation
+    # # include these at ~/.zshrc
+    # export DOCKER_HOST="unix:///${XDG_DATA_HOME}/containers/podman/machine/podman-machine-default/podman.sock" # to `docker` command to work with podman
+    # alias docker=podman # or just alias it
+    # ```
+  ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_WSL")
   [
     wslu # A collection of utilities for Windows 10/11 Linux Subsystems
