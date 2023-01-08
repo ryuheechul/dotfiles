@@ -321,6 +321,9 @@ return {
     config = function()
       require('drop').setup { theme = ({ 'xmas', 'stars', 'leaves', 'snow' })[math.random(1, 4)] }
     end,
+    cond = function()
+      return vim.env.SSH_CONNECTION == nil
+    end,
   },
   { -- 💥 completely replaces the UI for messages, cmdline and the popupmenu
     'folke/noice.nvim',
