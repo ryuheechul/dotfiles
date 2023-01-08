@@ -110,7 +110,10 @@ git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0 || tru
 ## zsh
 
 # source dotfiles' env
-echo "source '${dfs_rhc}/sh/zsh/env'" >> "${HOME}/.zshenv"
+echo "source '${dfs_rhc}/zsh/env'" >> "${HOME}/.zshenv"
+
+# source dotfiles' zlogin
+echo "source '${dfs_rhc}/zsh/zlogin'" >> "${HOME}/.zlogin"
 
 # source dotfiles' zshrc
 echo "source '${dfs_rhc}/zsh/zshrc'" >> "${HOME}/.zshrc"

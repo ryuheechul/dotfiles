@@ -2,7 +2,14 @@
 
 # aliases that is should be available for non-interactive shell too
 
+# convenient way to examine current and possible newer zsh versions installed
 alias version='echo -n "current shell: "
 print ${ZSH_VERSION}
 echo -n \$\("which zsh) = $(/usr/bin/which zsh): "
 zsh --version'
+
+# quick way to attach to tmux and zellij
+alias tmux-attach="${my_dot_d}/bin/tmux-attach-or-new.sh"
+alias exec-tmux-attach="exec ${my_dot_d}/bin/tmux-attach-or-new.sh"
+alias zellij-attach="${my_dot_d}/bin/zellij-attach-or-new.sh"
+alias exec-zellij-attach="exec ${my_dot_d}/bin/zellij-attach-or-new.sh"

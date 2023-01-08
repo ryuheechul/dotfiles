@@ -1,0 +1,4 @@
+# vim: set ft=zsh:
+
+# persist ssh session with zellij on ssh connection
+test -n "${SSH_TTY}" && UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec-zellij-attach ssh
