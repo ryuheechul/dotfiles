@@ -87,11 +87,11 @@ export FZF_DEFAULT_OPTS='
 
 # CTRL-T - Paste the selected files and directories onto the command-line
 export FZF_CTRL_T_COMMAND='fd'
-export FZF_CTRL_T_OPTS=''
+export FZF_CTRL_T_OPTS='--preview "preview {}"'
 
 # ALT-C - cd into the selected directory
 export FZF_ALT_C_COMMAND='fd -t d'
-export FZF_ALT_C_OPTS=''
+export FZF_ALT_C_OPTS='--preview "preview {}"'
 
 # better history search with fzf via https://nixos.wiki/wiki/Fzf
 

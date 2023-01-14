@@ -8,6 +8,13 @@ print ${ZSH_VERSION}
 echo -n \$\("which zsh) = $(/usr/bin/which zsh): "
 zsh --version'
 
+# exa
+alias exa="exa --icons --group-directories-first -F --ignore-glob='**/.git|**/.DS_Store'"
+alias ls="exa"
+alias l="ls -lah -g --git"
+alias lt="ls -lah -T -L=3 --git --git-ignore"
+alias tree="exa -G -T --git-ignore"
+
 # quick way to attach to tmux and zellij
 alias tmux-attach="${my_dot_d}/bin/tmux-attach-or-new.sh"
 alias exec-tmux-attach="exec ${my_dot_d}/bin/tmux-attach-or-new.sh"

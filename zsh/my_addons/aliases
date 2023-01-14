@@ -153,13 +153,6 @@ alias ping="gping"
 alias df="duf"
 alias du='du -d 1 -h | sort -h -r'
 
-# exa
-alias exa="exa --icons --group-directories-first -F --ignore-glob='**/.git|**/.DS_Store'"
-alias ls="exa"
-alias l="ls -lah -g --git"
-alias lt="ls -lah -T -L=3 --git --git-ignore"
-alias tree="exa -G -T --git-ignore"
-
 # git
 alias tig='TERM=xterm COLORTERM=256bit tig'
 alias gs="git status"
@@ -209,6 +202,22 @@ alias cim='NVIM_CACHE_PROFILE=1 vi'
 alias pim='NVIM_PROFILE=1 vi'
 # neovim with ghost
 alias vig='my_nvim_ghost=1 vi'
+
+sk ()
+{
+  # prevent running sk on home directory as there are too many things to read
+  test "${PWD}" = "${HOME}" && { echo "${PWD}"; return; }
+
+  if test -n "${TMUX_PANE}"; then
+    sk-tmux $@
+  else
+    sk $@
+  fi
+}
+
+# should I try infinite loop here maybe?
+alias v='vi $(sk --preview "preview {}")'
+alias dot='pushd "${my_dot_d}"; v; popd'
 
 # useful when the status of lazy.nvim seems not clean
 # for now, it only print the command not run

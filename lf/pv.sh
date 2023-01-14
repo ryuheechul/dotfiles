@@ -47,7 +47,18 @@ image-via-viu () {
   fi
 }
 
-rest-via-bat () {
+# via tree alias from my zsh
+directory-via-tree () {
+  echo "@ $(realpath "${1}")"
+  title Directory "tree" "${1}"
+  if test -n "${LF_PV_WITH_PAGER}"; then
+    zsh -c "tree '${1}'" | ${less_sh}
+  else
+    zsh -c "tree '${1}'"
+  fi
+}
+
+file-via-bat () {
   paging_flag=''
   if test -n "${LF_PV_WITH_PAGER}"; then
     # use bat-riffle if exist
@@ -74,6 +85,10 @@ case "${ext}" in
     image-via-viu "${1}"
     ;;
   *)
-    rest-via-bat "${1}"
+    if test -d "${1}"; then
+      directory-via-tree "${1}"
+    else
+      file-via-bat "${@}"
+    fi
     ;;
 esac

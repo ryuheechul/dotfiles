@@ -64,6 +64,7 @@ with pkgs;
 # modern tools - i.e. https://github.com/ibraheemdev/modern-unix
 [
   fzf # A command-line fuzzy finder
+  skim # Command-line fuzzy finder written in Rust
   # gotop # terminal based graphical activity monitor
   bottom # bottom instead of top
   yq-go # yaml processor and it's not a jq wrapper
