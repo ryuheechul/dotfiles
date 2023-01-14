@@ -17,7 +17,10 @@ function _change_my_base16_theme() {
   # change theme manually - by coping how base16-shell theme change works
   ln -sf "${BASE16_SHELL}/scripts/base16-solarized-${1}.sh" ~/.base16_theme
 
-  # update time to trigger notify subscribers
+  # and source the new one
+  source ~/.base16_theme
+
+  # update time to trigger notify subscribers too
   _update_theme_changed_time
 }
 
