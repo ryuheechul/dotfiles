@@ -2,10 +2,8 @@
 
 window:
   title: Alacritty
-  decorations: transparent
-  padding:
-    x: 5
-    y: 22
+  startup_mode: Fullscreen
+  decorations: full
 live_config_reload: true
 
 key_bindings:
@@ -17,23 +15,21 @@ env: {}
 #   TERM: xterm-256color
 font:
   normal:
-    family: JetBrainsMono Nerd Font
+    # adding Mono or not makes difference for characters like these [[tab:→\ ,eol:↵,trail:·,extends:↷,precedes:↶]]
+    family: FiraMono Nerd Font Mono
+    # family: JetBrainsMono Nerd Font Mono
     style: Regular
+  # skip specifying families to below to fallback to normal ones
   bold:
-    # family: JetBrains Mono
-    family: JetBrainsMono Nerd Font
     style: Bold
   italic:
-    family: JetBrainsMono Nerd Font
     style: Italic
   bold_italic:
-    family: JetBrainsMono Nerd Font
     style: Bold Italic
-  size: 13.0
-  use_thin_strokes: true # macOS only
+  size: 15.0
   draw_bold_text_with_bright_colors: true
 shell:
-  program: /bin/bash
+  program: /bin/zsh
   args:
     - -c
-    - '~/.config/dfs-rhc/bin/tmux-attach-or-new.sh default'
+    - tmux-attach alacritty

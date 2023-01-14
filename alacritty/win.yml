@@ -28,15 +28,13 @@ font:
   normal:
     family: FiraCode NF
     style: Regular
+  # skip specifying families to below to fallback to normal ones
   bold:
-    family: FiraCode NF
     style: Bold
   # thanks to https://github.com/alacritty/alacritty/issues/894#issuecomment-647877980
   italic:
-    family: FiraCode NF
     style: Oblique
   bold_italic:
-    family: FiraCode NF
     style: Bold Oblique
   size: 11.0
 key_bindings:
