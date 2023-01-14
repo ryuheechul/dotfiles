@@ -1,3 +1,5 @@
+# https://starship.rs/config
+
 [[battery.display]]
 threshold = 80
 style = "yellow"
@@ -25,3 +27,6 @@ disabled = false
 [terraform]
 
 [nix_shell]
+
+[aws]
+symbol = '🅰 '
