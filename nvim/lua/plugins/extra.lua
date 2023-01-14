@@ -134,7 +134,7 @@ return {
         dependencies = {
           'anuvyklack/keymap-amend.nvim',
         },
-        config = true,
+        opts = { auto = 100 },
       },
     },
     init = function()
