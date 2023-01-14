@@ -84,6 +84,9 @@ ln -sf "${dfs_rhc}/vim.tigrc" "${HOME}/.tigrc"
 # gitmux
 ln -sf "${dfs_rhc}/gitmux.conf" "${HOME}/.gitmux.conf"
 
+# zellij
+ln -sf "${dfs_rhc}/zellij" "${XDG_CONFIG_HOME}/zellij"
+
 # tmux
 ln -sf "${dfs_rhc}/tmux.conf" "${HOME}/.tmux.conf"
 git clone https://github.com/tmux-plugins/tpm "${HOME}/.tmux/plugins/tpm" || bash -c 'cd "${HOME}/.tmux/plugins/tpm" && git pull'

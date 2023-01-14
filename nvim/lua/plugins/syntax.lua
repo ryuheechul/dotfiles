@@ -4,6 +4,10 @@ return {
     'earthly/earthly.vim',
     ft = 'Earthfile',
   },
+  {
+    'imsnif/kdl.vim',
+    ft = 'kdl',
+  },
   { -- Highlight, edit, and navigate code using a fast incremental parsing library
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
