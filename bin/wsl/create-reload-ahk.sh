@@ -18,5 +18,6 @@ EOF
 
 chmod +x "${target_path}"
 
-echo "Now you can run \`${target_path}\` to easily reload hot keys." 
+echo "Now you can run \`${target_path}\` to easily reload hot keys."
 echo "Also \`~/dotfiles/autohotkey/my-hotkeys.ahk\` will be loaded on start up as well."
+echo "If this doesn't work creating a shortcut manually and place it it Startup folder also should work"
