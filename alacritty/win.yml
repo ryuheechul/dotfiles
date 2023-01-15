@@ -47,4 +47,4 @@ key_bindings:
     mods: Control
     action: Paste
 shell:
-  program: wsl -- bash -c -l 'cd && SHELL=$(which zsh) tmux a'
+  program: wsl -- bash -c -l 'cd && zsh -c "tmux-attach wsl"'
