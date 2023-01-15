@@ -29,10 +29,10 @@ return {
     },
     init = function()
       -- set a theme first
-      if vim.env.my_nvim_theme_everforest ~= nil then
-        vim.cmd [[ colorscheme everforest ]]
-      else
+      if vim.env.my_nvim_theme_solarized ~= nil then
         vim.cmd [[ colorscheme NeoSolarized ]]
+      else
+        vim.cmd [[ colorscheme everforest ]]
       end
 
       -- comply with base16
