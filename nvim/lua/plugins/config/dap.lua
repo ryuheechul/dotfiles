@@ -123,7 +123,7 @@ return function()
         { m, 'q', dap.disconnect, { noremap = true, desc = 'disconnect' } },
       },
       exit = {},
-      config = {
+      opts = {
         on_enter = function()
           print 'Enter quick debug layer'
         end,
@@ -149,7 +149,7 @@ return function()
         { m, 'q', smart_quit_debug, { noremap = true, desc = 'disconnect' } },
       },
       exit = {},
-      config = {
+      opts = {
         on_enter = function()
           print 'Enter quit debug layer'
         end,

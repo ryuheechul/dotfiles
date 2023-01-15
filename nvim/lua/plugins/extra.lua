@@ -177,7 +177,7 @@ return {
   { -- prevents the contents being cramped on windows's open/close event
     'luukvbaal/stabilize.nvim',
     event = 'VeryLazy',
-    config = {
+    opts = {
       -- by setting force to be false,
       -- it does not stabilize window when the content will be hidden behind the new windows
       force = false,
@@ -190,7 +190,7 @@ return {
   { -- Extensible Neovim Scrollbar
     'petertriho/nvim-scrollbar',
     event = 'VeryLazy',
-    config = {
+    opts = {
       -- currently this is the most optimal way for me to deal with this issue, https://github.com/petertriho/nvim-scrollbar/issues/72
       throttle_ms = 2000,
     },
@@ -211,7 +211,7 @@ return {
     -- my favorite is `f<enter>` to go to the end of the line
     'ggandor/lightspeed.nvim',
     event = 'VeryLazy',
-    config = {
+    opts = {
       ignore_case = true,
     },
   },
@@ -223,7 +223,7 @@ return {
   { -- A markdown preview directly in your neovim
     'ellisonleao/glow.nvim',
     ft = 'markdown',
-    config = {
+    opts = {
       border = 'none',
     },
   },
@@ -235,7 +235,7 @@ return {
       vim.o.list = true
       vim.o.listchars = [[tab:→\ ,eol:↵,trail:·,extends:↷,precedes:↶]]
     end,
-    config = {
+    opts = {
       -- -- disable this related to https://github.com/lukas-reineke/indent-blankline.nvim/issues/440
       -- show_current_context = true,
     },
@@ -287,7 +287,7 @@ return {
       'MunifTanjim/nui.nvim',
       'ElPiloto/significant.nvim',
     },
-    config = {
+    opts = {
       mappings = {
         prompt = '<C-Space>',
         swift = '<C-n>',
@@ -354,7 +354,7 @@ return {
         group = noice_group,
       })
     end,
-    config = {
+    opts = {
       lsp = {
         -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
         override = {
@@ -375,7 +375,7 @@ return {
   { -- A minimalist autoclose plugin
     'm4xshen/autoclose.nvim',
     event = 'VeryLazy',
-    config = {},
+    opts = {},
   },
 }
 

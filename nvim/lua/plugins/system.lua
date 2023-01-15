@@ -77,7 +77,7 @@ return {
     'nvim-tree/nvim-tree.lua',
     event = 'VeryLazy',
     dependencies = 'nvim-tree/nvim-web-devicons',
-    config = {
+    opts = {
       view = {
         side = 'right',
         mappings = {
@@ -112,7 +112,7 @@ return {
     event = 'VeryLazy',
     version = 'v3.*',
     dependencies = 'nvim-tree/nvim-web-devicons',
-    config = {
+    opts = {
       options = {
         diagnostics = 'nvim_lsp',
         always_show_bufferline = false,

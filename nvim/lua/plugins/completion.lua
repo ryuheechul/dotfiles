@@ -42,7 +42,7 @@ return {
         require('neogen').generate()
       end, { noremap = true, silent = true, desc = 'generate a docstring on cursor for multiple languages' })
     end,
-    config = { snippet_engine = 'luasnip' },
+    opts = { snippet_engine = 'luasnip' },
   },
 }
 
