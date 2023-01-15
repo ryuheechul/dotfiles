@@ -51,6 +51,8 @@ Space::Space ; without this Space will not work
 !l::Send, ^l ; focus address bar
 !z::Send, ^z ; undo
 !+z::Send, ^+z ; redo
+!=::Send, ^= ; zoom in
+!-::Send, ^- ; zoom out
 ; thanks to https://www.reddit.com/r/AutoHotkey/comments/rsozy8/comment/hqo0hqp
 !LButton::Send ^{LButton} ; mimic CMD+click - open in a new tab
 
