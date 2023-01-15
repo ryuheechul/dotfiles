@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+tempdir="$(mktemp -d)"
+pushd "${tempdir}"
+wget https://invisible-island.net/datafiles/current/terminfo.src.gz; gunzip terminfo.src.gz
+cat ./terminfo.src
+
+# mitigate issue in Darwin platform by choosing its own `tic`
+case "$(uname -s)" in
+  Darwin*) _tic_cmd=/usr/bin/tic
+    ;;
+  *) _tic_cmd=tic
+    ;;
+esac
+
+${_tic_cmd} -xe tmux-256color terminfo.src
+infocmp tmux-256color
+popd
+rm -r "${tempdir}"

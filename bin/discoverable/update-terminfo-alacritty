@@ -4,7 +4,7 @@ tempdir="$(mktemp -d)"
 pushd "${tempdir}"
 wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info
 cat ./alacritty.info
-tic -axe alacritty,alacritty-direct ./alacritty.info
+tic -xe alacritty,alacritty-direct ./alacritty.info
 infocmp alacritty
 popd
 rm -r "${tempdir}"
