@@ -322,7 +322,8 @@ return {
       require('drop').setup { theme = ({ 'xmas', 'stars', 'leaves', 'snow' })[math.random(1, 4)] }
     end,
     cond = function()
-      return vim.env.SSH_CONNECTION == nil
+      -- TODO: handle the logic elsewhere like zsh and expose single env var to use here
+      return vim.env.SSH_CONNECTION == nil and vim.env.WSL_DISTRO_NAME == nil
     end,
   },
   { -- 💥 completely replaces the UI for messages, cmdline and the popupmenu
