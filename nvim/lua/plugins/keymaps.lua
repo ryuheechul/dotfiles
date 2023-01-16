@@ -97,6 +97,7 @@ local config = function()
   wk.register({
     w = {
       name = '+Windows/Workspace',
+      d = { cmdify 'close', 'close window' },
       m = { cmdify '!tmux-zoom' .. cmdify 'WindowsMaximize', 'maximize/minimize window' },
       v = { cmdify 'WindowsMaximizeVertical', 'maximize/minimize window vertically' },
       h = { cmdify 'WindowsMaximizeHorizontal', 'maximize/minimize window horizontally' },
