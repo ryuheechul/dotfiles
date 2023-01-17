@@ -56,6 +56,24 @@ Space::Space ; without this Space will not work
 ;had to delete comma after Send for below to work - https://stackoverflow.com/a/47223049/1570165
 !=::Send ^{=} ; zoom in
 !-::Send, ^- ; zoom out
+
+; macOS style key bindings for screencapture
+; and thanks to https://www.autohotkey.com/boards/viewtopic.php?style=1&p=406921 for hints on preventing being mixed up
+!+3::
+  KeyWait LAlt
+  KeyWait 3
+  BlockInput On
+  Send #{PrintScreen}
+  BlockInput Off
+  return
+!+4::
+  KeyWait LAlt
+  KeyWait 4
+  BlockInput On
+  Send #+s
+  BlockInput Off
+  return
+
 ; thanks to https://www.reddit.com/r/AutoHotkey/comments/rsozy8/comment/hqo0hqp
 !LButton::Send ^{LButton} ; mimic CMD+click - open in a new tab
 
