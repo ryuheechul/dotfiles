@@ -13,7 +13,7 @@ cd ../../../ || exit
 
 [ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
-####### Screenshots #######
+######## Screenshots ########
 
 mkdir -p ~/Screenshots && defaults write com.apple.screencapture location ~/Screenshots
 
@@ -29,7 +29,7 @@ mas install 1475387142 # Tailscale
 mas install 1480933944 # Vimari
 mas install 1284863847 # Unsplash Wallpapers
 
-####### Brew Cask #######
+######### Brew Cask #########
 
 _install_cask () {
   brew list --cask $1 || brew install --cask $1
@@ -53,38 +53,49 @@ _install_cask 1password
 _install_cask amethyst
 _install_cask google-chrome
 _install_cask notion
-_install_cask sublime-text
+_install_cask logseq
+_install_cask sublime-text; ./sublime/.link.sh
 _install_cask secretive
 _install_cask visual-studio-code
-./sublime/.link.sh
-_install_cask karabiner-elements
-./karabiner/.link.sh
+_install_cask karabiner-elements; ./karabiner/.link.sh
 
-echo "do ./karabiner-uk/.link.sh instead if the hardware keyboard layout is British"
+echo "run ./karabiner-uk/.link.sh instead if the hardware keyboard layout is British"
 
 sleep 2
 
-####### Keytty #######
+######### Keytty #########
 
 # go to Keytty download page
 open https://github.com/keytty/shelter/releases
 
-####### font #######
+####### ScriptKit ########
+
+# go to ScriptKit download page
+open https://www.scriptkit.com/
+open https://github.com/ryuheechul/kenv
+
+######### Vimac ##########
+
+# go to vimac and homerow download page
+open https://vimacapp.com/
+open https://www.homerow.app/
+
+########## font ##########
 
 # download nerd font patched jetbrains and fira mono fonts
 brew tap homebrew/cask-fonts
 _install_cask font-jetbrains-mono-nerd-font
 _install_cask font-fira-mono-nerd-font
 
-echo "You might want to the followings:"
+echo "You might want to do the followings:"
 # https://github.com/mathiasbynens/dotfiles/issues/711#issuecomment-278265644
-echo "System Preference > Accessibility > Display > Reduce Motion checkbox"
-echo "System Preference > Keyboard > Adjust repeat speed and delay"
-echo "Open Karabiner Element and allow permissions"
-echo "Open Amethyst to have tiling start working"
-echo "System Preference > Display > change the dominant display if you use multi screen setup"
-echo "Install Keytty from ~/Downloads/Keytty.x.x.x.dmg"
-echo "Open Just Focus to start using Pomodoro technic"
+echo "- System Preference > Accessibility > Display > Reduce Motion checkbox"
+echo "- System Preference > Keyboard > Adjust repeat speed and delay"
+echo "- Open Karabiner Element and allow permissions"
+echo "- Open Amethyst to have tiling start working"
+echo "- System Preference > Display > change the dominant display if you use multi screen setup"
+echo "- Install Keytty from ~/Downloads/Keytty.x.x.x.dmg"
+echo "- Open Just Focus to start using Pomodoro technic"
 
 sleep 2
 
