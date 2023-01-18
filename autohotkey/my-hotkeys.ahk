@@ -38,10 +38,13 @@ Space & k:: Up
 Space & l:: Right
 Space::Space ; without this Space will not work
 
-; since Alt is in position of Apple Cmd key I want these to be:
+;; since Alt is in position of Apple Cmd key I want these to be:
+!Space:: Send ^{Esc} ; mimic opening alfred
+!Backspace::Send ^{Backspace} ; mimic Cmd Backspace
 !a::Send, ^a ; select all
 !w::Send, ^w ; close window
 !r::Send, ^r ; refresh
+!,::Send, ^{,} ; settings
 !c::Send, ^c ; copy
 !x::Send, ^x ; cut
 !v::Send, ^v ; paste
@@ -56,7 +59,8 @@ Space::Space ; without this Space will not work
 ;had to delete comma after Send for below to work - https://stackoverflow.com/a/47223049/1570165
 !=::Send ^{=} ; zoom in
 !-::Send, ^- ; zoom out
-
+; thanks to https://www.reddit.com/r/AutoHotkey/comments/rsozy8/comment/hqo0hqp
+!LButton::Send ^{LButton} ; mimic CMD+click - open in a new tab
 ; macOS style key bindings for screencapture
 ; and thanks to https://www.autohotkey.com/boards/viewtopic.php?style=1&p=406921 for hints on preventing being mixed up
 !+3::
@@ -74,18 +78,9 @@ Space::Space ; without this Space will not work
   BlockInput Off
   return
 
-; thanks to https://www.reddit.com/r/AutoHotkey/comments/rsozy8/comment/hqo0hqp
-!LButton::Send ^{LButton} ; mimic CMD+click - open in a new tab
-
 ; move wordly
 <#Left::Send, ^{Left}
 <#Right::Send, ^{Right}
 ; move to ends
 <!Left::Send, {Home}
 <!Right::Send, {End}
-
-; mimic opening alfred
-!Space:: Send ^{Esc}
-
-; mimic Cmd Backspace
-!Backspace::Send ^{Backspace}
