@@ -67,8 +67,7 @@ ln -sf "${dfs_rhc}/alacritty.yml" "${HOME}/.alacritty.yml"
 ln -sf "${dfs_rhc}/starship.toml" "${XDG_CONFIG_HOME}/starship.toml"
 
 # base16
-git clone https://github.com/chriskempson/base16-shell.git "${XDG_CONFIG_HOME}/base16-shell" \
-  || bash -c 'cd "${XDG_CONFIG_HOME}/base16-shell" && git pull && git checkout cd71822de1f9b53eea9beb9d94293985e9ad7122'
+git clone https://github.com/chriskempson/base16-shell.git "${XDG_CONFIG_HOME}/base16-shell"
 
 # prevent this file missing to satisfy `doom doctor` due to my own configuration
 touch "${HOME}/.base16_theme.updated-time"
