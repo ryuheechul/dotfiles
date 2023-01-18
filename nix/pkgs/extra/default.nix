@@ -78,6 +78,10 @@ with pkgs;
   [
     sqls # SQL language server written in Go
   ]
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_LIMA")
+  [
+    lima # Linux virtual machines (on macOS, in most cases)
+  ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_PODMAN")
   [
     podman # A program for managing pods, containers and container images
