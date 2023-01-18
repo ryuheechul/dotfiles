@@ -31,5 +31,6 @@ MY_NIX_EXTRA_WSL=1 home-manager switch
 ./bin/wsl/path.sh
 ./bin/wsl/wslu.sh
 ./bin/wsl/install-wudo.sh
+./bin/wsl/source-agent-at-login.sh
 
 echo "You may continue the rest with $(readlink -f ./bootstrap/configuration.sh)"

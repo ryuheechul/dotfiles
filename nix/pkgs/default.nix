@@ -116,6 +116,7 @@ with pkgs;
 # helper
 [
   ipcalc # Simple IP network calculator
+  socat # Utility for bidirectional data transfer between two independent data channels
   fswatch # A cross-platform file change monitor with multiple backends
   watch # execute a program periodically
   viddy # A modern watch command
