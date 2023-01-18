@@ -55,7 +55,7 @@ or
 
 #### Linux
 
-```
+```sh
 ~/dotfiles/bootstrap/foundation/linux.sh
 source /etc/profile.d/nix.sh
 source /etc/profile.d/user-shim-for-nix-path.sh
@@ -65,7 +65,7 @@ source /etc/profile.d/user-shim-for-nix-path.sh
 > See https://github.com/ryuheechul/dotfiles-launchpad/tree/master/Vagrantfile for more details
 
 #### macOS
-```
+```sh
 # this should prepare essential stuff
 ~/dotfiles/bootstrap/foundation/darwin/essential.sh
 

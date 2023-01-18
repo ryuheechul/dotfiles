@@ -12,10 +12,8 @@ set -x
 cd "$(dirname "$0")" || exit
 cd ../ || exit
 
-
-# enable nix for the rest of script
-
-. ./nix/bin/source-nix.sh
+# enable nix for the rest of script - wrap with `set +e` to be compatible with older version `[da]sh` like the one the macOS
+set +e; source ./nix/bin/source-nix.sh; set -e
 
 if [ -z "$(command -v nix)" ]; then
   echo 'Warning: `nix` is still not found but trying to run the rest of this script anyway'
@@ -71,6 +69,9 @@ ln -sf "${dfs_rhc}/starship.toml" "${XDG_CONFIG_HOME}/starship.toml"
 # base16
 git clone https://github.com/chriskempson/base16-shell.git "${XDG_CONFIG_HOME}/base16-shell" \
   || bash -c 'cd "${XDG_CONFIG_HOME}/base16-shell" && git pull && git checkout cd71822de1f9b53eea9beb9d94293985e9ad7122'
+
+# prevent this file missing to satisfy `doom doctor` due to my own configuration
+touch "${HOME}/.base16_theme.updated-time"
 
 # lf
 ln -sf "${dfs_rhc}/lf" "${XDG_CONFIG_HOME}/lf"
@@ -136,7 +137,7 @@ ln -sf "${dfs_rhc}/emacs.d/spacemacs" "${HOME}/.spacemacs"
 # doom emacs
 git clone https://github.com/hlissner/doom-emacs "${HOME}/.doom-emacs.d" || bash -c 'cd "${HOME}/.doom-emacs.d" && git pull'
 ln -sf "${dfs_rhc}/emacs.d/doom.d" "${XDG_CONFIG_HOME}/doom"
-"${HOME}/.doom-emacs.d/bin/doom" -y install || true # let the failure of this command not to block the rest
+"${HOME}/.doom-emacs.d/bin/doom" install || true # let the failure of this command not to block the rest
 
 # chemecs to allow switching between configs like doom emacs and spacemacs
 git clone https://github.com/plexus/chemacs2.git "${HOME}/.emacs.d" || bash -c 'cd "${HOME}/.emacs.d" && git pull'
@@ -149,7 +150,7 @@ ln -sf "${dfs_rhc}/nvim" "${XDG_CONFIG_HOME}/nvim"
 # trigger neovim plugins install via command line
 if [ -z "${SKIP_INSTALL_VIM_PLUGINS}" ]; then
   # since I'm not sure about this command to work very well and it's ok to fail for now anyway let it not cause disruption on failure
-  nvim --headless "+Lazy! restore" +qa
+  nvim --headless "+Lazy! sync" +qa
   nvim --headless -c 'UpdateRemotePlugins' -c q || true
 fi
 

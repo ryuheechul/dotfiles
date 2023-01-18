@@ -39,6 +39,7 @@ with pkgs;
   # - tput, utility for retrieving terminal capabilities in shell scripts
   # - tset, to initialize the terminal
   ncurses
+  fontconfig # A library for font customization and configuration
 ] ++
 # shell
 [

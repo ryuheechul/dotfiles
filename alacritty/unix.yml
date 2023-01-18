@@ -11,12 +11,12 @@ key_bindings:
   - { key: K, mods: Command, chars: "\x01\x77" } # `^Aw`, pretty much `tmux lsw`
 
 env: {}
-# I shouldn't need to set this
+# I shouldn't need to set this as (default) `alacritty` terminfo should work better
 #   TERM: xterm-256color
 font:
   normal:
     # adding Mono or not makes difference for characters like these [[tab:→\ ,eol:↵,trail:·,extends:↷,precedes:↶]]
-    family: FiraMono Nerd Font Mono
+    family: FuraMono Nerd Font Mono
     # family: JetBrainsMono Nerd Font Mono
     style: Regular
   # skip specifying families to below to fallback to normal ones
