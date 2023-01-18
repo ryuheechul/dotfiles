@@ -128,6 +128,7 @@ with pkgs;
   tldr # Simplified and community-driven man pages
   cht-sh # CLI client for cheat.sh, a community driven cheat sheet
   mosh # Mobile shell
+  gum # Tasty Bubble Gum for your shell
 ]
 ++ (import ./lang { pkgs = pkgs; })
 ++ (import ./extra/default.nix { pkgs = pkgs; })

@@ -133,6 +133,27 @@ function theme-tone () {
   # printenv BASE16_THEME | sed s/solarized-//
 }
 
+# a helper script to quickly set git author in global config
+function git-config-author() {
+  function _print_config() {
+    echo "git config --global user.${1}"
+    git config --global user.${1}
+  }
+
+  echo 'printing current values...'
+  _print_config name
+  _print_config email
+  echo
+
+  echo 'git config --global user.name:'
+  gum input --placeholder 'full name' | xargs -I _ git config --global user.name _
+  _print_config name
+
+  echo 'git config --global user.email:'
+  gum input --placeholder 'email@address' | xargs -I _ git config --global user.email _
+  _print_config email
+}
+
 # https://www.stefanjudis.com/today-i-learned/suffix-aliases-in-zsh/
 alias -s md=glow
 alias -s {ts,tsx,js,jsx,json,yaml,yml,toml}=vi
