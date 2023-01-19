@@ -298,6 +298,23 @@ return {
       ui = { icon = '' },
     },
   },
+  { -- Interact with OpenAI's GPT-3 language model
+    -- comes with these commands:
+    -- ChatGPT
+    -- ChatGPT
+    -- ChatGPTRun
+    -- ChatGPTActAs
+    -- ChatGPTRunCustomCodeAction
+    -- ChatGPTEditWithInstructions
+    'jackMort/ChatGPT.nvim',
+    event = 'VeryLazy',
+    config = true,
+    dependencies = {
+      'MunifTanjim/nui.nvim',
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+    },
+  },
   { -- Git Blame plugin for Neovim written in Lua
     'f-person/git-blame.nvim',
     event = 'VeryLazy',
