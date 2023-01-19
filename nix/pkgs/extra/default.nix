@@ -18,6 +18,10 @@ with pkgs;
     pre-commit # for managing multi-language pre-commit hooks
     gitwatch # Watch a file or folder and automatically commit changes to a git repo easily.
   ]
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_WASM")
+  [
+    wabt # The WebAssembly Binary Toolkit
+  ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_GO")
   [
     go # golang
