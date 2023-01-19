@@ -27,10 +27,3 @@
   commit-decoration-style = bold yellow box ul
   file-style = bold yellow ul
   file-decoration-style = none
-
-# No longer having to rewrite http urls to ssh ones manually
-# thanks to https://www.jvt.me/posts/2019/03/20/git-rewrite-url-https-ssh
-[url "ssh://git@github.com/"]
-	insteadOf = https://github.com/
-[url "ssh://git@gitlab.com/"]
-	insteadOf = https://gitlab.com/

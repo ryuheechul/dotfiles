@@ -154,6 +154,26 @@ function git-config-author() {
   _print_config email
 }
 
+# workaround to use SSH URL instead of HTTP
+function git-override-url-to-ssh {
+  if git rev-parse --show-toplevel > /dev/null; then
+    config_path="$(git rev-parse --show-toplevel)/.git/config"
+
+    cat <<EOF >> "${config_path}"
+
+# No longer having to rewrite http urls to ssh ones manually
+# thanks to https://www.jvt.me/posts/2019/03/20/git-rewrite-url-https-ssh
+[url "ssh://git@github.com/"]
+  insteadOf = https://github.com/
+[url "ssh://git@gitlab.com/"]
+  insteadOf = https://gitlab.com/
+EOF
+
+    echo "cat ${config_path}"
+    cat "${config_path}"
+fi
+}
+
 # https://www.stefanjudis.com/today-i-learned/suffix-aliases-in-zsh/
 alias -s md=glow
 alias -s {ts,tsx,js,jsx,json,yaml,yml,toml}=vi
