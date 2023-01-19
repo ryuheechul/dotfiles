@@ -314,6 +314,9 @@ return {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope.nvim',
     },
+    cond = function()
+      return vim.env.OPENAI_API_KEY ~= nil
+    end,
   },
   { -- Git Blame plugin for Neovim written in Lua
     'f-person/git-blame.nvim',
