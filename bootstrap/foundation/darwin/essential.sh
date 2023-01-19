@@ -125,7 +125,7 @@ EOF
 # another article for a same topic - https://gpanders.com/blog/the-definitive-guide-to-using-tmux-256color-on-macos/
 
 echo "Mitigating tmux terminfo"
-./bin/discoverable/update-terminfo-tmux
+./bin/path/default/update-terminfo-tmux
 
 echo "All done with this script!"
 

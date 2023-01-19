@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+echo from pbpaste > ~/tmp/test
+echo $@ >> ~/tmp/test
+
 # when either X11 is on local or forwarded
 # temporarily added `test -n "${SSH_TTY}"` to fallback to /usr/bin/pbpaste on macOS client
 # when accessing the shell locally

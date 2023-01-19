@@ -41,7 +41,10 @@ add-to-path "${HOME}/.local/bin"
 add-to-path "${HOME}/.local/my-bin"
 
 # my custom scripts that should work on any platform
-add-to-path "${dfs_rhc}/bin/discoverable"
+add-to-path "${dfs_rhc}/bin/path/default"
+
+# my custom scripts that should work on WSL
+test -n "${WSL_DISTRO_NAME}" && add-to-path "${dfs_rhc}/bin/path/wsl"
 
 # my custom scripts that should work on darwin
-test "$(uname)" = "Darwin" && add-to-path "${dfs_rhc}/bin/darwin"
+test "$(uname)" = "Darwin" && add-to-path "${dfs_rhc}/bin/path/darwin"

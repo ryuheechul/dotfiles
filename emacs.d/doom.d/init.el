@@ -108,7 +108,11 @@
 
        :os
        (:if IS-MAC macos)  ; improve compatibility with macOS
-       ;;tty               ; improve the terminal Emacs experience
+       ; +osc uses clipetty - https://github.com/doomemacs/doomemacs/tree/master/modules/os/tty
+       ; however currently this only support one direction - https://github.com/spudlyo/clipetty/issues/10
+       ; no +osc uses https://github.com/emacsmirror/xclip/blob/master/xclip.el
+       ; which handles both direction on multiplatforms well
+       tty               ; improve the terminal Emacs experience
 
        :lang
        ;;agda              ; types of types of types of types...

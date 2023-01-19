@@ -27,8 +27,6 @@ sudo ./nix/bin/shim/path.sh
 # install packages for current user
 MY_NIX_EXTRA_WSL=1 home-manager switch
 
-./bin/wsl/create-pbcopypaste.sh
-./bin/wsl/path.sh
 ./bin/wsl/wslu.sh
 ./bin/wsl/install-wudo.sh
 ./bin/wsl/source-agent-at-login.sh

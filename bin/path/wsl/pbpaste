@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# pbpaste for WSL - thanks to https://www.techtronic.us/pbcopy-pbpaste-for-wsl/
+powershell.exe Get-Clipboard | sed 's/\r$//' | sed -z '$ s/\n$//'
+exit 0

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# mimicking xsel using ../wsl/pbcopy and ../wsl/pbpaste
+# also inspired from https://github.com/Konfekt/win-bash-xclip-xsel/tree/0257c08664ce91bcbb8e11f33775ab22c7278c6d
+for i in "$@"; do
+  case "$i" in
+    (-o|--output|-out)
+      pbpaste
+      ;;
+    (-i|--input|-in)
+      pbcopy
+      ;;
+  esac
+done

@@ -44,7 +44,7 @@ dfs_rhc="${XDG_CONFIG_HOME}/dfs-rhc"
 
 # in case my bins are being used in the configuration step already
 # - one discovered usage is that `current-base16` is being used in ../nvim/lua/plugins/theme.lua
-export PATH="${dfs_rhc}/bin/discoverable:${PATH}"
+export PATH="${dfs_rhc}/bin/path/default:${PATH}"
 
 # source my gitconfig
 cat << EOF >> "${HOME}/.gitconfig"
