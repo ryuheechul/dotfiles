@@ -22,10 +22,12 @@ with pkgs;
   [
     wabt # The WebAssembly Binary Toolkit
   ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_RUST")
-  [
-    rustup # The Rust toolchain installer
-  ]
+## I found that using devenv is the most smooth experience with Rust from https://nixos.wiki/wiki/Rust
+## so use MY_NIX_EXTRA_DEVENV instead and configure per project via `devenv init`
+# ++ lib.optionals (checkEnv "MY_NIX_EXTRA_RUST")
+#   [
+#     rustup # The Rust toolchain installer
+#   ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_GO")
   [
     go # golang
@@ -33,6 +35,10 @@ with pkgs;
     gocode # auto completion for go
     gotools # updates your Go import lines, adding missing ones and removing unreferenced ones
     delve # go debugger
+  ]
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_DEVENV")
+  [
+    (import (fetchTarball https://github.com/cachix/devenv/archive/v0.5.tar.gz)).default
   ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_AWS")
   [

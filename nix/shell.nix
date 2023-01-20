@@ -2,5 +2,5 @@
 { pkgs ? import <nixpkgs> { } }:
 
 pkgs.mkShell {
-  nativeBuildInputs = import ./pkgs { } ++ import ./build-deps.nix { };
+  nativeBuildInputs = import ./pkgs {pkgs=pkgs;} ++ import ./build-deps.nix {pkgs=pkgs;};
 }
