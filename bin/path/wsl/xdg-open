@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# mimic xdg-open with the first priority of opening URLs
+# and fallback to explorer.exe when `wslview` is not available as I witnessed
+# that `wslu` from ../../../nix/pkgs/extra/default.nix didn't expose binaries sometimes
+command -v wslview2 > /dev/null && {
+  wslview $@
+} || {
+  explorer.exe $@ || true
+}
