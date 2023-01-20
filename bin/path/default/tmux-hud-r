@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# this script is intended to be used like below in ../../../tmux.conf
+# set -g status-right '#(tmux-hud-r)'
+
+if test -n "${WSL_DISTRO_NAME}"; then
+  date +'%a %b %d %H:%M'
+else
+  curl wttr.in/?format=2
+fi
