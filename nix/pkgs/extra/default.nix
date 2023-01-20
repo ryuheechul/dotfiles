@@ -22,6 +22,10 @@ with pkgs;
   [
     wabt # The WebAssembly Binary Toolkit
   ]
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_RUST")
+  [
+    rustup # The Rust toolchain installer
+  ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_GO")
   [
     go # golang
