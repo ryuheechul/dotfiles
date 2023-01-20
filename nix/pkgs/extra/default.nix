@@ -4,6 +4,7 @@ let
   checkEnv = import ../../utils/checkEnv.nix;
   tag = import ../custom/tag { pkgs = pkgs; };
   bat-riffle = import ../custom/bat-riffle { pkgs = pkgs; };
+  hired = import ../custom/hired.nix { pkgs = pkgs; };
   tf-helper = import ../custom/tf-helper.nix { pkgs = pkgs; };
   gitwatch = import ../custom/gitwatch.nix { pkgs = pkgs; };
   cfn-lint = pkgs.python3.pkgs.cfn-lint;
@@ -11,6 +12,7 @@ in
 with pkgs;
 [
   bat-riffle # A proof-of-concept for a pager-as-a-library. Mainly designed for bat, and not ready for general use.
+  hired # A modern take on 'ed'
 ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_GIT")
   [
