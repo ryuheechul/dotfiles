@@ -16,9 +16,9 @@ alias lt="ls -lah -T -L=3 --git --git-ignore"
 alias tree="exa -G -T --git-ignore"
 
 # make ed slightly friendlier
-# alias ed="ed -p '> '"
-# use hired in place of ed
-alias ed="hired -nl"
+alias ed="ed -p '> '"
+# use hired in place of ed when available
+test -n "${commands[hired]}" && alias ed="hired -nl"
 
 # quick way to attach to tmux and zellij
 alias tmux-attach="${my_dot_d}/bin/tmux-attach-or-new.sh"

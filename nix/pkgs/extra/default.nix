@@ -11,9 +11,12 @@ let
 in
 with pkgs;
 [
-  bat-riffle # A proof-of-concept for a pager-as-a-library. Mainly designed for bat, and not ready for general use.
-  hired # A modern take on 'ed'
+  # anything "extra" but without optional flag goes here
 ]
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_HIRED")
+  [
+    hired # A modern take on 'ed'
+  ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_GIT")
   [
     git-lfs # git extention for large file storage
@@ -89,6 +92,7 @@ with pkgs;
     batdiff
     batwatch
     prettybat
+    bat-riffle # A proof-of-concept for a pager-as-a-library. Mainly designed for bat, and not ready for general use.
   ])
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_SQL")
   [
