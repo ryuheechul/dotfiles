@@ -4,8 +4,6 @@
 # more info on rust + nix can be found at
 # https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/rust.section.md
 
-# use ../../../bin/path/default/nix-dummy-hash to help getting real value for `[cargo]sha256`
-
 { pkgs }:
 
 with pkgs;

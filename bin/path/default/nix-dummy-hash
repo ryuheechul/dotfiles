@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-# see more on this at https://github.com/NixOS/nixpkgs/issues/191128#issuecomment-1246030466
-echo sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA= | tee /dev/tty | pbcopy

@@ -12,5 +12,12 @@
       "}"
     ],
     "description": "minimal template for shell.nix"
+  },
+  "sha256-hash": {
+    "prefix": "sha256",
+    "body": [
+      "\"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\""
+    ],
+    "description": "placeholder of sha256 hash"
   }
 }
