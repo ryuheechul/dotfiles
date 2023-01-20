@@ -398,6 +398,16 @@ return {
     event = 'VeryLazy',
     opts = {},
   },
+  { -- Keep clipboard in sync with Neovim without the peformance hit.
+    'EtiamNullam/deferred-clipboard.nvim',
+    event = 'VeryLazy',
+    opts = {
+      fallback = 'unnamedplus',
+    },
+    -- Currently I need this on WSL
+    -- and discovered thanks to https://github.com/neovim/neovim/issues/21739#issuecomment-1379704105
+    cond = vim.env.WSL_DISTRO_NAME ~= nil,
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et
