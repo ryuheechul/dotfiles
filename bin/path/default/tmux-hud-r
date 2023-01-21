@@ -6,7 +6,7 @@
 # mimic https://github.com/jimeh/tmux-themepack/blob/master/powerline/block/cyan.tmuxtheme
 dress ()
 {
-  echo "#[fg=colour245,bg=colour0]#[fg=colour240,bg=colour245] ${1} #[fg=colour240,bg=colour245]#[fg=colour0,bg=colour240] ${2} #[fg=colour2 45,bg=colour240]#[fg=colour247,bg=colour0] #H "
+  echo "#[fg=colour238,bg=colour0]#[fg=colour243,bg=colour238] #H #[fg=colour240,bg=colour238]#[fg=colour0,bg=colour240] ${1} #[fg=colour2 45,bg=colour240]#[fg=colour247,bg=colour0] ${2} "
 }
 
 battery ()
@@ -28,8 +28,8 @@ weather ()
 
 if test -n "${WSL_DISTRO_NAME}"; then
   # thanks to https://askubuntu.com/a/1317728/1666783
-  dress "$(battery)" "$(today)"
+  dress "$(today)" "$(battery)"
 
 else
-  dress "$(weather)" "$(today)"
+  dress "$(today)" "$(weather)"
 fi
