@@ -3,8 +3,33 @@
 # this script is intended to be used like below in ../../../tmux.conf
 # set -g status-right '#(tmux-hud-r)'
 
+# mimic https://github.com/jimeh/tmux-themepack/blob/master/powerline/block/cyan.tmuxtheme
+dress ()
+{
+  echo "#[fg=colour245,bg=colour0]#[fg=colour240,bg=colour245] ${1} #[fg=colour240,bg=colour245]#[fg=colour0,bg=colour240] ${2} #[fg=colour2 45,bg=colour240]#[fg=colour247,bg=colour0] #H "
+}
+
+battery ()
+{
+  echo -n " $(cat /sys/class/power_supply/BAT1/capacity)%"
+}
+
+today ()
+{
+  date +'%a %d' | tr -d '\n'
+  # date +'%a %d %b %H:%M' # not showing time until this issue below is completely fixed
+  # https://stackoverflow.com/q/65086856/1570165
+}
+
+weather ()
+{
+  curl wttr.in/?format=2 | tr -d '\n'
+}
+
 if test -n "${WSL_DISTRO_NAME}"; then
-  date +'%a %b %d %H:%M'
+  # thanks to https://askubuntu.com/a/1317728/1666783
+  dress "$(battery)" "$(today)"
+
 else
-  curl wttr.in/?format=2
+  dress "$(weather)" "$(today)"
 fi
