@@ -7,6 +7,8 @@
 # symlink from wsl `ln -s /mnt/c/Users/[windows username]/Roaming/dotfiles-for-win` (so that I can edit dotfiles on wsl)
 # keep one dotfiles on windows and one dotfiles on wsl and sync via git when necessary for better disk performance on wsl
 
+# ref: https://github.com/alacritty/alacritty/blob/master/alacritty.yml
+
 window:
   title: Alacritty
   decorations: full
