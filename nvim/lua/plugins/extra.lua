@@ -402,7 +402,9 @@ return {
     'EtiamNullam/deferred-clipboard.nvim',
     event = 'VeryLazy',
     opts = {
-      fallback = 'unnamedplus',
+      lazy = true,
+      -- this option makes paste the yank from neovim itself slow so turning it off fow now
+      -- fallback = 'unnamedplus',
     },
     -- Currently I need this on WSL
     -- and discovered thanks to https://github.com/neovim/neovim/issues/21739#issuecomment-1379704105
