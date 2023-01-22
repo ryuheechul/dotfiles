@@ -32,7 +32,7 @@ mas install 1284863847 # Unsplash Wallpapers
 ######### Brew Cask #########
 
 _install_cask () {
-  brew list --cask $1 || brew install --cask $1
+  brew list --cask $1 || brew install --no-quarantine --cask $1
 }
 
 # iterm2
