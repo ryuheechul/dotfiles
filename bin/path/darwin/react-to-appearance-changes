@@ -12,8 +12,8 @@
 
 
 exec zsh -c '
+timeout 5s single-daemon base16-shell-to-follow-system-appearance || true
 timeout 5s single-daemon base16-shell-auto-reload-on-tmux || true
-timeout 5s single-daemon base16-shell-to-follow-system-appearance.sh || true
 exit
 ' >/dev/null 2>&1 &
 # some how going into background is necessary to prevent hanging with automator https://apple.stackexchange.com/a/340443/368485
