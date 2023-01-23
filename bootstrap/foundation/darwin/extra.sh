@@ -100,3 +100,5 @@ echo "- Open Just Focus to start using Pomodoro technic"
 sleep 2
 
 echo "All done in this script!"
+
+echo 'you may want to run `softwareupdate --install-rosetta` to install rosetta'
