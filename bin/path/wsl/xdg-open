@@ -8,3 +8,6 @@ command -v wslview2 > /dev/null && {
 } || {
   explorer.exe $@ || true
 }
+
+# `ln -s ./xdg-open open` would accomodate https://github.com/m3m0ryh0l3/extracturl/blob/422c3c26f7c50b09de6d53748c25d3c905b890d3/extract_url.pl#L206
+# which is used for https://github.com/tmux-plugins/tmux-urlview
