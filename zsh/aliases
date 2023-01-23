@@ -3,10 +3,22 @@
 # aliases that is should be available for non-interactive shell too
 
 # convenient way to examine current and possible newer zsh versions installed
-alias version='echo -n "current shell: "
-print ${ZSH_VERSION}
-echo -n \$\("which zsh) = $(/usr/bin/which zsh): "
-zsh --version'
+# as well as the version of the OS
+function version() {
+  case "$(uname -s)" in
+    Darwin) echo '$(sw_vers): '; sw_vers
+      ;;
+    Linux) echo '$(lsb_release -a): '; lsb_release -a
+      ;;
+  esac
+  echo
+  echo -n "current zsh: "; print ${ZSH_VERSION}
+  echo
+  echo \$\("which zsh) = $(/usr/bin/which zsh):"
+  zsh --version
+  echo
+  echo 'you may want to run `neofetch` to see more'
+}
 
 # exa
 alias exa="exa --icons --group-directories-first -F --ignore-glob='**/.git|**/.DS_Store'"
