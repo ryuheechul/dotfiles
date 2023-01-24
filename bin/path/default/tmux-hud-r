@@ -6,7 +6,15 @@
 # mimic https://github.com/jimeh/tmux-themepack/blob/master/powerline/block/cyan.tmuxtheme
 dress ()
 {
-  echo "#[fg=colour238,bg=colour0]#[fg=colour243,bg=colour238] #H #[fg=colour240,bg=colour238]#[fg=colour0,bg=colour240] ${1} #[fg=colour2 45,bg=colour240]#[fg=colour247,bg=colour0] ${2} "
+  style="minimal"
+
+  first="#[fg=colour238,bg=colour0]#[fg=colour243,bg=colour238] #H"
+  second="#[fg=colour240,bg=colour238]#[fg=colour0,bg=colour240] ${1}"
+  last="#[fg=colour0,bg=colour240]#[fg=colour247,bg=colour0] ${2}"
+
+  test "${style}" = "minimal" \
+    && echo "#[fg=colour240,bg=colour0]#[fg=colour0,bg=colour240] ${1} ${last} " \
+    || echo "${first} ${second} ${last} "
 }
 
 battery ()
