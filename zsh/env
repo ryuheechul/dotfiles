@@ -9,7 +9,10 @@ export my_dot_d="${XDG_CONFIG_HOME}/dfs-rhc"
 export my_zsh_d="${my_dot_d}/zsh"
 
 # just in case `nix` is still not loaded
-source "${my_dot_d}/nix/bin/source-nix.sh"
+source "${my_dot_d}/nix/bin/source/nix.sh"
+
+# to set $NIX_CONFIG
+source "${my_dot_d}/nix/bin/source/config.sh"
 
 # determine if this shell is interactive
 case "$-" in

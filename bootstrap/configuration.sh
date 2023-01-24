@@ -13,7 +13,7 @@ cd "$(dirname "$0")" || exit
 cd ../ || exit
 
 # enable nix for the rest of script - wrap with `set +e` to be compatible with older version `[da]sh` like the one the macOS
-set +e; source ./nix/bin/source-nix.sh; set -e
+set +e; source ./nix/bin/source/nix.sh; set -e
 
 if [ -z "$(command -v nix)" ]; then
   echo 'Warning: `nix` is still not found but trying to run the rest of this script anyway'
@@ -111,7 +111,7 @@ git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0 || tru
 ## installing packages with asdf has been replaced with Nix - look at ../nix/pkgs.nix
 
 ## bash
-echo ". \"${dfs_rhc}/nix/bin/source-nix.sh\"" >> "${HOME}/.bashrc"
+echo ". \"${dfs_rhc}/nix/bin/source/nix.sh\"" >> "${HOME}/.bashrc"
 
 ## zsh
 
