@@ -25,6 +25,13 @@ in
     NSAutomaticQuoteSubstitutionEnabled = false;
   };
 
+  # `defaults read com.apple.universalaccess`
+  system.defaults.universalaccess = {
+    # actually not able to change these so just do it manually for now
+    # closeViewScrollWheelToggle = true;
+    # reduceTransparency = true;
+  };
+
   # Dock and Mission Control - `defaults read com.apple.dock`
   system.defaults.dock = {
     autohide = true;
