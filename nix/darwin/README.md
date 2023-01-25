@@ -16,6 +16,7 @@ Thankfully these were helpful to get started:
 - https://nixos.wiki/wiki/Flakes
 - https://www.tweag.io/blog/2020-05-25-flakes/
 - https://xyno.space/post/nix-darwin-introduction
+- https://www.lucacambiaghi.com/nixpkgs/readme.html
 - https://github.com/LnL7/nix-darwin#flakes-experimental
 
 Hopefully just doing `cd [to this directory]` and `make switch` should kick start `nix-darwin`.
