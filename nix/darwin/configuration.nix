@@ -1,7 +1,15 @@
 { pkgs, ... }:
 # reference - https://daiderd.com/nix-darwin/manual/index.html
 
+let
+  inherit (pkgs.lib) mkIf;
+  enableBrew = true;
+in
 {
+  imports = [
+    ./modules/pam.nix
+  ];
+
   nix.useDaemon = true;
 
   ## System Settings
@@ -45,6 +53,15 @@
     "8.8.8.8"
   ];
 
+  # Manage Homebrew
+  homebrew.enable = enableBrew;
+  homebrew.brews = [
+    "pam-reattach"
+  ];
+
   # Add ability to used TouchID for sudo authentication
-  security.pam.enableSudoTouchIdAuth = true;
+  # security.pam.enableSudoTouchIdAuth = true;
+  # above doesn't work with tmux hence use the below.
+  # thanks to https://github.com/LnL7/nix-darwin/pull/228#issuecomment-873388257
+  security.pamCustom.enableSudoTouchIdAuth = mkIf enableBrew true;
 }
