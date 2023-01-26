@@ -5,10 +5,11 @@ set -e
 
 # current limitation of this script: it doesn' process args for the command - this may be mitigated in the future
 
-# cmd to expand ~ to $HOME
-the_cmd="${1/#\~/$HOME}"
+the_cmd="${1}"
+cmd_and_args="${@@Q}" # see ./async-with-delay for explanation
+
 # only leave basename for pid in case the cmd comes with path
-the_path="${HOME}/tmp/single-daemon/$(basename "${the_cmd}").pid"
+the_path="${HOME}/tmp/single-daemon/$(basename "${the_cmd}").pid" # NOTE: use ${cmd_and_args} instead?
 
 # early exits to prevent unwanted behaviors
 test -z "${the_cmd}" && echo "no command is provided" && exit 1
@@ -35,7 +36,7 @@ if test -f "${the_path}"; then
 fi
 
 # completely detach from terminal - https://stackoverflow.com/a/10408906/1570165
-nohup ${the_cmd} </dev/null >/dev/null 2>&1 &
+nohup bash -c "${cmd_and_args}" </dev/null >/dev/null 2>&1 &
 
 # save pid for later and print it to stdout
 echo -n $! | tee "${the_path}"

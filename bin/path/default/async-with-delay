@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+# Confused with quotes? Read https://scriptingosx.com/2020/04/advanced-quoting-in-shell-scripts/
+
 set -e
 # A helper script to run something with delay seconds
 # Usage example with 2 seconds delay: `async-with-delay 2 echo hi`
