@@ -227,14 +227,9 @@ return {
       border = 'none',
     },
   },
-  { -- Indent guides for Neovim
+  { -- Indent guides for Neovim - consult ../boot/filetype.lua for tabstop and listchars
     'lukas-reineke/indent-blankline.nvim',
     event = 'VeryLazy',
-    init = function()
-      -- show some hidden characters - these are vim builtin options
-      vim.o.list = true
-      vim.o.listchars = [[tab:→\ ,eol:↵,trail:·,extends:↷,precedes:↶]]
-    end,
     opts = {
       -- -- disable this related to https://github.com/lukas-reineke/indent-blankline.nvim/issues/440
       -- show_current_context = true,
