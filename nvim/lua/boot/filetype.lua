@@ -6,8 +6,11 @@ vim.opt.list = true
 vim.opt.listchars:append 'tab:  →' -- use this instead of 'tab:→ ' until https://github.com/lukas-reineke/indent-blankline.nvim/issues/503 gets resolved
 vim.opt.listchars:append 'eol:↵'
 vim.opt.listchars:append 'trail:·'
-vim.opt.listchars:append 'extends:↷'
-vim.opt.listchars:append 'precedes:↶'
+vim.opt.listchars:append 'extends:↷' -- only visible when nowrap
+vim.opt.listchars:append 'precedes:↶' -- same as above
+
+-- fillchars
+vim.opt.fillchars:append 'eob: ' -- empty lines at the end of a buffer (the default is '~')
 
 -- default tabstop - optimized for 2 spaces - this is my go-to option
 vim.opt.tabstop = 2

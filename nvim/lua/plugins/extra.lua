@@ -189,6 +189,7 @@ return {
   },
   { -- Extensible Neovim Scrollbar
     'petertriho/nvim-scrollbar',
+    -- waiting for this to be resolved - https://github.com/petertriho/nvim-scrollbar/issues/40
     event = 'VeryLazy',
     opts = {
       -- currently this is the most optimal way for me to deal with this issue, https://github.com/petertriho/nvim-scrollbar/issues/72
