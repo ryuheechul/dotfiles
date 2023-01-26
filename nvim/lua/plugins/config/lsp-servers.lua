@@ -74,6 +74,8 @@ return function(setup_default)
 
   local setup_rnix = merge(setup_default, {})
 
+  local setup_nimls = merge(setup_default, {})
+
   local setup_sqls = merge(setup_default, {
     on_attach = function(client, bufnr)
       require('sqls').on_attach(client, bufnr)
@@ -148,6 +150,7 @@ return function(setup_default)
     eslint = setup_eslint,
     sqls = setup_sqls,
     jsonls = setup_jsonls,
+    nimls = setup_nimls,
   }
 end
 
