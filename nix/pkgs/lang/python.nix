@@ -19,6 +19,11 @@ let
     isort
     coverage
   ]);
-
+  via-npm = (
+    with nodePackages; [
+      # lsp server for python
+      pyright
+    ]
+  );
 in
-[ python-with-pkgs ]
+[ python-with-pkgs ] ++ via-npm

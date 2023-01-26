@@ -1,3 +1,5 @@
+# programming language related ones should go to ../lang/default.nix and ../lang/support.nix instead
+
 { pkgs }:
 
 let
@@ -16,34 +18,6 @@ with pkgs;
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_HIRED")
   [
     hired # A modern take on 'ed'
-  ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_GIT")
-  [
-    git-lfs # git extention for large file storage
-    pre-commit # for managing multi-language pre-commit hooks
-    gitwatch # Watch a file or folder and automatically commit changes to a git repo easily.
-  ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_WASM")
-  [
-    wabt # The WebAssembly Binary Toolkit
-  ]
-## I found that using devenv is the most smooth experience with Rust from https://nixos.wiki/wiki/Rust
-## so use MY_NIX_EXTRA_DEVENV instead and configure per project via `devenv init`
-# ++ lib.optionals (checkEnv "MY_NIX_EXTRA_RUST")
-#   [
-#     rustup # The Rust toolchain installer
-#   ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_GO")
-  [
-    go # golang
-    gopls # go language server
-    gocode # auto completion for go
-    gotools # updates your Go import lines, adding missing ones and removing unreferenced ones
-    delve # go debugger
-  ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_DEVENV")
-  [
-    (import (fetchTarball https://github.com/cachix/devenv/archive/v0.5.tar.gz)).default
   ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_AWS")
   [
@@ -67,17 +41,6 @@ with pkgs;
     nodePackages.cdktf-cli
     tf-helper
   ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_ERLANG")
-  [
-    erlang # Programming language used for massively scalable soft real-time systems
-    rebar3 # Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases
-    elixir # A functional, meta-programming aware language built on top of the Erlang VM
-    gleam # A statically typed language for the Erlang VM
-  ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_EXERCISM")
-  [
-    exercism # CLI for exercism.org
-  ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_NOTCURSES")
   [
     # since qrcodegen is marked broken
@@ -94,10 +57,6 @@ with pkgs;
     prettybat
     bat-riffle # A proof-of-concept for a pager-as-a-library. Mainly designed for bat, and not ready for general use.
   ])
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_SQL")
-  [
-    sqls # SQL language server written in Go
-  ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_LIMA")
   [
     lima # Linux virtual machines (on macOS, in most cases)
@@ -119,7 +78,7 @@ with pkgs;
     wslu # A collection of utilities for Windows 10/11 Linux Subsystems
     # which comes with wslview to enable opening a browser on Windows from terminal
     ruby # An object-oriented language for quick and easy programming
-    # schasse/tmux-jump plugin requies it
+    # and `schasse/tmux-jump` plugin requires it
   ]
   # add any package to try out (locally more permanent way than `nix-shell -p [package]`
 ++ lib.optionals (builtins.pathExists ./local-only.nix) (import ./local-only.nix { pkgs = pkgs; })

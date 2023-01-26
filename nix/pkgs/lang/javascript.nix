@@ -1,3 +1,5 @@
+# this file is also for typescript
+
 { pkgs }:
 
 with pkgs;
@@ -19,8 +21,6 @@ let
       pnpm
       # Work with npm/yarn packages locally like a boss.
       yalc
-      # lsp server for python
-      pyright
       # TypeScript is a language for application scale JavaScript development
       typescript
       # Language Server Protocol (LSP) implementation for TypeScript using tsserver
