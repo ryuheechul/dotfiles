@@ -275,7 +275,7 @@ function emacs () {
     if test -n "${SSH_CONNECTION}"; then
       emacsclient
     elif test "$(uname)" = "Darwin"; then
-      ~/.config/dfs-rhc/bin/darwin/open-gui-emacs.sh
+      "${my_dot_d}/bin/path/darwin/open-gui-emacs"
     else
       emacsclient
     fi

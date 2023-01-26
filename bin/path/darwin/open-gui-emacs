@@ -4,12 +4,12 @@
 # and put the (Automator) app in either /Applications or ~/Applications so either Spotlight or Alfred can open (or activate the (Emacs) app quickly
 # Also avoid naming the Automator app "Emacs.app" to prevent collision with "~/.nix-profile/Applications/Emacs.app" on `"Emacs" to activate` Applescript side - For example, name it to "OpenEmacs.app"
 #
-# If OpenEmacs.app doesn't open emacs, possibly due to another automator run might be stuck 
+# If OpenEmacs.app doesn't open emacs, possibly due to another Automator run might be stuck
 
 osascript -e 'if application "Emacs" is not running then
-	error "emacs is not running"
+  error "emacs is not running"
 end if' 2> /dev/null && {
-	osascript -e 'tell application "Emacs" to activate'
+  osascript -e 'tell application "Emacs" to activate'
 } || {
-	open -a ~/.nix-profile/Applications/Emacs.app
+  open -a ~/.nix-profile/Applications/Emacs.app
 }
