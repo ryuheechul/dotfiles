@@ -1,11 +1,25 @@
 -- where I customize editing related behaviours per file type
 
-vim.cmd [[
-autocmd FileType markdown setlocal shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType typescript setlocal shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType Earthfile setlocal shiftwidth=2 softtabstop=2 expandtab
-autocmd FileType json setlocal shiftwidth=2 softtabstop=2 expandtab
-]]
+local ftGrp = vim.api.nvim_create_augroup('MyFileTypeAG', { clear = true })
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = {
+    'zsh',
+    'bash',
+    'lua',
+    'vim',
+    'nim',
+    'json',
+    'markdown',
+    'Earthfile',
+    'javascript',
+    'typescript',
+  },
+  callback = function()
+    vim.bo.expandtab = true
+    vim.bo.softtabstop = 2
+    vim.bo.shiftwidth = 2
+  end,
+  group = ftGrp,
+})
 
 -- vim: ts=2 sts=2 sw=2 et
