@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+
+# this simple script is to intended for double checking segmentation of args when debugging shell scripting
+
+# usage example:
+# $ mirror-args single 'to'k'en' with 'multiple tokens' with "different quotes"
+# 'single' 'token' 'with' 'multiple tokens' 'with' 'different quotes'
+
+echo "${(qq)@}"
