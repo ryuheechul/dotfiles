@@ -1,0 +1,17 @@
+#!/usr/bin/env zsh
+
+set -e
+# A helper script to run something with delay seconds
+# Usage example with 2 seconds delay: `async-with-delay 2 echo hi`
+
+delay="${1}" # in seconds
+
+# discard the first arg from @
+shift
+
+# keep quotes thanks to https://stackoverflow.com/a/25592614/1570165
+the_cmd="$(echo ${(qq)@})"
+# see this for bash - https://stackoverflow.com/a/64056898/1570165
+
+# completely detach from terminal - https://stackoverflow.com/a/10408906/1570165
+nohup bash -c "sleep ${delay} && ${the_cmd}" </dev/null >/dev/null 2>&1 &
