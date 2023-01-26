@@ -196,7 +196,7 @@ alias du='du -d 1 -h | sort -h -r'
 
 # git
 alias tig='TERM=xterm COLORTERM=256bit tig'
-alias gs="git status"
+alias gs="pwd; ls; git status"
 alias tgs="tig status"
 alias gd="git diff"
 alias gdc="git diff --cached"
