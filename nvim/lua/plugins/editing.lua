@@ -18,6 +18,10 @@ return {
     'sheerun/vim-polyglot',
     -- couldn't figure out how to work this with lazy loading option yet
     lazy = false,
+    init = function()
+      -- turn off sensible as I don't agree with it - https://github.com/sheerun/vim-polyglot/tree/master#default-settings
+      vim.g.polyglot_disabled = { 'sensible' }
+    end,
   },
   { 'kana/vim-textobj-line', dependencies = { 'kana/vim-textobj-user' }, event = 'VeryLazy' },
   -- for more text objects, visit https://github.com/kana/vim-textobj-user/wiki
@@ -128,5 +132,3 @@ return {
     config = require 'plugins.config.tree-surfer', -- follow the file to see key maps
   },
 }
-
--- vim: ts=2 sts=2 sw=2 et

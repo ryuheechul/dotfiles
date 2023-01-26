@@ -16,8 +16,10 @@ source "${my_dot_d}/nix/bin/source/config.sh"
 
 # determine if this shell is interactive
 case "$-" in
-	*i*) true;; # skip sourcing path on interactive shell as this will be sourced via ./zshrc
-		*) source "${my_zsh_d}/path/set-basic";;
+  *i*) true # skip sourcing path on interactive shell as this will be sourced via ./zshrc
+    ;;
+  *) source "${my_zsh_d}/path/set-basic"
+    ;;
 esac
 
 #`light` and `dark` - helper function to change theme

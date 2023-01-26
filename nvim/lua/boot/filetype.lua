@@ -1,6 +1,9 @@
 -- where I customize editing related behaviours per file type
+-- go to `../../ftdetect/detect.vim` for detecting files
 
 local ftGrp = vim.api.nvim_create_augroup('MyFileTypeAG', { clear = true })
+
+-- optimized for 2 spaces - this is my go-to option
 vim.api.nvim_create_autocmd('FileType', {
   pattern = {
     'zsh',
@@ -22,4 +25,14 @@ vim.api.nvim_create_autocmd('FileType', {
   group = ftGrp,
 })
 
--- vim: ts=2 sts=2 sw=2 et
+-- give illusion of using 2 spaces for tab based files
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = {
+    'make',
+  },
+  callback = function()
+    vim.bo.tabstop = 2
+    vim.bo.expandtab = false
+  end,
+  group = ftGrp,
+})
