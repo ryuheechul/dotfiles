@@ -25,7 +25,8 @@ env:
   # https://github.com/starship/starship/issues/2176
   # but unbuntu-20.04 works fine at the time of writing this
   LC_ALL: C.UTF-8
-  WSLENV: TERM:LC_ALL
+  # passing COLORTERM fixes color issues. e.g. doomemacs as TUI
+  WSLENV: TERM:LC_ALL:COLORTERM
 font:
   normal:
     family: FiraCode NF

@@ -103,3 +103,4 @@ echo "All done in this script!"
 
 echo 'you may want to run `softwareupdate --install-rosetta` to install rosetta'
 echo 'you may want to go to ~/.config/dfs-rhc/nix/darwin to utilize nix-darwin to automate configurations'
+echo 'you also may want to take a look at https://gist.github.com/ryuheechul/3918366306f6b7f02c250dcb0cbee4ec'
