@@ -5,6 +5,7 @@ return function()
   -- cleaner approach than $FORCE_LOAD_MY_ZSH_STUFF
   vim.env.UNSET_MY_BASIC_ZSH_STUFF_LOADED = 1
   vim.env.UNSET_ALL_MY_ZSH_STUFF_LOADED = 1
+  vim.env.UNSET_HOST_ALWAYS_USE_TMUX = 1
   vim.env.NO_VI_KEY_ON_ZSH = 1
 
   -- e.g. calc_length('columns'|'lines', 0.[1-9])

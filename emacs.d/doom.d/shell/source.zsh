@@ -21,6 +21,7 @@ echo '\e[2 q'
 
 # this is a workaround that fixes the cursor is not changing shape properly between modes for neovim with TERM=eterm-color
 alias nvim='TERM=xterm-256color nvim'
+export EDITOR='TERM=xterm-256color nvim'
 
 # because excluding these at `../init.el` wasn't enough when you run emacs from terminal inside tmux
 for env_var in $(${script_d}/env-vars-to-exclude); do
