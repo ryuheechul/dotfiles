@@ -107,7 +107,7 @@
   (vterm-with-cmd
    (concat
     ;; this is a workaround that fixes the cursor is not changing shape properly between modes for neovim with TERM=eterm-color
-    (if tui-emacs "" "TERM=xterm-256color ") ;; skip doing this for TUI becuase somehow it breaks the terminal graphics
+    "TERM=xterm-256color "
     ;; this enables opening the same line in neovim as emacs
     "my_nvim_forget_line_number=1 "
     "nvim +"
