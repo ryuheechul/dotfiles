@@ -1,8 +1,10 @@
 # vim: set ft=zsh:
 
-# persist ssh session with zellij on ssh connection
-# but avoid doing this for tramp-mode on emacs - https://www.emacswiki.org/emacs/TrampMode
-test "${TERM}" != 'dumb' \
+# - persist a session via zellij on SSH connection
+# - but avoid doing this for tramp-mode on emacs - https://www.emacswiki.org/emacs/TrampMode
+# - also guard this behaviour for non-interactive shell usage
+is_zsh_interactive \
+  && test "${TERM}" != 'dumb' \
   && test -n "${SSH_TTY}" \
   && echo 'Attempting to attach to zellij session and this might fail as zellij might be not stable' \
   && UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec-zellij-attach ssh

@@ -14,15 +14,13 @@ source "${my_dot_d}/nix/bin/source/nix.sh"
 # to set $NIX_CONFIG
 source "${my_dot_d}/nix/bin/source/config.sh"
 
-# determine if this shell is interactive
-case "$-" in
-  *i*) true # skip sourcing path on interactive shell as this will be sourced via ./zshrc
-    ;;
-  *) source "${my_zsh_d}/path/set-basic"
-    ;;
-esac
+# basically helper utils for zsh
+source "${my_zsh_d}/fn/zsh"
 
-#`light` and `dark` - helper function to change theme
+# skip sourcing path on interactive shell as this will be sourced via ./zshrc
+is_zsh_interactive || source "${my_zsh_d}/path/set-basic"
+
+# `light` and `dark` - helper function to change theme
 source "${my_zsh_d}/fn/theme"
 
 source "${my_zsh_d}/aliases"
