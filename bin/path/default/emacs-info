@@ -1,0 +1,59 @@
+#!/usr/bin/env doomscript
+
+;; helper script to see all useful information about emacs and doomemacs at the same time
+
+(print! "(version):\n%s\n" (version))
+(print! "(doom/version):") (doom/version) (print! "\n") ;; since (doom/version) itself prints
+(print! "(doom-info-string):\n%s" (doom-info-string)) ;; more readable than (doom-info)
+(print! "(native-comp-available-p):\n%s\n" (native-comp-available-p))
+(print! "(featurep 'native-compile):\n%s\n" (featurep 'native-compile))
+(print! "(shell-command-to-string \"doom doctor\"):\n%s" (shell-command-to-string "doom doctor"))
+(print! "also run `emacs-ls-eln` to list compiled eln files")
+
+;; an example output
+;;
+;; (version):
+;; GNU Emacs 28.1 (build 1, aarch64-apple-darwin22.2.0, NS appkit-2299.30 Version 13.1 (Build 22C65))
+;;
+;; (doom/version):
+;; GNU Emacs     v28.1            nil
+;; Doom core     v3.0.0-pre       HEAD -> master, origin/master, origin/HEAD e96624926 2023-01-01 21:55:13 -0500
+;; Doom modules  v22.10.0-pre     HEAD -> master, origin/master, origin/HEAD e96624926 2023-01-01 21:55:13 -0500
+;;
+;; (doom-info-string):
+;; generated  Jan 26, 2023 16:34:29
+;; system     MacOS 13.1 Darwin 22.2.0 arm64
+;; emacs      28.1 ~/.doom-emacs.d
+;; doom       3.0.0-pre PROFILE=_@0 HEAD -> master, origin/master, origin/HEAD
+;;            e96624926 2023-01-01 21:55:13 -0500 ~/.config/doom/
+;; shell      /opt/homebrew/bin/zsh
+;; features   ACL GLIB GMP GNUTLS JPEG JSON LIBXML2 MODULES NATIVE_COMP NOTIFY
+;;            KQUEUE NS PDUMPER PNG RSVG THREADS TIFF TOOLKIT_SCROLL_BARS ZLIB
+;; traits     batch server-running envvar-file
+;; modules    :config use-package
+;; elpa       vterm
+;;
+;; (native-comp-available-p):
+;; t
+;;
+;; (shell-command-to-string "doom doctor"):
+;; The doctor will see you now...
+;;
+;; > Checking your Emacs version...
+;; > Checking for Doom's prerequisites...
+;; > Checking for Emacs config conflicts...
+;; > Checking for great Emacs features...
+;; > Checking for private config conflicts...
+;; > Checking for stale elc files...
+;; > Checking for problematic git global settings...
+;; > Checking Doom Emacs...
+;;   ✓ Initialized Doom Emacs 3.0.0-pre
+;;   ✓ Detected 43 modules
+;;   ✓ Detected 145 packages
+;;   > Checking Doom core for irregularities...
+;;   > Checking for stale elc files in your DOOMDIR...
+;;   > Checking your enabled modules...
+;;
+;; Everything seems fine, happy Emacs'ing!
+
+;; vim: set ft=lisp:

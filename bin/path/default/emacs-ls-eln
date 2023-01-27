@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+fd --hidden -I . ~/.doom-emacs.d | grep 'eln$'

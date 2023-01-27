@@ -33,7 +33,7 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-solarized-light)
-(setq doom-font (font-spec :family "FiraMono Nerd Font Mono" :size 12)
+(setq doom-font (font-spec :family "FuraMono Nerd Font Mono" :size 12)
       ;; ;; There are several things I did to make fonts work "properly" (tested on GUI Emacs on macOS).
       ;; ;; Prior to these patches, because of the (undesired) differences that I saw from Emacs compare to terminal,
       ;; ;; I fulled myself to believe that maybe it was the limitations on any of these:
@@ -42,7 +42,7 @@
       ;; ;; - Emacs
       ;; ;; Now I know that was not the case.
       ;;
-      ;; 1. use `FiraMono Nerd Font` instead of `JetBrainsMono Nerd Font`
+      ;; 1. use `FuraMono Nerd Font` instead of `JetBrainsMono Nerd Font`
       ;;    because somehow the height of glyphs can vary with JetBrainsMono even though they both come from Nerd Fonts.
       ;;    (I don't have this issue with terminals that I use - Alacritty, iTerm, etc.)
       ;; 2. enabling `unicode` module under :ui at ./init.el would fix misalignments on width in `vterm` (and probably others)
@@ -61,6 +61,10 @@
 (setq org-directory "~/org/")
 
 (when IS-MAC
+  ;; see for "flash of unstyled Emacs" - https://www.reddit.com/r/emacs/comments/oza47b/comment/h7yfxjz
+  ;; also it's possible that maybe somehow *skipping* of running `doom install` might have caused this.
+  ;; if it's a very first time running the GUI that gets stuck or hangs, running `emacsclient` first might fix it.
+  ;;
   ;; to trigger emacs to be full screen on start up - https://emacsredux.com/blog/2020/12/04/maximize-the-emacs-frame-on-startup/
   (add-hook 'window-setup-hook #'toggle-frame-fullscreen))
 

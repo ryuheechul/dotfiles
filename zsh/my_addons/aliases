@@ -340,9 +340,6 @@ alias jqfromjson='jq "fromjson"'
 # more on it at https://www.cyberciti.biz/faq/unix-linux-check-if-port-is-in-use-command/
 alias listopenports='lsof -i -P -n | grep LISTEN'
 
-# emacs
-alias doom="~/.doom-emacs.d/bin/doom"
-
 ## these are replaced by ../../bin/local/pb[paste|copy]
 #
 # # bring `pbcopy` and `pbpaste` to linux

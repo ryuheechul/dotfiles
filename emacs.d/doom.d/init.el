@@ -205,12 +205,12 @@
 (when noninteractive
   ;; ignore terminal and tmux related env vars
   ;; define if not already exist - https://stackoverflow.com/a/7301151
-  (defvar doom-env-blacklist '())
+  (defvar doom-env-deny '()) ;; previously it was =doom-env-blacklist= - https://github.com/doomemacs/doomemacs/issues/2434
   ;; (mapc ... will result in the same effect as these example lines
-  ;; (add-to-list 'doom-env-blacklist "^TERM$")
-  ;; (add-to-list 'doom-env-blacklist "^TERM_PROGRAM$")
+  ;; (add-to-list 'doom-env-deny "^TERM$")
+  ;; (add-to-list 'doom-env-deny "^TERM_PROGRAM$")
   ;; ...
-  (mapc (lambda (x) (add-to-list 'doom-env-blacklist x))
+  (mapc (lambda (x) (add-to-list 'doom-env-deny x))
         (mapcar (lambda (x) (format "^%s$" x))
                 (string-lines
                  (shell-command-to-string

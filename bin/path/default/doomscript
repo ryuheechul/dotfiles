@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+doomscript=~/.doom-emacs.d/bin/doomscript
+
+if test -f "${doomscript}"; then
+  "${doomscript}" $@
+else
+  echo "make sure to have doomscript at ${doomscript}"
+  exit 1
+fi

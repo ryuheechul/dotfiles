@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+doom=~/.doom-emacs.d/bin/doom
+
+if test -f "${doom}"; then
+  "${doom}" $@
+else
+  echo "make sure to have doom at ${doom}"
+  exit 1
+fi
