@@ -64,11 +64,10 @@ return {
     event = 'VeryLazy',
     config = true,
   },
-  -- choosing `nvim-parinfer` over `parinfer-rust` for now
-  {
+  { -- editing helper for lisp family langs
     'gpanders/nvim-parinfer',
     event = 'VeryLazy',
-  }, -- editing helper for lisp family langs
+  }, -- choosing `nvim-parinfer` over `parinfer-rust` for now
   -- {
   --   'eraserhd/parinfer-rust', -- editing helper for lisp family langs
   --   build = 'nix-shell --run "cargo build --release"',
