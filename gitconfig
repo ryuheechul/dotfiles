@@ -22,11 +22,25 @@
 [delta]
   features = line-numbers decorations
   whitespace-error-style = 22 reverse
+  navigate = true # use n and N to move between diff sections
 
 [delta "decorations"]
   commit-decoration-style = bold yellow box ul
   file-style = bold yellow ul
   file-decoration-style = none
+
+[tig "color"] # optimize colors under current limitation
+  cursor = black cyan bold
+  commit = magenta black # something like `commit h65hc6...`
+  title-blur = white black reverse # like the one from parent view
+  title-focus = blue black reverse # for the active view
+  diff-chunk = magenta black # something like `@@ -25,7 +25,8 @@`
+  diff-index = yellow black # something like `index e46e744..42dd3b1 100644`
+  diff-stat = blue black bold # something like ` file | 1 +`
+  diff-header = blue black underline # something like `diff --git a/file b/file`
+  diff-del-file = red black  # something like `--- a/file`
+  diff-add-file = green black # something like `+++ b/file`
+  diff-add = green black standout # content that added
 
 [tig]
   ignore-case = smart-case # useful for search
