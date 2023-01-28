@@ -256,8 +256,12 @@ sk ()
   fi
 }
 
-# should I try infinite loop here maybe?
+## convenient quick ways to select file to open in vim
+# 1. in the current directory
 alias v='vi $(sk --preview "preview {}")'
+# 2. in the git root directory
+alias vv='grt; v; popd' # basically - `git rev-parse --show-toplevel || echo . | xargs pushd; v; popd`
+# 3. my dotfiles
 alias dot='pushd "${my_dot_d}"; v; popd'
 
 # useful when the status of lazy.nvim seems not clean
