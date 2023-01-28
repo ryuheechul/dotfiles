@@ -1,3 +1,5 @@
+# vim: set ft=bash: # it's not really bash file type but good enough to enable highlight
+#
 # Vim-style keybindings for Tig
 #
 # To use these keybindings copy the file to your HOME directory and include
@@ -5,11 +7,17 @@
 #
 #	$ cp contrib/vim.tigrc ~/.tigrc.vim
 #	$ echo "source ~/.tigrc.vim" >> ~/.tigrc
+#
+# see ./gitconfig for other settings
+# `vh` or `K` to see help
+# binding tips - https://github.com/jonas/tig/wiki/Bindings
 
 bind generic h scroll-left
 bind generic j move-down
 bind generic k move-up
 bind generic l scroll-right
+bind generic d move-page-down
+bind generic b move-page-up
 
 bind generic g  none
 bind generic gg move-first-line
@@ -40,7 +48,8 @@ bind generic vg view-grep
 bind generic vp view-pager
 bind generic vh view-help
 
-bind generic o  none
+# below is basically same as "open 'https://'$(git remote -v | head -n1 | cut -f2 | sed 's|^https://||' | sed 's|^ssh://git@||' | sed 's|.git\ .*$||' | sed 's| .*$||')'/commit/%(commit)'"
+bind generic o @sh -c "open $(git-remote-url)'/commit/%(commit)'"
 bind generic oo :toggle sort-order
 bind generic os :toggle sort-field
 bind generic on :toggle line-number
@@ -79,3 +88,6 @@ bind status  l  enter
 bind main    l  enter
 bind refs    l  enter
 bind stage   <esc> view-close
+# although this gets applied but doesn't seem to work
+# so just need to do good old <C-c> for now
+bind search  <esc> view-close

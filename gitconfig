@@ -30,3 +30,5 @@
 
 [tig]
   ignore-case = smart-case # useful for search
+  main-view-id = yes # show short hash - https://github.com/jonas/tig/issues/340#issuecomment-240764386
+  main-view-date-display = relative # to have shorter date width

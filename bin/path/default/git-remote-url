@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# A helper script to extract url from `git remote -v`
+
+echo -n 'https://'
+git remote -v \
+  | head -n1 | cut -f2 \
+  | sed 's|^https://||' \
+  | sed 's|^ssh://git@||' \
+  | sed 's|.git\ .*$||' \
+  | sed 's| .*$||'
+
+# basically transform this one
+# ```
+# origin  ssh://git@github.com/org/repo.git (fetch)
+# origin  ssh://git@github.com/org/repo.git (push)
+# ```
+# or this one
+# ```
+# origin  https://github.com/org/repo.git (fetch)
+# origin  https://github.com/org/repo.git (push)
+# or even this one
+# ```
+# origin  https://github.com/org/repo (fetch)
+# origin  https://github.com/org/repo (push)
+# ```
+# into
+# ```
+# https://github.com/org
+# ```
+# so that you can open it in the browser via `[xdg-]open`
+# try `git-remote-url | xargs open` inside any repo
