@@ -1,4 +1,4 @@
-# vim: set ft=gitconfig:
+; vim: set ft=gitconfig:
 
 [init]
   defaultBranch = main
@@ -7,8 +7,8 @@
   ff = only
 
 [status]
-  submoduleSummary = 5 # 5 means it will show up to 5 logs
-  # using -1 will mean it's infinite so it will show every log
+  submoduleSummary = 5 ; 5 means it will show up to 5 logs
+  ; using -1 will mean it's infinite so it will show every log
 
 [diff]
   submodule = log
@@ -22,27 +22,50 @@
 [delta]
   features = line-numbers decorations
   whitespace-error-style = 22 reverse
-  navigate = true # use n and N to move between diff sections
+  navigate = true ; use n and N to move between diff sections
 
 [delta "decorations"]
   commit-decoration-style = bold yellow box ul
   file-style = bold yellow ul
   file-decoration-style = none
 
-[tig "color"] # optimize colors under current limitation
-  cursor = black cyan bold
-  commit = magenta black # something like `commit h65hc6...`
-  title-blur = white black reverse # like the one from parent view
-  title-focus = blue black reverse # for the active view
-  diff-chunk = magenta black # something like `@@ -25,7 +25,8 @@`
-  diff-index = yellow black # something like `index e46e744..42dd3b1 100644`
-  diff-stat = blue black bold # something like ` file | 1 +`
-  diff-header = blue black underline # something like `diff --git a/file b/file`
-  diff-del-file = red black  # something like `--- a/file`
-  diff-add-file = green black # something like `+++ b/file`
-  diff-add = green black standout # content that added
-
 [tig]
-  ignore-case = smart-case # useful for search
-  main-view-id = yes # show short hash - https://github.com/jonas/tig/issues/340#issuecomment-240764386
-  main-view-date-display = relative # to have shorter date width
+  diff-highlight = true ; use diff-highlight to highlight https://github.com/jonas/tig/issues/313
+  ignore-case = smart-case ; useful for search
+  main-view-id = yes ; show short hash - https://github.com/jonas/tig/issues/340#issuecomment-240764386
+  main-view-date-display = relative ; to have shorter date width
+
+; optimize colors under current limitation
+[tig "color"]
+  ; specify either 8 color like black white ... or 256 color
+  ; 256 color might not work depends on TERM - read more on that here, https://github.com/jonas/tig/issues/559
+  ; note that using black or white could result them to be reversed (inconsistency) depends on situations probably due to how my theme from base16-shell works
+  cursor = black cyan bold
+  commit = magenta black ; something like `commit h65hc6...`
+  title-blur = white black reverse ; like the one from parent view
+  title-focus = blue black reverse ; for the active view
+  diff-chunk = magenta black ; something like `@@ -25,7 +25,8 @@`
+  diff-index = yellow black ; something like `index e46e744..42dd3b1 100644`
+  diff-stat = blue black bold ; something like ` file | 1 +`
+  diff-header = blue black underline ; something like `diff --git a/file b/file`
+  diff-del-file = 60 224 ; something like `--- a/file`
+  diff-add-file = 36 194 ; something like `+++ b/file`
+  diff-add = 36 194
+  diff-del = 60 224
+
+; to assist tig diff-view
+[color "diff-highlight"]
+oldNormal = "60 224"
+oldHighlight = "66 217"
+newNormal = "36 194"
+newHighlight = "36 157"
+; values above translated (and adjusted) from following - https://github.com/git/git/tree/5cc9858f1b470844dea5c5d3e936af183fdf2c68/contrib/diff-highlight
+; using https://github.com/ryuheechul/hexto256
+; ```
+; # Varying background intensities
+; [color "diff-highlight"]
+; oldNormal = "black #f8cbcb"
+; oldHighlight = "black #ffaaaa"
+; newNormal = "black #cbeecb"
+; newHighlight = "black #aaffaa"
+; ```
