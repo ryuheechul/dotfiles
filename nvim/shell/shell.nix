@@ -1,6 +1,12 @@
-# can use it to setup dev environment - currently it's for ../lua/plugins/debug.lua
+# to assist building things on the fly when installing plugins
+# search `nix-shell` at ../lua/plugins to see usages
+
 { pkgs ? import <nixpkgs> { } }:
 
-pkgs.mkShell {
-  nativeBuildInputs = import ../../nix/build-deps.nix { };
+with pkgs;
+mkShell {
+  nativeBuildInputs = import ../../nix/build-deps.nix { } ++ [
+    rustc
+    cargo
+  ];
 }

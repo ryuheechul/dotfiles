@@ -48,7 +48,7 @@ return {
             lazy = true, -- since this is not a real plugin
             version = 'v1.74.1',
             -- since it's not on npm registry, building directly borrowing power of nix-shell to satisfy dev dependencies
-            build = "nix-shell --command 'npm i --legacy-peer-deps && npm run compile' ~/.config/dfs-rhc/nvim/shell/shell.nix",
+            build = "np-build-via-nix-shell 'npm i --legacy-peer-deps && npm run compile'",
           },
         },
       },

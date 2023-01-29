@@ -19,3 +19,6 @@ alias tmux-attach="${my_dot_d}/bin/tmux-attach-or-new.sh"
 alias exec-tmux-attach="exec ${my_dot_d}/bin/tmux-attach-or-new.sh"
 alias zellij-attach="${my_dot_d}/bin/zellij-attach-or-new.sh"
 alias exec-zellij-attach="exec ${my_dot_d}/bin/zellij-attach-or-new.sh"
+
+# to be used for building source code from neovim plugins -- because sometimes they require these processes
+alias np-build-via-nix-shell="${my_dot_d}/nvim/shell/build-via-nix-shell.sh"
