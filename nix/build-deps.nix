@@ -17,6 +17,7 @@ with pkgs;
 [
   pkg-config # a helper tool used when compiling applications and libraries
   libcxx # C++ standard library
+  libiconv
   # openssl is also mentioned at https://github.com/psycopg/psycopg2/issues/1200#issuecomment-776159466
   openssl # A cryptographic library that implements the SSL and TLS protocols
 ] ++

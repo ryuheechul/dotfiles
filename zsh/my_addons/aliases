@@ -225,7 +225,8 @@ alias gap="git add -p"
 alias gfssh="ambr --no-parent-ignore 'https://' 'ssh://git@' .git/config"
 
 # editor
-alias pathnvimlazy='echo "~/.local/share/nvim/lazy" | pbcopy ; pbpaste'
+alias pathnvimlazy='echo "${HOME}/.local/share/nvim/lazy" | pbcopy ; pbpaste'
+alias clearnvimswaps='rm -r ~/.local/state/nvim/swap'
 alias vim="nvim"
 alias vi="vim"
 
@@ -244,6 +245,13 @@ alias pim='NVIM_PROFILE=1 vi'
 # neovim with ghost
 alias vig='my_nvim_ghost=1 vi'
 
+# usage: sggh ryuheechul/hexto256 main.go
+sggh ()
+{
+  nvim "sg://github.com/${1}/-/${2}"
+}
+
+# wrap `sk` to use TMUX_PANE when possible
 sk ()
 {
   # prevent running sk on home directory as there are too many things to read
@@ -258,7 +266,7 @@ sk ()
 
 ## convenient quick ways to select file to open in vim
 # 1. in the current directory
-alias v='vi $(sk --preview "preview {}")'
+alias v='sk --preview "preview {}" | xargs nvim'
 # 2. in the git root directory
 alias vv='grt; v; popd' # basically - `git rev-parse --show-toplevel || echo . | xargs pushd; v; popd`
 # 3. my dotfiles

@@ -28,6 +28,15 @@ return {
     },
     config = require('plugins.config.lsp').null_ls,
   },
+  { --  bringing many of the features of sourcegraph.com into Neovim
+    'tjdevries/sg.nvim', -- this is technically not directly related to lsp but it uses lsp so it can stay in this file for now.
+    -- try `nvim sg://github.com/ryuheechul/hexto256/-/main.go` from shell
+    -- or `:edit sg://github.com/ryuheechul/hexto256/-/main.go` inside neovim
+    -- I also made a zsh alias so it can be used like this, `sggh ryuheechul/hexto256 main.go`
+    build = "np-build-via-nix-shell 'cargo build --workspace'",
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = true,
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et
