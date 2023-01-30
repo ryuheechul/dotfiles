@@ -5,6 +5,7 @@
 let
   checkEnv = import ../../utils/checkEnv.nix;
   tag = import ../custom/tag { pkgs = pkgs; };
+  hexto256 = import ../custom/hexto256.nix;
   bat-riffle = import ../custom/bat-riffle { pkgs = pkgs; };
   hired = import ../custom/hired.nix { pkgs = pkgs; };
   tf-helper = import ../custom/tf-helper.nix { pkgs = pkgs; };
@@ -14,6 +15,7 @@ in
 with pkgs;
 [
   # anything "extra" but without optional flag goes here
+  hexto256
 ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_HIRED")
   [

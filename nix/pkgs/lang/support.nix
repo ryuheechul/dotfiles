@@ -2,6 +2,7 @@
 
 let
   checkEnv = import ../../utils/checkEnv.nix;
+  devenv = import ../custom/devenv.nix;
 in
 with pkgs;
 [ ]
@@ -16,8 +17,7 @@ with pkgs;
   # - https://devenv.sh/languages/
   # - https://github.com/cachix/devenv/blob/main/examples/supported-languages/devenv.nix
   [
-    # https://devenv.sh/getting-started/#__tabbed_3_3
-    (import (fetchTarball https://github.com/cachix/devenv/archive/v0.5.tar.gz)).default
+    devenv
   ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_EXERCISM")
   [
