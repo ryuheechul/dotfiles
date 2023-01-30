@@ -75,6 +75,7 @@ return function(setup_default)
   local setup_rnix = merge(setup_default, {})
 
   local setup_nimls = merge(setup_default, {})
+  local setup_gopls = merge(setup_default, {})
 
   local setup_sqls = merge(setup_default, {
     on_attach = function(client, bufnr)
@@ -151,6 +152,7 @@ return function(setup_default)
     sqls = setup_sqls,
     jsonls = setup_jsonls,
     nimls = setup_nimls,
+    gopls = setup_gopls,
   }
 end
 
