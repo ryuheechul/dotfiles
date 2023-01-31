@@ -84,6 +84,8 @@ bind generic ca !?git commit -v --amend
 bind generic K view-help
 bind generic <C-w><C-w> view-next
 
+bind diff    h  view-close
+bind diff    l  maximize
 bind status  l  enter
 bind main    l  enter
 bind refs    l  enter
