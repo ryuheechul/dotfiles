@@ -27,6 +27,8 @@ let
       typescript-language-server
       # for https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#eslint
       vscode-langservers-extracted
+      # A language server for Svelte
+      svelte-language-server
     ]) ++ (import ./node2nix { pkgs = pkgs; nodejs = nodejs; })
   );
 in

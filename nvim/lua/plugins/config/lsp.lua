@@ -10,6 +10,9 @@ function M.setup_lsp_format()
     lua = {
       exclude = { 'sumneko_lua' }, -- to let only null_ls with stylua to format
     },
+    typescript = {
+      exclude = { 'tsserver' },
+    },
   }
 end
 
@@ -42,6 +45,7 @@ function M.null_ls()
 
     sources = {
       null_ls.builtins.formatting.stylua,
+      null_ls.builtins.formatting.eslint,
     },
   }
 end
