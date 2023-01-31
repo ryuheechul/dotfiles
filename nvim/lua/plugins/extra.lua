@@ -392,7 +392,11 @@ return {
   { -- A minimalist autoclose plugin
     'm4xshen/autoclose.nvim',
     event = 'VeryLazy',
-    opts = {},
+    opts = {
+      options = {
+        disable_when_touch = true,
+      },
+    },
   },
   { -- Keep clipboard in sync with Neovim without the peformance hit.
     'EtiamNullam/deferred-clipboard.nvim',
