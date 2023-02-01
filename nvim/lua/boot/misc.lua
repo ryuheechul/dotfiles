@@ -58,7 +58,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 local helpGrp = vim.api.nvim_create_augroup('MyHelpAUG', { clear = true })
 vim.api.nvim_create_autocmd('FileType', {
   -- for now, including `checkhealth` and `qf` (for e.g. `gd` and `gr`) too
-  pattern = { 'help', 'checkhealth', 'qf' },
+  pattern = { 'help', 'checkhealth', 'qf', 'lazy' },
   callback = function()
     -- nowait only works with buffer mapping
     vim.keymap.set('n', 'd', '<C-d>', { noremap = true, silent = true, buffer = true, nowait = true })
