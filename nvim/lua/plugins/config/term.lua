@@ -66,17 +66,21 @@ return function()
     },
   }
 
+  local cmdify = function(cmd)
+    return '<Cmd>' .. cmd .. '<CR>'
+  end
+
   function _G.set_terminal_keymaps()
     local opts = { buffer = 0 }
     vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
     -- -- disable this as it makes long press with `j` not rendering until sometime after the key release.
     -- -- see https://github.com/akinsho/toggleterm.nvim/issues/63 for more details
     -- vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
-    vim.keymap.set('n', '<esc>', [[<Cmd>close<CR>]], opts)
-    vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
-    vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
-    vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
-    vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
+    vim.keymap.set('n', '<esc>', cmdify 'close', opts)
+    vim.keymap.set('t', '<C-h>', cmdify 'TmuxNavigateLeft', opts)
+    vim.keymap.set('t', '<C-j>', cmdify 'TmuxNavigateDown', opts)
+    vim.keymap.set('t', '<C-k>', cmdify 'TmuxNavigateUp', opts)
+    vim.keymap.set('t', '<C-l>', cmdify 'TmuxNavigateRight', opts)
   end
 
   local termGrp = vim.api.nvim_create_augroup('MyTerm', { clear = true })
