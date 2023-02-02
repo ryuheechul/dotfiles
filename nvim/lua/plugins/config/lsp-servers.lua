@@ -42,7 +42,13 @@ return function(setup_default)
 
   -- use :EslintFixAll to fix all - doesn't kick off automatically with format (on save)
   local setup_eslint = merge(setup_default, {
-    root_dir = lspconfig.util.root_pattern 'package.json',
+    -- thanks to https://neovim.discourse.group/t/is-it-possible-to-disable-lsp-in-node-modules-directory-file/444/5
+    root_dir = function(filename)
+      if string.find(filename, 'node_modules/') then
+        return nil
+      end
+      return require('lspconfig.server_configurations.eslint').default_config.root_dir(filename)
+    end,
   })
 
   local setup_denols = merge(setup_default, {
