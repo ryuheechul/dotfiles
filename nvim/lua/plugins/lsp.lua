@@ -15,7 +15,7 @@ return {
         'williamboman/mason-lspconfig.nvim',
         dependencies = { 'williamboman/mason.nvim', config = true },
         opts = {
-          ensure_installed = { 'sumneko_lua', 'jsonls' },
+          ensure_installed = { 'sumneko_lua', 'jsonls', 'astro' },
         },
       },
     },

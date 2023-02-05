@@ -83,6 +83,7 @@ return function(setup_default)
   local setup_nimls = merge(setup_default, {})
   local setup_gopls = merge(setup_default, {})
   local setup_svelte = merge(setup_default, {})
+  local setup_astro = merge(setup_default, {})
 
   local setup_sqls = merge(setup_default, {
     on_attach = function(client, bufnr)
@@ -161,6 +162,7 @@ return function(setup_default)
     nimls = setup_nimls,
     gopls = setup_gopls,
     svelte = setup_svelte,
+    astro = setup_astro,
   }
 end
 

@@ -2,3 +2,4 @@
 
 au BufRead,BufNewFile Earthfile set filetype=Earthfile
 au BufRead,BufNewFile *.kdl set filetype=kdl
+au BufRead,BufEnter *.astro set filetype=astro
