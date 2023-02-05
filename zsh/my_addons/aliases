@@ -57,7 +57,7 @@ function simple_bench_disk () {
 
 # when I don't feel liking adding `| less` at the end
 function show () {
-  $@ | less -r
+  $@ | less -r -i
 }
 
 # use help like man
@@ -185,21 +185,30 @@ alias -s git='git clone'
 alias gh='GLAMOUR_STYLE=$(theme-tone) gh'
 
 # replace htop with bottom
-alias htop="btm -b"
+alias htop='btm -b'
 # overwrite essential stuff
-alias which="which -a"
-alias ping="gping"
+alias which='which -a'
+alias ping='gping'
 
 # human friendly df and du
-alias df="duf"
+alias df='duf'
 alias du='du -d 1 -h | sort -h -r'
 
 # git
 alias tig='TERM=xterm-256color tig'
-alias gs="pwd; ls; git status"
-alias tgs="tig status"
-alias gd="git diff"
-alias gdc="git diff --cached"
+alias gs='pwd; ls; git status'
+alias tgs='tig status'
+alias gd='git diff'
+alias gdc='gd --cached'
+alias gdt='git difftool'
+alias gdtc='gdt --cached'
+alias gdp='gd -- ":(exclude)package-lock.json"'
+alias gdcp='gdc -- ":(exclude)package-lock.json"'
+alias gdtp='gdt -- ":(exclude)package-lock.json"'
+alias gdtcp='gdtc -- ":(exclude)package-lock.json"'
+# and just to help with typo
+alias gd.='gd .'
+alias gdc.='gdc .'
 
 unalias gl
 # envelop `git pull` with `stash` and `stash pop` when the status is not clean
@@ -219,7 +228,7 @@ function gl () {
 }
 
 # this overwrites existing gap which is for git apply
-alias gap="git add -p"
+alias gap='git add -p'
 
 # git fix remote to ssh from https
 alias gfssh="ambr --no-parent-ignore 'https://' 'ssh://git@' .git/config"
@@ -227,8 +236,8 @@ alias gfssh="ambr --no-parent-ignore 'https://' 'ssh://git@' .git/config"
 # editor
 alias pathnvimlazy='echo "${HOME}/.local/share/nvim/lazy" | pbcopy ; pbpaste'
 alias clearnvimswaps='rm -r ~/.local/state/nvim/swap'
-alias vim="nvim"
-alias vi="vim"
+alias vim='nvim'
+alias vi='vim'
 
 _dotfilepath="$(readlink -f ~/.config/dfs-rhc)"
 _perflogpath="${_dotfilepath}/.perf.log"
@@ -297,16 +306,16 @@ function emacs () {
 }
 
 # viewer and filter
-alias vimdiff="nvim -dR"
-alias diff="git diff --no-index"
-alias less="less -r"
+alias vimdiff='nvim -dR'
+alias diff='git diff --no-index'
+alias less='less -r -i'
 alias cat='bat'
 alias k9s='TERM=xterm COLORTERM=256bit k9s'
 
 # ripgrep
-alias rg="rg -p -i"
-alias rgc="rg -C"
-alias rgc5="rgc 5"
+alias rg='rg -p -i'
+alias rgc='rg -C'
+alias rgc5='rgc 5'
 
 alias glow='glow -p -s "$(theme-tone)"'
 
@@ -318,7 +327,7 @@ alias fpp='wrapped-fpp'
 function bdiff () { diff -u $@ | bat;} # use `vimdiff` for editing
 
 # shorthands
-alias dc="docker-compose"
+alias dc='docker-compose'
 alias mp='multipass'
 alias tf='terraform'
 alias wttr='curl wttr.in'
@@ -326,25 +335,25 @@ alias cht='CHTSH_QUERY_OPTIONS="style=friendly" cht.sh'
 alias chtsh='cht --shell'
 
 # web search
-alias googler="googler -n 3"
-alias ddgr="ddgr -n 3"
+alias googler='googler -n 3'
+alias ddgr='ddgr -n 3'
 
 # commandify
-alias fulltimezsh="FORCE_LOAD_MY_ZSH_STUFF=1 timezsh"
-alias vzshrc="nvim ~/.zshrc"
-alias sshconfig="cat ~/.ssh/config"
-alias vsshconfig="nvim ~/.ssh/config"
-alias touchreadme="touch README.md"
-alias touchmakefile="touch Makefile"
+alias fulltimezsh='FORCE_LOAD_MY_ZSH_STUFF=1 timezsh'
+alias vzshrc='nvim ~/.zshrc'
+alias sshconfig='cat ~/.ssh/config'
+alias vsshconfig='nvim ~/.ssh/config'
+alias touchreadme='touch README.md'
+alias touchmakefile='touch Makefile'
 alias weather='curl wttr.in'
 alias shebang='echo "#!/usr/bin/env bash" | pbcopy ; pbpaste'
 alias executable='chmod +x'
 alias lf='UNSET_ALL_MY_ZSH_STUFF_LOADED=1 lf'
 alias quickvenv='python3 -m venv "${MY_QUICK_VENV_PATH:-.venv}" && source "${MY_QUICK_VENV_PATH:-.venv}/bin/activate"'
 
-alias nis="npm install --save"
-alias nisd="npm install --save-dev"
-alias whoami-aws="aws sts get-caller-identity"
+alias nis='npm install --save'
+alias nisd='npm install --save-dev'
+alias whoami-aws='aws sts get-caller-identity'
 alias q='test -n "${VIRTUAL_ENV}" && deactivate || exit'
 alias e='${EDITOR} $(fzf)'
 alias jqstringify='jq ". | tostring"'

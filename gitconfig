@@ -12,9 +12,22 @@
 
 [diff]
   submodule = log
+  tool = difftastic
+
+[difftool]
+  prompt = false
+
+[difftool "difftastic"]
+  cmd = difft "$LOCAL" "$REMOTE"
 
 [core]
   pager = delta
+
+[pager]
+  difftool = true
+
+[alias]
+  dft = difftool
 
 [interactive]
   diffFilter = delta --color-only

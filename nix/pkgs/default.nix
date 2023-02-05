@@ -110,6 +110,7 @@ with pkgs;
   gfold # help keep track of your Git repositories locally
   git-filter-repo # quickly rewrite git repository history - read https://stackoverflow.com/a/69947947/1570165 for usage
   delta # syntax-highlighting pager for git
+  difftastic # A syntax-aware diff
   gh # official Github CLI
   act # Run your GitHub Actions locally
 ] ++

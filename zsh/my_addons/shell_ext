@@ -62,6 +62,9 @@ unset my_zsh_plugin_zsh_autocomplete;
 
 _tag arch
 
+# difftastic options see `difft --help` for more
+export DFT_DISPLAY=inline
+
 # theme for bat
 export BAT_THEME="Solarized (light)"
 # set it as env var here instead of ~/.config/bat/config as the issue is described in the file
