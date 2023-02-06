@@ -136,6 +136,11 @@ return function()
         ['i;'] = 'textsubjects-container-inner',
       },
     },
+    -- https://github.com/JoosepAlviste/nvim-ts-context-commentstring#commentnvim
+    context_commentstring = { -- installed from ../editing.lua
+      enable = true,
+      enable_autocmd = false,
+    },
   }
 end
 

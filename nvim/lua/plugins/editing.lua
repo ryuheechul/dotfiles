@@ -30,9 +30,15 @@ return {
   { 'sgur/vim-textobj-parameter', dependencies = { 'kana/vim-textobj-user' }, event = 'VeryLazy' },
   { -- replacing 'tpope/vim-commentary'
     'numToStr/Comment.nvim',
+    dependencies = {
+      -- Neovim treesitter plugin for setting the commentstring based on the cursor location in a file.
+      'JoosepAlviste/nvim-ts-context-commentstring',
+    },
     event = 'VeryLazy',
     config = function()
-      require('Comment').setup()
+      require('Comment').setup {
+        pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+      }
 
       local ft = require 'Comment.ft'
       -- correct comment character
