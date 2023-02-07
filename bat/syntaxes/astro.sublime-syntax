@@ -1,0 +1,370 @@
+%YAML 1.2
+---
+# this is extracted from https://github.com/Destiner/sublime-astro/blob/a41132afc7da386ca96589f3b801a55775616a2a/Astro.sublime-syntax
+# https://github.com/withastro/language-tools/tree/main/packages/vscode/syntaxes
+# http://www.sublimetext.com/docs/syntax.html
+name: Astro
+file_extensions:
+  - astro
+scope: text.html.astro
+contexts:
+  main:
+    - include: astro-markdown
+    - include: astro-expressions
+    - include: html-comment
+    - include: html-comment-bogus
+    - include: html-doctype
+    - include: astro-fragment
+    - include: astro-lang
+    - include: astro-component
+    - include: html-element
+    - include: html-entity
+    - include: html-entity-bogus
+    - include: frontmatter
+  astro-attribute:
+    - include: html-attribute
+    - include: string-double-quoted
+    - include: string-single-quoted
+    - include: string-template-literal
+    - include: astro-expressions
+  astro-component:
+    - match: '(</?)([$A-Z_][^/?!\s<>]*|[^/?!\s<>.]+\.[^/?!\s<>]+)\b'
+      captures:
+        1: punctuation.definition.tag.begin.astro
+        2: entity.name.tag.astro support.class.component.astro
+      push:
+        - meta_scope: meta.tag.component.astro
+        - match: (/?>)
+          captures:
+            1: punctuation.definition.tag.end.astro
+          pop: true
+        - include: astro-attribute
+  astro-expressions:
+    - match: '\{'
+      captures:
+        0: punctuation.definition.generic.begin.html
+      embed: scope:source.tsx
+      embed_scope: meta.template.astro
+      escape: '\}'
+      escape_captures:
+        0: punctuation.definition.generic.end.html
+  astro-fragment:
+    - match: (</?)(Fragment)?(\s*>)
+      scope: meta.tag.component.astro
+      captures:
+        1: punctuation.definition.tag.astro
+        2: entity.name.tag.astro support.class.fragment.astro
+        3: punctuation.definition.tag.astro
+  astro-lang:
+    - match: '(?:^\s+)?(<)((?i:style))\b(?=[^>]*lang=([''"])css\1?)'
+      captures:
+        1: punctuation.definition.tag.begin.html
+        2: entity.name.tag.style.html
+        3: punctuation.definition.tag.html
+      push:
+        - meta_scope: source.css.embedded.html
+        - match: (</)((?i:style))(>)(?:\s*\n)?
+          captures:
+            1: punctuation.definition.tag.begin.html
+            2: entity.name.tag.style.html
+            3: punctuation.definition.tag.html
+          pop: true
+        - include: astro-attribute
+        - match: (>)
+          captures:
+            1: punctuation.definition.tag.end.html
+          push:
+            - match: (?=</(?i:style))
+              pop: true
+            - include: scope:source.css
+    - match: '(?:^\s+)?(<)((?i:style))\b(?=[^>]*lang=([''"])sass\1?)'
+      captures:
+        1: punctuation.definition.tag.begin.html
+        2: entity.name.tag.style.html
+        3: punctuation.definition.tag.html
+      push:
+        - meta_scope: source.sass.embedded.html
+        - match: (</)((?i:style))(>)(?:\s*\n)?
+          captures:
+            1: punctuation.definition.tag.begin.html
+            2: entity.name.tag.style.html
+            3: punctuation.definition.tag.html
+          pop: true
+        - include: astro-attribute
+        - match: (>)
+          captures:
+            1: punctuation.definition.tag.end.html
+          push:
+            - match: (?=</(?i:style))
+              pop: true
+            - include: scope:source.sass
+    - match: '(?:^\s+)?(<)((?i:style))\b(?=[^>]*lang=([''"])scss\1?)'
+      captures:
+        1: punctuation.definition.tag.begin.html
+        2: entity.name.tag.style.html
+        3: punctuation.definition.tag.html
+      push:
+        - meta_scope: source.scss.embedded.html
+        - match: (</)((?i:style))(>)(?:\s*\n)?
+          captures:
+            1: punctuation.definition.tag.begin.html
+            2: entity.name.tag.style.html
+            3: punctuation.definition.tag.html
+          pop: true
+        - include: astro-attribute
+        - match: (>)
+          captures:
+            1: punctuation.definition.tag.end.html
+          push:
+            - match: (?=</(?i:style))
+              pop: true
+            - include: scope:source.css.scss
+    - match: '(?:^\s+)?(<)((?i:style))\b(?=[^>]*lang=([''"])less\1?)'
+      captures:
+        1: punctuation.definition.tag.begin.html
+        2: entity.name.tag.style.html
+        3: punctuation.definition.tag.html
+      push:
+        - meta_scope: source.less.embedded.html
+        - match: (</)((?i:style))(>)(?:\s*\n)?
+          captures:
+            1: punctuation.definition.tag.begin.html
+            2: entity.name.tag.style.html
+            3: punctuation.definition.tag.html
+          pop: true
+        - include: astro-attribute
+        - match: (>)
+          captures:
+            1: punctuation.definition.tag.end.html
+          push:
+            - match: (?=</(?i:style))
+              pop: true
+            - include: scope:source.less
+    - match: '(?:^\s+)?(<)((?i:style))\b(?=[^>]*lang=([''"])stylus\1?)'
+      captures:
+        1: punctuation.definition.tag.begin.html
+        2: entity.name.tag.style.html
+        3: punctuation.definition.tag.html
+      push:
+        - meta_scope: source.stylus.embedded.html
+        - match: (</)((?i:style))(>)(?:\s*\n)?
+          captures:
+            1: punctuation.definition.tag.begin.html
+            2: entity.name.tag.style.html
+            3: punctuation.definition.tag.html
+          pop: true
+        - include: astro-attribute
+        - match: (>)
+          captures:
+            1: punctuation.definition.tag.end.html
+          push:
+            - match: (?=</(?i:style))
+              pop: true
+            - include: scope:source.css.stylus
+    - match: '(?:^\s+)?(<)((?i:style))\b(?![^>]*/>)'
+      captures:
+        1: punctuation.definition.tag.begin.html
+        2: entity.name.tag.style.html
+        3: punctuation.definition.tag.html
+      push:
+        - meta_scope: source.css.embedded.html
+        - match: (</)((?i:style))(>)(?:\s*\n)?
+          captures:
+            1: punctuation.definition.tag.begin.html
+            2: entity.name.tag.style.html
+            3: punctuation.definition.tag.html
+          pop: true
+        - include: astro-attribute
+        - match: (>)
+          captures:
+            1: punctuation.definition.tag.end.html
+          push:
+            - match: (?=</(?i:style))
+              pop: true
+            - include: scope:source.css
+
+    - match: (<)((?i:script))\s(lang="ts")
+      captures:
+        0: meta.tag.script.begin.html
+        1: punctuation.definition.tag.begin.html
+        2: entity.name.tag.script.html
+      push:
+        - meta_content_scope: meta.tag.script.begin.html
+        - match: '>'
+          scope: punctuation.definition.tag.end.html
+          set:
+            - match: \s*(<!--)
+              captures:
+                1: comment.block.html punctuation.definition.comment.begin.html
+            - match: (?i)(?:(-->)\s*)?(</)(script)(>)
+              scope: meta.tag.script.end.html
+              captures:
+                1: comment.block.html punctuation.definition.comment.end.html
+                2: punctuation.definition.tag.begin.html
+                3: entity.name.tag.script.html
+                4: punctuation.definition.tag.end.html
+              pop: true
+            - match: (?=\S)
+              embed: scope:source.ts
+              embed_scope: source.ts.embedded.html
+              escape: (?i)(?=(?:-->\s*)?</script)
+
+    - match: (<)((?i:script))\b
+      captures:
+        0: meta.tag.script.begin.html
+        1: punctuation.definition.tag.begin.html
+        2: entity.name.tag.script.html
+      push:
+        - meta_content_scope: meta.tag.script.begin.html
+        - match: '>'
+          scope: punctuation.definition.tag.end.html
+          set:
+            - match: \s*(<!--)
+              captures:
+                1: comment.block.html punctuation.definition.comment.begin.html
+            - match: (?i)(?:(-->)\s*)?(</)(script)(>)
+              scope: meta.tag.script.end.html
+              captures:
+                1: comment.block.html punctuation.definition.comment.end.html
+                2: punctuation.definition.tag.begin.html
+                3: entity.name.tag.script.html
+                4: punctuation.definition.tag.end.html
+              pop: true
+            - match: (?=\S)
+              embed: scope:source.js
+              embed_scope: source.js.embedded.html
+              escape: (?i)(?=(?:-->\s*)?</script)
+  astro-markdown:
+    - match: (<)(Markdown)(>)
+      captures:
+        1: punctuation.definition.tag.begin.html
+        2: entity.name.tag.html
+        3: punctuation.definition.tag.end.html
+      push:
+        - meta_scope: text.html.astro.markdown
+        - match: (</)(Markdown)(>)
+          captures:
+            1: punctuation.definition.tag.begin.html
+            2: entity.name.tag.html
+            3: punctuation.definition.tag.end.html
+          pop: true
+        - include: scope:text.html.markdown.astro
+  frontmatter:
+    - match: ^---
+      captures:
+        0: comment.block.html
+      embed: scope:source.ts
+      embed_scope: meta.embedded.ts.astro
+      escape: ^---
+      escape_captures:
+        0: comment.block.html
+  html-attribute:
+    - match: '\b(@?[a-zA-Z\-:]+)(=?)'
+      scope: meta.attribute.$1.html
+      captures:
+        1: entity.other.attribute-name.html
+        2: punctuation.separator.key-value.html
+  html-comment:
+    - match: <!--
+      captures:
+        0: punctuation.definition.comment.html punctuation.definition.comment.begin.html
+      push:
+        - meta_scope: comment.block.html
+        - match: '--!?>'
+          captures:
+            0: punctuation.definition.comment.html punctuation.definition.comment.end.html
+          pop: true
+  html-comment-bogus:
+    - match: <\?
+      captures:
+        0: punctuation.definition.comment.html punctuation.definition.comment.begin.html
+      push:
+        - meta_scope: comment.block.html
+        - match: '>'
+          captures:
+            0: punctuation.definition.comment.html punctuation.definition.comment.end.html
+          pop: true
+  html-doctype:
+    - match: '(<!)([Dd][Oo][Cc][Tt][Yy][Pp][Ee])'
+      captures:
+        1: punctuation.definition.tag.html punctuation.definition.tag.begin.html
+        2: entity.name.tag.html
+      push:
+        - meta_scope: meta.tag.metadata.doctype.html
+        - match: '>'
+          captures:
+            0: punctuation.definition.tag.html punctuation.definition.tag.end.html
+          pop: true
+        - match: '"'
+          push:
+            - meta_scope: string.quoted.double.html
+            - match: '"'
+              pop: true
+        - match: '[^\s>]+'
+          scope: entity.other.attribute-name.html
+  html-element:
+    - match: '(<)([^/?!\s<>]+)(?=\s|/?>)'
+      captures:
+        1: punctuation.definition.tag.begin.html
+        2: entity.name.tag.html
+      push:
+        - meta_scope: meta.tag.any.$2.start.html
+        - match: /?>
+          captures:
+            0: punctuation.definition.tag.end.html
+          pop: true
+        - include: astro-attribute
+    - match: '(</)([^/?!\s<>]+)(?=\s|/?>)'
+      captures:
+        1: punctuation.definition.tag.begin.html
+        2: entity.name.tag.html
+      push:
+        - meta_scope: meta.tag.any.$2.end.html
+        - match: /?>
+          captures:
+            0: punctuation.definition.tag.end.html
+          pop: true
+        - include: astro-attribute
+  html-entity:
+    - match: '(&)([0-9A-Za-z]+|#x[0-9A-Fa-f]+|x[0-9]+)(;)'
+      scope: constant.character.entity.html
+      captures:
+        1: punctuation.definition.entity.html
+        3: punctuation.definition.entity.html
+  html-entity-bogus:
+    - match: '(&)([0-9A-Za-z]+|#x[0-9A-Fa-f]+|x[0-9]+)'
+      scope: constant.character.entity.html
+      captures:
+        1: invalid.illegal.bad-ampersand.html
+        3: punctuation.definition.entity.html
+  string-double-quoted:
+    - match: '"'
+      captures:
+        0: punctuation.definition.string.begin.html
+      push:
+        - meta_scope: string.quoted.double.html
+        - match: '"'
+          captures:
+            0: punctuation.definition.string.end.html
+          pop: true
+        - include: html-entity
+        - include: html-entity-bogus
+  string-single-quoted:
+    - match: "'"
+      captures:
+        0: punctuation.definition.string.begin.html
+      push:
+        - meta_scope: string.quoted.single.html
+        - match: "'"
+          captures:
+            0: punctuation.definition.string.end.html
+          pop: true
+        - include: html-entity
+        - include: html-entity-bogus
+  string-template-literal:
+    - match: '`'
+      push:
+        - meta_scope: string.template.html
+        - match: '`'
+          pop: true
+        - include: scope:source.tsx#template-substitution-element

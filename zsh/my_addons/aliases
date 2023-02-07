@@ -325,6 +325,7 @@ alias fpp='wrapped-fpp'
 
 # diff with bat
 function bdiff () { diff -u $@ | bat;} # use `vimdiff` for editing
+alias build-cache-bat='bat cache --build' # when there is a new syntax/theme to build
 
 # shorthands
 alias dc='docker-compose'
