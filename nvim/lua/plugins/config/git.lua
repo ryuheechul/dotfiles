@@ -3,7 +3,31 @@
 return function()
   local actions = require 'diffview.actions'
 
+  -- comment these out as I'm not creating a new highlight but still leave here for future usage.
+  -- local diffAddHl = vim.api.nvim_get_hl_by_name('DiffAdd', true)
+  -- vim.api.nvim_set_hl(0, 'MyDiffAddText', { background = diffAddHl.background })
+
   require('diffview').setup {
+    enhanced_diff_hl = true,
+    hooks = {
+      -- customize color to differentiate a and b - thanks to these for hints:
+      -- https://github.com/sindrets/diffview.nvim/pull/258
+      -- https://github.com/sindrets/diffview.nvim/issues/241
+      diff_buf_win_enter = function(bufnr, winid, ctx)
+        if ctx.layout_name:match '^diff2' then
+          if ctx.symbol == 'a' then
+            vim.opt_local.winhl = table.concat({
+              'DiffText:DiffviewDiffAddAsDelete',
+              'DiffAdd:DiffviewDiffAddAsDelete',
+            }, ',')
+          elseif ctx.symbol == 'b' then
+            vim.opt_local.winhl = table.concat({
+              'DiffText:DiffAdd', -- 'DiffText:MyDiffAddText',
+            }, ',')
+          end
+        end
+      end,
+    },
     keymaps = {
       view = {
         -- instead of cycle through another buffer, move around window
