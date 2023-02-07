@@ -65,6 +65,7 @@ with pkgs;
   ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_PODMAN")
   [
+    docker-client
     podman # A program for managing pods, containers and container images
     # ```
     # export MY_NIX_EXTRA_PODMAN=1 # to include podman at `home-manager switch`
