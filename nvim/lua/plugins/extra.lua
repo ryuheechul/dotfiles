@@ -68,9 +68,21 @@ return {
     -- 'junegunn/goyo.vim', -- a helper to focus on one window
     -- 'beauwilliams/focus.nvim', -- automatically adjust the size for focused windows
     dependencies = {
-      'anuvyklack/middleclass',
+      'anuvyklack/middleclass', -- Object-orientation for Lua
+      'runiq/neovim-throttle-debounce',
       -- 'anuvyklack/animation.nvim', disable since I don't need it
     },
+    init = function()
+      -- this is nothing to do with this plugin but placing here for my own consistency
+      -- assume that activity on changing windows want to maximize tmux
+      local windowsGrp = vim.api.nvim_create_augroup('MyWindowsAG', { clear = true })
+      vim.api.nvim_create_autocmd('WinEnter', {
+        callback = require('throttle-debounce').throttle_leading(function()
+          vim.cmd [[silent exec "!tmux-zoom"]]
+        end, 500),
+        group = windowsGrp,
+      })
+    end,
     config = true,
   },
   { -- differnciate parenthesis with colors
