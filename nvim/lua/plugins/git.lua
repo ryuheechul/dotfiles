@@ -12,12 +12,14 @@ return {
   { -- magit for neovim
     'TimUntersberger/neogit',
     dependencies = {
-      -- Single tabpage interface for easily cycling through diffs for all modified files for any git rev
-      'sindrets/diffview.nvim',
+      { -- Single tabpage interface for easily cycling through diffs for all modified files for any git rev
+        'sindrets/diffview.nvim',
+        config = require('plugins.config.git').diffview,
+      },
       'nvim-lua/plenary.nvim',
     },
     event = 'VeryLazy',
-    config = require 'plugins.config.git',
+    config = require('plugins.config.git').neogit,
   },
   { -- Changes Vim working directory to project root
     'airblade/vim-rooter', -- a replacement candidate, https://github.com/ahmedkhalf/project.nvim

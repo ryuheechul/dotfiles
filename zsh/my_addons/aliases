@@ -194,6 +194,8 @@ alias ping='gping'
 alias df='duf'
 alias du='du -d 1 -h | sort -h -r'
 
+# help avoiding seeing diff for long generated files
+exclude_for_pure="-- ':(exclude)package-lock.json' ':(exclude)**/lazy-lock.json'"
 # git
 alias tig='TERM=xterm-256color tig'
 alias gs='pwd; ls; git status'
@@ -202,10 +204,10 @@ alias gd='git diff'
 alias gdc='gd --cached'
 alias gdt='git difftool'
 alias gdtc='gdt --cached'
-alias gdp='gd -- ":(exclude)package-lock.json"'
-alias gdcp='gdc -- ":(exclude)package-lock.json"'
-alias gdtp='gdt -- ":(exclude)package-lock.json"'
-alias gdtcp='gdtc -- ":(exclude)package-lock.json"'
+alias gdp="gd ${exclude_for_pure}"
+alias gdcp="gdc ${exclude_for_pure}"
+alias gdtp="gdt ${exclude_for_pure}"
+alias gdtcp="gdtc ${exclude_for_pure}"
 # and just to help with typo
 alias gd.='gd .'
 alias gdc.='gdc .'
