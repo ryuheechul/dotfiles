@@ -63,7 +63,7 @@ unset my_zsh_plugin_zsh_autocomplete;
 _tag arch
 
 # difftastic options see `difft --help` for more
-export DFT_DISPLAY=inline
+# export DFT_DISPLAY=inline # but comment out for now as side-by-side actually complements with the usual diff as difftool
 
 # theme for bat
 export BAT_THEME="Solarized (light)"
