@@ -62,6 +62,9 @@ unset my_zsh_plugin_zsh_autocomplete;
 
 _tag arch
 
+# avoid having to type `docker buildx build` and `docker build` would do the same with this var set
+export DOCKER_BUILDKIT=1
+
 # difftastic options see `difft --help` for more
 # export DFT_DISPLAY=inline # but comment out for now as side-by-side actually complements with the usual diff as difftool
 

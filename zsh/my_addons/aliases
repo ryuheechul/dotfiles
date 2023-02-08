@@ -275,9 +275,11 @@ sk ()
   fi
 }
 
+alias skp='sk --preview "preview {}"'
+
 ## convenient quick ways to select file to open in vim
 # 1. in the current directory
-alias v='sk --preview "preview {}" | xargs nvim'
+alias v='skp | xargs nvim'
 # 2. in the git root directory
 alias vv='grt; v; popd' # basically - `git rev-parse --show-toplevel || echo . | xargs pushd; v; popd`
 # 3. my dotfiles
@@ -363,6 +365,11 @@ alias jqstringify='jq ". | tostring"'
 alias jqfromjson='jq "fromjson"'
 # more on it at https://www.cyberciti.biz/faq/unix-linux-check-if-port-is-in-use-command/
 alias listopenports='lsof -i -P -n | grep LISTEN'
+# a helper to grep from history to pbcopy                                 | uniq            | strip          |                                  | no newline  |                   | print        | copy to
+# break it down  = history | recent first   | strip line  numbers         | for unsorted*   | leading spaces | strip one word commands    | fzf | at the end  | expand newlines   | selected     | clipboard ; add newline
+alias grephistory='history | sort --reverse | sed "s/^\s*[0-9]*[*]*\s*//" | awk "!x[\$0]++" | sed "s/^\s*//" | sed "/^[a-zA-Z0-9]*\s*$/d" | fzf | tr -d "\\n" | sed "s/\\\n/\n/g" | tee /dev/tty | pbcopy    ; echo'
+
+# uniq for unsorted* - https://github.com/junegunn/fzf/issues/270#issuecomment-1301876481
 
 ## these are replaced by ../../bin/local/pb[paste|copy]
 #
