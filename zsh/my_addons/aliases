@@ -365,11 +365,28 @@ alias jqstringify='jq ". | tostring"'
 alias jqfromjson='jq "fromjson"'
 # more on it at https://www.cyberciti.biz/faq/unix-linux-check-if-port-is-in-use-command/
 alias listopenports='lsof -i -P -n | grep LISTEN'
-# a helper to grep from history to pbcopy                                 | uniq            | strip          |                                  | no newline  |                   | print        | copy to
-# break it down  = history | recent first   | strip line  numbers         | for unsorted*   | leading spaces | strip one word commands    | fzf | at the end  | expand newlines   | selected     | clipboard ; add newline
-alias grephistory='history | sort --reverse | sed "s/^\s*[0-9]*[*]*\s*//" | awk "!x[\$0]++" | sed "s/^\s*//" | sed "/^[a-zA-Z0-9]*\s*$/d" | fzf | tr -d "\\n" | sed "s/\\\n/\n/g" | tee /dev/tty | pbcopy    ; echo'
 
-# uniq for unsorted* - https://github.com/junegunn/fzf/issues/270#issuecomment-1301876481
+_expand_newlines_unquoted_only()
+{
+  # line 1 - sed: mark `\\n` wrapped in '' to `tO_Restore-NEW_linE`
+  # line 2 - sed: mark `\\n` wrapped in "" to `tO_Restore-NEW_linE`
+  # line 3 - sed: now remained replace `\\n` to `\n` (actual newline)
+  # line 4 - sed: finally replace `tO_Restore-NEW_linE` to `\\n` (not actual newline)
+  sed -r ':repeat;s/["](.*)(\\n)(.*)["]/"\1tO_Restore-NEW_linE\3"/g;t repeat' \
+    | sed -r ":repeat;s/['](.*)(\\\n)(.*)[']/'\1tO_Restore-NEW_linE\3'/g;t repeat" \
+    | sed "s/\\\n/\n/g" \
+    | sed "s/tO_Restore-NEW_linE/\\\n/g"
+
+  # about sed repeat - https://stackoverflow.com/a/44786664/1570165
+}
+
+# a helper to grep from history to pbcopy                                 | uniq            | strip          |
+# break it down  = history | recent first   | strip line  numbers         | for unsorted*   | leading spaces | strip one word commands    | fzf
+alias grephistory='history | sort --reverse | sed "s/^\s*[0-9]*[*]*\s*//" | awk "!x[\$0]++" | sed "s/^\s*//" | sed "/^[a-zA-Z0-9]*\s*$/d" \
+  | fzf | tr -d "\\n"      | _expand_newlines_unquoted_only | tee /dev/tty | pbcopy    ; echo'
+# | fzf | delete the       | expand newlines                | print        | copy to   ; add newline
+#       | trailing newline |                                | selected     | clipboard ;
+# *about uniq for unsorted - https://github.com/junegunn/fzf/issues/270#issuecomment-1301876481
 
 ## these are replaced by ../../bin/local/pb[paste|copy]
 #
