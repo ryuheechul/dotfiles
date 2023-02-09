@@ -24,3 +24,5 @@ is_zsh_interactive || source "${my_zsh_d}/path/set-basic"
 source "${my_zsh_d}/fn/theme"
 
 source "${my_zsh_d}/aliases"
+
+source "${my_zsh_d}/modules/history"

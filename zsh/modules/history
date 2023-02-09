@@ -1,0 +1,9 @@
+# vim: set ft=zsh:
+
+# optimize and enhance history management
+# - https://www.soberkoder.com/better-zsh-history/
+# - https://ryantoddgarza.medium.com/a-better-zsh-history-pt-2-dde323e0c9ca
+# - also these options will be
+# - combined with https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/history.zsh
+# - via ../my_addons/zinit
+setopt HIST_IGNORE_ALL_DUPS; HISTSIZE=1000000; SAVEHIST=1000000;

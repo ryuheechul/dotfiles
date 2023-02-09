@@ -23,8 +23,8 @@ zinit light romkatv/zsh-defer
 zinit snippet OMZP::git
 # j to jump around directory
 zinit snippet OMZP::fasd
-# to persist history
-zinit snippet OMZL::history.zsh
+# to persist history and make sure to override options from OMZ via my own
+zinit snippet OMZL::history.zsh; source "${my_zsh_d}/modules/history"
 # this seems to be not in effect because other similar plugins so disabling for now
 # zinit light Aloxaf/fzf-tab
 
