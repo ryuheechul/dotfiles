@@ -29,7 +29,7 @@ opts.checker = {
   -- automatically check for plugin updates
   enabled = true,
   concurrency = max_jobs / 4, -- since automatic checks shouldn't need to be too fast that potentially impact more important tasks
-  notify = true,
+  notify = false,
   frequency = 3600 --[[ an hour ]]
     * 24
     * 7, -- every week
