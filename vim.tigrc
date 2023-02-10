@@ -86,9 +86,13 @@ bind generic <C-w><C-w> view-next
 
 bind diff    h  view-close
 bind diff    l  maximize
+bind stage   h  view-close # same as diff
+bind stage   l  maximize   # this will be for the first line of stage/unstage that looks just like `diff`
+bind stage   s  status-update # toggle stage/unstage - but doesn't seem to work well
 bind status  l  enter
 bind main    l  enter
 bind refs    l  enter
+bind diff    <esc> view-close
 bind stage   <esc> view-close
 # although this gets applied but doesn't seem to work
 # so just need to do good old <C-c> for now
