@@ -401,12 +401,23 @@ return {
       },
     },
   },
-  { -- A minimalist autoclose plugin
-    'm4xshen/autoclose.nvim',
-    event = 'VeryLazy',
+  -- { -- A minimalist autoclose plugin
+  --   'm4xshen/autoclose.nvim',
+  --   event = 'VeryLazy',
+  --   opts = {
+  --     options = {
+  --       disable_when_touch = true,
+  --     },
+  --   },
+  -- },
+  { -- An autopair plugin designed to have all the features that an autopair plugin needs.
+    'altermo/ultimate-autopair.nvim',
+    event = { 'InsertEnter', 'CmdlineEnter' },
     opts = {
-      options = {
-        disable_when_touch = true,
+      fastwarp = {
+        enable = true,
+        map = '<C-e>',
+        cmap = '<C-e>',
       },
     },
   },
