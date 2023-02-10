@@ -73,7 +73,7 @@ function j() {
     dir="$(fasd -Rdl "$1" | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
 }
 
-if test "$(uname)" = "Darwin"; then
+if uname | xargs test "Darwin" =; then
   function _sound_for_return() {
     expr $? = 0 > /dev/null && afplay /System/Library/Sounds/Funk.aiff || afplay /System/Library/Sounds/Purr.aiff
   }
@@ -299,7 +299,7 @@ function emacs () {
   if test $# -eq 0; then
     if test -n "${SSH_CONNECTION}"; then
       emacsclient
-    elif test "$(uname)" = "Darwin"; then
+    elif uname | xargs test "Darwin" =; then
       "${my_dot_d}/bin/path/darwin/open-gui-emacs"
     else
       emacsclient
@@ -342,6 +342,12 @@ alias chtsh='cht --shell'
 # web search
 alias googler='googler -n 3'
 alias ddgr='ddgr -n 3'
+
+# bascially `home-manager switch` + extra depends on platforms
+# e.g. darwin will also do "switch" via nix-darwin
+uname | xargs test "Darwin" = \
+  && alias switch-nix='home-manager switch; pushd "$my_dot_d/nix/darwin" && make switch; popd' \
+  || alias switch-nix='home-manager switch'
 
 # commandify
 alias fulltimezsh='FORCE_LOAD_MY_ZSH_STUFF=1 timezsh'

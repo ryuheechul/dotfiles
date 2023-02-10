@@ -5,18 +5,23 @@
 let
   checkEnv = import ../../utils/checkEnv.nix;
   tag = import ../custom/tag { pkgs = pkgs; };
-  hexto256 = import ../custom/hexto256.nix;
-  bat-riffle = import ../custom/bat-riffle { pkgs = pkgs; };
   hired = import ../custom/hired.nix { pkgs = pkgs; };
-  tf-helper = import ../custom/tf-helper.nix { pkgs = pkgs; };
   gitwatch = import ../custom/gitwatch.nix { pkgs = pkgs; };
   cfn-lint = pkgs.python3.pkgs.cfn-lint;
+  hexto256 = import ../custom/hexto256.nix;
+  tf-helper = import ../custom/tf-helper.nix { pkgs = pkgs; };
+  bat-riffle = import ../custom/bat-riffle { pkgs = pkgs; };
+  alacritty-nightly = import ../custom/alacritty-nightly.nix;
 in
 with pkgs;
 [
   # anything "extra" but without optional flag goes here
   hexto256
 ]
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_NIGHTLY")
+  [
+    alacritty-nightly
+  ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_HIRED")
   [
     hired # A modern take on 'ed'
