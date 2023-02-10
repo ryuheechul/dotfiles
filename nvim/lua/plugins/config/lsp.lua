@@ -13,6 +13,9 @@ function M.setup_lsp_format()
     typescript = {
       exclude = { 'tsserver' },
     },
+    yaml = {
+      exclude = { 'yamlls' },
+    },
   }
 end
 

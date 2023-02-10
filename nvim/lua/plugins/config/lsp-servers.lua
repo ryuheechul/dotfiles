@@ -79,11 +79,27 @@ return function(setup_default)
   })
 
   local setup_rnix = merge(setup_default, {})
-
   local setup_nimls = merge(setup_default, {})
   local setup_gopls = merge(setup_default, {})
   local setup_svelte = merge(setup_default, {})
   local setup_astro = merge(setup_default, {})
+  local setup_dockerls = merge(setup_default, {})
+  local setup_ruby_ls = merge(setup_default, {})
+
+  local setup_yamlls = merge(setup_default, {
+    settings = {
+      yaml = {
+        format = { enable = true, singleQuote = true },
+        validate = true,
+        hover = true,
+        completion = true,
+        schemaStore = {
+          enable = true,
+          url = 'https://www.schemastore.org/api/json/catalog.json',
+        },
+      },
+    },
+  })
 
   local setup_sqls = merge(setup_default, {
     on_attach = function(client, bufnr)
@@ -163,6 +179,9 @@ return function(setup_default)
     gopls = setup_gopls,
     svelte = setup_svelte,
     astro = setup_astro,
+    yamlls = setup_yamlls,
+    dockerls = setup_dockerls,
+    ruby_ls = setup_ruby_ls,
   }
 end
 

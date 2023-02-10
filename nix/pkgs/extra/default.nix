@@ -63,9 +63,8 @@ with pkgs;
   [
     lima # Linux virtual machines (on macOS, in most cases)
   ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_PODMAN")
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_K8S")
   [
-    docker-client
     podman # A program for managing pods, containers and container images
     # ```
     # export MY_NIX_EXTRA_PODMAN=1 # to include podman at `home-manager switch`
@@ -75,6 +74,15 @@ with pkgs;
     # export DOCKER_HOST="unix:///${XDG_DATA_HOME}/containers/podman/machine/podman-machine-default/podman.sock" # to `docker` command to work with podman
     # alias docker=podman # or just alias it
     # ```
+    docker-client # to shim the absence of docker command for podman in case podman is to replace to docker and act like one
+    kubectl # Kubernetes CLI
+    k9s # Kubernetes CLI To Manage Your Clusters In Style
+    kubernetes-helm # A package manager for kubernetes
+    kustomize # Customization of kubernetes YAML configurations
+    kompose # A tool to help users who are familiar with docker-compose move to Kubernetes
+    minikube # A tool that makes it easy to run Kubernetes locally
+    # minikube with podman - https://github.com/containers/podman/issues/12713#issuecomment-1002567777
+    # an example podman machine works for minikube - `podman machine init --rootful --cpus 4 --memory 4096 --disk-size 30`
   ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_WSL")
   [
