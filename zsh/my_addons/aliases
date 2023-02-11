@@ -372,6 +372,14 @@ alias jqfromjson='jq "fromjson"'
 # more on it at https://www.cyberciti.biz/faq/unix-linux-check-if-port-is-in-use-command/
 alias listopenports='lsof -i -P -n | grep LISTEN'
 
+## quick ways to grep from espanso
+# eml: only trigger the match
+alias eml="espanso match list | fzf | sed -r 's/^(.*)[ ]-[ ].*$/\1/' | xargs espanso match exec -t"
+# emls: trigger + sink the result into clipboard - use `vared` (similar to `read` in zsh) to sink the "typing" from espanso since it becomes stdin
+alias emls="eml && vared -p '[Press ↵ to continue] ' -c _sink_espanso && echo \"\$_sink_espanso\" | tee /dev/tty | pbcopy"
+# emlg: do the same but using builtin GUI version
+alias emlg="espanso cmd search" # or ALT + SPACE
+
 _expand_newlines_unquoted_only()
 {
   # line 1 - sed: mark `\\n` wrapped in '' to `tO_Restore-NEW_linE`

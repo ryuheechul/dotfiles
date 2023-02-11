@@ -1,0 +1,3 @@
+# this directory is where the packages actually gets installed so ignore everything in here
+*
+# manage and run ../../bin/install-pkgs.sh to install packages

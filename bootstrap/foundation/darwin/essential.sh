@@ -109,7 +109,7 @@ set +x
 sleep 2
 
 # iCloudDrive symlink
-ln -sf ~/Library/Mobile\ Documents/com~apple~CloudDocs/ ~/icd
+ln -sf "${HOME}/Library/Mobile Documents/com~apple~CloudDocs" "${HOME}/icd"
 
 # to prevent loading zsh stuff twice in case tmux is the default shell command for terminal emulators
 # but skip in ssh - https://unix.stackexchange.com/a/9606

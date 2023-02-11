@@ -75,6 +75,17 @@ touch "${HOME}/.base16_theme.updated-time"
 # lf
 ln -sf "${dfs_rhc}/lf" "${XDG_CONFIG_HOME}/lf"
 
+# espanso
+espanso_config="${xdg_config}/espanso" \
+  && rm -rf "${espanso_config}" \
+  && ln -sf "${dfs_rhc}/espanso" "${espanso_config}"
+
+# espanso for darwin
+uname | xargs test "Darwin" = \
+  && espanso_config_for_darwin="${HOME}/Library/Preferences/espanso" \
+  && rm -rf "${espanso_config_for_darwin}" \
+  && ln -sf "${espanso_config}" "${espanso_config_for_darwin}"
+
 # viddy
 ln -sf "${dfs_rhc}/viddy.toml" "${XDG_CONFIG_HOME}/viddy.toml"
 
