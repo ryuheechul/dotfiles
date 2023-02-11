@@ -1,5 +1,9 @@
 # https://starship.rs/config
 
+[shlvl]
+disabled = false
+threshold = 3
+
 [[battery.display]]
 threshold = 80
 style = "yellow"
