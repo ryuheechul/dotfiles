@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # pbcopy for WSL - thanks to https://www.techtronic.us/pbcopy-pbpaste-for-wsl/
-tee <&0 | clip.exe
+tee <&0 | nohup bash -c 'clip.exe' >/dev/null 2>&1 & # use nohup to return quickly since `clip.exe` is very slow
 exit 0
