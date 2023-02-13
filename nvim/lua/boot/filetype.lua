@@ -29,3 +29,14 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
   group = ftGrp,
 })
+
+-- reinforce in case a drifted result is found for some filetype due to the usage of other plugins
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = {
+    'kdl',
+  },
+  callback = function()
+    vim.opt.tabstop = 2
+  end,
+  group = ftGrp,
+})
