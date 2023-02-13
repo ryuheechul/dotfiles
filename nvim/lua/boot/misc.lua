@@ -103,4 +103,6 @@ vim.opt.clipboard = 'unnamedplus'
 -- to assist ../shell/source.zsh
 vim.env.NVIM_LISTEN_ADDRESS = vim.v.servername
 
--- vim: ts=2 sts=2 sw=2 et
+-- a subset extracted from https://github.com/sheerun/vim-polyglot/blob/bc8a81d3592dab86334f27d1d43c080ebf680d42/autoload/polyglot/init.vim#L2704
+vim.opt.autoread = true -- Reload unchanged files automatically.
+vim.opt.shortmess:append 'A' -- This is needed to avoid swapfile warning when auto-reloading
