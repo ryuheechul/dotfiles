@@ -3,8 +3,17 @@
 # - persist a session via zellij on SSH connection
 # - but avoid doing this for tramp-mode on emacs - https://www.emacswiki.org/emacs/TrampMode
 # - also guard this behaviour for non-interactive shell usage
-is_zsh_interactive \
-  && test "${TERM}" != 'dumb' \
-  && test -n "${SSH_TTY}" \
-  && echo 'Attempting to attach to zellij session and this might fail as zellij might be not stable' \
-  && UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec-zellij-attach ssh
+if is_zsh_interactive && test "${TERM}" != 'dumb' && test -n "${SSH_TTY}"; then
+  # fallback to `en_US.UTF-8` - this prevents an warning message like below
+  # `bash: warning: setlocale: LC_ALL: cannot change locale (C.UTF-8): No such file or directory`
+  # due to darwin doesn't seem to come with "C.UTF-8" by default
+  test "${LC_ALL}" = "C.UTF-8" && export LC_ALL="en_US.UTF-8"
+
+  # wslg is very convinient locally but doesn't seem to support X11 forwarding with SSH - https://github.com/microsoft/vscode-remote-release/issues/6591
+  # so workaround with a method that I learned from https://taoofmac.com/space/til/2022/12/21/2000
+  test -z "${DISPLAY}" && export DISPLAY=:20 # it's required to run ssh like `ssh -R 6020:/tmp/.X11-unix/X0 [host]`
+  # or `RemoteForward 6020 /tmp/.X11-unix/X0` in ~/.ssh/config
+
+  echo 'Attempting to attach to zellij session and this might fail as zellij might be not stable'
+  UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec-zellij-attach ssh
+fi
