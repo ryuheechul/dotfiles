@@ -197,7 +197,8 @@
 
        :my-custom          ; my own modules
        vterm-enhance       ; bring tighter integration with my existing tools
-       lab)                 ; where my new configs will be added initially
+       org                 ; addtional stuff for org mode
+       lab)                ; where my new configs will be added initially
        ;; (default +bindings +smartparens)
 
 
