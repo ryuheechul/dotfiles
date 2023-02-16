@@ -89,6 +89,15 @@ with pkgs;
     # minikube with podman - https://github.com/containers/podman/issues/12713#issuecomment-1002567777
     # an example podman machine works for minikube - `podman machine init --rootful --cpus 4 --memory 4096 --disk-size 30`
   ]
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_SSH")
+  [
+    openssh # An implementation of the SSH protocol
+    xorg.xorgserver
+    xorg.xauth
+    # debug xauth - https://www.linuxquestions.org/questions/linux-newbie-8/warning-no-xauth-data-although-i%27m-using-%60ssh-y%60-4175525755/#post5272443
+    # `xauth list`
+    # `mcookie | xargs xauth add :0 .`
+  ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_WSL")
   [
     wslu # A collection of utilities for Windows 10/11 Linux Subsystems
