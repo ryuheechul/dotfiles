@@ -110,7 +110,7 @@ local config = function()
       b = { cmdify 'Telescope buffers', 'search buffer' },
       d = { cmdify 'bd', 'close buffer' },
     },
-    ['<space>'] = { cmdify 'Telescope buffers', 'telescope: buffers' },
+    ['<space>'] = { cmdify 'Telescope oldfiles', 'Telescope: recent files' },
     ['<Tab>'] = { cmdify 'bn', 'rotate buffer' },
     ["'"] = {
       -- use count 9 to be independent from the horizontal one
@@ -127,6 +127,12 @@ local config = function()
     f = { -- set a nested structure
       name = '+Find',
       b = { cmdify 'Telescope buffers', 'buffers' },
+      e = {
+        function()
+          vim.cmd([[silent exec "!open 'org-protocol://find-file?path=]] .. vim.fn.expand '%:p' .. [['"]])
+        end,
+        'open in Emacs',
+      },
       h = { cmdify 'Telescope help_tags', 'help tags' },
       c = {
         name = '+Commands',
