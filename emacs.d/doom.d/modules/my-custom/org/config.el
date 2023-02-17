@@ -11,7 +11,7 @@
 
         (defun org-protocol-find-file-fix-wsl-path (path)
           "If inside WSL, change Windows-style paths to WSL-style paths."
-          (if (not (string-match-p "-[Mm]icrosoft" operating-system-release))
+          (if (null (getenv "WSL_DISTRO_NAME"))
             path
             (save-match-data
               (if (/= 0 (string-match "^\\([a-zA-Z]\\):\\(/.*\\)" path))
