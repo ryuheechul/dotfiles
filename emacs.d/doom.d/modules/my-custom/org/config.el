@@ -1,9 +1,11 @@
-;;; $DOOMDIR/modules/my-custom/lab/config.el -*- lexical-binding: t; -*-
+;;; $DOOMDIR/modules/my-custom/org/config.el -*- lexical-binding: t; -*-
 
 ;; configs that customize anything for org mode
 
 ;; extending org-protocol
 ;; see https://github.com/xuchunyang/setup-org-protocol-on-mac/issues/6 in case any issues of opening =org-protocol://= on macOS
+;; also there seems to be a limitation on org-protocol picking up things when Emacs.app is not already running
+;; that is mitigated by a hack via ../../../../../bin/path/darwin/emacs-opff at least on macOS
 (after! org-protocol
         ;; to support https://github.com/ksqsf/logseq-open-in-emacs
         (add-to-list 'org-protocol-protocol-alist

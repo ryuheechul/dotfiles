@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# - opff: `org-protocol://find-file`
+# - this is a simple hack that supports ../../../emacs.d/doom.d/modules/my-custom/org/config.el
+# - it workarounds the limitation of org-protocol not picking up when Emacs.app was not already running
+# - see the usage example at the bottom
+
+is_running="${1}"
+this_URL="${2}"
+
+if test "${is_running}" = "1"; then
+  # simply let org-protocol to figure things out when it's already running
+  open -a Emacs && echo "${this_URL}" | xargs emacsclient
+else
+  # fallback to parse the file path and open via regular file path when it's not running yet
+  echo "${this_URL}" | sed 's#org-protocol://find-file?path=##' | xargs open -a Emacs
+fi
+
+# Usage example would be
+# ```applescript
+# -- a little context: https://github.com/xuchunyang/setup-org-protocol-on-mac/issues/6
+
+# on is_running(appName)
+#   tell application "System Events" to (name of processes) contains appName
+# end is_running
+
+# on open location this_URL
+#   if is_running("Emacs") then
+#     do shell script "zsh -c \"emacs-opff 1 '" & this_URL & "'\""
+#   else
+#     do shell script "zsh -c \"emacs-opff 0 '" & this_URL & "'\""
+#   end if
+# end open location
+# ```
