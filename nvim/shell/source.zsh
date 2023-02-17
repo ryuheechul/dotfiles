@@ -13,6 +13,6 @@ alias q="clear; nvr --remote-send '<esc>:q<cr>'"
 
 ## use host nvim instead of creating another nvim process
 # for programs like lf
-export EDITOR='nvr -c "lua require(\"utils.trap-close-for-term\")()" --remote-tab-wait'
+export EDITOR='editor-in-nvim'
 # for shell
 alias nvim='nvr --remote-tab'

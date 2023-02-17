@@ -271,7 +271,7 @@ sk ()
   if test -n "${TMUX_PANE}"; then
     sk-tmux $@
   else
-    sk $@
+    env sk $@
   fi
 }
 
@@ -279,7 +279,7 @@ alias skp='sk --preview "preview {}"'
 
 ## convenient quick ways to select file to open in vim
 # 1. in the current directory
-alias v='skp | xargs nvim'
+alias v='skp | xargs ${EDITOR}'
 # 2. in the git root directory
 alias vv='grt; v; popd' # basically - `git rev-parse --show-toplevel || echo . | xargs pushd; v; popd`
 # 3. my dotfiles
@@ -366,7 +366,7 @@ alias nis='npm install --save'
 alias nisd='npm install --save-dev'
 alias whoami-aws='aws sts get-caller-identity'
 alias q='test -n "${VIRTUAL_ENV}" && deactivate || exit'
-alias e='${EDITOR} $(fzf)'
+alias e='fzf | xargs ${EDITOR}'
 alias jqstringify='jq ". | tostring"'
 alias jqfromjson='jq "fromjson"'
 # more on it at https://www.cyberciti.biz/faq/unix-linux-check-if-port-is-in-use-command/
