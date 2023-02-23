@@ -18,7 +18,8 @@ with pkgs;
   earthly # Build automation for the container era
   gnugrep # GNU implementation of the Unix grep command
   coreutils # like for readlink
-  gnused # sed
+  gnused # GNU sed, a batch stream editor
+  gawk # GNU implementation of the Awk programming language
   ps
   pstree # Show the set of running processes as a tree
   curl # Curl is a command-line tool for transferring data specified with URL syntax
