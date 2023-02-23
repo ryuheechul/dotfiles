@@ -18,3 +18,27 @@ matches:
         type: shell
         params:
           cmd: echo Hello from your shell
+  - trigger: ":upcase"
+    replace: "{{output}}"
+    vars:
+      - name: form1
+        type: form
+        params:
+          layout: |
+            to uppercase [[to_upper]]
+      - name: output
+        type: shell
+        params:
+          cmd: echo '{{form1.to_upper}}' | upcase
+  - trigger: ":downcase"
+    replace: "{{output}}"
+    vars:
+      - name: form1
+        type: form
+        params:
+          layout: |
+            to lowercase [[to_lower]]
+      - name: output
+        type: shell
+        params:
+          cmd: echo '{{form1.to_lower}}' | downcase
