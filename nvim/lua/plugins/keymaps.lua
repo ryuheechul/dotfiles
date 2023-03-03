@@ -86,6 +86,9 @@ local config = function()
   wk.register({
     p = { paste_after_here, 'paste after here' },
     P = { paste_before_here, 'paste before here' },
+    e = {
+      name = '+Eval',
+    },
     r = {
       name = '+Run/Debug',
     },

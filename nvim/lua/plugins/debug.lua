@@ -55,6 +55,14 @@ return {
     },
     config = require 'plugins.config.dap',
   },
+  { -- Interactive evaluation for Neovim (mostly for lisp languages)
+    'Olical/conjure',
+    event = 'VeryLazy',
+  },
+  { -- A Fennel REPL that runs in Neovim
+    'gpanders/fennel-repl.nvim',
+    event = 'VeryLazy',
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et
