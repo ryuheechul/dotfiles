@@ -17,7 +17,8 @@ with pkgs;
   # - https://devenv.sh/languages/
   # - https://github.com/cachix/devenv/blob/main/examples/supported-languages/devenv.nix
   [
-    devenv
+    devenv # Fast, Declarative, Reproducible, and Composable Developer Environments
+    devbox # same goal as devenv but approaches are different
   ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_EXERCISM")
   [
