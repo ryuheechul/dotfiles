@@ -8,6 +8,7 @@ let
   sql = import ./sql.nix { pkgs = pkgs; };
   rust = import ./rust.nix { pkgs = pkgs; };
   wasm = import ./wasm.nix { pkgs = pkgs; };
+  java = import ./java.nix { pkgs = pkgs; };
   erlang = import ./erlang.nix { pkgs = pkgs; };
   python = import ./python.nix { pkgs = pkgs; };
   support = import ./support.nix { pkgs = pkgs; };
@@ -26,4 +27,5 @@ with pkgs;
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_LANG_SQL") sql
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_LANG_RUST") rust
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_LANG_WASM") wasm
+++ lib.optionals (checkEnv "MY_NIX_EXTRA_LANG_JAVA") java
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_LANG_ERLANG") erlang
