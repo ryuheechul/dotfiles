@@ -85,10 +85,6 @@ return {
     end,
     config = true,
   },
-  { -- differnciate parenthesis with colors
-    'p00f/nvim-ts-rainbow',
-    event = 'VeryLazy',
-  },
   { -- Open the current word with custom openers, GitHub shorthands for example
     'ofirgall/open.nvim',
     event = 'VeryLazy',
@@ -351,7 +347,7 @@ return {
     end,
     cond = function()
       -- TODO: handle the logic elsewhere like zsh and expose single env var to use here
-      return vim.env.SSH_CONNECTION == nil and vim.env.WSL_DISTRO_NAME == nil
+      return vim.env.SSH_CONNECTION == nil and vim.env.WSL_DISTRO_NAME == nil and vim.env.my_nvim_enable_drop ~= nil
     end,
   },
   { -- 💥 completely replaces the UI for messages, cmdline and the popupmenu
@@ -433,6 +429,16 @@ return {
     -- and discovered thanks to https://github.com/neovim/neovim/issues/21739#issuecomment-1379704105
     cond = vim.env.WSL_DISTRO_NAME ~= nil,
   },
+  { -- 🌈 Simpler Rainbow Parentheses
+    'junegunn/rainbow_parentheses.vim', -- if this plugin ever stops working for me I might consider trying 'luochen1990/rainbow' instead
+    init = function()
+      local rainbow_grp = vim.api.nvim_create_augroup('MyRainbowAUG', { clear = true })
+      vim.api.nvim_create_autocmd('FileType', {
+        -- for now, including `checkhealth` and `qf` (for e.g. `gd` and `gr`) too
+        pattern = { 'lisp', 'clojure', 'scheme', 'fennel' },
+        command = [[ RainbowParentheses ]],
+        group = rainbow_grp,
+      })
+    end,
+  },
 }
-
--- vim: ts=2 sts=2 sw=2 et

@@ -8,7 +8,7 @@ function M.setup_lsp_format()
       exclude = { 'sqls' }, -- formatting doesn't seem to be very good so excluding for now
     },
     lua = {
-      exclude = { 'sumneko_lua' }, -- to let only null_ls with stylua to format
+      exclude = { 'lua_ls' }, -- to let only null_ls with stylua to format
     },
     typescript = {
       exclude = { 'tsserver' },

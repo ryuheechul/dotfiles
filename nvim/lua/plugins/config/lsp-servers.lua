@@ -55,7 +55,7 @@ return function(setup_default)
     root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc'),
   })
 
-  local setup_sumneko_lua = merge(setup_default, {
+  local setup_lua_ls = merge(setup_default, {
     single_file_support = true,
     settings = {
       Lua = {
@@ -170,7 +170,7 @@ return function(setup_default)
     pyright = gen_setup_pyright(),
     tsserver = setup_tsserver,
     denols = setup_denols,
-    sumneko_lua = setup_sumneko_lua,
+    lua_ls = setup_lua_ls,
     rnix = setup_rnix,
     eslint = setup_eslint,
     sqls = setup_sqls,
