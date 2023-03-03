@@ -1,0 +1,4 @@
+# this directory is where the symlinks actually gets created which I don't want to track in git
+# to favor ../link.sh to maintain as a single source of truth
+# so ignore everything in here
+*

@@ -88,6 +88,7 @@ local config = function()
     P = { paste_before_here, 'paste before here' },
     e = {
       name = '+Eval',
+      l = { cmdify 'FennelRepl', 'Fennel Repl' },
     },
     r = {
       name = '+Run/Debug',

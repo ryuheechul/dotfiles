@@ -57,7 +57,7 @@ return {
   },
   { -- Interactive evaluation for Neovim (mostly for lisp languages)
     'Olical/conjure',
-    event = 'VeryLazy',
+    ft = { 'fennel', 'clojure', 'racket', 'lua', 'python', 'rust' },
   },
   { -- A Fennel REPL that runs in Neovim
     'gpanders/fennel-repl.nvim',

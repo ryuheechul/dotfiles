@@ -1,9 +1,12 @@
 { pkgs }:
 
 with pkgs;
-[ ]
-## I found that using devenv is the most smooth experience with Rust from https://nixos.wiki/wiki/Rust
-## so use MY_NIX_EXTRA_DEVENV instead and configure per project via `devenv init`
-# [
-#   rustup # The Rust toolchain installer
-# ]
+[
+  evcxr # An evaluation context for Rust
+  ## - I found that using devenv is the most smooth experience with Rust via https://nixos.wiki/wiki/Rust on Nix
+  ## - An alternative to uncomment packages below would be
+  ##   1. use `export MY_NIX_EXTRA_DEVENV=1` instead and configure per project via `devenv init`
+  ##   2. or read ../../../bin/path/tea/README.md to use tea
+  # cargo
+  # rustc
+]
