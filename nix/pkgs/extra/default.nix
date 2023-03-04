@@ -4,6 +4,7 @@
 
 let
   checkEnv = import ../../utils/checkEnv.nix;
+  ifEnv = envName: pkgs.lib.optionals (checkEnv envName);
   tag = import ../custom/tag { pkgs = pkgs; };
   hired = import ../custom/hired.nix { pkgs = pkgs; };
   gitwatch = import ../custom/gitwatch.nix { pkgs = pkgs; };
@@ -18,15 +19,15 @@ with pkgs;
   # anything "extra" but without optional flag goes here
   hexto256
 ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_NIGHTLY")
+++ ifEnv "MY_NIX_EXTRA_NIGHTLY"
   [
     alacritty-nightly
   ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_HIRED")
+++ ifEnv "MY_NIX_EXTRA_HIRED"
   [
     hired # A modern take on 'ed'
   ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_AWS")
+++ ifEnv "MY_NIX_EXTRA_AWS"
   [
     # also consider installing `pipx install aws-shell`
     awscli2 # aws cli
@@ -34,28 +35,28 @@ with pkgs;
     amazon-ecs-cli # aws ecs cli
     cfn-lint # Checks cloudformation for practices and behaviour that could potentially be improved
   ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_CI")
+++ ifEnv "MY_NIX_EXTRA_CI"
   [
     circleci-cli # circle ci cli # add checkEnv MY_NIX_EXTRA_CIRCLE_CI
   ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_TAG")
+++ ifEnv "MY_NIX_EXTRA_TAG"
   [
     tag
   ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_TERRAFORM")
+++ ifEnv "MY_NIX_EXTRA_TERRAFORM"
   [
     terraform
     nodePackages.cdktf-cli
     tf-helper
   ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_NOTCURSES")
+++ ifEnv "MY_NIX_EXTRA_NOTCURSES"
   [
     # since qrcodegen is marked broken
     (pkgs.notcurses.override {
       qrcodegenSupport = false;
     })
   ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_BAT")
+++ ifEnv "MY_NIX_EXTRA_BAT"
   (with bat-extras; [
     batman
     batgrep
@@ -64,11 +65,11 @@ with pkgs;
     prettybat
     bat-riffle # A proof-of-concept for a pager-as-a-library. Mainly designed for bat, and not ready for general use.
   ])
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_LIMA")
+++ ifEnv "MY_NIX_EXTRA_LIMA"
   [
     lima # Linux virtual machines (on macOS, in most cases)
   ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_K8S")
+++ ifEnv "MY_NIX_EXTRA_K8S"
   [
     podman # A program for managing pods, containers and container images
     # ```
@@ -89,7 +90,7 @@ with pkgs;
     # minikube with podman - https://github.com/containers/podman/issues/12713#issuecomment-1002567777
     # an example podman machine works for minikube - `podman machine init --rootful --cpus 4 --memory 4096 --disk-size 30`
   ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_SSH")
+++ ifEnv "MY_NIX_EXTRA_SSH"
   [
     openssh # An implementation of the SSH protocol
     xorg.xorgserver
@@ -98,7 +99,7 @@ with pkgs;
     # `xauth list`
     # `mcookie | xargs xauth add :0 .`
   ]
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_WSL")
+++ ifEnv "MY_NIX_EXTRA_WSL"
   [
     wslu # A collection of utilities for Windows 10/11 Linux Subsystems
     # which comes with wslview to enable opening a browser on Windows from terminal
@@ -109,7 +110,7 @@ with pkgs;
 ++ lib.optionals (builtins.pathExists ./local-only.nix) (import ./local-only.nix { pkgs = pkgs; })
 # # this is actually not working great at least on ubuntu
 # # it's probably wise to follow https://tailscale.com/kb/1031/install-linux/ instead
-# ++ lib.optionals (checkEnv "MY_NIX_EXTRA_TAILSCALE")
+# ++ ifEnv "MY_NIX_EXTRA_TAILSCALE"
 # [
 #   tailscale
 # ]

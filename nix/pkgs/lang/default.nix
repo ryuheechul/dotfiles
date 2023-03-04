@@ -12,20 +12,24 @@ let
   erlang = import ./erlang.nix { pkgs = pkgs; };
   python = import ./python.nix { pkgs = pkgs; };
   support = import ./support.nix { pkgs = pkgs; };
-  checkEnv = import ../../utils/checkEnv.nix;
+  graalvm = import ./graalvm.nix { pkgs = pkgs; };
   javascript = import ./javascript.nix { pkgs = pkgs; };
+  checkEnv = import ../../utils/checkEnv.nix;
+  ifEnv = envName: pkgs.lib.optionals (checkEnv envName);
+  defaults = (
+    nix
+    ++ lua
+    ++ python
+    ++ support # this is not for a language itself but to support the language related things
+    ++ graalvm
+    ++ javascript
+  );
 in
-with pkgs;
-[ ]
-++ nix
-++ lua
-++ python
-++ support # this not for a language itself but to support the language related things
-++ javascript
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_LANG_GO") go
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_LANG_NIM") nim
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_LANG_SQL") sql
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_LANG_RUST") rust
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_LANG_WASM") wasm
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_LANG_JAVA") java
-++ lib.optionals (checkEnv "MY_NIX_EXTRA_LANG_ERLANG") erlang
+defaults
+++ ifEnv "MY_NIX_EXTRA_LANG_GO" go
+++ ifEnv "MY_NIX_EXTRA_LANG_NIM" nim
+++ ifEnv "MY_NIX_EXTRA_LANG_SQL" sql
+++ ifEnv "MY_NIX_EXTRA_LANG_RUST" rust
+++ ifEnv "MY_NIX_EXTRA_LANG_WASM" wasm
+++ ifEnv "MY_NIX_EXTRA_LANG_JAVA" java
+++ ifEnv "MY_NIX_EXTRA_LANG_ERLANG" erlang
