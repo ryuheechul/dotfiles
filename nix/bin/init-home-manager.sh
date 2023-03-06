@@ -7,7 +7,7 @@ set -x
 curr_dir="$(dirname "$0")"
 repo_root="${curr_dir}/../.."
 repo_root_abs="$(readlink -f "${repo_root}")"
-nix_home_path="${repo_root_abs}/nix/home.nix"
+nix_home_path="${repo_root_abs}/nix/home"
 
 export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 

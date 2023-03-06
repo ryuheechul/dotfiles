@@ -1,15 +1,11 @@
 { config, pkgs, ... }:
 
 let
-  packages = import ./pkgs { };
+  packages = import ../pkgs { };
+  imports = [ ./programs ];
 in
 {
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
-
-  # use nix-direnv to speed up `use nix` in .envrc files
-  programs.direnv.enable = true;
-  programs.direnv.nix-direnv.enable = true;
+  inherit imports;
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -29,7 +25,7 @@ in
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "21.05";
+  home.stateVersion = "22.11";
 
   home.packages = packages;
 }

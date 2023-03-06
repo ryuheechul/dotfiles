@@ -9,6 +9,11 @@ alias l="ls -lah -g --git"
 alias lt="ls -lah -T -L=3 --git --git-ignore"
 alias tree="exa -G -T --git-ignore"
 
+# navi
+alias navi='navi --print'
+alias navie='env navi'
+alias navih='navi fn welcome'
+
 # make ed slightly friendlier
 alias ed="ed -p '> '"
 # use hired in place of ed when available

@@ -181,6 +181,11 @@ fi
 
 _tag tag
 
+# CTRL-G - https://github.com/denisidoro/navi#usage
+[ $commands[navi] ] && _evalcache navi widget zsh
+
+_tag navi
+
 # fallback any command to npx # disabled for now
 # source <(npx --shell-auto-fallback zsh)
 
