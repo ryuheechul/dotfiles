@@ -16,7 +16,13 @@ local init = function()
 
   -- because `zhou13/vim-easyescape` is too slow on startup
   vim.keymap.set('i', 'jk', '<Esc>', { noremap = true, silent = true, desc = 'shortcut to <Esc>' })
-  vim.keymap.set('n', '<Tab>', '<Cmd>wincmd w<CR>', { noremap = true, silent = true, desc = 'go to next window' })
+  vim.keymap.set('n', '<Tab>', '<Cmd>wincmd w<CR>', { noremap = true, silent = true, desc = 'go to "next" window' })
+  vim.keymap.set(
+    'n',
+    '<S-Tab>',
+    '<Cmd>wincmd W<CR>',
+    { noremap = true, silent = true, desc = 'go to "previous" window' }
+  )
   vim.keymap.set('n', 't', cmdify 'Telescope buffers', { noremap = true, silent = true, desc = ':Telescope buffers' })
 
   --- disabling this as this interfered with something like `>ap`
