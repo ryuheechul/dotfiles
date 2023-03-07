@@ -1,12 +1,7 @@
 # vim: set ft=zsh:
 
-# compatibility with linux inspired by https://github.com/marlonrichert/zsh-snap/blob/de5f789de661883bc118d96c8fd862935b6d3364/scripts/init.zsh#LL28-L31
-export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
-export XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
-export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
-export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
-export my_dot_d="${XDG_CONFIG_HOME}/dfs-rhc"
-export my_zsh_d="${my_dot_d}/zsh"
+# go to ../nix/home/programs/shells.nix to edit what to source
+source "${HOME}/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
 # just in case `nix` is still not loaded
 source "${my_dot_d}/nix/bin/source/nix.sh"

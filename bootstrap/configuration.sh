@@ -121,9 +121,6 @@ git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0 || tru
 
 ## installing packages with asdf has been replaced with Nix - look at ../nix/pkgs.nix
 
-## bash
-echo ". \"${dfs_rhc}/nix/bin/source/nix.sh\"" >> "${HOME}/.bashrc"
-
 ## zsh
 
 # source dotfiles' env

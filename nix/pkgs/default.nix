@@ -44,7 +44,7 @@ with pkgs;
 ] ++
 # shell
 [
-  bash # use latest bash
+  bashInteractive # use latest bash
   zsh # my favorite shell interface
   starship # cross-shell prompt
   tmux # terminal multiplexer

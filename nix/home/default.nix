@@ -2,7 +2,8 @@
 
 let
   packages = import ../pkgs { };
-  imports = [ ./programs ];
+  prgs = import ./programs { pkgs = pkgs; config = config; };
+  imports = [ prgs ];
 in
 {
   inherit imports;
