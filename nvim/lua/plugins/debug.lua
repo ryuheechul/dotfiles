@@ -17,12 +17,13 @@ return {
   },
   { -- Sniprun is a code runner plugin for neovim written in Lua and Rust
     'michaelb/sniprun',
-    build = 'bash ./install.sh',
+    build = "np-build-via-nix-shell 'bash ./install.sh'",
+    tag = 'v1.2.10',
     event = 'VeryLazy',
-    -- until there is more update on https://github.com/michaelb/sniprun/issues/54
-    cond = function()
-      return vim.fn.has 'linux' == 1
-    end,
+    opts = {
+      selected_interpreters = { 'JS_TS_deno' },
+      repl_enable = { 'JS_TS_deno' },
+    },
   },
   -- maybe one day this becomes useful
   -- { 'rcarriga/vim-ultest', dependencies = { 'vim-test/vim-test' }, build = ':UpdateRemotePlugins' },

@@ -98,7 +98,7 @@
   "sad.nvim": { "branch": "master", "commit": "4cd87acbe4d9106ff2a42c4cd850dc5313bdc696" },
   "sg.nvim": { "branch": "master", "commit": "c5e4ab788efeec9453706a4489bcaeaa867aeeb3" },
   "significant.nvim": { "branch": "main", "commit": "5450e9d5917dc6aa9afb0fcbe32355799b8303fb" },
-  "sniprun": { "branch": "master", "commit": "6511fd71e751ed80ea374ef096ec5187682241cd" },
+  "sniprun": { "branch": "master", "commit": "739756deb484d5b29b9a3228bf13712c695e8b86" },
   "sqls.nvim": { "branch": "main", "commit": "a0048b7018c99b68456f91b4aa42ce288f0c0774" },
   "stabilize.nvim": { "branch": "master", "commit": "34069870a8e72632c5447188e638e1c6bfebc353" },
   "syntax-tree-surfer": { "branch": "master", "commit": "9dc6657d76e3f8886a0b120e6a315c511f53bae7" },

@@ -95,6 +95,7 @@ local config = function()
     e = {
       name = '+Eval',
       l = { cmdify 'FennelRepl', 'Fennel Repl' },
+      s = { cmdify 'SnipRun', 'SnipRun' },
     },
     r = {
       name = '+Run/Debug',
