@@ -104,6 +104,7 @@ local config = function()
       name = '+Generate',
     },
     l = { cmdify 'Luapad', 'open Luapad' },
+    t = { cmdify 'TSPlaygroundToggle', 'TSPlaygroundToggle' },
   }, { prefix = '<leader>' })
 
   wk.register({
