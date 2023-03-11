@@ -19,11 +19,27 @@ function M.setup_lsp_format()
   }
 end
 
+local node_root = function()
+  local node_root_dir = require('lspconfig').util.root_pattern 'package.json'
+  local is_node_repo = node_root_dir(vim.fn.getcwd()) ~= nil
+  return node_root_dir, is_node_repo
+end
+
 function M.null_ls()
   local null_ls = require 'null-ls'
 
   -- being ok with calling this twice to maintain the independence for null_ls and lspconfig to each other
   M.setup_lsp_format()
+
+  local _, is_node_repo = node_root()
+
+  local ts_formatter = is_node_repo and null_ls.builtins.formatting.eslint or null_ls.builtins.formatting.deno_fmt
+
+  local sources = {
+    null_ls.builtins.formatting.stylua,
+    ts_formatter,
+  }
+
   null_ls.setup {
     -- -- not using boilerplate from README to favor https://github.com/lukas-reineke/lsp-format.nvim
     -- -- in fact this might the culprit for the issue below that ask between two on saving
@@ -46,10 +62,7 @@ function M.null_ls()
       require('lsp-format').on_attach(client)
     end,
 
-    sources = {
-      null_ls.builtins.formatting.stylua,
-      null_ls.builtins.formatting.eslint,
-    },
+    sources = sources,
   }
 end
 
@@ -123,7 +136,7 @@ function M.lspconfig()
   }
 
   -- delegate server specific setup to lsp-servers
-  local servers = require 'plugins.config.lsp-servers'(setup_default)
+  local servers = require 'plugins.config.lsp-servers'(setup_default, node_root)
   local lspconfig = require 'lspconfig'
   for server, setup in pairs(servers) do
     lspconfig[server].setup(setup)

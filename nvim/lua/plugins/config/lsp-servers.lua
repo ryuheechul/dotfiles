@@ -1,6 +1,6 @@
 -- LSP settings
 
-return function(setup_default)
+return function(setup_default, node_root)
   local merge = require('utils.table').merge
 
   -- why additional `--tsserver-path`?
@@ -35,9 +35,12 @@ return function(setup_default)
 
   local lspconfig = require 'lspconfig'
 
+  local node_root_dir, is_node_repo = node_root()
+
   local setup_tsserver = merge(setup_default, {
     cmd = { 'typescript-language-server', '--stdio', '--tsserver-path', 'tsserver' },
-    root_dir = lspconfig.util.root_pattern 'package.json',
+    root_dir = node_root_dir,
+    autostart = is_node_repo and true or false,
   })
 
   -- use :EslintFixAll to fix all - doesn't kick off automatically with format (on save)
@@ -52,7 +55,8 @@ return function(setup_default)
   })
 
   local setup_denols = merge(setup_default, {
-    root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc'),
+    root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc', 'deno.lock'),
+    autostart = not is_node_repo and true or false,
   })
 
   local setup_lua_ls = merge(setup_default, {
