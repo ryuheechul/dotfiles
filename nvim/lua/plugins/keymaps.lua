@@ -123,7 +123,7 @@ local config = function()
       d = { cmdify 'bd', 'close buffer' },
     },
     ['<space>'] = { cmdify 'Telescope oldfiles', 'Telescope: recent files' },
-    ['<Tab>'] = { cmdify 'bn', 'rotate buffer' },
+    ['<Tab>'] = { cmdify 'wincmd W', 'go to "previous" window' },
     ["'"] = {
       -- use count 9 to be independent from the horizontal one
       cmd_nohlsearch .. cmdify '9ToggleTerm direction=float',
