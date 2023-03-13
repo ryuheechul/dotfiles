@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# also see ./squote
+
+xargs -I _ echo '"_"'

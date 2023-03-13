@@ -8,9 +8,7 @@ function _tag {
 
 _tag start
 
-function add-to-path {
-  path=("${1}" ${path})
-}
+# function add-to-path # this function should be defined at ../path/set-basic
 
 function evalcache-clear {
   yes | _evalcache_clear
@@ -149,23 +147,11 @@ ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 
 _tag asdf
 
-# to make sure my custom path supersedes default ones like /bin /usr/bin /usr/local/bin again
+# to make sure my custom paths supersedes default ones like /bin /usr/bin /usr/local/bin again
 float_nix_path=1 source "${my_zsh_d}/path/set-basic"
 
-_tag nix_path
+_tag my_paths_supersedes
 
-# source tea if exists if not go to https://github.com/teaxyz/cli#getting-started
-if test -d "$HOME/.tea"; then
-  export TEA_MAGIC=0
-  source <("$HOME/.tea/tea.xyz/v*/bin/tea" --magic=zsh --silent)
-
-  # drawing the power of tea to magically install things with symlinks
-  # read ../../bin/path/tea/README.md for detail
-  test -n "${commands[tea]}" && add-to-path "${my_dot_d}/bin/path/tea/bin"
-fi
-
-_tag tea
-_tag path
 
 # use direnv
 [ $commands[direnv] ] && _evalcache direnv hook zsh

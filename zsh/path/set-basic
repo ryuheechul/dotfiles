@@ -23,12 +23,14 @@ function _load_brew() {
 _load_brew
 
 function add-to-path {
-  path=("${1}" ${path})
+  test -n "${1}" && path=("${1}" ${path})
 }
 
-dfs_rhc="${XDG_CONFIG_HOME}/dfs-rhc"
+# assuming path for nix is already set from ../env
+test -n "${float_nix_path}" && add-to-path $(printpath | grep 'nix-profile')
 
-test -n "${float_nix_path}" && add-to-path $(printpath | grep nix-profile)
+# this should be just after nix and before others
+source "${my_dot_d}/zsh/path/tea"
 
 # discover user specific binaries and scripts
 add-to-path "${HOME}/.local/bin"
@@ -41,10 +43,10 @@ add-to-path "${HOME}/.local/bin"
 add-to-path "${HOME}/.local/my-bin"
 
 # my custom scripts that should work on any platform
-add-to-path "${dfs_rhc}/bin/path/default"
+add-to-path "${my_dot_d}/bin/path/default"
 
 # my custom scripts that should work on WSL
-test -n "${WSL_DISTRO_NAME}" && add-to-path "${dfs_rhc}/bin/path/wsl"
+test -n "${WSL_DISTRO_NAME}" && add-to-path "${my_dot_d}/bin/path/wsl"
 
 # my custom scripts that should work on darwin
-test "$(uname)" = "Darwin" && add-to-path "${dfs_rhc}/bin/path/darwin"
+test "$(uname)" = "Darwin" && add-to-path "${my_dot_d}/bin/path/darwin"
