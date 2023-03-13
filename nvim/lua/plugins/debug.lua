@@ -18,7 +18,6 @@ return {
   { -- Sniprun is a code runner plugin for neovim written in Lua and Rust
     'michaelb/sniprun',
     build = "np-build-via-nix-shell 'bash ./install.sh'",
-    tag = 'v1.2.10',
     event = 'VeryLazy',
     opts = {
       selected_interpreters = { 'JS_TS_deno' },
