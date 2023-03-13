@@ -39,8 +39,9 @@ in
       # this actually gets done by ~/.profile which hm generates
       # source "''${HOME}/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
-      # this actually gets done by /etc/bashrc (the sourcing ending with `set-environment`)
-      # source "''${my_dot_d}/nix/bin/source/nix.sh"
+      # sometimes this gets done by /etc/bashrc (the sourcing ending with `set-environment`)
+      # but not all platforms work that way - so this is the fallback
+      source "''${my_dot_d}/nix/bin/source/nix.sh"
     '';
   };
 }
