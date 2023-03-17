@@ -6,6 +6,10 @@ return {
   -- 'roxma/vim-tmux-clipboard', -- share clipboard with tmux
   { -- A Neovim plugin to improve buffer deletion
     'ojroques/nvim-bufdel',
+    dependencies = {
+      -- https://github.com/akinsho/bufferline.nvim/issues/239#issuecomment-944153281
+      'famiu/bufdelete.nvim', -- Delete Neovim buffers without losing window layout
+    },
     event = 'VimEnter',
     config = function()
       -- q to close in a smart way

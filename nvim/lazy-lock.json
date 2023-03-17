@@ -5,6 +5,7 @@
   "NeoSolarized": { "branch": "master", "commit": "13bfe6f238df199a24eb1bc10ed93e37c467db39" },
   "alpha-nvim": { "branch": "main", "commit": "4e1c4dedf5983e84b3ed305228b2235c56c7023c" },
   "barbecue.nvim": { "branch": "main", "commit": "d60fb8d8e240e5be04a20636f5b35b05a0d4712c" },
+  "bufdelete.nvim": { "branch": "master", "commit": "8933abc09df6c381d47dc271b1ee5d266541448e" },
   "bufferline.nvim": { "branch": "main", "commit": "b337fd393cef2e3679689d220e2628722c20ddcb" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
   "cmp-cmdline": { "branch": "main", "commit": "8fcc934a52af96120fe26358985c10c035984b53" },

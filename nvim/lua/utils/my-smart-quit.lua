@@ -1,3 +1,6 @@
+-- my attempt to make `q` to work smarter and more resilient with various edge cases
+-- see ../plugins/system.lua for depedencies
+
 -- telescope window resilient `close`
 local close_telescope_in_mind = function()
   -- first try with the regular close
@@ -36,6 +39,16 @@ local quit_unlisted = function()
   end
 end
 
+-- this is not the same with `try_bufdel`
+local try_bufdelete = function()
+  local ok = pcall(vim.cmd, 'Bdelete')
+  -- when it fails fall back to `bd!` instead
+  if not ok then
+    vim.cmd [[ bd! ]]
+  end
+end
+
+-- this is not the same with `try_bufdelete`
 local try_bufdel = function()
   local is_curr_buf_modifiable = vim.api.nvim_buf_get_option(0, 'modifiable')
 
@@ -47,7 +60,7 @@ local try_bufdel = function()
     -- when it fails, it's assumed that it's something like Luapad that doesn't work very well with BufDel
     -- so fall back to `bd!` instead
     if not ok then
-      vim.cmd [[ bd! ]]
+      try_bufdelete()
     end
   end
 end
@@ -66,7 +79,11 @@ local quit_listed = function()
   else
     -- but also close windows first if only single buffer left with multiple windows
     -- to prevent closing abruptly when still multiple windows are present
-    vim.cmd [[ q ]]
+    if vim.bo.filetype == 'qf' then -- to accommodate 'kevinhwang91/nvim-bqf'
+      try_bufdelete()
+    else
+      vim.cmd [[ q ]]
+    end
   end
 end
 
