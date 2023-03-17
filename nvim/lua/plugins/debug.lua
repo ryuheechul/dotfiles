@@ -12,7 +12,14 @@ return {
       'nvim-tree/nvim-web-devicons',
       'folke/lsp-colors.nvim',
     },
-    config = true,
+    init = function()
+      vim.keymap.set('n', 'gt', ':Trouble<CR>', { noremap = true, silent = true, desc = 'Trouble' })
+    end,
+    opts = {
+      action_keys = {
+        hover = 'gk',
+      },
+    },
     event = 'VeryLazy',
   },
   { -- Sniprun is a code runner plugin for neovim written in Lua and Rust

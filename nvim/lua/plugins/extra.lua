@@ -370,7 +370,7 @@ return {
       local throttle = require('throttle-debounce').throttle_leading
 
       local throttled_callback = throttle(function()
-        require('notify').dismiss()
+        require('notify').dismiss {}
       end, 500)
 
       local noice_group = vim.api.nvim_create_augroup('MyNoiceAG', { clear = true })

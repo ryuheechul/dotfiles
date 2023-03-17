@@ -105,7 +105,7 @@ function M.lspconfig()
 
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, desc_opts 'go to declaration')
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, desc_opts 'go to definition')
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, desc_opts 'hover')
+    vim.keymap.set('n', 'gk', vim.lsp.buf.hover, desc_opts 'hover')
     vim.keymap.set('n', 'gj', vim.lsp.buf.implementation, desc_opts 'go to implementations')
     vim.keymap.set('n', '<S-k>', vim.lsp.buf.signature_help, desc_opts 'signature help')
     vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, desc_opts 'add workspace')
