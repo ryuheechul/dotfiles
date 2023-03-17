@@ -8,6 +8,7 @@ alias ls="exa"
 alias l="ls -lah -g --git"
 alias lt="ls -lah -T -L=3 --git --git-ignore"
 alias tree="exa -G -T --git-ignore"
+alias treed="tree -D --no-icons"
 
 # navi
 alias navi='navi --print'
