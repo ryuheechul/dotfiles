@@ -105,6 +105,7 @@ local config = function()
     },
     l = { cmdify 'Luapad', 'open Luapad' },
     t = { cmdify 'TSPlaygroundToggle', 'TSPlaygroundToggle' },
+    s = { cmdify 'suspend', ':suspend - go to background - `fg` to comeback' },
   }, { prefix = '<leader>' })
 
   wk.register({

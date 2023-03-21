@@ -365,7 +365,11 @@ alias quickvenv='python3 -m venv "${MY_QUICK_VENV_PATH:-.venv}" && source "${MY_
 alias nis='npm install --save'
 alias nisd='npm install --save-dev'
 alias whoami-aws='aws sts get-caller-identity'
-alias q='test -n "${VIRTUAL_ENV}" && deactivate || exit'
+
+# firstly fallback to `fg` when there is a background job is running
+# secondly exit virtualenv if the shell is inside one
+# lastly `exit` the shell when there no other conditions above are met
+alias q='jobs | wc -l | xargs test 0 -eq && { test -n "${VIRTUAL_ENV}" && deactivate || exit } || fg'
 alias e='fzf | xargs ${EDITOR}'
 alias jqstringify='jq ". | tostring"'
 alias jqfromjson='jq "fromjson"'
