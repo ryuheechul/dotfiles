@@ -19,6 +19,8 @@ return {
       action_keys = {
         hover = 'gk',
       },
+      auto_open = true,
+      auto_close = true,
     },
     event = 'VeryLazy',
   },
