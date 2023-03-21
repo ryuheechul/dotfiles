@@ -27,7 +27,7 @@ opts.change_detection.notify = false
 opts.concurrency = max_jobs -- not setting limits would likely cause issues - https://github.com/folke/lazy.nvim/issues/462
 opts.checker = {
   -- automatically check for plugin updates
-  enabled = true,
+  enabled = false,
   concurrency = max_jobs / 4, -- since automatic checks shouldn't need to be too fast that potentially impact more important tasks
   notify = false,
   frequency = 3600 --[[ an hour ]]

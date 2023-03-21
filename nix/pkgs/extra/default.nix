@@ -19,7 +19,7 @@ with pkgs;
   # anything "extra" but without optional flag goes here
   hexto256
 ]
-++ ifEnv "MY_NIX_EXTRA_NIGHTLY"
+++ ifEnv "MY_NIX_EXTRA_NIGHTLY_ALACRITTY"
   [
     alacritty-nightly
   ]

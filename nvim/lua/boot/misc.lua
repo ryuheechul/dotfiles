@@ -10,41 +10,44 @@ vim.o.lazyredraw = false
 -- lazyredraw seems to cause more lags (especially with nvim-cmp) than not with my setup.
 -- possibly it might work better with certain terminals than not so I might consider branching this out per terminal
 
---Incremental live completion
+-- Incremental live completion
 vim.o.inccommand = 'nosplit'
 
---Set highlight on search
+-- Set highlight on search
 vim.o.hlsearch = true
 
---Set spell check
+-- Set spell check
 vim.o.spell = true
 
---Make line numbers default
+-- Make line numbers default
 vim.wo.number = true
 
---Do not save when switching buffers
+-- Do not save when switching buffers
 vim.o.hidden = true
 
---Enable mouse mode
+-- Enable mouse mode
 vim.o.mouse = 'a'
 
---Enable break indent
+-- Enable break indent
 vim.o.breakindent = true
 
---Save undo history
+-- Save undo history
 vim.cmd [[set undofile]]
 
---Case insensitive searching UNLESS /C or capital in search
+-- Case insensitive searching UNLESS /C or capital in search
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
---Decrease update time
+-- Decrease update time
 vim.o.updatetime = 250
 vim.wo.signcolumn = 'yes'
 
---Set colorscheme (order is important here)
+-- Set colorscheme (order is important here)
 vim.o.termguicolors = true
 vim.g.onedark_terminal_italics = 2
+
+-- Replace https://github.com/luukvbaal/stabilize.nvim with Neovim 0.9.0 onward
+vim.o.splitkeep = 'screen'
 
 -- Highlight on yank
 local yankHighlightGrp = vim.api.nvim_create_augroup('YankHighlight', { clear = true })

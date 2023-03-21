@@ -190,6 +190,8 @@ return {
       -- it does not stabilize window when the content will be hidden behind the new windows
       force = false,
     },
+    -- TODO: remove this section all together when neovim 0.9 becomes stable
+    enabled = vim.version().minor < 9,
   },
   {
     'sbulav/nredir.nvim', -- Redirect the output of Vim or external command to scratch buffer, in LUA
