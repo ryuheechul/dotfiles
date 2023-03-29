@@ -84,16 +84,6 @@ return {
     opts = {
       view = {
         side = 'right',
-        mappings = {
-          custom_only = false,
-          -- override default mappings
-          list = {
-            { key = { 'o', '<2-LeftMouse>', 'l', 'e' }, action = 'edit' },
-            { key = { '-', 'h' }, action = 'dir_up' },
-            { key = { '<Tab>' }, cb = ':wincmd w<CR>' },
-            { key = { 'q' }, cb = ':q<CR>' },
-          },
-        },
       },
       -- auto_open = true,
       -- not available any more
@@ -102,6 +92,28 @@ return {
       disable_netrw = false,
       hijack_netrw = false,
       open_on_setup = false,
+      on_attach = function(bufnr)
+        local api = require 'nvim-tree.api'
+
+        local function opts(desc)
+          return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+        end
+
+        -- use default mappings
+        api.config.mappings.default_on_attach(bufnr)
+
+        -- open file in buffer
+        vim.tbl_map(function(key)
+          vim.keymap.set('n', key, api.node.open.edit, { buffer = bufnr })
+        end, { 'o', '<2-LeftMouse>', 'l', 'e' })
+
+        -- as well as `-`
+        vim.keymap.set('n', 'h', api.tree.change_root_to_parent, opts 'Up')
+        -- to be able to "toggle" the behavior of `change_root_to_parent`
+        vim.keymap.set('n', '=', api.tree.change_root_to_node, opts 'Change Root')
+        -- cycle windows
+        vim.keymap.set('n', '<Tab>', '<Cmd>wincmd w<CR>', { buffer = bufnr })
+      end,
     },
   }, -- enhanced filetree replacing netrw
   { -- https://github.com/fregante/GhostText
