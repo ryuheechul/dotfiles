@@ -316,10 +316,15 @@ alias less='less -r -i'
 alias cat='bat'
 alias k9s='TERM=xterm COLORTERM=256bit k9s'
 
-# ripgrep
-alias rg='rg -p -i'
-alias rgc='rg -C'
-alias rgc5='rgc 5'
+## ripgrep
+# alias rg='rg -p -i' # with pretty (-p) and ignore case (-i)
+# enhanced the above alias using the function below to apply what's mentioned at https://github.com/BurntSushi/ripgrep/issues/86#issuecomment-1469717706
+rg ()
+{
+  env rg --json $@ | delta
+}
+alias rgc='rg -C' # with context
+alias rgc5='rgc 5' # with context value that is 5
 
 alias glow='glow -p -s "$(theme-tone)"'
 
