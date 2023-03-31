@@ -42,6 +42,16 @@ in
       # sometimes this gets done by /etc/bashrc (the sourcing ending with `set-environment`)
       # but not all platforms work that way - so this is the fallback
       source "''${my_dot_d}/nix/bin/source/nix.sh"
+
+      # load tea.xyz when available
+      if test -d "''${HOME}/.tea"; then
+        export TEA_MAGIC=0
+        # load tea first
+        command -v tea 2>&1 >/dev/null || source <("''${HOME}/.tea/tea.xyz/v*/bin/tea" --magic=bash --silent)
+
+        # and binaries via tea
+        command -v tea 2>&1 >/dev/null && export PATH="''${my_dot_d}/bin/path/tea/bin:''${PATH}"
+      fi
     '';
   };
 }

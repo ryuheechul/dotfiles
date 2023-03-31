@@ -2,7 +2,7 @@
 
 # TODO: when the list grows, spin out the list to something like `packages.txt`
 # edit here to add more files separate via space
-direct_links="rust bun~0.4"
+direct_links="rust bun~0.4 ruby" # added ruby temporarily since graalvm's ruby (../../../nix/pkgs/lang/graalvm.nix) fails https://github.com/schasse/tmux-jump
 
 script_d="$(dirname "$0")"
 target_d="${script_d}/bin"
