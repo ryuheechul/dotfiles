@@ -20,7 +20,7 @@
   "cmp_luasnip": { "branch": "master", "commit": "18095520391186d634a0045dacaa346291096566" },
   "conjure": { "branch": "master", "commit": "51936288d182a677fcb808e660081ad7e9ecd4ec" },
   "deferred-clipboard.nvim": { "branch": "master", "commit": "810a29d166eaa41afc220cc7cd85eeaa3c43b37f" },
-  "diffview.nvim": { "branch": "main", "commit": "6420a73b340fdb1f842479cd7640dcca9ec6f5d1" },
+  "diffview.nvim": { "branch": "main", "commit": "052521c8948491c20f4e9278864ff058c6bb7436" },
   "dressing.nvim": { "branch": "master", "commit": "5f44f829481640be0f96759c965ae22a3bcaf7ce" },
   "drop.nvim": { "branch": "main", "commit": "511025ac0e3b8e8df501786c54cf66521864688d" },
   "earthly.vim": { "branch": "main", "commit": "9402908f41c5165fa69317da9fe1c47ea5f9e5dd" },
