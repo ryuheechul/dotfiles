@@ -7,7 +7,6 @@ let
   ifEnv = envName: pkgs.lib.optionals (checkEnv envName);
   tag = import ../custom/tag { pkgs = pkgs; };
   hired = import ../custom/hired.nix { pkgs = pkgs; };
-  gitwatch = import ../custom/gitwatch.nix { pkgs = pkgs; };
   cfn-lint = pkgs.python3.pkgs.cfn-lint;
   hexto256 = import ../custom/hexto256.nix;
   tf-helper = import ../custom/tf-helper.nix { pkgs = pkgs; };
