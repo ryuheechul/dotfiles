@@ -75,7 +75,7 @@ with pkgs;
     # export MY_NIX_EXTRA_PODMAN=1 # to include podman at `home-manager switch`
     #
     # # follow instruction on machine init & start - https://podman.io/getting-started/installation
-    # # include these at ~/.zshrc
+    # # include these at ~/.local.zshrc
     # export DOCKER_HOST="unix:///${XDG_DATA_HOME}/containers/podman/machine/podman-machine-default/podman.sock" # to `docker` command to work with podman
     # alias docker=podman # or just alias it
     # ```

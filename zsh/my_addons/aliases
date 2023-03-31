@@ -356,7 +356,7 @@ uname | xargs test "Darwin" = \
 
 # commandify
 alias fulltimezsh='FORCE_LOAD_MY_ZSH_STUFF=1 timezsh'
-alias vzshrc='nvim ~/.zshrc'
+alias vzshrc='nvim ~/.local.zshrc ~/.zlogin ~/.zshenv ~/.zshrc'
 alias sshconfig='cat ~/.ssh/config'
 alias vsshconfig='nvim ~/.ssh/config'
 alias touchreadme='touch README.md'

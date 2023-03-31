@@ -111,16 +111,6 @@ sleep 2
 # iCloudDrive symlink
 ln -sf "${HOME}/Library/Mobile Documents/com~apple~CloudDocs" "${HOME}/icd"
 
-# to prevent loading zsh stuff twice in case tmux is the default shell command for terminal emulators
-# but skip in ssh - https://unix.stackexchange.com/a/9606
-cat <<EOF >> ~/.zshrc
-if [ -n "\$SSH_CLIENT" ] || [ -n "\$SSH_TTY" ] || [ -n "\$SSH_CONNECTION" ] ; then
-  true
-else
-  export HOST_ALWAYS_USE_TMUX=1
-fi
-EOF
-
 # fixing for TERM=tmux-256color - thanks to https://gist.github.com/bbqtd/a4ac060d6f6b9ea6fe3aabe735aa9d95
 # another article for a same topic - https://gpanders.com/blog/the-definitive-guide-to-using-tmux-256color-on-macos/
 

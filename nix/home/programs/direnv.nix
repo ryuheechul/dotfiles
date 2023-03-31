@@ -3,6 +3,7 @@
   programs.direnv = {
     # https://nix-community.github.io/home-manager/options.html#opt-programs.direnv.enable
     enable = true;
+    enableZshIntegration = false; # since I do this manually
     nix-direnv.enable = true;
   };
 }
