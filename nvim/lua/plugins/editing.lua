@@ -82,21 +82,25 @@ return {
     'arthurxavierx/vim-caser',
     -- | Default Mapping | Case                                    |
     -- | --------------- | --------------------------------------- |
-    -- | `gsm` or `gsp`  | `MixedCase` or `PascalCase`             |
-    -- | `gsc`           | `camelCase`                             |
-    -- | `gs_`           | `snake_case`                            |
-    -- | `gsu` or `gsU`  | `UPPER_CASE`                            |
-    -- | `gst`           | `Title Case`                            |
-    -- | `gss`           | `Sentence case`                         |
-    -- | `gs<space>`     | `space case`                            |
-    -- | `gs-` or `gsk`  | `dash-case` or `kebab-case`             |
-    -- | `gsK`           | `Title-Dash-Case` or `Title-Kebab-Case` |
-    -- | `gs.`           | `dot.case`                              |
+    -- | `gmm` or `gmp`  | `MixedCase` or `PascalCase`             |
+    -- | `gmc`           | `camelCase`                             |
+    -- | `gm_`           | `snake_case`                            |
+    -- | `gmu` or `gmU`  | `UPPER_CASE`                            |
+    -- | `gmt`           | `Title Case`                            |
+    -- | `gms`           | `Sentence case`                         |
+    -- | `gm<space>`     | `space case`                            |
+    -- | `gm-` or `gmk`  | `dash-case` or `kebab-case`             |
+    -- | `gmK`           | `Title-Dash-Case` or `Title-Kebab-Case` |
+    -- | `gm.`           | `dot.case`                              |
     event = 'VeryLazy',
+    init = function()
+      vim.g.caser_prefix = 'gm' -- rationale: "Go Modify" and also to avoid conflict with leap.nvim
+    end,
   },
   { -- Multiple cursors plugin for vim/neovim
     'mg979/vim-visual-multi',
     event = 'VeryLazy',
+    cond = vim.env.my_nvim_visual_multi ~= nil,
     init = function()
       vim.g.VM_maps = {
         ['Add Cursor Down'] = '<M-Down>',
@@ -134,6 +138,7 @@ return {
   { -- https://github.com/ziontee113/syntax-tree-surfer/tree/d6d518f48dcc4441b11ee3e6cefd48fa1e09568a
     'ziontee113/syntax-tree-surfer',
     event = 'VeryLazy',
+    cond = vim.env.my_nvim_syntax_tree_surfer ~= nil,
     config = require 'plugins.config.tree-surfer', -- follow the file to see key maps
   },
 }

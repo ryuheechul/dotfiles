@@ -215,16 +215,34 @@ return {
     event = 'VeryLazy',
     config = true,
   },
-  { -- pretty cool motion plugin that turns s/f/t to be supercharged.
+  {
+    -- pretty cool motion plugin that turns s/f/t to be supercharged.
     -- it takes some to get used to but it's quite powerful and reduce cognitive loads
     -- while it could be super efficient with predicting some potential normal future
     -- they call it "clairvoyant" ability!
-    -- my favorite is `f<enter>` to go to the end of the line
-    'ggandor/lightspeed.nvim',
+    -- my favorite used to be `f<enter>` to go to the end of the line with lightspeed.nvim
+    -- and this is not the case anymore with leap as `f<enter>` would work as a repeat of the last search with flit.nvim
+    'ggandor/leap.nvim',
     event = 'VeryLazy',
-    opts = {
-      ignore_case = true,
+    dependencies = {
+      {
+        'ggandor/flit.nvim', -- f/F/t/T motions on steroids - f[any char]f(repeat until you are there)
+        config = true,
+      },
+      -- { -- disable as it doesn't seem to be stable
+      --   'ggandor/leap-spooky.nvim', -- 👻 Actions at a distance - pretty cool if it would work seamlessly
+      --   config = true,
+      -- },
     },
+    config = function()
+      require('leap').add_default_mappings()
+
+      -- to give a feedback on search area
+      vim.api.nvim_set_hl(0, 'LeapBackdrop', { bold = true })
+
+      -- to give feedback on first two characters I'm searching for
+      require('leap').opts.highlight_unlabeled_phase_one_targets = true
+    end,
   },
   {
     -- syntax support for CODEOWNERS file
