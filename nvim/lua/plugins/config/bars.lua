@@ -103,6 +103,14 @@ return function()
         'filetype',
       },
     },
+    extensions = {
+      'fugitive',
+      'lazy',
+      'nvim-tree',
+      'nvim-dap-ui',
+      'trouble',
+      'quickfix',
+    },
   }
 
   -- fallback to lualine when no preference is set for barbecue
