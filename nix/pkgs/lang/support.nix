@@ -13,7 +13,9 @@ with pkgs;
     git-lfs # git extention for large file storage
     pre-commit # for managing multi-language pre-commit hooks
     gitwatch # Watch a file or folder and automatically commit changes to a git repo easily.
+    # these below are technically not directly related to git - so maybe one day I will make its own category
     src-cli # Sourcegraph CLI
+    comby # Tool for searching and changing code structure
   ]
 ++ lib.optionals (checkEnv "MY_NIX_EXTRA_DEVENV")
   # devenv is not a language but help a quick setup of a dev environment for many languages
