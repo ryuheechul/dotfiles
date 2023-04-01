@@ -84,7 +84,6 @@ function M.lspconfig()
   -- after the language server attaches to the current buffer
   local on_attach = function(client, bufnr)
     -- to enable format on save
-
     require('lsp-format').on_attach(client)
 
     if client.server_capabilities.documentSymbolProvider then

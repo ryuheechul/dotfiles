@@ -82,7 +82,16 @@ return function(setup_default, node_root)
     },
   })
 
-  local setup_rnix = merge(setup_default, {})
+  -- for nix
+  local setup_nil_ls = merge(setup_default, {
+    settings = {
+      ['nil'] = {
+        formatting = {
+          command = { 'nixpkgs-fmt' },
+        },
+      },
+    },
+  })
   local setup_nimls = merge(setup_default, {})
   local setup_gopls = merge(setup_default, {})
   local setup_svelte = merge(setup_default, {})
@@ -175,7 +184,7 @@ return function(setup_default, node_root)
     tsserver = setup_tsserver,
     denols = setup_denols,
     lua_ls = setup_lua_ls,
-    rnix = setup_rnix,
+    nil_ls = setup_nil_ls,
     eslint = setup_eslint,
     sqls = setup_sqls,
     jsonls = setup_jsonls,
