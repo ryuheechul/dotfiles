@@ -134,4 +134,5 @@ with pkgs;
   gum # Tasty Bubble Gum for your shell
 ]
 ++ (import ./lang { pkgs = pkgs; })
+++ (import ./fonts { pkgs = pkgs; })
 ++ (import ./extra/default.nix { pkgs = pkgs; })

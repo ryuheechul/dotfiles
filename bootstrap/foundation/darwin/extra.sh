@@ -82,10 +82,11 @@ open https://www.homerow.app/
 
 ########## font ##########
 
-# download nerd font patched jetbrains and fira mono fonts
-brew tap homebrew/cask-fonts
-_install_cask font-jetbrains-mono-nerd-font
-_install_cask font-fira-mono-nerd-font
+## now fonts are being installed via ../../../nix/home/default.nix instead of using brew
+# # download nerd font patched jetbrains and fira mono fonts
+# brew tap homebrew/cask-fonts
+# _install_cask font-jetbrains-mono-nerd-font
+# _install_cask font-fira-mono-nerd-font
 
 echo "You might want to do the followings:"
 # https://github.com/mathiasbynens/dotfiles/issues/711#issuecomment-278265644

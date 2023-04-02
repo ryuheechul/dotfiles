@@ -27,6 +27,12 @@ in
   # the Home Manager release notes for a list of state version
   # changes in each release.
   home.stateVersion = "22.11";
-
   home.packages = packages;
+
+  # ../pkgs/fonts will be included via ../pkgs
+  fonts.fontconfig.enable = true;
+  # debug/find fonts per OS:
+  # - linux: https://github.com/nix-community/home-manager/blob/master/modules/misc/fontconfig.nix
+  # - darwin: https://github.com/nix-community/home-manager/blob/master/modules/targets/darwin/fonts.nix
+  #   - ~/Library/Fonts/HomeManager
 }
