@@ -54,6 +54,7 @@ Space::Space ; without this Space will not work
 !g::Send, ^g ; next item (usually with) find
 !+g::Send, ^+g ; previous item (usually with) find
 !l::Send, ^l ; focus address bar
+!/::Send, ^/ ; comment/uncomment
 !z::Send, ^z ; undo
 !+z::Send, ^+z ; redo
 ;had to delete comma after Send for below to work - https://stackoverflow.com/a/47223049/1570165
