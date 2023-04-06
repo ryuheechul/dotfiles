@@ -38,6 +38,15 @@ with pkgs;
   [
     circleci-cli # circle ci cli # add checkEnv MY_NIX_EXTRA_CIRCLE_CI
   ]
+++ ifEnv "MY_NIX_EXTRA_NETWORK"
+  [
+    ipcalc # Simple IP network calculator
+    socat # Utility for bidirectional data transfer between two independent data channels
+    tcpdump # Network sniffer
+    ngrep # Network packet analyzer
+    tcpflow # TCP stream extractor
+    termshark # A terminal user-interface for tshark, inspired by Wireshark.
+  ]
 ++ ifEnv "MY_NIX_EXTRA_TAG"
   [
     tag

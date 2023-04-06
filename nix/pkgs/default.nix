@@ -21,6 +21,7 @@ with pkgs;
   gnused # GNU sed, a batch stream editor
   gawk # GNU implementation of the Awk programming language
   ps
+  pv # Tool for monitoring the progress of data through a pipeline
   pstree # Show the set of running processes as a tree
   curl # Curl is a command-line tool for transferring data specified with URL syntax
   wget # useful for downloading files
@@ -117,8 +118,6 @@ with pkgs;
 ] ++
 # helper
 [
-  ipcalc # Simple IP network calculator
-  socat # Utility for bidirectional data transfer between two independent data channels
   fswatch # A cross-platform file change monitor with multiple backends
   watch # execute a program periodically
   viddy # A modern watch command
