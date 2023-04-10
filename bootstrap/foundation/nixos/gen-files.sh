@@ -35,11 +35,14 @@ cat << EOF > ./configuration.nix
       ./base-configuration.nix
     ];
 
+  # Bootloader.
+$(grep 'boot\.loader\.' /etc/nixos/configuration.nix)
+
   # Set your time zone.
-$(grep 'time.timeZone' /etc/nixos/configuration.nix | head -n1)
+$(grep 'time\.timeZone' /etc/nixos/configuration.nix | head -n1)
 
   # Select internationalisation properties.
-$(grep 'i18n.defaultLocale' /etc/nixos/configuration.nix | head -n1)
+$(grep 'i18n\.defaultLocale' /etc/nixos/configuration.nix | head -n1)
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.$(whoami) = {
