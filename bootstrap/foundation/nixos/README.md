@@ -39,6 +39,7 @@ List of desktop/apps that didn't work:
 - `./hardware-configuration.nix` is a symlink to
   `/etc/nixos/hardware-configuration.nix`
 - `./gen-files.sh` will generate `./hm.nix` and `./configuration.nix`
+- `./gen-local-pkgs.sh` will generate `./local-pkgs.nix`
 - `./base-configuration.nix` is what `./configuration.nix` is based on
 - `./hm.nix` links to `../../../nix/home`
 - `./switch.sh` will run `./gen-files.sh` and nixos-rebuild with them

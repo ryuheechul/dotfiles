@@ -49,7 +49,7 @@ $(grep 'i18n\.defaultLocale' /etc/nixos/configuration.nix | head -n1)
     isNormalUser = true;
     description = "user $(whoami)";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [ ];
+    packages = with pkgs; [ ] ++ pkgs.lib.optionals (builtins.pathExists ./local-pkgs.nix) (import ./local-pkgs.nix { pkgs = pkgs; });
     shell = pkgs.zsh;
   };
 
