@@ -9,6 +9,7 @@ let
   rust = import ./rust.nix { pkgs = pkgs; };
   wasm = import ./wasm.nix { pkgs = pkgs; };
   java = import ./java.nix { pkgs = pkgs; };
+  janet = import ./janet.nix { pkgs = pkgs; };
   erlang = import ./erlang.nix { pkgs = pkgs; };
   python = import ./python.nix { pkgs = pkgs; };
   support = import ./support.nix { pkgs = pkgs; };
@@ -21,7 +22,6 @@ let
     ++ lua
     ++ python
     ++ support # this is not for a language itself but to support the language related things
-    ++ graalvm
     ++ javascript
   );
 in
@@ -32,4 +32,6 @@ defaults
 ++ ifEnv "MY_NIX_EXTRA_LANG_RUST" rust
 ++ ifEnv "MY_NIX_EXTRA_LANG_WASM" wasm
 ++ ifEnv "MY_NIX_EXTRA_LANG_JAVA" java
+++ ifEnv "MY_NIX_EXTRA_LANG_JANET" janet
 ++ ifEnv "MY_NIX_EXTRA_LANG_ERLANG" erlang
+++ ifEnv "MY_NIX_EXTRA_LANG_GRAALVM" graalvm

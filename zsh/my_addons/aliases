@@ -212,6 +212,9 @@ alias gdtcp="gdtc ${exclude_for_pure}"
 alias gd.='gd .'
 alias gdc.='gdc .'
 
+# do this again although this is done by ../aliases already since this get overwritten by something along the way (probably OMZ)
+alias l="ls -lah -g --git"
+
 unalias gl
 # envelop `git pull` with `stash` and `stash pop` when the status is not clean
 function gl () {

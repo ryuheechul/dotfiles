@@ -36,6 +36,7 @@ return {
     build = "np-build-via-nix-shell 'cargo build --workspace'",
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = true,
+    cond = vim.env.my_nvim_use_sg ~= nil,
   },
   { -- to complement the built-in `vim.lsp.buf.hover`
     'lewis6991/hover.nvim', -- Hover plugin framework for Neovim

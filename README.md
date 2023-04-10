@@ -62,20 +62,18 @@ The safe ways to try these out are below:
 
 ### Platform Foundation
 
-
 `~/dotfiles/bootstrap/foundation/darwin/essential.sh` # recommended you to look
 at an example below
 
 or
 
-`~/dotfiles/bootstrap/foundation/nixos/switch.sh` # recommended you to look
-at an example below
+`~/dotfiles/bootstrap/foundation/nixos/switch.sh` # recommended you to look at
+an example below
 
 or
 
 `~/dotfiles/bootstrap/foundation/linux.sh` # recommended to look at an example
 below
-
 
 ### Configuration
 
@@ -98,9 +96,13 @@ below
 # you might need to open a new terminal window to be able to do this successfully
 ~/dotfiles/bootstrap/configuration.sh
 ```
+
 #### NixOS
 
 ```sh
+# optionally - you probably want to run this first to be able to clone this repo and also use the vim editor
+nix-shell -p git vim
+
 # this should prepare essential stuff
 ~/dotfiles/bootstrap/foundation/nixos/switch.sh
 
