@@ -62,13 +62,20 @@ The safe ways to try these out are below:
 
 ### Platform Foundation
 
-`~/dotfiles/bootstrap/foundation/linux.sh` # recommended to look at an example
-below
-
-or
 
 `~/dotfiles/bootstrap/foundation/darwin/essential.sh` # recommended you to look
 at an example below
+
+or
+
+`~/dotfiles/bootstrap/foundation/nixos/switch.sh` # recommended you to look
+at an example below
+
+or
+
+`~/dotfiles/bootstrap/foundation/linux.sh` # recommended to look at an example
+below
+
 
 ### Configuration
 
@@ -76,18 +83,6 @@ at an example below
 below
 
 ### Examples
-
-#### Linux
-
-```sh
-~/dotfiles/bootstrap/foundation/linux.sh
-source /etc/profile.d/nix.sh
-source /etc/profile.d/user-shim-for-nix-path.sh
-~/dotfiles/bootstrap/configuration.sh
-```
-
-> See https://github.com/ryuheechul/dotfiles-launchpad/tree/master/Vagrantfile
-> for more details
 
 #### macOS
 
@@ -103,6 +98,28 @@ source /etc/profile.d/user-shim-for-nix-path.sh
 # you might need to open a new terminal window to be able to do this successfully
 ~/dotfiles/bootstrap/configuration.sh
 ```
+#### NixOS
+
+```sh
+# this should prepare essential stuff
+~/dotfiles/bootstrap/foundation/nixos/switch.sh
+
+# this should prepare platform agnostic essential stuff
+# you might need to open a new terminal window to be able to do this successfully
+~/dotfiles/bootstrap/configuration.sh
+```
+
+#### Linux
+
+```sh
+~/dotfiles/bootstrap/foundation/linux.sh
+source /etc/profile.d/nix.sh
+source /etc/profile.d/user-shim-for-nix-path.sh
+~/dotfiles/bootstrap/configuration.sh
+```
+
+> See https://github.com/ryuheechul/dotfiles-launchpad/tree/master/Vagrantfile
+> for more details
 
 ## Stuff That Come With
 
