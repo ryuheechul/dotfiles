@@ -33,16 +33,13 @@ List of desktop/apps that didn't work:
 
 ## Explain
 
-- assumed that there is just one user
-- `/etc/nixos/configuration.nix` is basically ignored (except to extract some
-  information like timezone)
-- `./hardware-configuration.nix` is a symlink to
-  `/etc/nixos/hardware-configuration.nix`
-- `./gen-files.sh` will generate `./hm.nix` and `./configuration.nix`
-- `./gen-local-pkgs.sh` will generate `./local-pkgs.nix`
-- `./base-configuration.nix` is what `./configuration.nix` is based on
-- `./hm.nix` links to `../../../nix/home`
-- `./switch.sh` will run `./gen-files.sh` and nixos-rebuild with them
+- assumed `/etc/nixos/configuration.nix` is good default to start with
+- real meat is at `../../../nix/nixos/`
+- `./gen-files.sh` will generate `./hm.nix` and `./configuration.nix` to glue
+  everything together
+- `./hm.nix` basically links to `../../../nix/home`
+- `./switch.sh` will run `./gen-files.sh` and run `nixos-rebuild` with the
+  generated files
 
 ## Resources
 

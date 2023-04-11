@@ -28,32 +28,19 @@ cat << EOF > ./configuration.nix
 
 { config, pkgs, ... }:
 
+let
+  my-nixos = ../../../nix/nixos/configuration.nix;
+  user = import ../../../nix/nixos/user.nix { username = "$(whoami)"; pkgs = pkgs; };
+in
 {
   imports =
     [
       # Include the results of the hardware scan.
-      ./base-configuration.nix
+      my-nixos
+      ./hm.nix
     ];
 
-  # Bootloader.
-$(grep 'boot\.loader\.' /etc/nixos/configuration.nix)
-
-  # Set your time zone.
-$(grep 'time\.timeZone' /etc/nixos/configuration.nix | head -n1)
-
-  # Select internationalisation properties.
-$(grep 'i18n\.defaultLocale' /etc/nixos/configuration.nix | head -n1)
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.$(whoami) = {
-    isNormalUser = true;
-    description = "user $(whoami)";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [ ] ++ pkgs.lib.optionals (builtins.pathExists ./local-pkgs.nix) (import ./local-pkgs.nix { pkgs = pkgs; });
-    shell = pkgs.zsh;
-  };
-
-  # Enable automatic login for the user.
-  services.getty.autologinUser = "$(whoami)";
+  users.users.$(whoami) = pkgs.lib.mkForce user;
 }
 EOF
