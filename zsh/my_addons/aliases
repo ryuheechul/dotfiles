@@ -351,11 +351,14 @@ alias chtsh='cht --shell'
 alias googler='googler -n 3'
 alias ddgr='ddgr -n 3'
 
-# bascially `home-manager switch` + extra depends on platforms
-# e.g. darwin will also do "switch" via nix-darwin
+# unifying interface of applying updated nix expressions for different systems
+alias switch-nix='home-manager switch' # this is default for a simple system that only uses home-manager
+# on darwin, it will also do "switch" via nix-darwin
 uname | xargs test "Darwin" = \
-  && alias switch-nix='home-manager switch; pushd "$my_dot_d/nix/darwin" && make switch; popd' \
-  || alias switch-nix='home-manager switch'
+  && alias switch-nix='home-manager switch; pushd "$my_dot_d/nix/darwin" && make switch; popd'
+# on nixos, rely on one script to do it all
+test -f /etc/nixos/configuration.nix \
+  && alias switch-nix='"$my_dot_d/bootstrap/foundation/nixos/switch.sh"'
 
 # commandify
 alias fulltimezsh='FORCE_LOAD_MY_ZSH_STUFF=1 timezsh'
