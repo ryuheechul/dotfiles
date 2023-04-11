@@ -40,7 +40,6 @@ in
       ./hm.nix
     ];
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.$(whoami) = pkgs.lib.mkForce user;
+  users.users.$(whoami) = user;
 }
 EOF
