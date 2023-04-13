@@ -108,7 +108,7 @@ with pkgs;
     # `xauth list`
     # `mcookie | xargs xauth add :0 .`
   ]
-++ ifEnv "MY_NIX_EXTRA_WSL" wsl
+++ ifEnv "WSL_DISTRO_NAME" wsl
   # add any package to try out (locally more permanent way than `nix-shell -p [package]`
 ++ lib.optionals (builtins.pathExists ./local-only.nix) (import ./local-only.nix { pkgs = pkgs; })
 # # this is actually not working great at least on ubuntu

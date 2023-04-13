@@ -169,4 +169,7 @@ ln -sf "${dfs_rhc}/SpaceVim.d" "${HOME}/.SpaceVim.d"
 # shim vimrc
 ln -sf "${HOME}/.SpaceVim" "${HOME}/.vim"
 
+# wudo in case of WSL
+test -n "${WSL_DISTRO_NAME}" && git clone https://github.com/Chronial/wsl-sudo.git "${HOME}/.wsl-sudo"
+
 echo "configuration.sh seemed to have run successfully!"

@@ -3,8 +3,6 @@ with pkgs;
 [
   wslu # A collection of utilities for Windows 10/11 Linux Subsystems
   # which comes with wslview to enable opening a browser on Windows from terminal
-  ruby # An object-oriented language for quick and easy programming
-  # and `schasse/tmux-jump` plugin requires it
   ## below are for virtual machine capabilities via:
   ## - virt-manager: to be a "front-end"
   ## - qemu: to provide kvm capabilities for hardware acceleration

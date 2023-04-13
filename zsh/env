@@ -1,5 +1,7 @@
 # vim: set ft=zsh:
 
+setopt no_global_rcs # prevent /etc/zshrc and /etc/zprofile to surprise me
+
 # go to ../nix/home/programs/shells.nix to edit what to source
 source "${HOME}/.nix-profile/etc/profile.d/hm-session-vars.sh"
 

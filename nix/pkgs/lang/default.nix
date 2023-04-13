@@ -6,6 +6,7 @@ let
   nix = import ./nix.nix { pkgs = pkgs; };
   nim = import ./nim.nix { pkgs = pkgs; };
   sql = import ./sql.nix { pkgs = pkgs; };
+  ruby = import ./ruby.nix { pkgs = pkgs; };
   rust = import ./rust.nix { pkgs = pkgs; };
   wasm = import ./wasm.nix { pkgs = pkgs; };
   java = import ./java.nix { pkgs = pkgs; };
@@ -20,6 +21,7 @@ let
   defaults = (
     nix
     ++ lua
+    ++ ruby
     ++ python
     ++ support # this is not for a language itself but to support the language related things
     ++ javascript

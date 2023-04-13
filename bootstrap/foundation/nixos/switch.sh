@@ -3,7 +3,9 @@
 curr_dir="$(dirname "$0")"
 pushd "${curr_dir}"
 
-./gen-files.sh
-sudo nixos-rebuild switch -I nixos-config=./configuration.nix
+./switch-nixos.sh
 
-# use https://gitlab.com/khumba/nvd to see the diff between generations
+# home-manager init and switch ("idempotent")
+../../../nix/bin/channels.sh
+../../../nix/bin/init-home-manager.sh
+home-manager switch

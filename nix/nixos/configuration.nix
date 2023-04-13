@@ -5,6 +5,7 @@
 
 let
   system-pkgs = import ./system-pkgs.nix { pkgs = pkgs; };
+  checkEnv = import ../utils/checkEnv.nix;
 in
 {
   imports =
@@ -13,12 +14,15 @@ in
       /etc/nixos/configuration.nix # will import `/etc/nixos/hardware-configuration.nix` too
     ];
 
+  # https://nixos.wiki/wiki/NTP
+  services.ntp.enable = true;
+
   # assuming it's a VM running via QEMU
   services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true;
 
   # Configure keymap in X11
-  services.xserver = {
+  services.xserver = if checkEnv "WSL_DISTRO_NAME" then { } else {
     enable = true;
     layout = "us";
     xkbVariant = "";
