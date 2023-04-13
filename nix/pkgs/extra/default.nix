@@ -12,6 +12,7 @@ let
   tf-helper = import ../custom/tf-helper.nix { pkgs = pkgs; };
   bat-riffle = import ../custom/bat-riffle { pkgs = pkgs; };
   alacritty-nightly = import ../custom/alacritty-nightly.nix;
+  wsl = import ./wsl.nix { pkgs = pkgs; };
 in
 with pkgs;
 [
@@ -107,25 +108,7 @@ with pkgs;
     # `xauth list`
     # `mcookie | xargs xauth add :0 .`
   ]
-++ ifEnv "MY_NIX_EXTRA_WSL"
-  [
-    wslu # A collection of utilities for Windows 10/11 Linux Subsystems
-    # which comes with wslview to enable opening a browser on Windows from terminal
-    ruby # An object-oriented language for quick and easy programming
-    # and `schasse/tmux-jump` plugin requires it
-    ## below are for virtual machine capabilities via:
-    ## - virt-manager: to be a "front-end"
-    ## - qemu: to provide kvm capabilities for hardware acceleration
-    ## - libvirt: to be a "back-end"
-    virt-manager # Desktop user interface for managing virtual machines
-    # qemu # A generic and open source machine emulator and virtualizer
-    # - above might not work as libvirt not be able to find a path
-    # - alternatively `apt-get install qemu-system-x86` (in case of debian/ubuntu)
-    # libvirt # A toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes
-    # - but wait libvirt will not work with non NixOS distros so in that case do something like below instead
-    # - `apt-get install libvirt-daemon-system` (in case of debian/ubuntu)
-    # - this also possibly requires logout and login (like terminating tmux server) for `libvirt` group to be effective
-  ]
+++ ifEnv "MY_NIX_EXTRA_WSL" wsl
   # add any package to try out (locally more permanent way than `nix-shell -p [package]`
 ++ lib.optionals (builtins.pathExists ./local-only.nix) (import ./local-only.nix { pkgs = pkgs; })
 # # this is actually not working great at least on ubuntu
