@@ -8,5 +8,8 @@ in
 with pkgs; [
   vim # would you rather use nano?
   nvd # Nix/NixOS package version diff tool
+  # https://www.reddit.com/r/linux_gaming/comments/ynue9u/comment/ivat383
+  glxinfo # Test utilities for OpenGL - `glxinfo -B`
+  glmark2 # OpenGL (ES) 2.0 benchmark
 ]
 ++ local-only
