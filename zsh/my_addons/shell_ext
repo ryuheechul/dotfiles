@@ -205,4 +205,12 @@ fi
 
 _tag base16
 
+# although home-manager might enable this,
+# it's also ignored by ../../nix/home/programs/shells.nix
+# hence relying on bash's one instead
+command_not_found_handler() {
+  # assuming bash has its own handler
+  bash -ic "${1}"
+}
+
 unfunction _tag

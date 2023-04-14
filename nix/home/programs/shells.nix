@@ -30,6 +30,8 @@ in
     printpath = ''echo ''${PATH} | tr ":" "\n"'';
   };
 
+  programs.command-not-found.enable = true;
+
   programs.bash = {
     # https://nix-community.github.io/home-manager/options.html#opt-programs.bash.enable
     enable = true;

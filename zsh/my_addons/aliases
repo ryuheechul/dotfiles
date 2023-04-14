@@ -188,6 +188,11 @@ alias gh='GLAMOUR_STYLE=$(theme-tone) gh'
 alias htop='btm -b'
 # overwrite essential stuff
 alias which='which -a'
+# follow the link of the command
+whichlink ()
+{
+  which $1 | xargs readlink
+}
 alias ping='gping'
 
 # human friendly df and du

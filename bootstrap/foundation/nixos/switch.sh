@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 curr_dir="$(dirname "$0")"
 pushd "${curr_dir}"
 

@@ -34,14 +34,10 @@ List of desktop/apps that didn't work:
 ## Explain
 
 - assumed `/etc/nixos/configuration.nix` is good default to start with
-- real meat is at `../../../nix/nixos/`
-- `./gen-configuration.sh` will generate `./hm.nix` and `./configuration.nix` to glue
-  everything together
+- real meat is at `../../../nix/nixos/`, read `../../../nix/nixos/README.md` for
+  further information
+- `./gen-configuration.sh` will generate `./hm.nix` and `./configuration.nix` to
+  glue everything together
 - `./hm.nix` basically links to `../../../nix/home`
-- `./switch.sh` will run `./gen-configuration.sh` and run `nixos-rebuild` with the
-  generated files
-
-## Resources
-
-- https://nixos.wiki/wiki/NixOS_as_a_desktop
-- https://github.com/mikeroyal/NixOS-Guide
+- `./switch.sh` will run `./gen-configuration.sh` and run `nixos-rebuild` with
+  the generated files
