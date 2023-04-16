@@ -210,7 +210,7 @@ _tag base16
 # hence relying on bash's one instead
 command_not_found_handler() {
   # assuming bash has its own handler
-  bash -ic "${1}"
+  bash -ic "command_not_found_handle ${1}"
 }
 
 unfunction _tag
