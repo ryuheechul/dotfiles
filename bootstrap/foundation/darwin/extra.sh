@@ -53,6 +53,7 @@ _install_cask 1password
 _install_cask amethyst
 _install_cask google-chrome
 _install_cask notion
+_install_cask utm
 _install_cask logseq
 _install_cask sublime-text; ./sublime/.link.sh
 _install_cask secretive
