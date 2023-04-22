@@ -13,6 +13,7 @@ let
   bat-riffle = import ../custom/bat-riffle { pkgs = pkgs; };
   alacritty-nightly = import ../custom/alacritty-nightly.nix;
   wsl = import ./wsl.nix { pkgs = pkgs; };
+  rsop = import ../custom/rsop.nix { pkgs = pkgs; };
 in
 with pkgs;
 [
@@ -67,6 +68,7 @@ with pkgs;
   ]
 ++ ifEnv "MY_NIX_EXTRA_BAT"
   (with bat-extras; [
+    rsop # Simple, fast & configurable tool to open and preview files
     batman
     batgrep
     batdiff

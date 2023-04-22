@@ -87,6 +87,7 @@ with pkgs;
   vivid # LS_COLORS generator
   exa # modern ls
   bat # cat with wings
+  hexyl # A command-line hex viewer - to supplement `xxd`, `hexdump`
   glow # markdown render on cli
   lf # terminal file manager
   fx # json viewer
