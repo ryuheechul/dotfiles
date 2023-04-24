@@ -442,3 +442,6 @@ inspect-home-manager ()
 }
 
 alias inspect-bash='/bin/bash -lixc exit 2>&1 | sed -n "s/^+* \(source\|\.\) //p"' # via https://stackoverflow.com/a/65922714/1570165
+
+# mimic `command-not-found` via `nix-index` shell hook when it's not available
+test -z "${commands[command-not-found]}" && alias command-not-found='bash -ic '

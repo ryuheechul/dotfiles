@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 let
   env-vars = config.home.sessionVariables;
@@ -20,7 +20,7 @@ in
   # I don't like that these goes after $PATH not before - let me think about a workaround
   # and of course the related issues can be found here! - https://github.com/nix-community/home-manager/issues/3324
   home.sessionPath = [
-    "$XDG_CONFIG_HOME/dfs-rhc/bin/path/default"
+    ''''${XDG_CONFIG_HOME}/dfs-rhc/bin/path/default''
   ];
 
   # only the super basic ones that should be shared across shells
@@ -30,7 +30,15 @@ in
     printpath = ''echo ''${PATH} | tr ":" "\n"'';
   };
 
-  programs.command-not-found.enable = true;
+  programs.command-not-found = {
+    enable = ! pkgs.stdenv.isDarwin;
+  };
+
+  # fallback to nix-index on darwin in place of command-not-found
+  # https://github.com/bennofs/nix-index#usage-as-a-command-not-found-replacement
+  programs.nix-index = {
+    enable = pkgs.stdenv.isDarwin;
+  };
 
   programs.bash = {
     # https://nix-community.github.io/home-manager/options.html#opt-programs.bash.enable
