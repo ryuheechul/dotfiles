@@ -428,26 +428,17 @@ alias grephistory='history | sort --reverse | sed "s/^\s*[0-9]*[*]*\s*//" | awk 
 #       | trailing newline |                                | selected     | clipboard ;
 # *about uniq for unsorted - https://github.com/junegunn/fzf/issues/270#issuecomment-1301876481
 
-## these are replaced by ../../bin/local/pb[paste|copy]
-#
-# # bring `pbcopy` and `pbpaste` to linux
-# test -z "${commands[pbcopy]}" \
-#   && alias pbcopy='xsel -i -b'
-#
-# test -z "${commands[pbpaste]}" \
-#   && alias pbpaste='xsel -o -b'
+# debug helpers
+latest-path-home-manager ()
+{
+  local gen="$(home-manager generations | head -n1 | awk '{ print $5; }')"
+  echo "/nix/var/nix/profiles/per-user/${USER}/home-manager-${gen}-link"
+}
 
-## legacy
-#
-# alias ccat="ccat -G Keyword=\"darkgreen\" -G Plaintext=\"ellow\" -G Tag=\"fuchsia\" -G HTMLAttrName=\"darkteal\" -G Decimal=\"yellow\" -G Punctuation=\"lightgray\" --color=always"
-#
-# alias gmacs="open -a /Applications/Emacs.app"
-# alias cmacs="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n ."
-#
-# alias clj-repl='docker run -i -t pandeiro/lein repl'
-#
-# alias muxl="mux local"
-# alias muxk="tmux kill-session -t"
-# alias muxle="vi .tmuxinator.yml"
-# alias muxs="mux start"
-# alias muxe="mux open"
+inspect-home-manager ()
+{
+  latest-path-home-manager | xargs -I _ zsh -c 'tree '_'/'
+  latest-path-home-manager | xargs lf
+}
+
+alias inspect-bash='/bin/bash -lixc exit 2>&1 | sed -n "s/^+* \(source\|\.\) //p"' # via https://stackoverflow.com/a/65922714/1570165
