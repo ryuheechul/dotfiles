@@ -222,7 +222,7 @@ local config = function()
     t = {
       name = '+UI Toggles',
       b = { toggle_bg, 'toggle-background' },
-      f = { cmdify 'NvimTreeToggle', 'toggle file tree' },
+      f = { cmdify 'Lf', 'toggle lf' },
       l = { cmdify 'set list!', 'toggle-hidden-listchars' },
     },
   }, { prefix = '<Space>' })

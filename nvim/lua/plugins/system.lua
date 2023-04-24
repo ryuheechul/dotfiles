@@ -77,6 +77,22 @@ return {
       end
     end,
   },
+  { -- Lf file manager for Neovim (in Lua)
+    'lmburns/lf.nvim',
+    opts = {
+      border = 'rounded',
+      winblend = 20,
+      highlights = {
+        NormalFloat = {
+          guibg = '', -- "normalize"
+        },
+        FloatBorder = {
+          guifg = '#aaaaaa',
+        },
+      },
+    },
+    dependencies = { 'plenary.nvim', 'toggleterm.nvim' },
+  },
   { -- A file explorer tree for neovim written in lua
     'nvim-tree/nvim-tree.lua',
     event = 'VeryLazy',

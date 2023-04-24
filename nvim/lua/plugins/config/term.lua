@@ -55,10 +55,10 @@ return function()
       -- see :h nvim_win_open for details on borders however
       -- the 'curved' border is a custom border type
       -- not natively supported but implemented in this plugin.
-      border = 'single', -- | 'double' | 'shadow' | 'curved' | ... other options supported by win open
+      border = 'rounded', -- | 'single' | 'double' | 'shadow' | 'curved' | ... other options supported by win open
       width = calc_length('columns', 0.6),
       height = calc_length('lines', 0.6),
-      winblend = 0,
+      winblend = 20,
       highlights = {
         border = 'Normal',
         background = 'Normal',
