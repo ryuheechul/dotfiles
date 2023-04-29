@@ -240,6 +240,10 @@ return {
       -- to give a feedback on search area
       vim.api.nvim_set_hl(0, 'LeapBackdrop', { bold = true })
 
+      -- https://github.com/ggandor/leap.nvim#faq
+      vim.keymap.del({ 'x', 'o' }, 'x')
+      vim.keymap.del({ 'x', 'o' }, 'X')
+
       -- to give feedback on first two characters I'm searching for
       require('leap').opts.highlight_unlabeled_phase_one_targets = true
     end,
