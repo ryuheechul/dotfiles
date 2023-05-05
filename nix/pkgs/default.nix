@@ -135,4 +135,5 @@ with pkgs;
 ]
 ++ (import ./lang { pkgs = pkgs; })
 ++ (import ./fonts { pkgs = pkgs; })
+++ (import ./linux.nix { pkgs = pkgs; })
 ++ (import ./extra/default.nix { pkgs = pkgs; })
