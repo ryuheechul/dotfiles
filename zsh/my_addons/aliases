@@ -194,11 +194,6 @@ alias man='man -i'
 alias htop='btm -b'
 # overwrite essential stuff
 alias which='which -a'
-# follow the link of the command
-whichlink ()
-{
-  which $1 | xargs readlink
-}
 alias ping='gping'
 
 # human friendly df and du
@@ -439,6 +434,19 @@ inspect-home-manager ()
 {
   latest-path-home-manager | xargs -I _ zsh -c 'tree '_'/'
   latest-path-home-manager | xargs lf
+}
+
+# follow the link of the command
+# useful to trace symlinked binaries the ones from nixpkgs
+which-trace ()
+{
+  which $1 | xargs realpath
+}
+
+# useful to browse other binaries in the same directory
+which-browse ()
+{
+  which-trace $1 | xargs lf
 }
 
 alias inspect-bash='/bin/bash -lixc exit 2>&1 | sed -n "s/^+* \(source\|\.\) //p"' # via https://stackoverflow.com/a/65922714/1570165
