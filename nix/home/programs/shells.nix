@@ -47,8 +47,8 @@ in
     # for non-interactive (and interactive)
     bashrcExtra = ''
       # to set env vars and ''$PATH
-      # this actually gets done by ~/.profile which hm generates
-      # source "''${HOME}/.nix-profile/etc/profile.d/hm-session-vars.sh"
+      # making sure to source below (this actually gets done sometimes but not all the time by ~/.profile which hm generates)
+      source "''${HOME}/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
       # sometimes this gets done by /etc/bashrc (the sourcing ending with `set-environment`)
       # but not all platforms work that way - so this is the fallback
