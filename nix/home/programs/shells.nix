@@ -67,6 +67,12 @@ in
       # to prevent zsh to miss this in case bash was the first one to load
       unset __HM_SESS_VARS_SOURCED
     '';
+
+    # I'm treating this like `.zlogin` and delegating handling ssh login shell case
+    # to zsh in case zsh is not the default shell
+    profileExtra = ''
+      test -n "''${SSH_TTY}" && source "''${my_dot_d}/nix/bin/source/nix.sh" && exec zsh -l
+    '';
   };
 
   programs.zsh = {
