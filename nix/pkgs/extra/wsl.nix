@@ -1,6 +1,7 @@
 { pkgs }:
 with pkgs;
 [
+  socat # for ../../../zsh/integration/agent-bridge-via-1p
   wslu # A collection of utilities for Windows 10/11 Linux Subsystems
   # which comes with wslview to enable opening a browser on Windows from terminal
   ## below are for virtual machine capabilities via:
