@@ -10,6 +10,15 @@ with pkgs; [
   nvd # Nix/NixOS package version diff tool
   # https://www.reddit.com/r/linux_gaming/comments/ynue9u/comment/ivat383
   glxinfo # Test utilities for OpenGL - `glxinfo -B`
+  libdrm # for drmdevice
+  drm_info # Small utility to dump info about DRM devices
+  libva-utils # for vainfo
+  intel-gpu-tools # for intel_gpu_top
+  pciutils # for `lspci`
+  kmod # for `modinfo`
   glmark2 # OpenGL (ES) 2.0 benchmark
+  usbutils # for lsusb
+  lshw
+  lsscsi
 ]
 ++ local-only

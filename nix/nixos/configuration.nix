@@ -17,6 +17,11 @@ in
   # https://nixos.wiki/wiki/NTP
   services.ntp.enable = true;
 
+  # https://nixos.wiki/wiki/Fonts
+  fonts.fonts = with pkgs;[
+    noto-fonts-emoji # Color and Black-and-White emoji fonts
+  ];
+
   # assuming it's a VM running via QEMU
   services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true;
