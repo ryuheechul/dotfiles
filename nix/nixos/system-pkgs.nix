@@ -13,12 +13,15 @@ with pkgs; [
   libdrm # for drmdevice
   drm_info # Small utility to dump info about DRM devices
   libva-utils # for vainfo
-  intel-gpu-tools # for intel_gpu_top
   pciutils # for `lspci`
   kmod # for `modinfo`
   glmark2 # OpenGL (ES) 2.0 benchmark
   usbutils # for lsusb
+  lsof
   lshw
   lsscsi
+]
+++ lib.optionals stdenv.isx86_64 [
+  intel-gpu-tools # for intel_gpu_top
 ]
 ++ local-only
