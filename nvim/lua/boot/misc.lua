@@ -109,3 +109,7 @@ vim.env.NVIM_LISTEN_ADDRESS = vim.v.servername
 -- a subset extracted from https://github.com/sheerun/vim-polyglot/blob/bc8a81d3592dab86334f27d1d43c080ebf680d42/autoload/polyglot/init.vim#L2704
 vim.opt.autoread = true -- Reload unchanged files automatically.
 vim.opt.shortmess:append 'A' -- This is needed to avoid swapfile warning when auto-reloading
+
+-- to use host nvim instead of creating another nvim process
+-- mainly for `lf.nvim` plugin at ../plugins/system.lua
+vim.env.EDITOR = 'editor-in-nvim'
