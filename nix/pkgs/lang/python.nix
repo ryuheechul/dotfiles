@@ -1,5 +1,9 @@
 { pkgs }:
 
+let
+  checkEnv = import ../../utils/checkEnv.nix;
+  ifEnv = envName: pkgs.lib.optionals (checkEnv envName);
+in
 with pkgs;
 let
   python-with-pkgs = python3.withPackages (python-packages: with python-packages; [
@@ -18,6 +22,8 @@ let
     autoflake
     isort
     coverage
+  ] ++ ifEnv "MY_NIX_EXTRA_LANG_PYTHON_JUPYTER" [
+    jupyter # The Jupyter HTML notebook is a web-based notebook environment for interactive computing
   ]);
   via-npm = (
     with nodePackages; [
