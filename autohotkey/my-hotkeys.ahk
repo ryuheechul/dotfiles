@@ -50,6 +50,7 @@ Space::Space ; without this Space will not work
 !v::Send, ^v ; paste
 !s::Send, ^s ; save
 !t::Send, ^t ; new tab
+!k::Send, ^k ; usually quick access or search on my websites
 !f::Send, ^f ; find
 !g::Send, ^g ; next item (usually with) find
 !+g::Send, ^+g ; previous item (usually with) find
