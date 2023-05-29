@@ -16,6 +16,7 @@ return {
       vim.keymap.set('n', 'gt', ':Trouble<CR>', { noremap = true, silent = true, desc = 'Trouble' })
     end,
     opts = {
+      position = 'top',
       action_keys = {
         hover = 'gk',
       },
