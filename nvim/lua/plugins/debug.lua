@@ -16,12 +16,13 @@ return {
       vim.keymap.set('n', 'gt', ':Trouble<CR>', { noremap = true, silent = true, desc = 'Trouble' })
     end,
     opts = {
-      position = 'top',
+      position = 'bottom',
       action_keys = {
         hover = 'gk',
       },
       auto_open = true,
       auto_close = true,
+      auto_preview = false, -- this being up could cause the feeling of cursors jumping around with auto_open/close
     },
     event = 'VeryLazy',
   },
