@@ -294,6 +294,9 @@ alias vv='grt; v; popd' # basically - `git rev-parse --show-toplevel || echo . |
 # 3. my dotfiles
 alias dot='pushd "${my_dot_d}"; v; popd'
 
+# similar to `v` but with code searching via `cs`
+alias c='cs | xargs ${EDITOR}'
+
 # useful when the status of lazy.nvim seems not clean
 # for now, it only print the command not run
 alias clean-nvim-cmd='echo "rm -rf  ~/.local/share/nvim/lazy ~/.cache/nvim/lazy"'
