@@ -24,7 +24,7 @@ map <enter> push l
 # f will fuzzy search file and open with nvim
 map f $$EDITOR $(fzf)
 # e will open the file with $EDITOR
-map e $eval $EDITOR '$f' # use this since somehow the pure version, `map e $$EDITOR "$f"` doesn't work very well
+map e $eval $EDITOR "'$f'" # use this since somehow the pure version, `map e $$EDITOR "$f"` doesn't work very well
 
 # explanation about the above
 # first $ to indicate the start of command
