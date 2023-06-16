@@ -18,4 +18,6 @@ in
 [
   packages.neovim
   import-js
+  # for https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#eslint
+  packages.vscode-langservers-extracted
 ]

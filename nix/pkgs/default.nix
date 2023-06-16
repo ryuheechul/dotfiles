@@ -54,7 +54,7 @@ with pkgs;
 # editor - mostly for neovim
 [
   # emacs editor including GUI, `emacs -nw` to run as TUI
-  ((emacsPackagesFor (emacs.override { nativeComp = true; })).emacsWithPackages (epkgs: [ epkgs.vterm ]))
+  ((emacsPackagesFor (emacs.override { withNativeCompilation = true; })).emacsWithPackages (epkgs: [ epkgs.vterm ]))
   # above replace `emacs` to enable the use of libvterm
   neovim # my favorite editor
   neovim-remote # 👌 Support for --remote and friends.

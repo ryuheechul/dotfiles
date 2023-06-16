@@ -1,4 +1,5 @@
 [
-	"neovim",
-	"import-js"
+  "neovim",
+  "import-js",
+  "vscode-langservers-extracted"
 ]
