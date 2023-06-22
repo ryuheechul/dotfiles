@@ -309,16 +309,18 @@ alias emacsclient="emacsclient -nw -c -a ''"
 # in terms of being able to activate the window like any other app on macOS
 typeset -f emacs &> /dev/null && unfunction emacs
 function emacs () {
-  if test $# -eq 0; then
-    if test -n "${SSH_CONNECTION}"; then
-      emacsclient
-    elif uname | xargs test "Darwin" =; then
-      "${my_dot_d}/bin/path/darwin/open-gui-emacs"
-    else
-      emacsclient
-    fi
+  if test -n "${SSH_CONNECTION}"; then
+    env emacs -nw ${@} # use `emacs` instead of `emacsclient` on SSH connection
   else
-    emacsclient ${@}
+    if test $# -eq 0; then
+      if uname | xargs test "Darwin" =; then
+        "${my_dot_d}/bin/path/darwin/open-gui-emacs"
+      else
+        emacsclient
+      fi
+    else
+      emacsclient ${@}
+    fi
   fi
 }
 
