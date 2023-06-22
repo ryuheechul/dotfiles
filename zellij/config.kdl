@@ -3,6 +3,7 @@
 env {
   UNSET_ALL_MY_ZSH_STUFF_LOADED 1
   UNSET_HOST_ALWAYS_USE_TMUX 1
+  COLORTERM "truecolor"
 }
 
 keybinds {
