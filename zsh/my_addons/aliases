@@ -195,6 +195,7 @@ alias htop='btm -b'
 # overwrite essential stuff
 alias which='which -a'
 alias ping='gping'
+alias ip='ip -c'
 
 # human friendly df and du
 alias df='duf'
