@@ -1,0 +1,988 @@
+%YAML 1.2
+---
+# this is extracted from https://github.com/bathos/wast-sublime-syntax/blob/6e75655c467534a4b978a87cc854cc8fe3998f08/wast.sublime-syntax
+
+name: WAST (WebAssembly Text)
+file_extensions: [ 'wast', 'wat' ]
+scope: source.wast
+
+variables:
+  CALLIN: 'call_indirect{{IDTERM}}'
+  CALLOP: 'call{{IDTERM}}'
+  DECFLT: '{{DECNUM}}(?=[Ee.])(?:\.{{DECFRC}})?(?:[Ee][+-]?{{DECNUM}})?'
+  DECFRC: (?:{{DECNUM}})?
+  DECNUM: '\d(_?\d)*'
+  DROPSL: '(?:drop|select){{IDTERM}}'
+  FLOATC: 'f(?:32|64)\.(?:a(?:bs|dd)|c(?:eil|o(?:nvert_(?:(?:[su]/i(?:32|64))|(?:i(?:32|64)_[su]))|pysign))|div|eq|floor|[gl][et]|m(?:ax|in|ul)|ne(?:arest|g)?|s(?:qrt|ub)|trunc)'
+  FLOATO: 'f32\.(?:reinterpret_i32|demote_f64)|f64\.(?:promote_f32|reinterpret_i64)'
+  FLOATP: '[+-]?(?:inf|nan(?::0x{{HEXNUM}})?|{{HEXFLT}}|{{DECFLT}}){{IDTERM}}'
+  FLOW_1: '(?:nop|return|unreachable){{IDTERM}}'
+  FLOW_2: '(?:br(?:_if)?|throw|rethrow){{IDTERM}}'
+  FLOW_3: 'br_table{{IDTERM}}'
+  HEXFLT: '0x{{HEXNUM}}(?=[Pp.])(\.{{HEXFRC}})?(?:[Pp][+-]?{{DECNUM}})?'
+  HEXFRC: (?:{{HEXNUM}})?
+  HEXNUM: '\h(_?\h)*'
+  IDCHAR: '[!-~&&[^"'',;{}()\[\]]]'
+  IDNAME: '\${{IDCHAR}}+'
+  IDTERM: '(?!{{IDCHAR}})'
+  INTERC: 'i(?:32|64)\.(?:a[dn]d|c[lt]z|div_[su]|eqz?|[gl][et]_[su]|mul|ne|or|popcnt|r(?:em_[su]|ot[lr])|s(?:h(l|r_[su])|ub)|trunc_(?:(?:[su]/f(?:32|64))|(?:f(?:32|64)_[su]))|xor)'
+  INTERG: '[+-]?(?:0x{{HEXNUM}}|{{DECNUM}}){{IDTERM}}'
+  INTERO: 'i32\.(?:reinterpret_f32|trunc_f(?:32|64)_[su]|wrap_i64)|i64\.(?:extend_i32_[su]|trunc_f(?:32|64)_[su]|reinterpret[/_]f64)'
+  MEMOPS: '(?:f(?:32|64)\.(?:load|store)|i(?:32|64)\.(?:load(?:(?:8_|16_)[su])?|store(?:8|16)?)|i64\.(?:load32_[su]|store32)){{IDTERM}}'
+  MEMOP2: 'memory\.(?:grow|size){{IDTERM}}'
+  NCONST: '[fi](?:32|64)\.const{{IDTERM}}'
+  NUMOPS: '(?:{{FLOATC}}|{{FLOATO}}|{{INTERC}}|{{INTERO}}){{IDTERM}}'
+  STARTS: '(\(){{WHITES}}*(start){{IDTERM}}'
+  UINTER: '(?:0x{{HEXNUM}}|{{DECNUM}}){{IDTERM}}'
+  VALTYP: '[fi](?:32|64){{IDTERM}}'
+  VAROPS: '(?:(?:global|local)\.(?:get|set))|(?:local\.tee){{IDTERM}}'
+  WHITES: '[ \n\r\t]'
+
+contexts:
+  abbreviated_export:
+    - match: '(\(){{WHITES}}*(export){{IDTERM}}'
+      captures:
+        1: punctuation.definition.export.begin.wast
+        2: keyword.other.export.wast
+      push:
+        - - meta_scope: meta.s-expression.export.wast
+          - match: '\)'
+            scope: punctuation.definition.export.end.wast
+            pop: true
+        - - match: '"'
+            scope: punctuation.definition.string.begin.wast
+            set:
+              - - meta_scope: string.quoted.double.wast entity.name.export.wast
+                - include: string
+          - match: '.'
+            scope: invalid.illegal.wast
+    - match: '(?=.)'
+      pop: true
+  funcref:
+    - match: 'funcref{{IDTERM}}'
+      scope: support.type.wast
+      pop: true
+    - match: '.'
+      scope: invalid.illegal.wast
+  block_end:
+    - meta_scope: meta.block.wast
+    - match: 'end{{IDTERM}}'
+      scope: keyword.control.flow.wast
+      pop: true
+    - match: '.'
+      scope: invalid.illegal.wast
+  comment_block:
+    - meta_include_prototype: false
+    - meta_scope: comment.block.wast
+    - match: ';\)'
+      scope: punctuation.definition.comment.end.wast
+      pop: true
+    - match: '\(;'
+      scope: punctuation.definition.comment.begin.wast
+      push: comment_block
+  constant_expression:
+    # This is a narrow subset of "expression" permitting only one "constant" or
+    # "global.get" instruction. There are a few places where the grammar
+    # indicates "expression" but where this constraint is then enforced at a
+    # higher level. For simplicity I’ve added this artificial production; even
+    # though the constraint it describes is technically not syntactic, it
+    # _could_ have been, and from a user perspective, it may as well be.
+    - match: '\('
+      scope: punctuation.definition.expression.begin.wast
+      set:
+        - - meta_scope: meta.s-expression.expression.wast
+          - match: '\)'
+            scope: punctuation.definition.expression.end.wast
+            pop: true
+          - match: '.'
+            scope: invalid.illegal.wast
+        - - include: constant_expression_instr
+    - include: constant_expression_instr
+  constant_expression_instr:
+    - match: 'global.get{{IDTERM}}'
+      scope: support.function.variable.wast
+      set: reference
+    - match: '{{NCONST}}'
+      scope: support.function.numeric.wast
+      set: number
+    - match: '.'
+      scope: invalid.illegal.wast
+  else:
+    - match: 'else{{IDTERM}}'
+      scope: keyword.control.conditional.wast
+      set: [ instructions, label ]
+    - match: '(?=.)'
+      pop: true
+  function_abbr_or_type:
+    - match: '(\(){{WHITES}}*(import){{IDTERM}}'
+      captures:
+        1: punctuation.definition.import.begin.wast
+        2: keyword.other.import.wast
+      set: [ typeuse, import_end, import_names ]
+    - match: '(?=.)'
+      set: [ instructions, locals, typeuse ]
+  function_end:
+    - meta_scope: meta.s-expression.function.wast
+    - match: '\)'
+      scope: punctuation.definition.function.end.wast
+      pop: true
+    - match: '.'
+      scope: invalid.illegal.wast
+  function_name:
+    - match: '({{IDNAME}})|()'
+      captures:
+        1: entity.name.function.wast
+        2: meta.symbol-helper.anonymous-function
+      pop: true
+  global_end:
+    - meta_scope: meta.s-expression.global.wast
+    - match: '\)'
+      scope: punctuation.definition.global.end.wast
+      pop: true
+    - match: '.'
+      scope: invalid.illegal.wast
+  global_import:
+    - match: '(\(){{WHITES}}*(import){{IDTERM}}'
+      captures:
+        1: punctuation.definition.import.begin.wast
+        2: keyword.other.import.wast
+      set: [ globaltype, import_end, import_names ]
+    - match: (?=.)
+      set:
+        - - include: constant_expression
+        - - include: globaltype
+  global_name:
+    - match: '({{IDNAME}})|'
+      captures:
+        1: variable.other.wast
+      pop: true
+  globaltype:
+    - match: '(\(){{WHITES}}*(mut){{IDTERM}}'
+      captures:
+        1: punctuation.definition.globaltype.begin.wast
+        2: storage.modifier.mutable.wast
+      set:
+        - - meta_scope: meta.s-expression.globaltype.wast
+          - match: '\)'
+            scope: punctuation.definition.globaltype.end.wast
+            pop: true
+          - match: '.'
+            scope: invalid.illegal.wast
+        - valtype
+    - include: valtype
+  if_else_end:
+    - meta_scope: meta.block.conditional.wast
+    - match: 'end{{IDTERM}}'
+      scope: keyword.control.conditional.wast
+      pop: true
+    - match: '.'
+      scope: invalid.illegal.wast
+  label:
+    - match: '{{IDNAME}}'
+      scope: entity.name.statement.wast
+      pop: true
+    - match: '(?=.)'
+      pop: true
+  limit:
+    - match: '{{DECNUM}}'
+      scope: meta.group.limit.wast constant.numeric.integer.wast
+      set:
+        - - match: '({{DECNUM}})|'
+            captures:
+              1: meta.group.limit.wast constant.numeric.integer.wast
+            pop: true
+    - match: '.'
+      scope: invalid.illegal.wast
+  locals:
+    - match: '(\(){{WHITES}}*(local){{IDTERM}}'
+      captures:
+        1: punctuation.definition.local.begin.wast
+        2: storage.type.constant.wast storage.type.local.wast
+      push:
+        - - meta_scope: meta.s-expression.local.wast
+          - match: '\)'
+            scope: punctuation.definition.local.end.wast
+            pop: true
+          - match: '.'
+            scope: invalid.illegal.wast
+        - - match: '{{IDNAME}}'
+            scope: variable.other.readwrite.wast
+            set: valtype
+          - match: '{{VALTYP}}'
+            scope: support.type.wast
+            set:
+              - match: '{{VALTYP}}'
+                scope: support.type.wast
+              - match: '(?=.)'
+                pop: true
+          - match: '.'
+            scope: invalid.illegal.wast
+    - match: '(?=.)'
+      pop: true
+  import_desc:
+    - match: '(\(){{WHITES}}*(func){{IDTERM}}'
+      captures:
+        1: punctuation.definition.function.begin.wast
+        2: storage.modifier.wast
+      set: [ function_end, typeuse, function_name ]
+    - match: '(\(){{WHITES}}*(global){{IDTERM}}'
+      captures:
+        1: punctuation.definition.global.begin.wast
+        2: storage.modifier.wast
+      set: [ global_end, globaltype, global_name ]
+    - match: '(\(){{WHITES}}*(memory){{IDTERM}}'
+      captures:
+        1: punctuation.definition.memory.begin.wast
+        2: storage.modifier.wast
+      set: [ memory_end, limit, memory_name ]
+    - match: '(\(){{WHITES}}*(table){{IDTERM}}'
+      captures:
+        1: punctuation.definition.table.begin.wast
+        2: storage.modifier.wast
+      set: [ table_end, funcref, limit, table_name ]
+    - match: '.'
+      scope: invalid.illegal.wast
+  import_end:
+    - meta_scope: meta.s-expression.import.wast
+    - match: '\)'
+      scope: punctuation.definition.import.end.wast
+      pop: true
+    - match: '.'
+      scope: invalid.illegal.wast
+  import_names:
+    - match: '"'
+      scope: punctuation.definition.string.begin.wast
+      set:
+        - - match: '"'
+            scope: punctuation.definition.string.begin.wast
+            set:
+              - - meta_scope: string.quoted.double.wast entity.name.module.import.wast
+                - include: string
+          - match: '.'
+            scope: invalid.illegal.wast
+        - - meta_scope: string.quoted.double.wast entity.name.module.wast
+          - include: string
+    - match: '.'
+      scope: invalid.illegal.wast
+  instructions:
+    - match: 'block{{IDTERM}}'
+      scope: keyword.control.flow.wast
+      push: [ label, block_end, instructions, resulttype, label ]
+    - match: 'loop{{IDTERM}}'
+      scope: keyword.control.flow.wast
+      push: [ label, loop_end, instructions, resulttype, label ]
+    - match: 'if{{IDTERM}}'
+      scope: keyword.control.conditional.wast
+      push: [ label, if_else_end, else, instructions, resulttype, label ]
+    - match: 'try{{IDTERM}}'
+      scope: keyword.control.flow.wast
+      push: [ label, try_catch_delegate, instructions, resulttype, label ]
+    - include: instructions_plain
+    - include: instructions_folded
+  instructions_folded:
+    - match: '(\(){{WHITES}}*(block){{IDTERM}}'
+      captures:
+        1: punctuation.definition.block.begin.wast
+        2: keyword.control.flow.wast
+      push:
+        - - meta_scope: meta.s-expression.instruction.wast
+          - match: '\)'
+            scope: punctuation.definition.block.end.wast
+            pop: true
+        - instructions
+        - resulttype
+        - label
+    - match: '(\(){{WHITES}}*(loop){{IDTERM}}'
+      captures:
+        1: punctuation.definition.block.loop.begin.wast
+        2: keyword.control.flow.wast
+      push:
+        - - meta_scope: meta.s-expression.instruction.wast
+          - match: '\)'
+            scope: punctuation.definition.block.loop.end.wast
+            pop: true
+        - instructions
+        - resulttype
+        - label
+    - match: '(\(){{WHITES}}*(if){{IDTERM}}'
+      captures:
+        1: punctuation.definition.block.conditional.begin.wast
+        2: keyword.control.conditional.wast
+      push:
+        - - meta_scope: meta.s-expression.instruction.wast
+          - match: '\)'
+            scope: punctuation.definition.block.conditional.end.wast
+            pop: true
+        - - match: '\('
+            scope: punctuation.definition.block.conditional.begin.wast
+            set:
+              - - meta_scope: meta.s-expression.instruction.wast
+                - match: '\)'
+                  scope: punctuation.definition.block.conditional.end.wast
+                  pop: true
+              - instructions
+              - - match: 'else{{IDTERM}}'
+                  scope: keyword.control.conditional.wast
+                  pop: true
+                - match: '.'
+                  scope: invalid.illegal.wast
+          - match: '(?=.)'
+            pop: true
+        - - match: '\('
+            scope: punctuation.definition.block.conditional.begin.wast
+            set:
+              - - meta_scope: meta.s-expression.instruction.wast
+                - match: '\)'
+                  scope: punctuation.definition.block.conditional.end.wast
+                  pop: true
+              - instructions
+              - - match: 'then{{IDTERM}}'
+                  scope: keyword.control.conditional.wast
+                  pop: true
+                - match: '.'
+                  scope: invalid.illegal.wast
+          - match: '.'
+            scope: invalid.illegal.wast
+        - instructions_folded
+        - resulttype
+        - label
+    - match: '(\(){{WHITES}}*(try){{IDTERM}}'
+      captures:
+        1: punctuation.definition.block.begin.wast
+        2: keyword.control.flow.wast
+      push:
+        - - meta_scope: meta.s-expression.instruction.wast
+          - match: '\)'
+            scope: punctuation.definition.block.end.wast
+            pop: true
+          - match: '(\(){{WHITES}}*(do){{IDTERM}}'
+            captures:
+              1: punctuation.definition.block.begin.wast
+              2: keyword.control.flow.wast
+            push:
+              - - meta_scope: meta.s-expression.instruction.wast
+                - match: '\)'
+                  scope: punctuation.definition.block.end.wast
+                  pop: true
+              - instructions
+          - match: '(\(){{WHITES}}*(delegate){{IDTERM}}'
+            captures:
+              1: punctuation.definition.block.begin.wast
+              2: keyword.control.flow.wast
+            push:
+              - - meta_scope: meta.s-expression.instruction.wast
+                - match: '\)'
+                  scope: punctuation.definition.block.end.wast
+                  pop: true
+              - reference
+          - match: '(\(){{WHITES}}*(catch){{IDTERM}}'
+            captures:
+              1: punctuation.definition.block.begin.wast
+              2: keyword.control.flow.wast
+            push:
+              - - meta_scope: meta.s-expression.instruction.wast
+                - match: '\)'
+                  scope: punctuation.definition.block.end.wast
+                  pop: true
+              - instructions
+              - reference
+          - match: '(\(){{WHITES}}*(catch_all){{IDTERM}}'
+            captures:
+              1: punctuation.definition.block.begin.wast
+              2: keyword.control.flow.wast
+            push:
+              - - meta_scope: meta.s-expression.instruction.wast
+                - match: '\)'
+                  scope: punctuation.definition.block.end.wast
+                  pop: true
+              - instructions
+        - resulttype
+        - label
+    - match: '(\(){{WHITES}}*(pop){{IDTERM}}'
+      captures:
+        1: punctuation.definition.instruction.begin.wast
+        2: support.function.numeric.wast
+      push:
+        - - meta_scope: meta.s-expression.instruction.wast
+          - match: '\)'
+            scope: punctuation.definition.instruction.end.wast
+            pop: true
+          - match: '.'
+            scope: invalid.illegal.wast
+        - - match: '{{VALTYP}}'
+            scope: support.type.wast
+          - match: '(?=.)'
+            pop: true
+    # The lookahead here is a hack for if-then to avoid more copypasta contexts
+    - match: '\((?!{{WHITES}}*then{{IDTERM}})'
+      scope: punctuation.definition.instruction.begin.wast
+      push:
+        - - meta_scope: meta.s-expression.instruction.wast
+          - match: '\)'
+            scope: punctuation.definition.instruction.end.wast
+            pop: true
+          - match: '.'
+            scope: invalid.illegal.wast
+        - instructions_folded
+        - instructions_plain_pop
+    - match: '(?=.)'
+      pop: true
+  instructions_plain:
+    - match: '{{FLOW_1}}'
+      scope: keyword.control.flow.wast
+    - match: '{{FLOW_2}}'
+      scope: keyword.control.flow.wast
+      push: reference
+    - match: '{{FLOW_3}}'
+      scope: keyword.control.flow.wast
+      push: [ reference_vec_pop, reference ]
+    - match: '{{CALLOP}}'
+      scope: keyword.control.flow.wast meta.function-call.wast meta.invocation.wast
+      push: reference
+    - match: '{{CALLIN}}'
+      scope: keyword.control.flow.wast meta.function-call.wast meta.invocation.wast
+      push: typeuse
+    - match: '{{DROPSL}}'
+      scope: keyword.operator.word.wast
+    - match: '{{VAROPS}}'
+      scope: keyword.operator.assignment.wast
+      push: reference
+    - match: '{{MEMOPS}}'
+      scope: support.function.numeric.wast
+      push: memarg
+    - match: '{{MEMOP2}}'
+      scope: support.function.memory.wast
+    - match: '{{NCONST}}'
+      scope: support.function.numeric.wast
+      push: number
+    - match: '{{NUMOPS}}'
+      scope: support.function.numeric.wast
+  instructions_plain_pop:
+    # This is duplicative because in one context we need to be able to match one
+    # instruction, and in another we need to match any number of instructions.
+    # SS doesn’t provide an expressive way to describe that. To make it less poo
+    # all the patterns here are vars at least.
+    - match: '{{FLOW_1}}'
+      scope: keyword.control.flow.wast
+      pop: true
+    - match: '{{FLOW_2}}'
+      scope: keyword.control.flow.wast
+      set: reference
+    - match: '{{FLOW_3}}'
+      scope: keyword.control.flow.wast
+      set: [ reference_vec_pop, reference ]
+    - match: '{{CALLOP}}'
+      scope: keyword.control.flow.wast meta.function-call.wast meta.invocation.wast
+      set: reference
+    - match: '{{CALLIN}}'
+      scope: keyword.control.flow.wast meta.function-call.wast meta.invocation.wast
+      set: typeuse
+    - match: '{{DROPSL}}'
+      scope: keyword.operator.word.wast
+      pop: true
+    - match: '{{VAROPS}}'
+      scope: keyword.operator.assignment.wast
+      set: reference
+    - match: '{{MEMOPS}}'
+      scope: support.function.numeric.wast
+      set: memarg
+    - match: '{{MEMOP2}}'
+      scope: support.function.memory.wast
+      pop: true
+    - match: '{{NCONST}}'
+      scope: support.function.numeric.wast
+      set: number
+    - match: '{{NUMOPS}}'
+      scope: support.function.numeric.wast
+      pop: true
+  loop_end:
+    - meta_scope: meta.block.loop.wast
+    - match: 'end{{IDTERM}}'
+      scope: keyword.control.flow.wast
+      pop: true
+    - match: '.'
+      scope: invalid.illegal.wast
+  main:
+    - match: '\('
+      scope: punctuation.definition.module.begin.wast
+      set:
+        - - match: '.'
+            scope: invalid.illegal.wast
+        - - meta_scope: meta.s-expression.module.wast
+          - match: '\)'
+            scope: punctuation.definition.module.end.wast
+            pop: true
+          - match: '.'
+            scope: invalid.illegal.wast
+        - modulefields_IMPORT_START
+        - - match: '({{IDNAME}})|'
+            captures:
+              1: entity.name.module.wast
+            pop: true
+        - - match: 'module{{IDTERM}}'
+            scope: keyword.other.module.wast
+            pop: true
+          - match: '.'
+            scope: invalid.illegal.wast
+    - match: '.'
+      scope: invalid.illegal.wast
+  memarg:
+    - match: '(?:(offset=)({{UINTER}}))?'
+      captures:
+        1: keyword.declaration.offset.wast
+        2: constant.numeric.integer.wast
+      set:
+        - match: '(?:(align=)({{UINTER}}))?'
+          captures:
+            1: keyword.declaration.offset.wast
+            2: constant.numeric.integer.wast
+          pop: true
+    - match: '(?=.)'
+      pop: true
+  memory_abbr_or_type:
+    - match: '(\(){{WHITES}}*(import){{IDTERM}}'
+      captures:
+        1: punctuation.definition.import.begin.wast
+        2: keyword.other.import.wast
+      set: [ limit, import_end, import_names ]
+    - match: '(\(){{WHITES}}*(data){{IDTERM}}'
+      captures:
+        1: punctuation.definition.data.begin.wast
+        2: storage.type.constant.wast storage.type.data.wast
+      set:
+        - - meta_scope: meta.s-expression.data.wast
+          - match: '\)'
+            scope: punctuation.definition.data.end.wast
+            pop: true
+          - match: '"'
+            scope: punctuation.definition.string.begin.wast
+            push: string
+          - match: '.'
+            scope: invalid.illegal.wast
+    - include: limit
+  memory_end:
+    - meta_scope: meta.s-expression.memory.wast
+    - match: '\)'
+      scope: punctuation.definition.memory.end.wast
+      pop: true
+    - match: '.'
+      scope: invalid.illegal.wast
+      pop: true
+  memory_name:
+    - match: '({{IDNAME}})|'
+      captures:
+        1: entity.name.memory.wast
+      pop: true
+  modulefield_data:
+    - match: '(\(){{WHITES}}*(data){{IDTERM}}'
+      captures:
+        1: punctuation.definition.data.begin.wast
+        2: storage.type.constant.wast storage.type.data.wast
+      push:
+        - - meta_scope: meta.s-expression.data.wast
+          - match: '\)'
+            scope: punctuation.definition.data.end.wast
+            pop: true
+          - match: '"'
+            scope: punctuation.definition.string.begin.wast
+            push: string
+          - match: '.'
+            scope: invalid.illegal.wast
+        - - include: offset
+        - - include: reference_optional
+  modulefield_element:
+    - match: '(\(){{WHITES}}*(elem){{IDTERM}}'
+      captures:
+        1: punctuation.definition.elem.begin.wast
+        2: storage.type.constant.wast storage.type.elem.wast
+      push:
+        - - meta_scope: meta.s-expression.elem.wast
+          - match: '\)'
+            scope: punctuation.definition.elem.end.wast
+            pop: true
+          - include: reference_vec
+          - match: '.'
+            scope: invalid.illegal.wast
+        - - include: offset
+        - - include: reference_optional
+  modulefield_export:
+    - match: '(\(){{WHITES}}*(export){{IDTERM}}'
+      captures:
+        1: punctuation.definition.export.begin.wast
+        2: keyword.other.export.wast
+      push:
+        - - meta_scope: meta.s-expression.export.wast
+          - match: '\)'
+            scope: punctuation.definition.export.end.wast
+            pop: true
+          - match: '.'
+            scope: invalid.illegal.wast
+        - - match: '(\(){{WHITES}}*(func|global|memory|table|tag){{IDTERM}}'
+            captures:
+              1: punctuation.definition.exportdesc.begin.wast
+              2: storage.modifier.wast
+            set:
+              - - meta_scope: meta.s-expression.export-description.wast
+                - match: '\)'
+                  scope: punctuation.definition.exportdesc.end.wast
+                  pop: true
+                - match: '.'
+                  scope: invalid.illegal.wast
+              - - include: reference
+        - - match: '"'
+            scope: punctuation.definition.string.begin.wast
+            set:
+              - - meta_scope: string.quoted.double.wast entity.name.export.wast
+                - include: string
+          - match: '.'
+            scope: invalid.illegal.wast
+  modulefield_function:
+    - match: '(\(){{WHITES}}*(func){{IDTERM}}'
+      captures:
+        1: punctuation.definition.function.begin.wast
+        2: storage.type.function.wast
+      push: [ function_end, function_abbr_or_type, abbreviated_export, function_name ]
+  modulefield_global:
+    - match: '(\(){{WHITES}}*(global){{IDTERM}}'
+      captures:
+        1: punctuation.definition.global.begin.wast
+        2: storage.type.constant.wast storage.type.global.wast
+      push: [ global_end, global_import, abbreviated_export, global_name ]
+  modulefield_import:
+    - match: '(\(){{WHITES}}*(import){{IDTERM}}'
+      captures:
+        1: punctuation.definition.import.begin.wast
+        2: keyword.other.import.wast
+      push: [ import_end, import_desc, import_names ]
+  modulefield_memory:
+    - match: '(\(){{WHITES}}*(memory){{IDTERM}}'
+      captures:
+        1: punctuation.definition.memory.begin.wast
+        2: storage.type.constant.wast storage.type.memory.wast
+      push: [ memory_end, memory_abbr_or_type, abbreviated_export, memory_name ]
+  modulefield_table:
+    - match: '(\(){{WHITES}}*(table){{IDTERM}}'
+      captures:
+        1: punctuation.definition.table.begin.wast
+        2: storage.type.constant.wast storage.type.table.wast
+      push: [ table_end, table_abbr_or_type, abbreviated_export, table_name ]
+  modulefield_type:
+    - match: '(\(){{WHITES}}*(type){{IDTERM}}'
+      captures:
+        1: punctuation.definition.type.begin.wast
+        2: storage.type.type.wast
+      push:
+        - - meta_scope: meta.s-expression.type.wast
+          - match: '\)'
+            scope: punctuation.definition.type.end.wast
+            pop: true
+          - match: '.'
+            scope: invalid.illegal.wast
+        - - match: '\('
+            scope: punctuation.definition.functype.begin.wast
+            set:
+              - - meta_scope: meta.s-expression.functype.wast
+                - match: '\)'
+                  scope: punctuation.definition.functype.end.wast
+                  pop: true
+                - match: '.'
+                  scope: invalid.illegal.wast
+              - - include: result
+                - match: '(?=.)'
+                  pop: true
+              - - include: param
+                - match: '(?=.)'
+                  pop: true
+              - - match: 'func{{IDTERM}}'
+                  scope: storage.modifier.wast
+                  pop: true
+                - match: '.'
+                  scope: invalid.illegal.wast
+          - match: '.'
+            scope: invalid.illegal.wast
+        - - match: '({{IDNAME}})|'
+            captures:
+              1: entity.name.type.wast
+            pop: true
+  modulefield_tag:
+    - match: '(\(){{WHITES}}*(tag){{IDTERM}}'
+      captures:
+        1: punctuation.definition.tag.begin.wast
+        2: storage.type.constant.wast storage.type.tag.wast
+      push: [ tag_end, tag_type, tag_import, abbreviated_export, tag_name ]
+  modulefields_IMPORT_START:
+    - include: modulefield_data
+    - include: modulefield_element
+    - include: modulefield_export
+    - include: modulefield_import
+    - include: modulefield_type
+    - include: modulefield_tag
+    - match: '{{STARTS}}'
+      captures:
+        1: punctuation.definition.start.begin.wast
+        2: keyword.other.start.wast
+      set: [ modulefields_IMPORT, start, reference ]
+    - match: '(?=.)'
+      set: modulefields_START
+  modulefields_IMPORT:
+    - include: modulefield_data
+    - include: modulefield_element
+    - include: modulefield_export
+    - include: modulefield_import
+    - include: modulefield_type
+    - include: modulefield_tag
+    - match: '(?=.)'
+      set: modulefields_REST
+  modulefields_REST:
+    - include: modulefield_data
+    - include: modulefield_element
+    - include: modulefield_export
+    - include: modulefield_function
+    - include: modulefield_global
+    - include: modulefield_memory
+    - include: modulefield_table
+    - include: modulefield_type
+    - include: modulefield_tag
+    - match: '(?=.)'
+      pop: true
+  modulefields_START:
+    - match: '{{STARTS}}'
+      captures:
+        1: punctuation.definition.start.begin.wast
+        2: keyword.other.start.wast
+      set: [ modulefields_REST, start, reference ]
+    - include: modulefields_REST
+  number:
+    - match: '{{FLOATP}}'
+      scope: constant.numeric.float.wast
+      pop: true
+    - match: '{{INTERG}}'
+      scope: constant.numeric.integer.wast
+      pop: true
+    - match: '.'
+      scope: invalid.illegal.wast
+  offset:
+    - match: '(\(){{WHITES}}*(?:(offset){{IDTERM}})?'
+      captures:
+        1: punctuation.definition.offset.begin.wast
+        2: keyword.other.offset.wast
+      set:
+        - - meta_scope: meta.s-expression.offset.wast
+          - match: '\)'
+            scope: punctuation.definition.offset.end.wast
+            pop: true
+          - match: '.'
+            scope: invalid.illegal.wast
+        - - include: constant_expression
+    - match: '.'
+      scope: invalid.illegal.wast
+  param:
+    - match: '(\(){{WHITES}}*(param){{IDTERM}}'
+      captures:
+        1: punctuation.definition.param.begin.wast
+        2: storage.type.constant.wast storage.type.param.wast
+      push:
+        - - meta_scope: meta.s-expression.param.wast
+          - match: '\)'
+            scope: punctuation.definition.param.end.wast
+            pop: true
+          - match: '.'
+            scope: invalid.illegal.wast
+        - - match: '{{IDNAME}}'
+            scope: variable.parameter.wast
+            set: valtype
+          - match: '{{VALTYP}}'
+            scope: support.type.wast
+            set:
+              - match: '{{VALTYP}}'
+                scope: support.type.wast
+              - match: '(?=.)'
+                pop: true
+          - match: '.'
+            scope: invalid.illegal.wast
+  prototype:
+    - match: '{{WHITES}}+'
+    - match: '\(;'
+      scope: punctuation.definition.comment.begin.wast
+      push: comment_block
+    - match: '(;;).*'
+      scope: comment.line.wast
+      captures:
+        1: punctuation.definition.comment.begin.wast
+  reference:
+    - include: reference_common
+    - match: '.'
+      scope: invalid.illegal.wast
+  reference_common:
+    - match: '{{IDNAME}}'
+      scope: variable.other.wast
+      pop: true
+    - match: '{{DECNUM}}'
+      scope: variable.other.index.wast constant.numeric.integer.wast
+      pop: true
+  reference_optional:
+    - include: reference_common
+    - match: (?=.)
+      pop: true
+  reference_vec:
+    - match: '{{IDNAME}}'
+      scope: variable.other.wast
+    - match: '{{DECNUM}}'
+      scope: variable.other.index.wast constant.numeric.integer.wast
+  reference_vec_pop:
+    - include: reference_vec
+    - match: '(?=.)'
+      pop: true
+  result:
+    # Note that multiple result types are permitted syntactically, but aren’t
+    # yet supported.
+    - match: '(\(){{WHITES}}*(result){{IDTERM}}'
+      captures:
+        1: punctuation.definition.result.begin.wast
+        2: storage.modifier.result.wast
+      push: result_end
+  result_end:
+    - meta_scope: meta.s-expression.result.wast
+    - match: '\)'
+      scope: punctuation.definition.result.end.wast
+      pop: true
+    - match: '{{VALTYP}}'
+      scope: support.type.wast
+    - match: '.'
+      scope: invalid.illegal.wast
+  resulttype:
+    - match: '(\(){{WHITES}}*(result){{IDTERM}}'
+      captures:
+        1: punctuation.definition.result.begin.wast
+        2: storage.modifier.result.wast
+      set: result_end
+    - match: '(?=.)'
+      pop: true
+  start:
+    - meta_scope: meta.s-expression.start.begin.wast
+    - match: '\)'
+      scope: punctuation.definition.start.end.wast
+      pop: true
+    - match: '.'
+      scope: invalid.illegal.wast
+  string:
+    - meta_include_prototype: false
+    - meta_scope: string.quoted.double.wast
+    - match: '"'
+      scope: punctuation.definition.string.end.wast
+      pop: true
+    - match: '\\(?:[tnr"''\\]|u\{{{HEXNUM}}\})'
+      scope: constant.character.escape.char.wast
+    - match: '\\\h\h'
+      scope: constant.character.escape.byte.wast
+    - match: '[\\\x00-\x1F\x7F]'
+      scope: invalid.illegal.wast
+  table_abbr_or_type:
+    - match: '(\(){{WHITES}}*(import){{IDTERM}}'
+      captures:
+        1: punctuation.definition.import.begin.wast
+        2: keyword.other.import.wast
+      set: [ funcref, limit, import_end, import_names ]
+    - match: 'funcref{{IDTERM}}'
+      scope: support.type.wast
+      set:
+        - match: '(\(){{WHITES}}*(elem){{IDTERM}}'
+          captures:
+            1: punctuation.definition.elem.begin.wast
+            2: storage.type.constant.wast storage.type.elem.wast
+          set:
+            - - meta_scope: meta.s-expression.elem.wast
+              - match: '\)'
+                scope: punctuation.definition.elem.end.wast
+                pop: true
+              - include: reference_vec
+              - match: '.'
+                scope: invalid.illegal.wast
+    - match: (?=.)
+      set: [ funcref, limit ]
+  table_end:
+    - meta_scope: meta.s-expression.table.wast
+    - match: '\)'
+      scope: punctuation.definition.table.end.wast
+      pop: true
+    - match: '.'
+      scope: invalid.illegal.wast
+  table_name:
+    - match: '({{IDNAME}})|'
+      captures:
+        1: entity.name.table.wast
+      pop: true
+  tag_end:
+    - meta_scope: meta.s-expression.tag.wast
+    - match: '\)'
+      scope: punctuation.definition.tag.end.wast
+      pop: true
+    - match: '.'
+      scope: invalid.illegal.wast
+      pop: true
+  tag_import:
+    - match: '(\(){{WHITES}}*(import){{IDTERM}}'
+      captures:
+        1: punctuation.definition.import.begin.wast
+        2: keyword.other.import.wast
+      set: [ import_end, import_names ]
+    - match: '(?=.)'
+      pop: true
+  tag_name:
+    - match: '({{IDNAME}})|'
+      captures:
+        1: entity.name.tag.wast
+      pop: true
+  tag_type:
+    - include: param
+    - match: '(?=.)'
+      pop: true
+  try_catch_delegate:
+    - meta_scope: meta.block.wast
+    - match: 'delegate{{IDTERM}}'
+      scope: keyword.control.flow.wast
+      set: [ reference ]
+    - match: '(?=.)'
+      set: [ try_catch ]
+  try_catch:
+    - meta_scope: meta.block.wast
+    - match: 'catch{{IDTERM}}'
+      scope: keyword.control.flow.wast
+      push: [ instructions, reference ]
+    - match: 'catch_all{{IDTERM}}'
+      scope: keyword.control.flow.wast
+      push: [ instructions ]
+    - match: 'end{{IDTERM}}'
+      scope: keyword.control.flow.wast
+      pop: true
+    - match: '.'
+      scope: invalid.illegal.wast
+  typeuse:
+    - match: (?=.)
+      set:
+        - - include: result
+          - match: '(?=.)'
+            pop: true
+        - - include: param
+          - match: '(?=.)'
+            pop: true
+        - - match: '(\(){{WHITES}}*(type){{IDTERM}}'
+            captures:
+              1: punctuation.definition.typeuse.begin.wast
+              2: storage.modifier.type.wast
+            set:
+              - - meta_scope: meta.s-expression.typeuse.wast
+                - match: '\)'
+                  scope: punctuation.definition.typeuse.end.wast
+                  pop: true
+                - match: '.'
+                  scope: invalid.illegal.wast
+              - reference
+          - match: '(?=.)'
+            pop: true
+  valtype:
+    - match: '{{VALTYP}}'
+      scope: support.type.wast
+      pop: true
+    - match: '.'
+      scope: invalid.illegal.wast
