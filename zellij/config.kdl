@@ -232,7 +232,7 @@ themes {
 // Choose the theme that is specified in the themes section.
 // Default: default
 //
-theme "dracula"
+theme "solarized"
 
 // The name of the default layout to load on startup
 // Default: "default"
