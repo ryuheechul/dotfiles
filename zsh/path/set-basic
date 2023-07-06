@@ -26,6 +26,11 @@ function add-to-path {
   test -n "${1}" && path=("${1}" ${path})
 }
 
+# to mitigate the issue of /etc/profile not sourced for the time being - https://github.com/nix-community/home-manager/issues/3681
+test -z "${path_helper_manually_called}" && \
+  test -x /usr/libexec/path_helper && \
+  eval `/usr/libexec/path_helper -s` && export path_helper_manually_called=1
+
 # assuming path for nix is already set from ../env
 test -n "${float_nix_path}" && add-to-path $(printpath | grep 'nix-profile')
 
