@@ -1,5 +1,9 @@
 { pkgs ? import <nixpkgs> (import ./overlays) }:
 
+
+let
+  emacs = import ./custom/emacs.nix { pkgs = pkgs; };
+in
 with pkgs;
 # just for fun/testing
 [
@@ -53,9 +57,7 @@ with pkgs;
 ] ++
 # editor - mostly for neovim
 [
-  # emacs editor including GUI, `emacs -nw` to run as TUI
-  ((emacsPackagesFor (emacs.override { withNativeCompilation = true; })).emacsWithPackages (epkgs: [ epkgs.vterm ]))
-  # above replace `emacs` to enable the use of libvterm
+  emacs # coming from my customization at ./custom/emacs.nix
   neovim # my favorite editor
   neovim-remote # 👌 Support for --remote and friends.
   tree-sitter # An incremental parsing system for programming tools
