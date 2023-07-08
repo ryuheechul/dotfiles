@@ -98,6 +98,8 @@ with pkgs;
     kustomize # Customization of kubernetes YAML configurations
     kompose # A tool to help users who are familiar with docker-compose move to Kubernetes
     minikube # A tool that makes it easy to run Kubernetes locally
+    kind # Kubernetes IN Docker - local clusters for testing Kubernetes
+    colima # Container runtimes with minimal setup powered by lima
     # minikube with podman - https://github.com/containers/podman/issues/12713#issuecomment-1002567777
     # an example podman machine works for minikube - `podman machine init --rootful --cpus 4 --memory 4096 --disk-size 30`
   ]
