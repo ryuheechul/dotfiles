@@ -465,4 +465,21 @@ return {
       })
     end,
   },
+  { -- A feature-rich Go development plugin
+    -- it does the job for both ./editing.lua and ./debug.lua
+    -- let's just put it here for now
+    'ray-x/go.nvim',
+    dependencies = { -- optional packages
+      'ray-x/guihua.lua',
+      'neovim/nvim-lspconfig',
+      'nvim-treesitter/nvim-treesitter',
+    },
+    event = 'CmdlineEnter',
+    ft = { 'go', 'gomod' },
+    config = function()
+      require('go').setup {}
+
+      vim.keymap.set('n', '<leader>rt', ':GoTestFile<CR>', { silent = true, noremap = true, desc = 'run :GoTestFile' })
+    end,
+  },
 }

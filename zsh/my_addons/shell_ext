@@ -126,7 +126,7 @@ _tag cargo
 
 # golang
 if test -n "${commands[go]}"; then
-  export GOPATH=${HOME}/go
+  export GOPATH=${GOPATH:-${HOME}/go}
   add-to-path "${GOPATH}/bin"
 fi
 

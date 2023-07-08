@@ -33,6 +33,7 @@
   "git-blame.nvim": { "branch": "master", "commit": "8cb8dc053b7b24eac457395e3c535fdbcd95e97e" },
   "gitsigns.nvim": { "branch": "main", "commit": "f412f51d0eaf0905a2759c8087090071689bb8fb" },
   "glow.nvim": { "branch": "main", "commit": "a3f24fdaa71d2c25a2b88026032b34f5b6a6e215" },
+  "go.nvim": { "branch": "master", "commit": "6550ddf5ce491d17af009c397aceb25310566eaa" },
   "goto-preview": { "branch": "main", "commit": "82ce83ae589be7a59e4ec5cfbbf82d9f5eb8bded" },
   "guihua.lua": { "branch": "master", "commit": "0ad2612cd85457402005e252c39ca7b7c215dda0" },
   "headlines.nvim": { "branch": "master", "commit": "ddef41b2664f0ce25fe76520d708e2dc9dfebd70" },
