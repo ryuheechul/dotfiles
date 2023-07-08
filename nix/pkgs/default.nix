@@ -126,7 +126,8 @@ with pkgs;
   entr # Run arbitrary commands when files change
   pueue # long running task manager
   # taskell # CLI kanban
-  jsonnet # templating with json
+  # jsonnet # Purely-functional configuration language that helps you define JSON data
+  go-jsonnet # An implementation of Jsonnet in pure Go
   ansifilter # ANSI sequence filter - like [ansi2txt](https://github.com/kilobyte/colorized-logs)
   dos2unix # Convert text files with DOS or Mac line breaks to Unix line breaks and vice versa
   tldr # Simplified and community-driven man pages
