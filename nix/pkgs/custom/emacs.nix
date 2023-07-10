@@ -1,8 +1,9 @@
 { pkgs }:
 
 let
-  # emacs = pkgs.emacs29 # use this instead of below if you wish to use emacs29 instead
-  emacs = pkgs.emacs;
+  checkEnv = import ../../utils/checkEnv.nix;
+  use-emacs29 = checkEnv "MY_NIX_OVERRIDE_EMACS_29";
+  emacs = if use-emacs29 then pkgs.emacs29 else pkgs.emacs;
   emacsWithNativeComp = emacs.override { withNativeCompilation = true; };
   emacsWithPackages = (pkgs.emacsPackagesFor emacsWithNativeComp).emacsWithPackages;
   customizedEmacs = emacsWithPackages (epkgs: [ epkgs.vterm ]); # include libvterm

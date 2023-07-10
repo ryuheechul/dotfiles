@@ -33,7 +33,7 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-solarized-light)
-(setq doom-font (font-spec :family "FuraMono Nerd Font Mono" :size 12)
+(setq doom-font (font-spec :family "FiraMono Nerd Font Mono" :size 12)
       ;; ;; There are several things I did to make fonts work "properly" (tested on GUI Emacs on macOS).
       ;; ;; Prior to these patches, because of the (undesired) differences that I saw from Emacs compare to terminal,
       ;; ;; I fulled myself to believe that maybe it was the limitations on any of these:
@@ -42,7 +42,7 @@
       ;; ;; - Emacs
       ;; ;; Now I know that was not the case.
       ;;
-      ;; 1. use `FuraMono Nerd Font` instead of `JetBrainsMono Nerd Font`
+      ;; 1. use `FiraMono Nerd Font` instead of `JetBrainsMono Nerd Font`
       ;;    because somehow the height of glyphs can vary with JetBrainsMono even though they both come from Nerd Fonts.
       ;;    (I don't have this issue with terminals that I use - Alacritty, iTerm, etc.)
       ;; 2. enabling `unicode` module under :ui at ./init.el would fix misalignments on width in `vterm` (and probably others)
@@ -50,6 +50,10 @@
       ;; 3. enabling `emoji` module under :ui at ./init.el would fix misalignments on height in emacs not just with `[v]term`
       ;;    due to non-monospace (height) native emoji font like Apple Color Emoji.
       ;; 4. adding the line below to use the font that I assign for glyphs instead of whatever the default that doom-emacs comes with for mono width.
+      ;; 5. nerd-fonts release fonts sometimes Fira ... and Fura ... and not finding the exact name will freeze/break GUI emacs UI
+      ;; - https://github.com/ryanoasis/nerd-fonts/blame/master/bin/scripts/lib/fonts.json
+      ;; - https://github.com/ryanoasis/nerd-fonts/commit/72b9ec663bb16e7e77c56d6061aed8f5452cb0de
+      ;; - https://github.com/ryanoasis/nerd-fonts/commit/8b3257d6766f40c98289c6193209e0700a4cc3d0
       doom-unicode-font doom-font)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
