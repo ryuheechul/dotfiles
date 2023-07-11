@@ -7,7 +7,6 @@ return {
       'lukas-reineke/lsp-format.nvim', -- A wrapper around Neovims native LSP formatting
       'arkav/lualine-lsp-progress', -- LSP Progress lualine componenet
       'SmiteshP/nvim-navic', -- Simple winbar/statusline plugin that shows your current code context
-      'nanotee/sqls.nvim', -- Neovim plugin for sqls that leverages the built-in LSP client
       -- 💻 Neovim setup for init.lua and plugin development with full signature help, docs and completion for the nvim lua API.
       'lspcontainers/lspcontainers.nvim', -- Neovim plugin for lspcontainers
       { 'folke/neodev.nvim', config = true },

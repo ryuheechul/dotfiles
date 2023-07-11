@@ -114,7 +114,7 @@ return function(setup_default, node_root)
     },
   })
 
-  local setup_sqls = merge(setup_default, {
+  local setup_sqlls = merge(setup_default, {
     on_attach = function(client, bufnr)
       require('sqls').on_attach(client, bufnr)
       setup_default.on_attach(client, bufnr)
@@ -186,7 +186,7 @@ return function(setup_default, node_root)
     lua_ls = setup_lua_ls,
     nil_ls = setup_nil_ls,
     eslint = setup_eslint,
-    sqls = setup_sqls,
+    sqlls = setup_sqlls,
     jsonls = setup_jsonls,
     nimls = setup_nimls,
     gopls = setup_gopls,

@@ -4,9 +4,6 @@ local M = {}
 
 function M.setup_lsp_format()
   require('lsp-format').setup {
-    sql = {
-      exclude = { 'sqls' }, -- formatting doesn't seem to be very good so excluding for now
-    },
     lua = {
       exclude = { 'lua_ls' }, -- to let only null_ls with stylua to format
     },

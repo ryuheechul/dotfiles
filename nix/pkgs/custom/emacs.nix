@@ -3,6 +3,7 @@
 let
   checkEnv = import ../../utils/checkEnv.nix;
   use-emacs29 = checkEnv "MY_NIX_OVERRIDE_EMACS_29";
+  # https://blog.phundrak.com/emacs-29-what-can-we-expect/
   emacs = if use-emacs29 then pkgs.emacs29 else pkgs.emacs;
   emacsWithNativeComp = emacs.override { withNativeCompilation = true; };
   emacsWithPackages = (pkgs.emacsPackagesFor emacsWithNativeComp).emacsWithPackages;
