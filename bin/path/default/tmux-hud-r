@@ -19,7 +19,22 @@ dress ()
 
 battery ()
 {
-  echo -n " $(cat /sys/class/power_supply/BAT1/capacity)%"
+  percent="$(cat /sys/class/power_supply/BAT1/capacity)"
+
+  icon=''
+  # be very careful not forget to wrap > with ''
+  # to avoid using them as a redirection
+  if expr "${percent}" '>' 80; then
+    icon=''
+  elif expr "${percent}" '>' 50; then
+    icon=''
+  elif expr "${percent}" '>' 25; then
+    icon=''
+  elif expr "${percent}" '>' 10; then
+    icon=''
+  fi
+
+  echo -n "${icon} ${percent}%"
 }
 
 today ()
