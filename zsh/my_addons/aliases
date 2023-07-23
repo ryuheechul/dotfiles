@@ -366,9 +366,10 @@ alias ddgr='ddgr -n 3'
 # set half of the available core to be default
 # to prevent OOM during paralleled compilations
 # to be kind for low memory environments
+# https://nixos.org/manual/nix/stable/advanced-topics/cores-vs-jobs.html
 export NIX_BUILD_CORES="$(getconf _NPROCESSORS_ONLN | xargs -I _ expr _ / 2)"
 
-# works for bot mac and linux
+# `home-manager` doesn't seem to blindly follow $NIX_BUILD_CORES so manually pass the value
 alias home-manager='home-manager --cores "${NIX_BUILD_CORES}"'
 
 # unifying interface of applying updated nix expressions for different systems
