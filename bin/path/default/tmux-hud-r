@@ -34,7 +34,7 @@ battery ()
     icon=''
   fi
 
-  echo -n "${icon} ${percent}%"
+  echo -n "${percent}% ${icon}"
 }
 
 today ()
