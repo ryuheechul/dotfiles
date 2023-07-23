@@ -9,5 +9,6 @@ with pkgs;(
       traceroute # Tracks the route taken by packets over an IP network
       unixtools.netstat
       nmap # A free and open source utility for network discovery and security auditing
+      ed # An implementation of the standard Unix editor
     ]
 )
