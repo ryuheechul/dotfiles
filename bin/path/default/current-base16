@@ -8,4 +8,4 @@ test ! -f ~/.base16_theme && {
   exit 0
 }
 
-basename "$(readlink -f ~/.base16_theme)" | sed s/^base16-// | sed s/.sh$// | tr -d "\n"
+readlink -f ~/.base16_theme | xargs -I _ basename _ .sh | sed s/^base16-// | tr -d '\n'
