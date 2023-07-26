@@ -363,6 +363,8 @@ alias chtsh='cht --shell'
 alias googler='googler -n 3'
 alias ddgr='ddgr -n 3'
 
+# https://nixos.wiki/wiki/Storage_optimization
+alias nix-collect-garbage='nix-collect-garbage --delete-older-than 30d'
 # set half of the available core to be default
 # to prevent OOM during paralleled compilations
 # to be kind for low memory environments
