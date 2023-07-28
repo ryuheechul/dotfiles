@@ -1,6 +1,6 @@
 %YAML 1.2
-# copied from https://github.com/molnarmark/sublime-gleam/blob/ff9638511e05b0aca236d63071c621977cffce38/syntax/gleam.sublime-syntax
 ---
+# copied from https://github.com/molnarmark/sublime-gleam/blob/ff9638511e05b0aca236d63071c621977cffce38/syntax/gleam.sublime-syntax
 name: Gleam
 file_extensions:
   - gleam

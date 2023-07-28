@@ -1,6 +1,6 @@
 %YAML 1.2
-# https://github.com/sharkdp/bat/issues/1703#issue-928736115
 ---
+# https://github.com/sharkdp/bat/issues/1703#issue-928736115
 # http://www.sublimetext.com/docs/3/syntax.html
 name: Tmux
 hidden: false
