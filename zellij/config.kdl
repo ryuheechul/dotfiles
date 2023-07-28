@@ -119,22 +119,22 @@ keybinds {
   }
   tmux {
     bind "[" { SwitchToMode "Scroll"; }
-    bind "Ctrl b" { Write 2; SwitchToMode "Normal"; }
-    bind "-" { NewPane "Down"; SwitchToMode "Normal"; }
-    bind "/" { NewPane "Right"; SwitchToMode "Normal"; }
-    bind "z" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
-    bind "c" { NewTab; SwitchToMode "Normal"; }
+    bind "Ctrl b" { Write 2; SwitchToMode "Locked"; }
+    bind "-" { NewPane "Down"; SwitchToMode "Locked"; }
+    bind "/" { NewPane "Right"; SwitchToMode "Locked"; }
+    bind "z" { ToggleFocusFullscreen; SwitchToMode "Locked"; }
+    bind "c" { NewTab; SwitchToMode "Locked"; }
     bind "," { SwitchToMode "RenameTab"; }
-    bind "p" { GoToPreviousTab; SwitchToMode "Normal"; }
-    bind "n" { GoToNextTab; SwitchToMode "Normal"; }
-    bind "Left" { MoveFocus "Left"; SwitchToMode "Normal"; }
-    bind "Right" { MoveFocus "Right"; SwitchToMode "Normal"; }
-    bind "Down" { MoveFocus "Down"; SwitchToMode "Normal"; }
-    bind "Up" { MoveFocus "Up"; SwitchToMode "Normal"; }
-    bind "h" { MoveFocus "Left"; SwitchToMode "Normal"; }
-    bind "l" { MoveFocus "Right"; SwitchToMode "Normal"; }
-    bind "j" { MoveFocus "Down"; SwitchToMode "Normal"; }
-    bind "k" { MoveFocus "Up"; SwitchToMode "Normal"; }
+    bind "p" { GoToPreviousTab; SwitchToMode "Locked"; }
+    bind "n" { GoToNextTab; SwitchToMode "Locked"; }
+    bind "Left" { MoveFocus "Left"; SwitchToMode "Locked"; }
+    bind "Right" { MoveFocus "Right"; SwitchToMode "Locked"; }
+    bind "Down" { MoveFocus "Down"; SwitchToMode "Locked"; }
+    bind "Up" { MoveFocus "Up"; SwitchToMode "Locked"; }
+    bind "h" { MoveFocus "Left"; SwitchToMode "Locked"; }
+    bind "l" { MoveFocus "Right"; SwitchToMode "Locked"; }
+    bind "j" { MoveFocus "Down"; SwitchToMode "Locked"; }
+    bind "k" { MoveFocus "Up"; SwitchToMode "Locked"; }
     bind "o" "Tab" { FocusNextPane; }
     bind "d" { Detach; }
   }
@@ -170,7 +170,7 @@ keybinds {
   shared_except "move" "locked" {
     bind "Ctrl m" { SwitchToMode "Move"; }
   }
-  shared_except "tmux" "locked" {
+  shared_except "tmux" {
     bind "Ctrl b" { SwitchToMode "Tmux"; }
   }
 }
