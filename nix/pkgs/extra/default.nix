@@ -93,6 +93,7 @@ with pkgs;
     # ```
     docker-client # to shim the absence of docker command for podman in case podman is to replace to docker and act like one
     kubectl # Kubernetes CLI
+    kubectx # Fast way to switch between clusters and namespaces in kubectl!
     k9s # Kubernetes CLI To Manage Your Clusters In Style
     kubernetes-helm # A package manager for kubernetes
     kustomize # Customization of kubernetes YAML configurations
