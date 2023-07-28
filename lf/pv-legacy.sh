@@ -28,6 +28,15 @@ markdown-via-glow () {
   with-glow $1
 }
 
+zip-via-less () {
+  function with-less () {
+    title Zip less "${1}"
+    less "$1"
+  }
+
+  with-less $1
+}
+
 image-via-viu () {
   with-viu ()
   {
@@ -70,6 +79,9 @@ case "${ext}" in
     ;;
   jpg|jpeg|png|gif)
     image-via-viu "${1}"
+    ;;
+  zip)
+    zip-via-less "${1}"
     ;;
   *)
     if test -d "${1}"; then
