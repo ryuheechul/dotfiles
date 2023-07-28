@@ -54,6 +54,9 @@ command = "preview-legacy '%i'"
 [handler_preview.text]
 command = "preview-legacy '%i'"
 
+[handler_preview.zip]
+command = "preview-legacy '%i'"
+
 [handler_open.text]
 command = "preview-legacy '%i'"
 
@@ -69,7 +72,7 @@ command = "preview-legacy '%i'"
 #
 
 [filter.gzip]
-command = "gzip -dc %i"
+command = "gzip -dc '%i'"
 
 
 #
@@ -89,8 +92,11 @@ command = "gzip -dc %i"
 [filetype.binary]
 mimes = ["application/octet-stream"]
 
+[filetype.zip]
+extensions = ["zip"]
+
 [handler_preview.binary]
-command = "hexyl %i"
+command = "hexyl '%i'"
 shell = true
 stdin_arg = ""
 
@@ -99,11 +105,11 @@ stdin_arg = ""
 extensions = ["md"]
 
 [handler_preview.markdown]
-command = "preview-legacy %i"
+command = "preview-legacy '%i'"
 
 [filetype.image]
 mimes = ["image"]
-extensions = ["png"]
+extensions = ["jpg", "jpeg", "png", "gif", "bmp"]
 
 [handler_preview.image]
-command = "preview-legacy %i"
+command = "preview-legacy '%i'"

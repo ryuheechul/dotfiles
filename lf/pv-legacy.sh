@@ -28,13 +28,13 @@ markdown-via-glow () {
   with-glow $1
 }
 
-zip-via-less () {
-  function with-less () {
-    title Zip less "${1}"
-    less "$1"
+zip-via-unzip () {
+  function with-unzip () {
+    title Zip unzip "${1}"
+    unzip -l "${1}"
   }
 
-  with-less $1
+  with-unzip "${1}"
 }
 
 image-via-viu () {
@@ -77,11 +77,11 @@ case "${ext}" in
   md)
     markdown-via-glow "${1}"
     ;;
-  jpg|jpeg|png|gif)
+  jpg|jpeg|png|gif|bmp)
     image-via-viu "${1}"
     ;;
   zip)
-    zip-via-less "${1}"
+    zip-via-unzip "${1}"
     ;;
   *)
     if test -d "${1}"; then
