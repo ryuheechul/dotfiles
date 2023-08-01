@@ -9,6 +9,7 @@
     ./recipes/vm.nix
     ./recipes/wsl.nix
     # services
+    ./recipes/openssh.nix
     ./recipes/desktop-gnome.nix
     ./recipes/docker.nix
     ./recipes/virtualization.nix
