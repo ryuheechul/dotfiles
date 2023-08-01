@@ -5,7 +5,7 @@ set -e
 curr_dir="$(dirname "$0")"
 pushd "${curr_dir}"
 
-./switch-nixos.sh
+./nixos-rebuild.sh switch
 
 # home-manager init and switch ("idempotent")
 ../../../nix/bin/channels.sh

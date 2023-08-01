@@ -7,6 +7,7 @@ in
 # system pkgs for any nixOS
 with pkgs; [
   vim # would you rather use nano?
+  alacritty # A cross-platform, GPU-accelerated terminal emulator
   nvd # Nix/NixOS package version diff tool
   # https://www.reddit.com/r/linux_gaming/comments/ynue9u/comment/ivat383
   glxinfo # Test utilities for OpenGL - `glxinfo -B`
@@ -21,7 +22,7 @@ with pkgs; [
   lshw
   lsscsi
 ]
-++ lib.optionals stdenv.isx86_64 [
-  intel-gpu-tools # for intel_gpu_top
-]
+  # ++ lib.optionals stdenv.isx86_64 [
+  #   intel-gpu-tools # for intel_gpu_top
+  # ]
 ++ local-only

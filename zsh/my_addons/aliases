@@ -381,6 +381,7 @@ uname | xargs test "Darwin" = \
   && alias switch-nix='home-manager switch; pushd "$my_dot_d/nix/darwin" && make switch; popd'
 # on nixos, rely on one script to do it all
 test -f /etc/nixos/configuration.nix \
+  && alias switch-nix-dry='"$my_dot_d/bootstrap/foundation/nixos/nixos-rebuild.sh"' \
   && alias switch-nix='"$my_dot_d/bootstrap/foundation/nixos/switch.sh"'
 
 # commandify

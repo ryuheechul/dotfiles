@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+action=${1:-dry-activate}
+
 curr_dir="$(dirname "$0")"
 pushd "${curr_dir}"
 
@@ -7,7 +9,7 @@ pushd "${curr_dir}"
 test -n "${WSL_DISTRO_NAME}" && sudo mount -o remount,rw /tmp/.X11-unix
 
 ./gen-configuration.sh
-sudo nixos-rebuild switch -I nixos-config=./configuration.nix
+sudo nixos-rebuild "${action}" -I nixos-config=./configuration.nix
 
 # Troubleshooting:
 # - use https://gitlab.com/khumba/nvd to see the diff between generations
