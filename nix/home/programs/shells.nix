@@ -14,6 +14,8 @@ in
   home.sessionVariables = {
     my_dot_d = "${env-vars.XDG_CONFIG_HOME}/dfs-rhc";
     my_zsh_d = "${env-vars.my_dot_d}/zsh";
+    # https://nixos.wiki/wiki/Flatpak
+    XDG_DATA_DIRS = ''''${XDG_DATA_DIRS}:/usr/share:/var/lib/flatpak/exports/share:''${HOME}/.local/share/flatpak/exports/share'';
   };
 
   # `cat ~/.nix-profile/etc/profile.d/hm-session-vars.sh` to debug

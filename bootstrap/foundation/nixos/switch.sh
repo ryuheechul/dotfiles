@@ -10,4 +10,8 @@ pushd "${curr_dir}"
 # home-manager init and switch ("idempotent")
 ../../../nix/bin/channels.sh
 ../../../nix/bin/init-home-manager.sh
-home-manager switch
+
+echo ${NIX_PATH} | grep ${USER} && home-manager switch || {
+  export NIX_PATH="${HOME}/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH"
+  home-manager switch
+}

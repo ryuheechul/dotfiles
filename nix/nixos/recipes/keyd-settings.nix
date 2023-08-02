@@ -70,6 +70,8 @@
     s = "C-s";
     # New tab
     t = "C-t";
+    # New window
+    n = "C-n";
     # Cmd+K: usually quick access or search on my websites
     k = "C-k";
     # Find

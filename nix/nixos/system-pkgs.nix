@@ -6,6 +6,7 @@ let
 in
 # system pkgs for any nixOS
 with pkgs; [
+  zip # Compressor/archiver for creating and modifying zipfiles
   vim # would you rather use nano?
   alacritty # A cross-platform, GPU-accelerated terminal emulator
   nvd # Nix/NixOS package version diff tool

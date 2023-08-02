@@ -13,6 +13,7 @@
     ./recipes/desktop-gnome.nix
     ./recipes/docker.nix
     ./recipes/virtualization.nix
+    ./recipes/flatpak.nix
     ./recipes/tailscale.nix
     ./recipes/1password.nix
     ./recipes/keyd.nix
