@@ -64,7 +64,7 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
 
-(when IS-MAC
+(when (or IS-MAC IS-LINUX)
   ;; see for "flash of unstyled Emacs" - https://www.reddit.com/r/emacs/comments/oza47b/comment/h7yfxjz
   ;; also it's possible that maybe somehow *skipping* of running `doom install` might have caused this.
   ;; if it's a very first time running the GUI that gets stuck or hangs, running `emacsclient` first might fix it.
