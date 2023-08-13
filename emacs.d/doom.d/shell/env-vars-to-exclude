@@ -22,8 +22,7 @@ ALACRITTY_LOG
 
 # only for doom sync - things that I don't want shell to unset
 test -n "${FOR_DOOM_SYNC_ENV}" && \
-  echo -n "
-DISPLAY
+  echo -n "DISPLAY
 STARSHIP_SHELL
 STARSHIP_SESSION_KEY
 LANG

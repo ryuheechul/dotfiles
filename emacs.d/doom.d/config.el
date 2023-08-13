@@ -33,7 +33,11 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-solarized-light)
-(setq doom-font (font-spec :family "FiraMono Nerd Font Mono" :size 12)
+(setq doom-font
+      ;; provide a way to favor the font size value from env var
+      (let ((size (string-to-number (or (getenv "MY_EMACS_FONT_SIZE") "12")))
+            (family "FiraMono Nerd Font Mono"))
+        (font-spec :family family :size size))
       ;; ;; There are several things I did to make fonts work "properly" (tested on GUI Emacs on macOS).
       ;; ;; Prior to these patches, because of the (undesired) differences that I saw from Emacs compare to terminal,
       ;; ;; I fulled myself to believe that maybe it was the limitations on any of these:
