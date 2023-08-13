@@ -33,13 +33,14 @@
     #     - `gsettings set org.gnome.mutter overlay-key ''`
 
     # Create a new "Cmd" button, with various Mac OS-like features below
-    alt = "overload(meta_mac, leftmeta)";
+    leftalt = "overload(meta_mac, leftmeta)";
+    rightalt = "overload(meta_mac, leftmeta)"; # rightmeta seems not working so fallback to leftmeta
 
     # Swap meta/alt
     meta = "overload(option_mac, leftalt)";
 
     # Switch to next input source
-    leftcontrol = "oneshotm(main, M-space)";
+    leftcontrol = "macro(M-space)";
   };
 
   # meta_mac modifier layer; inherits from 'Alt' modifier layer
