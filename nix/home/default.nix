@@ -1,9 +1,10 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   packages = import ../pkgs { };
   prgs = import ./programs { pkgs = pkgs; config = config; };
-  imports = [ prgs ];
+  dconf = import ./dconf.nix { lib = lib; };
+  imports = [ prgs dconf ];
 in
 {
   inherit imports;
