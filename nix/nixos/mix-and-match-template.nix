@@ -12,6 +12,7 @@
     ./recipes/openssh.nix
     ./recipes/desktop-gnome.nix
     ./recipes/docker.nix
+    ./recipes/rosetta.nix
     ./recipes/waydroid.nix
     ./recipes/virtualization.nix
     ./recipes/flatpak.nix
