@@ -3,8 +3,9 @@
 let
   packages = import ../pkgs { };
   prgs = import ./programs { pkgs = pkgs; config = config; };
+  svcs = import ./services { pkgs = pkgs; };
   dconf = import ./dconf.nix { lib = lib; };
-  imports = [ prgs dconf ];
+  imports = [ prgs svcs dconf ];
 in
 {
   inherit imports;
