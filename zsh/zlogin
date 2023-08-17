@@ -16,7 +16,9 @@ if is_zsh_interactive && test "${TERM}" != 'dumb' && test -n "${SSH_TTY}"; then
   # or `RemoteForward 6020 /tmp/.X11-unix/X0` in ~/.ssh/config
 
   # prevent infinite session opening with the same name, 'ssh'
-  zellij list-sessions | grep ssh | xargs test ssh = || {
+  zellij list-sessions \
+    | grep ssh | head -n1 | sed 's/ (current)$//' | \
+    grep -E '^ssh$' > /dev/null || {
     echo 'Attempting to attach to zellij session and this might fail as zellij might be not stable'
     UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec-zellij-attach ssh
   }
