@@ -18,6 +18,7 @@
     ./recipes/flatpak.nix
     ./recipes/tailscale.nix
     ./recipes/1password.nix
-    ./recipes/keyd.nix
+    ./recipes/keyd-host.nix
+    ./recipes/keyd-guest.nix
   ];
 }

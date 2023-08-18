@@ -1,6 +1,9 @@
-# to be used for `services.keyd.settings`
+# - to be used for ../recipes/keyd-host.nix
+# - you may debug with `sudo showkey` but there should should be better way too
 
-# you may debug with `sudo showkey` but there should should be better way too
+let
+  meta_mac = import ./keyd-settings-meta-mac.nix;
+in
 {
   space_hjkl = {
     h = "left";
@@ -50,50 +53,7 @@
   #
   # The main part! Using this layer, we can remap our new "Cmd" key to
   # do almost everything our muscle memory might need...
-  "meta_mac:A" = {
-    # Copy
-    c = "C-insert";
-    # Paste
-    v = "S-insert";
-    # Cut
-    x = "S-delete";
-    # Select all
-    a = "C-a";
-    # Undo (and redo with shift)
-    z = "C-z";
-    # Close window
-    w = "C-w";
-    # Refresh
-    r = "C-r";
-    # Settings
-    "," = "C-,";
-    # Save
-    s = "C-s";
-    # New tab
-    t = "C-t";
-    # New window
-    n = "C-n";
-    # Cmd+K: usually quick access or search on my websites
-    k = "C-k";
-    # Find
-    f = "C-f";
-    # Next (and previous with shift) item (usually with) find
-    g = "C-g";
-    # Focus address bar
-    l = "C-l";
-    # comment uncomment
-    "/" = "C-/";
-    # Zoom in: `=` would not work, so `equal`
-    equal = "C-+";
-    # Zoom out
-    "-" = "C--";
-    # Move cursor to beginning of line
-    left = "home";
-    # Move cursor to end of Line
-    right = "end";
-    # Switch between windows
-    "`" = "A-f6";
-  };
+  "meta_mac:A" = meta_mac;
 
   # option_mac modifier layer; inherits from 'Alt' modifier layer
   "option_mac:M" = { };
