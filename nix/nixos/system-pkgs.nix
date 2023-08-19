@@ -3,26 +3,46 @@
 let
   # system pkgs for local only
   local-only = pkgs.lib.optionals (builtins.pathExists ./system-pkgs-local.nix) (import ./system-pkgs-local.nix { pkgs = pkgs; });
+  pop-shell-stuff = with pkgs;[
+    # this is need for pop-shell to use launcher
+    # https://github.com/NixOS/nixpkgs/issues/174353#issuecomment-1416152982
+    pop-launcher # Modular IPC-based desktop launcher service
+    # gnomeExtensions required to be enabled first before being used
+    # one way to do it is via `Extensions` app but I automated that with ../home/dconf.nix
+    gnomeExtensions.pop-shell # Keyboard-driven layer for GNOME Shell
+    gnomeExtensions.pop-launcher-super-key # Fork of Pop COSMIC: Binds Pop Launcher on Super-Key when Pop COSMIC Extension is disabled.
+  ];
+  nix-utils = with pkgs;[
+    nvd # Nix/NixOS package version diff tool
+    dconf2nix # Convert dconf files to Nix, as expected by Home Manager
+  ];
+  missing-commons = with pkgs;[
+    zip # Compressor/archiver for creating and modifying zipfiles
+    vim # would you rather use nano?
+    lsof # A tool to list open files
+    libdrm # for drmdevice
+    drm_info # Small utility to dump info about DRM devices
+    kmod # for `modinfo`
+  ];
+  hardware-support = with pkgs;[
+    glmark2 # OpenGL (ES) 2.0 benchmark
+    usbutils # for lsusb
+    lshw # Provide detailed information on the hardware configuration of the machine
+    lsscsi
+    libva-utils # for vainfo
+    pciutils # for `lspci`
+    # https://www.reddit.com/r/linux_gaming/comments/ynue9u/comment/ivat383
+    glxinfo # Test utilities for OpenGL - `glxinfo -B`
+  ];
 in
 # system pkgs for any nixOS
 with pkgs; [
-  zip # Compressor/archiver for creating and modifying zipfiles
-  vim # would you rather use nano?
   alacritty # A cross-platform, GPU-accelerated terminal emulator
-  nvd # Nix/NixOS package version diff tool
-  # https://www.reddit.com/r/linux_gaming/comments/ynue9u/comment/ivat383
-  glxinfo # Test utilities for OpenGL - `glxinfo -B`
-  libdrm # for drmdevice
-  drm_info # Small utility to dump info about DRM devices
-  libva-utils # for vainfo
-  pciutils # for `lspci`
-  kmod # for `modinfo`
-  glmark2 # OpenGL (ES) 2.0 benchmark
-  usbutils # for lsusb
-  lsof
-  lshw
-  lsscsi
 ]
+++ missing-commons
+++ nix-utils
+++ hardware-support
+++ pop-shell-stuff
   # ++ lib.optionals stdenv.isx86_64 [
   #   intel-gpu-tools # for intel_gpu_top
   # ]

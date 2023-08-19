@@ -50,5 +50,25 @@ with lib.hm.gvariant; {
       tap-to-click = true;
       two-finger-scrolling-enabled = true;
     };
+
+    "org/gnome/shell" = {
+      enabled-extensions = [
+        "pop-shell@system76.com"
+        "pop-launcher-super-key@ManeLippert"
+      ];
+    };
+
+    "org/gnome/shell/extensions/pop-shell" = {
+      active-hint = false;
+      active-hint-border-radius = mkUint32 5;
+      fullscreen-launcher = true;
+      gap-inner = mkUint32 2;
+      gap-outer = mkUint32 2;
+      show-title = false;
+      tile-by-default = false;
+      # custom shortcuts - https://www.reddit.com/r/pop_os/comments/g4t5vt/how_to_change_shell_keyboard_shortcuts/
+      # https://github.com/pop-os/shell/blob/master_jammy/schemas/org.gnome.shell.extensions.pop-shell.gschema.xml
+      activate-launcher = [ "<Alt>slash" ];
+    };
   };
 }
