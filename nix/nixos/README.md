@@ -9,3 +9,4 @@ This is where the real ingredients for that ends up constructing
 - https://nixos.wiki/wiki/NixOS_as_a_desktop
 - https://github.com/mikeroyal/NixOS-Guide
 - https://nixos.wiki/wiki/Extend_NixOS
+- https://github.com/ryuheechul/reflect/blob/main/org/lang/nix.org

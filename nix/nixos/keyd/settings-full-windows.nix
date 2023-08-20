@@ -2,7 +2,7 @@
 # - you may debug with `sudo showkey` but there should should be better way too
 
 let
-  meta_mac = import ./keyd-settings-meta-mac.nix;
+  meta_mac = import ./meta-mac.nix;
 in
 {
   space_hjkl = {

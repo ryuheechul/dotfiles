@@ -18,7 +18,7 @@
     ./recipes/flatpak.nix
     ./recipes/tailscale.nix
     ./recipes/1password.nix
-    ./recipes/keyd-host.nix
+    ./recipes/keyd-host-windows.nix
     ./recipes/keyd-guest.nix
   ];
 }
