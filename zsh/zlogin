@@ -17,8 +17,15 @@ if is_zsh_interactive && test "${TERM}" != 'dumb' && test -n "${SSH_TTY}"; then
 
   # prevent infinite session opening with the same name, 'ssh'
   zellij list-sessions \
-    | grep ssh | head -n1 | sed 's/ (current)$//' | \
-    grep -E '^ssh$' > /dev/null || {
+    | grep ssh | head -n1 | sed 's/ (current)$//' \
+    | grep -E '^ssh$' > /dev/null \
+    && {
+    echo 'an existing ssh session is found as below'
+    zellij list-sessions
+    echo 'attaching to zellij is being skipped to avoid potential nested sessions'
+    echo 'you can still attach via `zellij attach ssh`...'
+    sleep 3
+  } || {
     echo 'Attempting to attach to zellij session and this might fail as zellij might be not stable'
     UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec-zellij-attach ssh
   }
