@@ -7,6 +7,12 @@
     "snippets": [
       {
         "language": [
+          "all"
+        ],
+        "path": "./all.json"
+      },
+      {
+        "language": [
           "make"
         ],
         "path": "./make.json"

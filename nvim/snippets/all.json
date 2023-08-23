@@ -1,0 +1,30 @@
+{
+  "Vim filetype hint comment (slash)": {
+    "prefix": "vimfts",
+    "body": [
+      "// vim: set ft=${1:filetype}:"
+    ],
+    "description": "Filetype hint for (neo)vim as a comment"
+  },
+  "Vim filetype hint comment (pound)": {
+    "prefix": "vimftp",
+    "body": [
+      "# vim: set ft=${1:filetype}:"
+    ],
+    "description": "Filetype hint for (neo)vim as a comment"
+  },
+  "Emacs mode hint comment (slash)": {
+    "prefix": "emacsmds",
+    "body": [
+      "// -*- mode: ${1:mode} -*-"
+    ],
+    "description": "mode hint for Emacs as a comment"
+  },
+  "Emacs mode hint comment (pound)": {
+    "prefix": "emacsmdp",
+    "body": [
+      "# -*- mode: ${1:mode} -*-"
+    ],
+    "description": "mode hint for Emacs as a comment"
+  }
+}
