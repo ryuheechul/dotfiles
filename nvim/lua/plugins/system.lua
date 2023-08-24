@@ -107,7 +107,6 @@ return {
       -- auto_close = false,
       disable_netrw = false,
       hijack_netrw = false,
-      open_on_setup = false,
       on_attach = function(bufnr)
         local api = require 'nvim-tree.api'
 
