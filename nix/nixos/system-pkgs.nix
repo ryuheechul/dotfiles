@@ -21,6 +21,7 @@ let
     vim # would you rather use nano?
     lsof # A tool to list open files
     libdrm # for drmdevice
+    libinput # Handles input devices in Wayland compositors and provides a generic X.Org input driver
     drm_info # Small utility to dump info about DRM devices
     kmod # for `modinfo`
   ];

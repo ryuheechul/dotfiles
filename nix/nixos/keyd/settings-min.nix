@@ -1,5 +1,6 @@
 # - to be used for ../recipes/keyd-guest.nix
 # - you may debug with `sudo showkey` but there should should be better way too
+#   - or with `sudo libinput debug-events --show-keycodes`
 
 let
   meta_mac = import ./meta-mac.nix;
