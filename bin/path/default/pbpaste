@@ -4,7 +4,7 @@
 # temporarily added `test -n "${SSH_TTY}"` to fallback to /usr/bin/pbpaste on macOS client
 # when accessing the shell locally
 if test -n "${DISPLAY}" && test -n "${SSH_TTY}" ; then
-  xsel -o -s | sed $'s/\r$//' # custom sed instead of dos2unix since it somwhow still carried the last line
+  xsel -o -b | sed $'s/\r$//' # custom sed instead of dos2unix since it somwhow still carried the last line
   # thanks to https://stackoverflow.com/a/2613834/1570165
 # when there is no sign of using X11
 else
