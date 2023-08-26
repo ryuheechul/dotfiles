@@ -4,7 +4,7 @@
 # temporarily added `test -n "${SSH_TTY}"` to fallback to /usr/bin/pbcopy on macOS client
 # when accessing the shell locally
 if test -n "${DISPLAY}" && test -n "${SSH_TTY}" ; then
-  tee <&0 | nohup xsel -i -b >/dev/null 2>&1 & # use nohup to return quickly since this can be very slow
+  tee <&0 | nohup xsel -i -s >/dev/null 2>&1 & # use nohup to return quickly since this can be very slow
 # when there is no sign of using X11
 else
   # favor pbpaste
