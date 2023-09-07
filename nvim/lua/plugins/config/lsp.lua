@@ -55,9 +55,7 @@ function M.null_ls()
     -- end,
 
     -- using lsp-format instead to enable format on save
-    on_attach = function(client)
-      require('lsp-format').on_attach(client)
-    end,
+    on_attach = require('lsp-format').on_attach,
 
     sources = sources,
   }
@@ -81,7 +79,7 @@ function M.lspconfig()
   -- after the language server attaches to the current buffer
   local on_attach = function(client, bufnr)
     -- to enable format on save
-    require('lsp-format').on_attach(client)
+    require('lsp-format').on_attach(client, bufnr)
 
     if client.server_capabilities.documentSymbolProvider then
       navic.attach(client, bufnr)

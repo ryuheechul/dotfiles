@@ -14,6 +14,7 @@ return {
         -- customize color to differentiate a and b - thanks to these for hints:
         -- https://github.com/sindrets/diffview.nvim/pull/258
         -- https://github.com/sindrets/diffview.nvim/issues/241
+        ---@diagnostic disable: unused-local
         diff_buf_win_enter = function(bufnr, winid, ctx)
           if ctx.layout_name:match '^diff2' then
             if ctx.symbol == 'a' then
@@ -66,7 +67,7 @@ return {
           -- WARNING: these mapped keys don't seem to reflect to hint
           ['h'] = 'Toggle',
           ['l'] = 'Toggle',
-          ['<tab>'] = '',
+          ['<tab>'] = false,
         },
       },
     }

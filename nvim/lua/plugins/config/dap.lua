@@ -13,6 +13,7 @@ return function()
     }
 
     dap.adapters.nlua = function(callback, config)
+      ---@diagnostic disable: undefined-field
       callback { type = 'server', host = config.host or '127.0.0.1', port = config.port or 8086 }
     end
 
@@ -46,7 +47,7 @@ return function()
         },
         {
           elements = {
-            'console',
+            { id = 'console' },
           },
           size = 10, -- columns
           position = 'bottom',
@@ -54,7 +55,7 @@ return function()
       },
       controls = {
         -- enabled = vim.fn.exists '+winbar' == 1,
-        enabled = 1,
+        enabled = true,
         element = 'console',
         icons = {
           pause = '',
@@ -232,7 +233,7 @@ return function()
       config.justMyCode = false
     end
 
-    local session = dap.attach(adapter, config)
+    local session = dap.attach(adapter, config, {})
     if session == nil then
       io.write 'Error attaching adapter'
     end
@@ -293,7 +294,7 @@ return function()
         -- also relying on setup_vscode_js for adapters to be setup
         dap.continue()
       else
-        print('current there is no support for ' .. ft .. ' file type')
+        print('currently there is no support for ' .. ft .. ' file type')
       end
     end
 
@@ -304,7 +305,7 @@ return function()
   setup_dapui()
   setup_vscode_js()
   attach_keymap()
-  require('nvim-dap-virtual-text').setup()
+  require('nvim-dap-virtual-text').setup {}
 
   layer_keys()
 end

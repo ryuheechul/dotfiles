@@ -99,6 +99,9 @@ local config = function()
     },
     r = {
       name = '+Run/Debug',
+      c = {
+        name = '+Conjure',
+      },
     },
     g = {
       name = '+Generate',
