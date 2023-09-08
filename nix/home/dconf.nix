@@ -55,6 +55,8 @@ with lib.hm.gvariant; {
       enabled-extensions = [
         "pop-shell@system76.com"
         "pop-launcher-super-key@ManeLippert"
+        "nightthemeswitcher@romainvigier.fr"
+        "gestureImprovements@gestures"
       ];
     };
 

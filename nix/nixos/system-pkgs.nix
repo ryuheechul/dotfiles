@@ -11,6 +11,8 @@ let
     # one way to do it is via `Extensions` app but I automated that with ../home/dconf.nix
     gnomeExtensions.pop-shell # Keyboard-driven layer for GNOME Shell
     gnomeExtensions.pop-launcher-super-key # Fork of Pop COSMIC: Binds Pop Launcher on Super-Key when Pop COSMIC Extension is disabled.
+    gnomeExtensions.night-theme-switcher # Automatically toggle your desktop’s color scheme between light and dark, switch backgrounds and run custom commands at sunset and sunrise.
+    gnomeExtensions.gesture-improvements # Improve touchpad gestures for Wayland/X11
   ];
   nix-utils = with pkgs;[
     nvd # Nix/NixOS package version diff tool
