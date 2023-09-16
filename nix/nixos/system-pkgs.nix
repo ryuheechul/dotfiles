@@ -20,7 +20,8 @@ let
   ];
   missing-commons = with pkgs;[
     zip # Compressor/archiver for creating and modifying zipfiles
-    vim # would you rather use nano?
+    vim # The most popular clone of the VI editor
+    file # A program that shows the type of files
     lsof # A tool to list open files
     libdrm # for drmdevice
     libinput # Handles input devices in Wayland compositors and provides a generic X.Org input driver
