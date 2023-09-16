@@ -5,6 +5,8 @@
   imports = [
     # hardware specifics
     ./recipes/surface-pro-intel.nix
+    # handling oom to prevent freezing
+    ./recipes/oom.nix
     # when it's virtualised
     ./recipes/vm.nix
     ./recipes/wsl.nix
