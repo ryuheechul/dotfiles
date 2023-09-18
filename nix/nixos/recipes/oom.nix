@@ -25,9 +25,15 @@
 
   services.systembus-notify.enable = pkgs.lib.mkIf (config.services.earlyoom.enableNotifications) (pkgs.lib.mkDefault true);
 
+  # I can test earlyoom with the one line python code below
+  # this will very quickly fill up the memory; run it with your own risk
+  # `python -c '[print(j) for j in [i for i in range(1_000_000_000)]]'`
+
   ### less likely OOM via swaps
   # - https://wiki.archlinux.org/title/Zram
   # - https://www.reddit.com/r/linuxquestions/comments/ju4bft/zram_zswap_or_both/
+  # - https://www.reddit.com/r/linux/comments/11dkhz7/zswap_vs_zram_in_2023_whats_the_actual_practical/
+  # - https://opensource.com/article/22/11/zram-swap-linux
   zramSwap.enable = true;
 
   # in addition, you can also enable swapfile to avoid memory pressure situation for longer
