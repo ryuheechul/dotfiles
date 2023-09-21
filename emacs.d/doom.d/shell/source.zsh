@@ -47,7 +47,7 @@ fi
 export TERM=eterm-color
 # this way would prevent the shell to be actually closed and open again needlessly which makes toggle feel prompt (after initial opening)
 # when you need an actual exit, just type `exit`
-alias q='vterm_cmd vterm/hide && clear' # `clear` give you the illusion of opening the shell again (promptly) - don't use `clear` when debugging
+printenv ZELLIJ || alias q='vterm_cmd vterm/hide && clear' # `clear` give you the illusion of opening the shell again (promptly) - don't use `clear` when debugging
 
 # despite its name it should only work for the "full screen one"
 vterm_cmd vterm/unhide-mode-line
