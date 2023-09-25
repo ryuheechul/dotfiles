@@ -2,12 +2,12 @@
 
 # aliases that is should be available for non-interactive shell too
 
-# exa
-alias exa="exa --icons --group-directories-first -F --ignore-glob='**/.git|**/.DS_Store'"
-alias ls="exa"
+# eza
+alias eza="eza --icons --group-directories-first -F --ignore-glob='**/.git|**/.DS_Store'"
+alias ls="eza"
 alias l="ls -lah --group --git"
 alias lt="ls -lah -T -L=3 --git --git-ignore"
-alias tree="exa -G -T --git-ignore"
+alias tree="eza -G -T --git-ignore"
 alias treed="tree -D --no-icons"
 
 # navi
