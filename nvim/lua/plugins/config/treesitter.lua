@@ -126,10 +126,6 @@ return function()
     matchup = {
       enable = true, -- mandatory, false will disable the whole extension
     },
-    -- for p00f/nvim-ts-rainbow
-    rainbow = {
-      enable = true,
-    },
     textsubjects = {
       enable = true,
       keymaps = {

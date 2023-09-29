@@ -453,16 +453,22 @@ return {
     -- and discovered thanks to https://github.com/neovim/neovim/issues/21739#issuecomment-1379704105
     cond = vim.env.WSL_DISTRO_NAME ~= nil,
   },
-  { -- 🌈 Simpler Rainbow Parentheses
-    'junegunn/rainbow_parentheses.vim', -- if this plugin ever stops working for me I might consider trying 'luochen1990/rainbow' instead
+  {
+    'hiphish/rainbow-delimiters.nvim',
+    event = 'BufReadPre',
     init = function()
-      local rainbow_grp = vim.api.nvim_create_augroup('MyRainbowAUG', { clear = true })
-      vim.api.nvim_create_autocmd('FileType', {
-        -- for now, including `checkhealth` and `qf` (for e.g. `gd` and `gr`) too
-        pattern = { 'lisp', 'clojure', 'scheme', 'fennel' },
-        command = [[ RainbowParentheses ]],
-        group = rainbow_grp,
-      })
+      vim.g.rainbow_delimiters = {
+        highlight = {
+          'Black',
+          'RainbowDelimiterViolet',
+          'RainbowDelimiterOrange',
+          'RainbowDelimiterBlue',
+          'RainbowDelimiterYellow',
+          'RainbowDelimiterCyan',
+          'RainbowDelimiterGreen',
+          'RainbowDelimiterRed',
+        },
+      }
     end,
   },
   { -- A feature-rich Go development plugin
