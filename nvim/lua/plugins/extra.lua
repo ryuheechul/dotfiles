@@ -260,12 +260,17 @@ return {
       border = 'none',
     },
   },
-  { -- Indent guides for Neovim - consult ../boot/filetype.lua for tabstop and listchars
+  { -- Indent guides for Neovim
     'lukas-reineke/indent-blankline.nvim',
     event = 'VeryLazy',
+    main = 'ibl', -- https://github.com/lukas-reineke/indent-blankline.nvim/wiki/Migrate-to-version-3
     opts = {
-      -- -- disable this related to https://github.com/lukas-reineke/indent-blankline.nvim/issues/440
-      -- show_current_context = true,
+      indent = {
+        char = '▏', -- consult ../boot/filetype.lua for tabstop and listchars
+      },
+      scope = {
+        enabled = false,
+      },
     },
   },
   -- to improve the default vim.ui interfaces which something like nvim-gfold.lua can benefits from

@@ -3,7 +3,7 @@
 
 -- show some hidden characters
 vim.opt.list = true
-vim.opt.listchars:append 'tab:  →' -- use this instead of 'tab:→ ' until https://github.com/lukas-reineke/indent-blankline.nvim/issues/503 gets resolved
+vim.opt.listchars:append 'tab:> '
 vim.opt.listchars:append 'eol:↵'
 vim.opt.listchars:append 'trail:·'
 vim.opt.listchars:append 'extends:↷' -- only visible when nowrap
