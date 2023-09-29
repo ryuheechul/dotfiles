@@ -136,6 +136,7 @@ with pkgs;
   cht-sh # CLI client for cheat.sh, a community driven cheat sheet
   mosh # Mobile shell
   gum # Tasty Bubble Gum for your shell
+  vale # A syntax-aware linter for prose built with speed and extensibility in mind
 ]
 ++ (import ./lang { pkgs = pkgs; })
 ++ (import ./fonts { pkgs = pkgs; })
