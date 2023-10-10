@@ -19,7 +19,7 @@ with pkgs;
   git # Distributed version control system
   gnumake # gnu make
   time # Tool that runs programs and summarizes the system resources they use
-  earthly # Build automation for the container era
+  less # A more advanced file pager than ‘more’
   gnugrep # GNU implementation of the Unix grep command
   coreutils # like for readlink
   gnused # GNU sed, a batch stream editor
@@ -83,6 +83,7 @@ with pkgs;
   jqp # a TUI playground for exploring jq
   # not sure if sqlite is "modern" but keep it here so I can avoid having to build sqlite by an arbitrary npm package which happened quite often
   sqlite # A self-contained, serverless, zero-configuration, transactional SQL database engine
+  earthly # Build automation for the container era
 ] ++
 # viewer
 [
@@ -108,7 +109,7 @@ with pkgs;
   codespelunker # A command code search tool - use with `cs [term]` which works kinda like `rg [term] | fzf`
   fasd # Command-line productivity booster, offers quick access to files and directories
   sad # search and replace | Space Age seD - ex) `fd . | sad find replace`
-  fd # mordern find
+  fd # A simple, fast and user-friendly alternative to find
 ] ++
 # enhance git/github experience
 [
