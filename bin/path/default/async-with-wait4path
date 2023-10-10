@@ -3,10 +3,10 @@
 # Confused with quotes? Read https://scriptingosx.com/2020/04/advanced-quoting-in-shell-scripts/
 
 set -e
-# A helper script to run something with delay seconds
-# Usage example with 2 seconds delay: `async-with-delay 2 mkdir _test__`
+# A helper script to run something with wait4path
+# Usage example: `async-with-wait4path /bin/echo mkdir _test__`
 
-delay="${1}" # in seconds
+path_to_wait="${1}"
 
 # discard the first arg from @
 shift
@@ -15,5 +15,6 @@ shift
 the_cmd="$(echo ${(qq)@})"
 # see this for bash - https://stackoverflow.com/a/64056898/1570165
 
+# exit 0
 # completely detach from terminal - https://stackoverflow.com/a/10408906/1570165
-nohup bash -c "sleep ${delay} && ${the_cmd}" </dev/null >/dev/null 2>&1 &
+nohup bash -c "wait4path ${path_to_wait} && ${the_cmd}" </dev/null >/dev/null 2>&1 &
