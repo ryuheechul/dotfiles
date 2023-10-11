@@ -18,6 +18,8 @@ in
     XDG_DATA_DIRS = ''''${XDG_DATA_DIRS}:/usr/share:/var/lib/flatpak/exports/share:''${HOME}/.local/share/flatpak/exports/share'';
     # https://github.com/sharkdp/bat/issues/2578#issuecomment-1598332705
     LESSUTFCHARDEF = "E000-F8FF:p,F0000-FFFFD:p,100000-10FFFD:p";
+    # https://github.com/microsoft/WSL/issues/4446
+    LESSCHARSET = "utf-8";
   };
 
   # `cat ~/.nix-profile/etc/profile.d/hm-session-vars.sh` to debug
