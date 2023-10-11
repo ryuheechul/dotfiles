@@ -27,6 +27,7 @@ let
     libinput # Handles input devices in Wayland compositors and provides a generic X.Org input driver
     drm_info # Small utility to dump info about DRM devices
     kmod # for `modinfo`
+    file # A program that shows the type of files
   ];
   hardware-support = with pkgs;[
     glmark2 # OpenGL (ES) 2.0 benchmark
