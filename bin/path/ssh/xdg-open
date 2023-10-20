@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# this is for https://github.com/superbrothers/opener#remote-environment
+
+socket="${HOME}/.opener.sock"
+
+test -S "${socket}" || {
+  echo "${socket} is not bound"
+  exit 1
+}
+
+if [ -p /dev/stdin ]; then
+    cat - | nc -U "${socket}"
+else
+    echo "${@}" | nc -U "${socket}"
+fi
+
+# check also https://github.com/superbrothers/opener#local-environment for local environment
+#
+# for example:
+# ```ssh-config
+# #             remote path (linux)       local path (macOS)
+# RemoteForward /home/[user]/.opener.sock /Users/[user]/.opener
+# ```

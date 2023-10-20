@@ -17,6 +17,10 @@ cd ../../../ || exit
 
 mkdir -p ~/Screenshots && defaults write com.apple.screencapture location ~/Screenshots
 
+# remote url local opener - https://github.com/superbrothers/opener
+brew install superbrothers/opener/opener
+brew services start opener
+
 ####### Mac App Store #######
 
 # mas let you install Mac App Store app with CLI
