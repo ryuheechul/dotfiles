@@ -139,6 +139,10 @@ zsh -c "source '${dfs_rhc}/zsh/my_addons/zinit'"
 
 ## emacs
 
+# chemecs to allow switching between configs like doom emacs and spacemacs
+git clone https://github.com/plexus/chemacs2.git "${HOME}/.emacs.d" || bash -c 'cd "${HOME}/.emacs.d" && git pull'
+ln -sf "${dfs_rhc}/emacs.d/emacs-profiles.el" "${HOME}/.emacs-profiles.el"
+
 # spacemacs
 git clone https://github.com/syl20bnr/spacemacs "${HOME}/.spacemacs.d" || bash -c 'cd "${HOME}/.spacemacs.d" && git pull'
 ln -sf "${dfs_rhc}/emacs.d/spacemacs" "${HOME}/.spacemacs"
@@ -147,10 +151,6 @@ ln -sf "${dfs_rhc}/emacs.d/spacemacs" "${HOME}/.spacemacs"
 git clone https://github.com/hlissner/doom-emacs "${HOME}/.doom-emacs.d" || bash -c 'cd "${HOME}/.doom-emacs.d" && git pull'
 ln -sf "${dfs_rhc}/emacs.d/doom.d" "${XDG_CONFIG_HOME}/doom"
 yes | "${HOME}/.doom-emacs.d/bin/doom" install || true # let the failure of this command not to block the rest
-
-# chemecs to allow switching between configs like doom emacs and spacemacs
-git clone https://github.com/plexus/chemacs2.git "${HOME}/.emacs.d" || bash -c 'cd "${HOME}/.emacs.d" && git pull'
-ln -sf "${dfs_rhc}/emacs.d/emacs-profiles.el" "${HOME}/.emacs-profiles.el"
 
 ## (neo)vim
 # neovim - now this replace SpaceVim
