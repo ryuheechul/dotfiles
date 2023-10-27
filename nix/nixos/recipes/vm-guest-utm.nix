@@ -47,6 +47,8 @@
       device = "/mnt/share/from-utm";
       depends = [ "/mnt/share/from-utm" ];
       fsType = "fuse.bindfs";
+      # if permission is not fixed by mapping below, you may try `sudo chown -R $USER /mnt/share/for-user`
+      # https://docs.getutm.app/guest-support/linux/#fixing-permission-errors
       options = [ "map=501/1000:@20/@1000" "nofail" ];
     };
 }
