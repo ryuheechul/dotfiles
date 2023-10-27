@@ -38,6 +38,7 @@ let
     pciutils # for `lspci`
     # https://www.reddit.com/r/linux_gaming/comments/ynue9u/comment/ivat383
     glxinfo # Test utilities for OpenGL - `glxinfo -B`
+    bindfs # A FUSE filesystem for mounting a directory to another location
   ];
 in
 # system pkgs for any nixOS

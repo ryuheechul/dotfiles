@@ -8,7 +8,7 @@
     # handling oom to prevent freezing
     ./recipes/oom.nix
     # when it's virtualised
-    ./recipes/vm.nix
+    ./recipes/vm-guest-utm.nix
     ./recipes/wsl.nix
     # services
     ./recipes/openssh.nix

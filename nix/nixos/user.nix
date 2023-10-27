@@ -2,7 +2,8 @@
 let
   groups = [ ]
     ++ pkgs.lib.optionals config.virtualisation.docker.enable [ "docker" ]
-    ++ pkgs.lib.optionals config.virtualisation.libvirtd.enable [ "libvirtd" "qemu-libvirtd" ];
+    ++ pkgs.lib.optionals config.virtualisation.libvirtd.enable [ "libvirtd" "qemu-libvirtd" ]
+    ++ pkgs.lib.optionals config.services.davfs2.enable [ "davfs2" ];
 in
 with pkgs.lib;{
   isNormalUser = mkForce true;
