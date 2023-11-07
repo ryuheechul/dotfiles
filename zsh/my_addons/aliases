@@ -375,15 +375,17 @@ export NIX_BUILD_CORES="$(getconf _NPROCESSORS_ONLN | xargs -I _ expr _ / 2)"
 # `home-manager` doesn't seem to blindly follow $NIX_BUILD_CORES so manually pass the value
 alias home-manager='home-manager --cores "${NIX_BUILD_CORES:-4}"'
 
+alias switch-home='home-manager switch |& nom'
+
 # unifying interface of applying updated nix expressions for different systems
-alias switch-nix='home-manager switch' # this is default for a simple system that only uses home-manager
+alias switch-nix='switch-home' # this is default for a simple system that only uses home-manager
 # on darwin, it will also do "switch" via nix-darwin
 uname | xargs test "Darwin" = \
-  && alias switch-nix='home-manager switch; pushd "$my_dot_d/nix/darwin" && make switch; popd'
+  && alias switch-nix='switch-home; pushd "$my_dot_d/nix/darwin" && make switch |& nom; popd'
 # on nixos, rely on one script to do it all
 test -f /etc/nixos/configuration.nix \
-  && alias switch-nix-dry='"$my_dot_d/bootstrap/foundation/nixos/nixos-rebuild.sh"' \
-  && alias switch-nix='"$my_dot_d/bootstrap/foundation/nixos/switch.sh"'
+  && alias switch-nix-dry='"$my_dot_d/bootstrap/foundation/nixos/nixos-rebuild.sh" |& nom' \
+  && alias switch-nix='"$my_dot_d/bootstrap/foundation/nixos/switch.sh" |& nom'
 
 # commandify
 alias fulltimezsh='FORCE_LOAD_MY_ZSH_STUFF=1 timezsh'

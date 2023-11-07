@@ -139,6 +139,7 @@ with pkgs;
   gum # Tasty Bubble Gum for your shell
   vale # A syntax-aware linter for prose built with speed and extensibility in mind
   vhs # A tool for generating terminal GIFs with code
+  nix-output-monitor # Parses output of nix-build to show additional information
 ]
 ++ (import ./lang { pkgs = pkgs; })
 ++ (import ./fonts { pkgs = pkgs; })
