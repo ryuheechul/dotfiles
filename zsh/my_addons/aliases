@@ -381,11 +381,11 @@ alias switch-home='home-manager switch |& nom'
 alias switch-nix='switch-home' # this is default for a simple system that only uses home-manager
 # on darwin, it will also do "switch" via nix-darwin
 uname | xargs test "Darwin" = \
-  && alias switch-nix='switch-home; pushd "$my_dot_d/nix/darwin" && make switch |& nom; popd'
+  && alias switch-nix='switch-home; pushd "$my_dot_d/nix/darwin" && make switch; popd'
 # on nixos, rely on one script to do it all
 test -f /etc/nixos/configuration.nix \
-  && alias switch-nix-dry='"$my_dot_d/bootstrap/foundation/nixos/nixos-rebuild.sh" |& nom' \
-  && alias switch-nix='"$my_dot_d/bootstrap/foundation/nixos/switch.sh" |& nom'
+  && alias switch-nix-dry='"$my_dot_d/bootstrap/foundation/nixos/nixos-rebuild.sh"' \
+  && alias switch-nix='"$my_dot_d/bootstrap/foundation/nixos/switch.sh"'
 
 # commandify
 alias fulltimezsh='FORCE_LOAD_MY_ZSH_STUFF=1 timezsh'

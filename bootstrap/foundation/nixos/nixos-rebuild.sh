@@ -10,7 +10,7 @@ test -n "${WSL_DISTRO_NAME}" && sudo mount -o remount,rw /tmp/.X11-unix
 
 # to support hardwares
 sudo nix-channel --list | grep nixos-hardware > /dev/null || {
-  sudo nix-channel --add https://github.com/NixOS/nixos-hardware/archive/master.tar.gz nixos-hardware
+  sudo nix-channel --add https://github.com/NixOS/nixos-hardware/archive/627bc9b.tar.gz nixos-hardware
   sudo nix-channel --update
 }
 
