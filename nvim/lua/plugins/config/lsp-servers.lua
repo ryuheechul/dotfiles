@@ -131,9 +131,19 @@ return function(setup_default, node_root)
     local volume_name = vim.env.LSP_PYRIGHT_ADDITIONAL_VOLUME
     local path_in_container = vim.env.LSP_PYRIGHT_VOLUME_CONTAINER_PATH
 
+    local setup_pyright = merge(setup_default, {
+      settings = {
+        python = {
+          analysis = {
+            diagnosticMode = 'openFileOnly',
+          },
+        },
+      },
+    })
+
     -- in case with no container use
     if not volume_name and not path_in_container then
-      return setup_default
+      return setup_pyright
     end
 
     -- to be able to go to a definitions for third party packages, mount the volume from code running container
@@ -165,7 +175,7 @@ return function(setup_default, node_root)
       end,
     })
 
-    return merge(setup_default, {
+    return merge(setup_pyright, {
       -- based on the example from https://github.com/lspcontainers/lspcontainers.nvim#pyright
       before_init = function(params)
         params.processId = vim.NIL
