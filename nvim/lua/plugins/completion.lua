@@ -26,6 +26,19 @@ return {
           return vim.env.my_nvim_tabnine ~= nil
         end,
       },
+      { -- to turn github copilot into a cmp source
+        'zbirenbaum/copilot-cmp',
+        dependencies = {
+          { -- Fully featured & enhanced replacement for copilot.vim complete with API for interacting with Github Copilot
+            'zbirenbaum/copilot.lua',
+            opts = {},
+          },
+        },
+        opts = {},
+        cond = function()
+          return vim.env.my_nvim_copilot ~= nil
+        end,
+      },
     },
     config = require 'plugins.config.completion',
   },
