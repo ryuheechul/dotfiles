@@ -63,6 +63,7 @@ _install_cask sublime-text; ./sublime/.link.sh
 _install_cask secretive
 _install_cask visual-studio-code
 _install_cask karabiner-elements; ./karabiner/.link.sh
+_install_cask raycast
 
 echo "run ./karabiner-uk/.link.sh instead if the hardware keyboard layout is British"
 
