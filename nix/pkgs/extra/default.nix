@@ -9,6 +9,7 @@ let
   hired = import ../custom/hired.nix { pkgs = pkgs; };
   cfn-lint = pkgs.python3.pkgs.cfn-lint;
   hexto256 = import ../custom/hexto256.nix;
+  termimagenator = import ../custom/termimagenator.nix;
   tf-helper = import ../custom/tf-helper.nix { pkgs = pkgs; };
   bat-riffle = import ../custom/bat-riffle { pkgs = pkgs; };
   alacritty-nightly = import ../custom/alacritty-nightly.nix;
@@ -19,6 +20,7 @@ with pkgs;
 [
   # anything "extra" but without optional flag goes here
   hexto256
+  termimagenator
 ]
 ++ ifEnv "MY_NIX_EXTRA_NIGHTLY_ALACRITTY"
   [
