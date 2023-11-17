@@ -209,6 +209,10 @@ plugins {
 //
 // default_shell "fish"
 
+// Choose the path to override cwd that zellij will use for opening new panes
+//
+// default_cwd ""
+
 // Toggle between having pane frames around the panes
 // Options:
 //   - true (default)
@@ -216,25 +220,51 @@ plugins {
 //
 pane_frames true // set to true until https://github.com/zellij-org/zellij/issues/2180 gets resolved...
 
+// Toggle between having Zellij lay out panes according to a predefined set of layouts whenever possible
+// Options:
+//   - true (default)
+//   - false
+//
+// auto_layout true
+
+// Whether sessions should be serialized to the cache folder (including their tabs/panes, cwds and running commands) so that they can later be resurrected
+// Options:
+//   - true (default)
+//   - false
+//
+session_serialization false
+
+// Whether pane viewports are serialized along with the session, default is false
+// Options:
+//   - true
+//   - false (default)
+// serialize_pane_viewport true
+
+// Scrollback lines to serialize along with the pane viewport when serializing sessions, 0
+// defaults to the scrollback size. If this number is higher than the scrollback size, it will
+// also default to the scrollback size. This does nothing if `serialize_pane_viewport` is not true.
+//
+// scrollback_lines_to_serialize 10000
+
 // Define color themes for Zellij
 // For more examples, see: https://github.com/zellij-org/zellij/tree/main/example/themes
 // Once these themes are defined, one of them should to be selected in the "theme" section of this file
 //
-themes {
-  dracula {
-    fg 248 248 242
-    bg 40 42 54
-    red 255 85 85
-    green 80 250 123
-    yellow 241 250 140
-    blue 98 114 164
-    magenta 255 121 198
-    orange 255 184 108
-    cyan 139 233 253
-    black 0 0 0
-    white 255 255 255
-  }
-}
+// themes {
+//   dracula {
+//     fg 248 248 242
+//     bg 40 42 54
+//     red 255 85 85
+//     green 80 250 123
+//     yellow 241 250 140
+//     blue 98 114 164
+//     magenta 255 121 198
+//     orange 255 184 108
+//     cyan 139 233 253
+//     black 0 0 0
+//     white 255 255 255
+//   }
+// }
 
 // Choose the theme that is specified in the themes section.
 // Default: default
@@ -311,3 +341,9 @@ default_mode "locked"
 // The folder in which Zellij will look for themes
 //
 // theme_dir "/path/to/my/theme_dir"
+
+// Enable or disable the rendering of styled and colored underlines (undercurl).
+// May need to be disabled for certain unsupported terminals
+// Default: true
+//
+// styled_underlines false
