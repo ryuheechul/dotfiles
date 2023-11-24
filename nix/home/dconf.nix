@@ -51,6 +51,12 @@ with lib.hm.gvariant; {
       two-finger-scrolling-enabled = true;
     };
 
+    # keyboard shortcuts
+    "org/gnome/settings-daemon/plugins/media-keys" = {
+      screensaver = [ "<Control><Alt>q" ];
+    };
+
+    # gnome shell
     "org/gnome/shell" = {
       enabled-extensions = [
         # https://search.nixos.org/packages?show=gnomeExtensions.pop-shell
@@ -66,6 +72,7 @@ with lib.hm.gvariant; {
       ];
     };
 
+    # pop-shell
     "org/gnome/shell/extensions/pop-shell" = {
       active-hint = false;
       active-hint-border-radius = mkUint32 5;
