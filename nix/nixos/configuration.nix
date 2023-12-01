@@ -17,7 +17,9 @@ in
     ];
 
   # https://nixos.wiki/wiki/NTP
-  services.ntp.enable = true;
+  # https://anarc.at/blog/2022-01-23-chrony/
+  # https://chrony-project.org/comparison.html
+  services.chrony.enable = true;
 
   # https://nixos.wiki/wiki/Fonts
   fonts = {
