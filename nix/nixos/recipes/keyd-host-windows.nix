@@ -5,7 +5,5 @@
 
 {
   services.keyd.enable = true;
-  services.keyd.settings = import ../keyd/settings-full-windows.nix;
-  # replace above to below at the next release
-  # services.keyd.keyboards.default.settings = import ../keyd/settings-full-windows.nix
+  services.keyd.keyboards.default.settings = import ../keyd/settings-full-windows.nix;
 }

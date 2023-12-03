@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# why this wrapper?
+# - avoid using channel and use the explicit source set by `niv`
+
+curr_d="$(dirname "$0")"
+nix_d="${curr_d}/../../../nix"
+get_path_for="${nix_d}/niv-shim/bin/get-path-for.sh"
+alt_nixpkgs="$("${get_path_for}" nixpkgs)"
+alt_hm="$("${get_path_for}" home-manager)"
+
+# try this first
+bin_nix_shell=/nix/var/nix/profiles/default/bin/nix-shell
+
+# fall back to this one for NixOS
+test -x "${bin_nix_shell}" || bin_nix_shell=/run/current-system/sw/bin/nix-shell
+
+# `-I "nixpkgs=${alt_nixpkgs}" seems to have a trouble when installing home-manager on NixOS
+# thus altering $NIX_PATH instead
+NIX_PATH="nixpkgs=${alt_nixpkgs}:${NIX_PATH}" \
+  "${bin_nix_shell}" \
+  -I "home-manager=${alt_hm}" \
+  $@

@@ -13,19 +13,13 @@ cd ../../ || exit
 # install nix
 ./nix/bin/install/multi-user.sh
 
-sudo ./nix/bin/shim/path.sh
-
 # enable nix for the rest of script
 . /etc/profile.d/nix.sh
-. /etc/profile.d/user-shim-for-nix-path.sh
 
-# init channels
-./nix/bin/channels.sh
-
-# set up local ~/.config/nixpkgs/home.nix
-./nix/bin/init-home-manager.sh
+# home-manager init and switch ("idempotent")
+./nix/bin/init-hm.sh
 
 # install packages for current user
-home-manager switch
+./nix/bin/hm.sh switch
 
 echo "You may continue the rest with $(readlink -f ./bootstrap/configuration.sh)"

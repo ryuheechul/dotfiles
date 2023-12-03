@@ -22,6 +22,7 @@ brew install superbrothers/opener/opener
 brew services start opener
 
 ####### Mac App Store #######
+# TODO: give a handle to skip this when not signed in
 
 # mas let you install Mac App Store app with CLI
 brew install mas

@@ -1,0 +1,62 @@
+{
+    "home-manager": {
+        "branch": "master",
+        "description": "Manage a user environment using Nix  [maintainer=@rycee] ",
+        "homepage": "https://nix-community.github.io/home-manager/",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "e504e8d01f950776c3a3160ba38c5957a1b89e66",
+        "sha256": "07zi387zmfabp567f6cd6jb30jqjx1aykxcmxnwp41yp7qrjghcr",
+        "type": "tarball",
+        "url": "https://github.com/nix-community/home-manager/archive/e504e8d01f950776c3a3160ba38c5957a1b89e66.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixos": {
+        "branch": "nixos-unstable",
+        "description": "Nix Packages collection & NixOS",
+        "homepage": "",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "e92039b55bcd58469325ded85d4f58dd5a4eaf58",
+        "sha256": "1nf6i21njixl6rx2fxalih4nhcsc5p8bf521gk0b87kv4qiq7mnf",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/e92039b55bcd58469325ded85d4f58dd5a4eaf58.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixos-hardware": {
+        "branch": "master",
+        "description": "A collection of NixOS modules covering hardware quirks.",
+        "homepage": "",
+        "owner": "NixOS",
+        "repo": "nixos-hardware",
+        "rev": "627bc9b",
+        "sha256": "08xq883mls3650wnr90cfqwqjlvdax3y5l9fnnl5sghv7cibggkh",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixos-hardware/archive/627bc9b.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs": {
+        "branch": "nixpkgs-unstable",
+        "description": "Nix Packages collection & NixOS",
+        "homepage": "",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "ec04772e7516b6d58d98b491e68b329b7558b14d",
+        "sha256": "0h6x6phv6bdd4sby1kzradvv5ba813g258y5sx64ixlqvzbv9cpc",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/ec04772e7516b6d58d98b491e68b329b7558b14d.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs-stable-darwin": {
+        "branch": "nixpkgs-23.11-darwin",
+        "description": "Nix Packages collection & NixOS",
+        "homepage": "",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "20643cc9a93e6d09f3b131e068cfafddb083921b",
+        "sha256": "0c1rq04hm95ds9xj0575kj4np2mh13rd6412rhiawwdzp8hg2c0p",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/20643cc9a93e6d09f3b131e068cfafddb083921b.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}

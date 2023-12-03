@@ -35,15 +35,12 @@ then
   . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 fi
 
-# init channels
-./nix/bin/channels.sh
-
-# set up a local ~/.config/nixpkgs/home.nix
-nix-shell -p coreutils --run ./nix/bin/init-home-manager.sh
+# home-manager init and switch ("idempotent")
+./nix/bin/nix-shell.sh -p coreutils --run ./nix/bin/init-hm.sh
 
 if [ -x "$(command -v nix)" ]; then
   SKIP_BREW_BUNDLE=1
-  home-manager switch
+  ./nix/bin/hm.sh switch
 fi
 
 ####### brew #######

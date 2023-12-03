@@ -5,7 +5,5 @@
 
 {
   services.keyd.enable = true;
-  services.keyd.settings = import ../keyd/settings-min.nix;
-  # replace above to below at the next release
-  # services.keyd.keyboards.vm.settings = import ../keyd/settings-min.nix;
+  services.keyd.keyboards.vm.settings = import ../keyd/settings-min.nix;
 }

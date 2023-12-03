@@ -2,8 +2,8 @@
 
 set -e
 
-curr_dir="$(dirname "$0")"
-pushd "${curr_dir}"
+curr_d="$(dirname "$0")"
+pushd "${curr_d}"
 
 ./nixos-rebuild.sh switch
 
@@ -17,12 +17,7 @@ printenv TMUX ZELLIJ | xargs test -z \
   || printenv SSH_CLIENT > /dev/null \
   || exit 0
 
+nix_d="../../../nix"
 # home-manager init and switch ("idempotent")
-../../../nix/bin/channels.sh
-../../../nix/bin/init-home-manager.sh
-
-echo ${NIX_PATH} | grep ${USER} && home-manager switch || {
-  # fallback to set path to include channels in case not added yet
-  export NIX_PATH="${HOME}/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH"
-  home-manager switch
-}
+"${nix_d}/bin/init-hm.sh"
+"${nix_d}/bin/hm.sh" switch

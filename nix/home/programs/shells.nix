@@ -31,6 +31,7 @@ in
 
   # only the super basic ones that should be shared across shells
   # `cat ~/.bashrc or other shell rc files to debug`
+  # `cat ~/.zshrc to see why this is not being loaded for zsh`
   home.shellAliases = {
     q = "exit";
     printpath = ''echo ''${PATH} | tr ":" "\n"'';
@@ -69,6 +70,9 @@ in
         # and binaries via tea
         command -v tea 2>&1 >/dev/null && export PATH="''${my_dot_d}/bin/path/tea/bin:''${PATH}"
       fi
+
+      # overriding due to https://github.com/nix-community/home-manager/issues/3324
+      export PATH="''${XDG_CONFIG_HOME}/dfs-rhc/bin/path/default:''${PATH}"
 
       # to prevent zsh to miss this in case bash was the first one to load
       unset __HM_SESS_VARS_SOURCED

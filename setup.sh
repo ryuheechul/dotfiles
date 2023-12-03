@@ -16,14 +16,11 @@ cd "$(dirname "$0")" || exit
 # source nix
 . ${HOME}/.nix-profile/etc/profile.d/nix.sh
 
-# init channels
-./nix/bin/channels.sh
-
-# set up local ~/.config/nixpkgs/home.nix
-./nix/bin/init-home-manager.sh
+# home-manager init and switch ("idempotent")
+./nix/bin/init-hm.sh
 
 # install packages for current user
-home-manager switch
+./nix/bin/hm.sh switch
 
 ####### configuration #######
 

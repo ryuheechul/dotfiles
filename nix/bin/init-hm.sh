@@ -5,11 +5,14 @@
 set -x
 
 # early exit to be "idempotent"
-command -v home-manager && { echo 'home-manager already initialized'; exit 0; }
+#
+test -x "${HOME}/.nix-profile/bin/home-manager" && { echo 'home-manager already initialized'; exit 0; }
 
-export NIX_PATH="${HOME}/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH"
+curr_dir="$(dirname "$0")"
+repo_root="${curr_dir}/../.."
+nix_d="${repo_root}/nix"
 
-nix-shell '<home-manager>' -A install
+"${nix_d}/bin/install-hm.sh"
 
 path_for_hm="${HOME}/.config/home-manager"
 path_for_home_nix="${path_for_hm}/home.nix"
@@ -17,8 +20,6 @@ path_for_home_nix="${path_for_hm}/home.nix"
 # print previous file content in case there's one
 test -f "${path_for_home_nix}" && cat "${path_for_home_nix}"
 
-curr_dir="$(dirname "$0")"
-repo_root="${curr_dir}/../.."
 repo_root_abs="$(readlink -f "${repo_root}")"
 my_nix_home_path="${repo_root_abs}/nix/home"
 
@@ -26,7 +27,7 @@ my_nix_home_path="${repo_root_abs}/nix/home"
 echo "generating ${path_for_home_nix}"
 mkdir -p "${path_for_hm}"
 cat << EOF > "${path_for_home_nix}"
-# generated via init-home-manager.sh
+# generated via init-hm.sh
 let
   home-nix-path = /. + builtins.toPath "$(echo "${my_nix_home_path}")";
   imports = [ home-nix-path ];

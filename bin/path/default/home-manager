@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# why this wrapper?
+# - `home-manager` doesn't seem to blindly follow $NIX_BUILD_CORES so manually pass the value
+# - avoid using channel and use the explicit source set by `niv`
+
+curr_d="$(dirname "$0")"
+nix_d="${curr_d}/../../../nix"
+get_path_for="${nix_d}/niv-shim/bin/get-path-for.sh"
+alt_nixpkgs="$("${get_path_for}" nixpkgs)"
+alt_nixpkgs_stable_darwin="$("${get_path_for}" nixpkgs-stable-darwin)"
+alt_hm="$("${get_path_for}" home-manager)"
+
+channel_for_darwin=""
+test $(uname) = "Darwin" && channel_for_darwin="-I nixpkgs-stable-darwin=${alt_nixpkgs_stable_darwin}"
+
+"${HOME}/.nix-profile/bin/home-manager" \
+  -I "home-manager=${alt_hm}" \
+  -I "nixpkgs=${alt_nixpkgs}" \
+  ${channel_for_darwin} \
+  --cores "${NIX_BUILD_CORES:-4}" \
+  $@
