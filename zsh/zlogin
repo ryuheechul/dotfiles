@@ -19,7 +19,7 @@ if is_zsh_interactive && test "${TERM}" != 'dumb' && test -n "${SSH_TTY}"; then
 
   if test -z "${DISPLAY}"; then
     # in case of `ssh -R 6020:/tmp/.X11-unix/X0 [host]`
-    if nc -zv localhost 6020; then
+    if nc -zv localhost 6020 &> /dev/null; then
       export DISPLAY=:20
     fi
   fi
