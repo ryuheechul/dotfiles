@@ -364,6 +364,7 @@ alias chtsh='cht --shell'
 alias googler='googler -n 3'
 alias ddgr='ddgr -n 3'
 
+alias is-nixos='grep "NAME=NixOS" /etc/os-release &> /dev/null'
 # https://nixos.wiki/wiki/Storage_optimization
 alias nix-collect-garbage='nix-collect-garbage --delete-older-than 30d'
 # set half of the available core to be default
@@ -380,7 +381,7 @@ alias switch-nix='switch-home' # this is default for a simple system that only u
 uname | xargs test "Darwin" = \
   && alias switch-nix='switch-home; pushd "$my_dot_d/nix/darwin" && make switch; popd'
 # on nixos, rely on one script to do it all
-test -f /etc/nixos/configuration.nix \
+is-nixos \
   && alias switch-nix-dry='"$my_dot_d/bootstrap/foundation/nixos/nixos-rebuild.sh"' \
   && alias switch-nix='"$my_dot_d/bootstrap/foundation/nixos/switch.sh"'
 
