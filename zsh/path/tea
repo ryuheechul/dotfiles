@@ -1,12 +1,12 @@
 # vim: set ft=zsh:
 
-# function add-to-path # this function should be defined at ./set-basic
+# using function add-to-path which should be coming from ./set-basic
 
 if test -d "${HOME}/.tea"; then
   export TEA_MAGIC=0
-  test -z "${commands[tea]}" && source <("${HOME}/.tea/tea.xyz/v*/bin/tea" --magic=zsh --silent)
+  fastcommandcheck tea || source <("${HOME}/.tea/tea.xyz/v*/bin/tea" --magic=zsh --silent)
 
   # drawing the power of tea to magically install things with symlinks
   # read ../../bin/path/tea/README.md for detail
-  test -n "${commands[tea]}" && add-to-path "${my_dot_d}/bin/path/tea/bin"
+  fastcommandcheck tea && add-to-path "${my_dot_d}/bin/path/tea/bin"
 fi

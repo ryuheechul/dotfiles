@@ -8,7 +8,7 @@ fi
 
 # extra things to load for neovim for seamless integration
 
-if test -n "${NVIM_LISTEN_ADDRESS}" && test -n "${commands[nvr]}"; then
+if test -n "${NVIM_LISTEN_ADDRESS}" && fastcommandcheck nvr; then
   to_source_for_neovim="${my_dot_d}/nvim/shell/source.zsh"
   test -f ${to_source_for_neovim} && source ${to_source_for_neovim}
 fi

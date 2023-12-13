@@ -18,7 +18,7 @@ alias navih='navi fn welcome'
 # make ed slightly friendlier
 alias ed="ed -p '> '"
 # use hired in place of ed when available
-test -n "${commands[hired]}" && alias ed="hired -nl"
+fastcommandcheck hired && alias ed="hired -nl"
 
 # quick way to attach to tmux and zellij
 alias tmux-attach="${my_dot_d}/bin/tmux-attach-or-new.sh"

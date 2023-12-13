@@ -1,5 +1,10 @@
 # vim: set ft=zsh:
 
+# inspired by https://www.topbug.net/blog/2016/10/11/speed-test-check-the-existence-of-a-command-in-bash-and-zsh/
+function fastcommandcheck() {
+  (($+commands[$1]))
+}
+
 # a helper function to determine if this shell is interactive
 function is_zsh_interactive() {
   case "$-" in

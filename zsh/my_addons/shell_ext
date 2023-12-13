@@ -72,7 +72,7 @@ export BAT_THEME="Solarized (light)"
 export BAT_PAGER="less --RAW-CONTROL-CHARS --quit-if-one-screen --mouse -I"
 
 # set LS_COLORS with vivid
-if test -n "${commands[vivid]}"; then
+if fastcommandcheck vivid; then
   export LS_COLORS="$(_evalcache _evalable_vivid_generate_solarized_light)"
 fi
 
@@ -99,13 +99,13 @@ export FZF_ALT_C_OPTS='--preview "preview {}"'
 
 # better history search with fzf via https://nixos.wiki/wiki/Fzf
 
-if test -n "${commands[fzf-share]}"; then
+if fastcommandcheck fzf-share; then
   path_from_fzf_share="$(_evalcache _evalable_fzf_share)"
   source "${path_from_fzf_share}/key-bindings.zsh"
   source "${path_from_fzf_share}/completion.zsh"
 else # falling back to brew
   # in case of enabling with brew via https://github.com/junegunn/fzf#using-homebrew
-  if test -n "${commands[brew]}"; then
+  if fastcommandcheck brew; then
     [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
     # configuring completions for brew installed packages
     # this FPATH will be needed in ../zshrc and should be accessible this way too
@@ -118,14 +118,14 @@ _tag fzf
 ## binaries by language global packages, for example, npm, rust, go, etc.
 
 # rust
-if test -n "${commands[cargo]}"; then
+if fastcommandcheck cargo; then
   add-to-path "${HOME}/.cargo/bin"
 fi
 
 _tag cargo
 
 # golang
-if test -n "${commands[go]}"; then
+if fastcommandcheck go; then
   export GOPATH=${GOPATH:-${HOME}/go}
   add-to-path "${GOPATH}/bin"
 fi
@@ -133,7 +133,7 @@ fi
 _tag go
 
 # yarn
-if test -n "${commands[yarn]}"; then
+if fastcommandcheck yarn; then
   # because yarn global bin is slow
   add-to-path "$(_evalcache _evalable_yarn_global_path)"
 fi
@@ -154,12 +154,12 @@ _tag my_paths_supersedes
 
 
 # use direnv
-[ $commands[direnv] ] && _evalcache direnv hook zsh
+fastcommandcheck direnv && _evalcache direnv hook zsh
 
 _tag direnv
 
 # for https://github.com/aykamko/tag
-if (( $+commands[tag] )); then
+if fastcommandcheck tag; then
   export TAG_SEARCH_PROG=ag
   tag() { command tag "$@"; source ${TAG_ALIAS_FILE:-/tmp/tag_aliases} 2>/dev/null }
   alias ag=tag
@@ -168,7 +168,7 @@ fi
 _tag tag
 
 # CTRL-G - https://github.com/denisidoro/navi#usage
-[ $commands[navi] ] && _evalcache navi widget zsh
+fastcommandcheck navi && _evalcache navi widget zsh
 
 _tag navi
 
