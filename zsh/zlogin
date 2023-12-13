@@ -19,11 +19,20 @@ if is_zsh_interactive && test "${TERM}" != 'dumb' && test -n "${SSH_TTY}"; then
 
   if test -z "${DISPLAY}"; then
     # in case of `ssh -R 6020:/tmp/.X11-unix/X0 [host]`
+    # or `RemoteForward 6020 /tmp/.X11-unix/X0` in ~/.ssh/config
     if nc -zv localhost 6020 &> /dev/null; then
       export DISPLAY=:20
+
+    # could be useful when having a complete control of the "remote host"
+    # e.g. a direct VM guest that has some integration with the host machine
+    # aka mimicking ForwardX11 (only) in terms of clipboard sharing
+    # "local" is a relative term and here is being used in the perspective of the remote host
+    elif test -n "${PREFER_LOCAL_DISPLAY_AS_FALLBACK}" && fastcommandcheck systemctl; then
+      source "${my_zsh_d}/fn/linux"
+      sourcesystemuserenv DISPLAY
+      sourcesystemuserenv XAUTHORITY
     fi
   fi
-  # or `RemoteForward 6020 /tmp/.X11-unix/X0` in ~/.ssh/config
 
   # consider opening `zellij` only if not running under `tmux` already
   if ! printenv TMUX > /dev/null; then

@@ -1,0 +1,15 @@
+# vim: set ft=zsh:
+
+fastcommandcheck systemctl || return 0
+
+function printsystemuserenv() {
+  # inspired by:
+  # - https://unix.stackexchange.com/a/176874/396504
+  # - https://unix.stackexchange.com/a/429106/396504
+  # - https://stackoverflow.com/a/77651039/1570165
+  bash -c 'source <(systemctl --user show-environment | grep '$1'); echo $'$1
+}
+
+function sourcesystemuserenv() {
+  export $1="$(printsystemuserenv $1)"
+}
