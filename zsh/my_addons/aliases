@@ -332,6 +332,8 @@ alias less='less -r -i'
 alias cat='bat'
 alias k9s='TERM=xterm COLORTERM= k9s'
 
+alias shellcheck='shellcheck --color=always'
+
 ## ripgrep
 # alias rg='rg -p -i' # with pretty (-p) and ignore case (-i)
 # enhanced the above alias using the function below to apply what's mentioned at https://github.com/BurntSushi/ripgrep/issues/86#issuecomment-1469717706

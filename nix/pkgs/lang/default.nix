@@ -13,6 +13,7 @@ let
   janet = import ./janet.nix { pkgs = pkgs; };
   erlang = import ./erlang.nix { pkgs = pkgs; };
   python = import ./python.nix { pkgs = pkgs; };
+  shells = import ./shells.nix { pkgs = pkgs; };
   support = import ./support.nix { pkgs = pkgs; };
   graalvm = import ./graalvm.nix { pkgs = pkgs; };
   javascript = import ./javascript.nix { pkgs = pkgs; };
@@ -23,6 +24,7 @@ let
     ++ lua
     ++ ruby
     ++ python
+    ++ shells
     ++ support # this is not for a language itself but to support the language related things
     ++ javascript
   );
