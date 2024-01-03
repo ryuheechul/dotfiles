@@ -73,11 +73,12 @@ return function()
     },
     incremental_selection = {
       enable = true,
+      -- map keys starting with leader `\` instead of `g` to avoid conflict with my other keys at ../keymaps.lua
       keymaps = {
-        init_selection = 'gnn',
-        node_incremental = 'grn',
-        scope_incremental = 'grc',
-        node_decremental = 'grm',
+        init_selection = '\\tnn',
+        node_incremental = '\\trn',
+        scope_incremental = '\\trc',
+        node_decremental = '\\trm',
       },
     },
     indent = {

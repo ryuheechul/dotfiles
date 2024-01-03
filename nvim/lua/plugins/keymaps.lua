@@ -14,6 +14,12 @@ local init = function()
   --- my keymaps to to accomodate my muscle memory with ../SpaceVim.d
   --- these don't require which-key
 
+  -- there is also `g;` `g,` `gi` - https://learnbyexample.github.io/tips/vim-tip-5/
+  vim.keymap.set('n', 'go', '<C-O>', { noremap = true, silent = true, desc = 'Go to "old"' })
+  -- FYI, <C-I> and <Tab> are same in vim
+  -- - https://stackoverflow.com/a/18176199/1570165
+  vim.keymap.set('n', 'gn', '<C-I>', { noremap = true, silent = true, desc = 'Go to "new"' })
+
   -- because `zhou13/vim-easyescape` is too slow on startup
   vim.keymap.set('i', 'jk', '<Esc>', { noremap = true, silent = true, desc = 'shortcut to <Esc>' })
   vim.keymap.set('n', '<Tab>', '<Cmd>wincmd w<CR>', { noremap = true, silent = true, desc = 'go to "next" window' })
@@ -107,7 +113,10 @@ local config = function()
       name = '+Generate',
     },
     l = { cmdify 'Luapad', 'open Luapad' },
-    t = { cmdify 'TSPlaygroundToggle', 'TSPlaygroundToggle' },
+    t = {
+      name = '+Treesitter',
+      t = { cmdify 'TSPlaygroundToggle', 'TSPlaygroundToggle' },
+    },
     s = { cmdify 'suspend', ':suspend - go to background - `fg` to comeback' },
   }, { prefix = '<leader>' })
 
