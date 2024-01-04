@@ -186,6 +186,36 @@ return function(setup_default, node_root)
     })
   end
 
+  -- using efm to replace null-ls
+  local setup_efm = merge(
+    setup_default,
+    (function()
+      -- Register linters and formatters per language
+      local eslint = require 'efmls-configs.formatters.eslint'
+      local denofmt = require 'plugins.config.efmls-configs.deno-fmt'
+      local stylua = require 'efmls-configs.formatters.stylua'
+
+      local ts_formatter = is_node_repo and eslint or denofmt
+
+      local languages = {
+        typescript = { ts_formatter },
+        lua = { stylua },
+      }
+
+      return {
+        filetypes = vim.tbl_keys(languages),
+        settings = {
+          rootMarkers = { '.git/' },
+          languages = languages,
+        },
+        init_options = {
+          documentFormatting = true,
+          documentRangeFormatting = true,
+        },
+      }
+    end)()
+  )
+
   -- Enable the following language servers with `setup_default`
   return {
     clangd = setup_default,
@@ -205,6 +235,7 @@ return function(setup_default, node_root)
     yamlls = setup_yamlls,
     dockerls = setup_dockerls,
     ruby_ls = setup_ruby_ls,
+    efm = setup_efm,
   }
 end
 

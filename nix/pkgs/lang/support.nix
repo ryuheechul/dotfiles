@@ -8,7 +8,9 @@ let
   gitwatch = import ../custom/gitwatch.nix { pkgs = pkgs; };
 in
 with pkgs;
-[ ]
+[
+  efm-langserver # General purpose Language Server
+]
 ++ ifEnv "MY_NIX_EXTRA_GIT"
   [
     git-lfs # git extention for large file storage

@@ -22,47 +22,7 @@ local node_root = function()
   return node_root_dir, is_node_repo
 end
 
-function M.null_ls()
-  local null_ls = require 'null-ls'
-
-  -- being ok with calling this twice to maintain the independence for null_ls and lspconfig to each other
-  M.setup_lsp_format()
-
-  local _, is_node_repo = node_root()
-
-  local ts_formatter = is_node_repo and null_ls.builtins.formatting.eslint or null_ls.builtins.formatting.deno_fmt
-
-  local sources = {
-    null_ls.builtins.formatting.stylua,
-    ts_formatter,
-  }
-
-  null_ls.setup {
-    -- -- not using boilerplate from README to favor https://github.com/lukas-reineke/lsp-format.nvim
-    -- -- in fact this might the culprit for the issue below that ask between two on saving
-    -- -- https://www.reddit.com/r/neovim/comments/ubgi6h/nullls_issues/
-    --
-    -- you can reuse a shared lspconfig on_attach callback here
-    -- on_attach = function(client)
-    --   if client.resolved_capabilities.document_formatting then
-    --     vim.cmd [[
-    --     augroup LspFormatting
-    --         autocmd! * <buffer>
-    --         autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-    --     augroup END
-    --     ]]
-    --   end
-    -- end,
-
-    -- using lsp-format instead to enable format on save
-    on_attach = require('lsp-format').on_attach,
-
-    sources = sources,
-  }
-end
-
 function M.lspconfig()
-  -- being ok with calling this twice to maintain the independence for null_ls and lspconfig to each other
   M.setup_lsp_format()
 
   local navic = require 'nvim-navic'

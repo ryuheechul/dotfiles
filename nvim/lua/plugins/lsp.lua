@@ -5,6 +5,8 @@ return {
     dependencies = {
       'ray-x/lsp_signature.nvim', -- for floating signature hints
       'lukas-reineke/lsp-format.nvim', -- A wrapper around Neovims native LSP formatting
+      -- thanks for the news from https://dotfyle.com/this-week-in-neovim/48#creativenull/efmls-configs-nvim
+      'creativenull/efmls-configs-nvim', -- An unofficial collection of linters and formatters configured for efm-langserver for neovim
       'arkav/lualine-lsp-progress', -- LSP Progress lualine componenet
       'SmiteshP/nvim-navic', -- Simple winbar/statusline plugin that shows your current code context
       -- 💻 Neovim setup for init.lua and plugin development with full signature help, docs and completion for the nvim lua API.
@@ -19,13 +21,6 @@ return {
       },
     },
     config = require('plugins.config.lsp').lspconfig,
-  },
-  { -- use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
-    'jose-elias-alvarez/null-ls.nvim',
-    dependencies = {
-      'lukas-reineke/lsp-format.nvim', -- A wrapper around Neovims native LSP formatting
-    },
-    config = require('plugins.config.lsp').null_ls,
   },
   { --  bringing many of the features of sourcegraph.com into Neovim
     'sourcegraph/sg.nvim', -- this is technically not directly related to lsp but it uses lsp so it can stay in this file for now.
