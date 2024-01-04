@@ -113,7 +113,7 @@
   "toggleterm.nvim": { "branch": "main", "commit": "7e400d37422c662e9979fb1b49fb2aba04d676f0" },
   "treesj": { "branch": "main", "commit": "bff8c32b826e188fa558e94c7c93ac17a8ef0365" },
   "trouble.nvim": { "branch": "main", "commit": "3f85d8ed30e97ceeddbbcf80224245d347053711" },
-  "ultimate-autopair.nvim": { "branch": "v0.6", "commit": "cb17304fa8e609d5eed2ccbf975a61b68919ff3d" },
+  "ultimate-autopair.nvim": { "branch": "v0.6", "commit": "4f01418547c7e27c3aa779da8cc30c9998dc6843" },
   "vim-caser": { "branch": "master", "commit": "6bc9f41d170711c58e0157d882a5fe8c30f34bf6" },
   "vim-fugitive": { "branch": "master", "commit": "d4914b361b081c4d983e924f1dd337c143152833" },
   "vim-illuminate": { "branch": "master", "commit": "76f28e858f1caae87bfa45fb4fd09e4b053fc45b" },

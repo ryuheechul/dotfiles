@@ -14,7 +14,9 @@ local init = function()
   --- my keymaps to to accomodate my muscle memory with ../SpaceVim.d
   --- these don't require which-key
 
-  -- there is also `g;` `g,` `gi` - https://learnbyexample.github.io/tips/vim-tip-5/
+  -- there is also `g;` `g,` `gi`
+  -- - https://learnbyexample.github.io/tips/vim-tip-5/
+  -- - https://www.reddit.com/r/vim/comments/nrkvwm/just_discovered_ctrlo_and_ctrli_and_it_rules/
   vim.keymap.set('n', 'go', '<C-O>', { noremap = true, silent = true, desc = 'Go to "old"' })
   -- FYI, <C-I> and <Tab> are same in vim
   -- - https://stackoverflow.com/a/18176199/1570165
