@@ -4,6 +4,9 @@ local M = {}
 
 function M.setup_lsp_format()
   require('lsp-format').setup {
+    json = {
+      exclude = { 'jsonls' },
+    },
     lua = {
       exclude = { 'lua_ls' }, -- to let only null_ls with stylua to format
     },
