@@ -21,6 +21,7 @@ local init = function()
   -- FYI, <C-I> and <Tab> are same in vim
   -- - https://stackoverflow.com/a/18176199/1570165
   vim.keymap.set('n', 'gn', '<C-I>', { noremap = true, silent = true, desc = 'Go to "new"' })
+  vim.keymap.set('n', 'gl', '<C-]>', { noremap = true, silent = true, desc = 'go to the link under the cursor' })
 
   -- because `zhou13/vim-easyescape` is too slow on startup
   vim.keymap.set('i', 'jk', '<Esc>', { noremap = true, silent = true, desc = 'shortcut to <Esc>' })
@@ -70,6 +71,11 @@ local init = function()
 
   -- , to repeat last normal command - https://stackoverflow.com/a/4789842/1570165
   vim.keymap.set('n', ',', '@:<CR>', { noremap = true, desc = 'repeat last normal command' })
+
+  -- since I don't use the default way of `+`, `-`, mapping these to increase/decrease numbers
+  -- - https://learnbyexample.github.io/tips/vim-tip-1/
+  vim.keymap.set('n', '+', '<C-A>', { noremap = true, silent = true, desc = 'increase number' })
+  vim.keymap.set('n', '-', '<C-X>', { noremap = true, silent = true, desc = 'decrease number' })
 end
 
 local toggle_bg = function()
