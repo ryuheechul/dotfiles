@@ -89,6 +89,12 @@ end
 
 -- call it via `:lua require('utils.my-smart-quit')()`
 return function()
+  -- don't try to be too smart on 'nofile' `buftype`
+  if vim.bo.buftype == 'nofile' then
+    vim.cmd [[ q ]]
+    return
+  end
+
   local current = vim.fn.bufnr '%'
   local is_listed = vim.fn.buflisted(current) ~= 0
 
