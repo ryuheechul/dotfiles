@@ -4,6 +4,12 @@
 # - but avoid doing this for tramp-mode on emacs - https://www.emacswiki.org/emacs/TrampMode
 # - also guard this behaviour for non-interactive shell usage
 if is_zsh_interactive && test "${TERM}" != 'dumb' && test -n "${SSH_TTY}"; then
+  # there shouldn't be any `COLORTERM` set at this point but respect if it's already there
+  printenv COLORTERM > /dev/null || {
+    # because `COLORTERM` doesn't inherit from client unlike `TERM`
+    printenv TERM | grep -q 256color \
+      && export COLORTERM=truecolor
+  }
 
   # add path for ssh
   add-to-path "${my_dot_d}/bin/path/ssh"

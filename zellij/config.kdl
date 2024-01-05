@@ -8,7 +8,6 @@
 env {
   UNSET_ALL_MY_ZSH_STUFF_LOADED 1
   UNSET_HOST_ALWAYS_USE_TMUX 1
-  COLORTERM "truecolor"
   // maybe at least until this issue gets resolved - https://github.com/zellij-org/zellij/issues/1594
   TERM "xterm-256color"
 }
