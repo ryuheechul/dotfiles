@@ -52,3 +52,18 @@ Thankfully they all provide ways to not load on certain file types:
 - [`excluded_filetypes` at nvim-scrollbar](https://github.com/petertriho/nvim-scrollbar/blob/35f99d559041c7c0eff3a41f9093581ceea534e8/README.md?plain=1#L231)
 - [`filetypes_denylist` at vim-illuminate](https://github.com/RRethy/vim-illuminate/blob/3bd2ab64b5d63b29e05691e624927e5ebbf0fb86/README.md?plain=1#L31)
 - [`exclude` at indent-blankline](https://github.com/lukas-reineke/indent-blankline.nvim/blob/3c8a185da4b8ab7aef487219f5e001b11d4b6aaf/doc/indent_blankline.txt#L207-L218)
+
+### More on the "Culprits" Above
+
+Although disabling them helped, even without any of them, I found the same performance issue simply by words being highlighted (e.g. by search). And I vaguely remember the parts of source code of some plugins (that was being slow) something to do with the highlighting!
+
+On top of that I stumbled upon "a fix" from one of these:
+- https://docs.getutm.app/settings-qemu/qemu/#balloon-device
+- https://docs.getutm.app/settings-qemu/qemu/#use-local-time-for-base-clock
+
+After turning them on, the issue disappeared as if they never existed...
+However, I can't confirm this as the problem didn't come back after I turn the options off again
+to see whether the absence of them were indeed the culprit.
+
+So now I have some clues like highlight in Neovim and some VM optimizations but cannot be so sure about it at this moment. Nonetheless I'm glad that it's possible to do something about it although I don't know what that is.
+Maybe the problem will comeback later and give me a better clue? We will see.
