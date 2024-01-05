@@ -29,6 +29,10 @@ return {
     -- I also made a zsh alias so it can be used like this, `sggh ryuheechul/hexto256 main.go`
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = true,
+    -- optionally load due to the combination of:
+    -- - the performance hit on loading (maybe requiring `nvim-cmp` internally from sg.nvim)
+    -- - and `sg.nvim` cannot work properly on start up with `sggh` with lazy loading
+    -- I made an alias via ../../../zsh/my_addons/aliases `vis` to toggle this easily
     cond = vim.env.my_nvim_use_sg ~= nil,
     build = "np-build-via-nix-shell 'cargo build --workspace'",
   },

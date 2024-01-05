@@ -257,6 +257,7 @@ _perflogpath="${_dotfilepath}/.perf.log"
 ## special modes
 # start neovim purely without any plugins loaded
 alias vil='my_nvim_plugins_default_to_lazy=1 vi'
+alias vis='my_nvim_use_sg=1 vi'
 alias vip='vi -u NONE'
 # measure startup time
 alias vips="rm -f ${_perflogpath} && vi --startuptime ${_perflogpath} ${_perflogpath}"
@@ -270,7 +271,7 @@ alias vig='my_nvim_ghost=1 vi'
 # usage: sggh ryuheechul/hexto256 main.go
 sggh ()
 {
-  nvim "sg://github.com/${1}/-/${2}"
+  vis "sg://github.com/${1}/-/${2}"
 }
 
 # wrap `sk` to use TMUX_PANE when possible
