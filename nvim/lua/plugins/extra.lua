@@ -42,6 +42,17 @@ return {
   { -- Better quickfix window in Neovim, polish old quickfix window
     'kevinhwang91/nvim-bqf',
     ft = 'qf',
+    opts = {
+      func_map = {
+        -- comments on the right for default mapping
+        open = '<Tab>', -- `<CR>`
+        tab = '', -- `t`
+        tabb = '', -- `T`
+        stoggledown = 't', -- `<Tab>`
+        stoggleup = 'T', -- `<S-Tab>`
+        stogglevm = '', -- `<Tab>`
+      },
+    },
   },
   -- this doesn't work until treesitter markdown gets install and it's currently unstable and fails to install
   -- {
