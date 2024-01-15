@@ -49,6 +49,7 @@ return {
     },
     config = function()
       local telescope = require 'telescope'
+      local actions = require 'telescope.actions'
 
       telescope.setup {
         defaults = {
@@ -57,6 +58,8 @@ return {
             i = {
               ['<C-u>'] = false,
               ['<C-d>'] = false,
+              ['<Tab>'] = actions.move_selection_next,
+              ['<S-Tab>'] = actions.move_selection_previous,
             },
           },
         },
