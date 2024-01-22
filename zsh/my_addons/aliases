@@ -182,8 +182,10 @@ alias -s {conf,}=lf
 alias -s {org,el}='emacsclient'
 alias -s git='git clone'
 
+## better defaults
+alias shellcheck='shellcheck --color=always'
+alias distrobox='STARTSHIP_SESSION_KEY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 distrobox'
 alias gh='GLAMOUR_STYLE=$(theme-tone) gh'
-
 # equip auxww by default for convenience: basically show all process with full command
 alias ps='ps auxww'
 # better than bare info but still not the best
@@ -332,8 +334,6 @@ alias diff='git diff --no-index'
 alias less='less -R -i'
 alias cat='bat'
 alias k9s='TERM=xterm COLORTERM= k9s'
-
-alias shellcheck='shellcheck --color=always'
 
 ## ripgrep
 # alias rg='rg -p -i' # with pretty (-p) and ignore case (-i)

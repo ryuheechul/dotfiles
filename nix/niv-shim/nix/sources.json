@@ -41,10 +41,10 @@
         "homepage": "",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "ec04772e7516b6d58d98b491e68b329b7558b14d",
-        "sha256": "0h6x6phv6bdd4sby1kzradvv5ba813g258y5sx64ixlqvzbv9cpc",
+        "rev": "e5d1c87f5813afde2dda384ac807c57a105721cc",
+        "sha256": "1c97p3fzmadq3nnplp5hpgxkghmdqvnrj92n92psgmxrckfm7sjx",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/ec04772e7516b6d58d98b491e68b329b7558b14d.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/e5d1c87f5813afde2dda384ac807c57a105721cc.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs-stable-darwin": {

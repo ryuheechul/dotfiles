@@ -10,5 +10,6 @@ with pkgs;(
       unixtools.netstat
       nmap # A free and open source utility for network discovery and security auditing
       ed # An implementation of the standard Unix editor
+      distrobox # Wrapper around podman or docker to create and start containers
     ]
 )
