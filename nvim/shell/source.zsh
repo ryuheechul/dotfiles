@@ -16,3 +16,6 @@ alias q="clear; nvr --remote-send '<esc>:q<cr>'"
 export EDITOR='editor-in-nvim'
 # for shell
 alias nvim='nvr --remote-tab'
+
+# try to maintain clean state for devenv
+test -z "${DEVENV_PROFILE}" || { cd ~ && cd - }

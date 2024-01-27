@@ -389,6 +389,7 @@ is-nixos \
   && alias switch-nix='"$my_dot_d/bootstrap/foundation/nixos/switch.sh"'
 
 # commandify
+alias reenter='cd ~ && cd -'
 alias fulltimezsh='FORCE_LOAD_MY_ZSH_STUFF=1 timezsh'
 alias vzshrc='nvim ~/.local.zshrc ~/.zlogin ~/.zshenv ~/.zshrc'
 alias sshconfig='cat ~/.ssh/config'
@@ -464,7 +465,7 @@ inspect-home-manager ()
 # useful to trace symlinked binaries the ones from nixpkgs
 which-trace ()
 {
-  which $1 | xargs realpath
+  env which $1 | xargs realpath
 }
 
 # useful to browse other binaries in the same directory
