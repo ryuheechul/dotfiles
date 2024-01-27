@@ -57,12 +57,12 @@ function simple_bench_disk () {
 
 # when I don't feel liking adding `| less` at the end
 function show () {
-  $@ | less -R -i
+  "$@" | less -R -i
 }
 
 # use help like man
 function help () {
-  show $@ --help
+  show "$@" --help
 }
 
 # quickly jump via fsad - https://github.com/junegunn/fzf/wiki/examples#with-fasd-1
@@ -82,7 +82,7 @@ if uname | xargs test "Darwin" =; then
   function notify() {
     start_time=$(date +%s)
 
-    env time -p $@
+    env time -p "$@"
     ret=$?
 
     # skip making sound for under 2 seconds
@@ -283,9 +283,9 @@ sk ()
   test "${PWD}" = "${HOME}" && { echo "${PWD}"; return; }
 
   if test -n "${TMUX_PANE}"; then
-    sk-tmux $@
+    sk-tmux "$@"
   else
-    env sk $@
+    env sk "$@"
   fi
 }
 
@@ -340,7 +340,7 @@ alias k9s='TERM=xterm COLORTERM= k9s'
 # enhanced the above alias using the function below to apply what's mentioned at https://github.com/BurntSushi/ripgrep/issues/86#issuecomment-1469717706
 rg ()
 {
-  env rg -i --json $@ | delta
+  env rg -i --json "$@" | delta
 }
 alias rgc='rg -C' # with context
 alias rgc5='rgc 5' # with context value that is 5
@@ -352,7 +352,7 @@ alias fzfpp='fzf|fpp'
 alias fpp='wrapped-fpp'
 
 # diff with bat
-function bdiff () { diff -u $@ | bat;} # use `vimdiff` for editing
+function bdiff () { diff -u "$@" | bat;} # use `vimdiff` for editing
 alias build-cache-bat='bat cache --build' # when there is a new syntax/theme to build
 
 # shorthands

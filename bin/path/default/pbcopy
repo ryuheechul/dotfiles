@@ -9,7 +9,7 @@ if test -n "${DISPLAY}" && test -n "${SSH_TTY}" ; then
 else
   # favor pbpaste
   if test -x /usr/bin/pbcopy; then
-    /usr/bin/pbcopy $@
+    /usr/bin/pbcopy "$@"
   # fallback to xsel
   else
     xsel -i -b

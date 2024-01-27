@@ -4,4 +4,4 @@
 
 curr_d="$(dirname "$0")"
 hm_wrapper="${curr_d}/../../bin/path/default/home-manager"
-"${hm_wrapper}" $@
+"${hm_wrapper}" "$@"

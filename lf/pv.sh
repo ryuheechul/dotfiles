@@ -13,8 +13,8 @@ if command -v rsop > /dev/null; then
 # if not fallback to my own legacy script
 else
   if test -n "${LF_PV_WITH_PAGER}"; then
-    "${lf_d}/pv-legacy.sh" $@ | ${less_sh}
+    "${lf_d}/pv-legacy.sh" "$@" | ${less_sh}
   else
-    "${lf_d}/pv-legacy.sh" $@
+    "${lf_d}/pv-legacy.sh" "$@"
   fi
 fi

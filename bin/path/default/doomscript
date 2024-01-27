@@ -3,7 +3,7 @@
 doomscript=~/.doom-emacs.d/bin/doomscript
 
 if test -f "${doomscript}"; then
-  "${doomscript}" $@
+  "${doomscript}" "$@"
 else
   echo "make sure to have doomscript at ${doomscript}"
   exit 1

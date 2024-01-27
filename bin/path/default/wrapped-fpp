@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 # To avoid an error similar to https://github.com/saulpw/visidata/issues/1227
-TERM=xterm-256color fpp $@
+TERM=xterm-256color fpp "$@"

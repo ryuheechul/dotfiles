@@ -20,4 +20,4 @@ test -x "${bin_nix_shell}" || bin_nix_shell=/run/current-system/sw/bin/nix-shell
 NIX_PATH="nixpkgs=${alt_nixpkgs}:${NIX_PATH}" \
   "${bin_nix_shell}" \
   -I "home-manager=${alt_hm}" \
-  $@
+  "$@"

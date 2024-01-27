@@ -19,4 +19,4 @@ test $(uname) = "Darwin" && channel_for_darwin="-I nixpkgs-stable-darwin=${alt_n
   -I "nixpkgs=${alt_nixpkgs}" \
   ${channel_for_darwin} \
   --cores "${NIX_BUILD_CORES:-4}" \
-  $@
+  "$@"

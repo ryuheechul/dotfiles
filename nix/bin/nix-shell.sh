@@ -4,4 +4,4 @@
 
 curr_d="$(dirname "$0")"
 ns_wrapper="${curr_d}/../../bin/path/default/nix-shell"
-"${ns_wrapper}" $@
+"${ns_wrapper}" "$@"
