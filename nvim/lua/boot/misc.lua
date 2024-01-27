@@ -65,6 +65,8 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function()
     -- nowait only works with buffer mapping
     vim.keymap.set('n', 'd', '<C-d>', { noremap = true, silent = true, buffer = true, nowait = true })
+    vim.keymap.set('n', 'u', '<C-u>', { noremap = true, silent = true, buffer = true, nowait = true })
+    vim.keymap.set('n', 'f', '<C-f>', { noremap = true, silent = true, buffer = true, nowait = true })
     vim.keymap.set('n', 'b', '<C-b>', { noremap = true, silent = true, buffer = true, nowait = true })
     vim.keymap.set('n', '<Esc>', require 'utils.my-smart-quit', { noremap = true, silent = true, buffer = true })
   end,
