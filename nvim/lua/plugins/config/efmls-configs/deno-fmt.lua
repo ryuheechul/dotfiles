@@ -2,6 +2,7 @@
 -- languages: javascript,typescript
 -- url: https://docs.deno.com/runtime/manual/tools/formatter
 
+-- This is DEPRECATED as now it's merged to upstream https://github.com/creativenull/efmls-configs-nvim/pull/120
 local fs = require 'efmls-configs.fs'
 
 local formatter = 'deno'

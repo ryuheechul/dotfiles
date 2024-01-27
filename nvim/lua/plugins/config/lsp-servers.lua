@@ -192,14 +192,16 @@ return function(setup_default, node_root)
     (function()
       -- Register linters and formatters per language
       local eslint = require 'efmls-configs.formatters.eslint'
-      local denofmt = require 'plugins.config.efmls-configs.deno-fmt'
+      local denofmt = require 'efmls-configs.formatters.deno_fmt'
       local stylua = require 'efmls-configs.formatters.stylua'
+      local black = require 'efmls-configs.formatters.black'
 
       local ts_formatter = is_node_repo and eslint or denofmt
 
       local languages = {
         typescript = { ts_formatter },
         lua = { stylua },
+        python = { black },
       }
 
       return {
