@@ -35,6 +35,16 @@ opts.checker = {
     * 7, -- every week
 }
 
+-- - mainly to workaround with nvim-treesitter plugin issue on nixos
+-- - see the files below:
+--   - ../../../nix/home/shims.nix
+--   - ../utils/nixos-shim.lua
+opts.dev = {
+  -- may need to re-run `TSInstall all` if the path ever changed
+  path = '~/.local/share/nvim/my-local-lazy',
+  fallback = false,
+}
+
 if vim.env.my_nvim_plugins_default_to_lazy ~= nil then
   opts.defaults.lazy = true
 end

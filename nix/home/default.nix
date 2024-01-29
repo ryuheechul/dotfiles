@@ -5,7 +5,8 @@ let
   prgs = import ./programs { pkgs = pkgs; config = config; };
   svcs = import ./services { pkgs = pkgs; };
   dconf = import ./dconf.nix { lib = lib; };
-  imports = [ prgs svcs dconf ];
+  shims = import ./shims.nix { pkgs = pkgs; };
+  imports = [ prgs svcs dconf shims ];
 in
 {
   inherit imports;

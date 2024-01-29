@@ -47,7 +47,7 @@ return {
     -- follow only stable versions
     version = '*',
     dependencies = {
-      'nvim-treesitter/nvim-treesitter',
+      require('utils.nixos-shim').nvim_treesitter.base,
       'L3MON4D3/LuaSnip',
     },
     init = function()

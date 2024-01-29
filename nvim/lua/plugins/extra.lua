@@ -494,7 +494,7 @@ return {
     dependencies = { -- optional packages
       'ray-x/guihua.lua',
       'neovim/nvim-lspconfig',
-      'nvim-treesitter/nvim-treesitter',
+      require('utils.nixos-shim').nvim_treesitter.base,
     },
     event = 'CmdlineEnter',
     ft = { 'go', 'gomod' },

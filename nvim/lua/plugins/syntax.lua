@@ -8,8 +8,9 @@ return {
     'imsnif/kdl.vim',
     ft = 'kdl',
   },
-  { -- Highlight, edit, and navigate code using a fast incremental parsing library
-    'nvim-treesitter/nvim-treesitter',
+  -- Highlight, edit, and navigate code using a fast incremental parsing library
+  require('utils.nixos-shim').nvim_treesitter.extend {
+    -- 'nvim-treesitter/nvim-treesitter', -- <- this is provided via `extend`
     dependencies = {
       'RRethy/nvim-treesitter-textsubjects',
       'nvim-treesitter/nvim-treesitter-textobjects', -- Additional textobjects for treesitter
@@ -21,7 +22,9 @@ return {
   { -- Highlight arguments' definitions and usages, using Treesitter
     'm-demare/hlargs.nvim',
     event = 'VeryLazy',
-    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    dependencies = {
+      require('utils.nixos-shim').nvim_treesitter.base,
+    },
     config = true,
   },
   { -- A fast Neovim http client written in Lua
@@ -36,14 +39,14 @@ return {
     'nvim-treesitter/nvim-treesitter-context',
     event = 'VimEnter',
     dependencies = {
-      'nvim-treesitter/nvim-treesitter',
+      require('utils.nixos-shim').nvim_treesitter.base,
     },
   },
   { -- debug treesitter context via `:TSPlaygroundToggle`
     'nvim-treesitter/playground',
     event = 'VeryLazy',
     dependencies = {
-      'nvim-treesitter/nvim-treesitter',
+      require('utils.nixos-shim').nvim_treesitter.base,
     },
   },
 }

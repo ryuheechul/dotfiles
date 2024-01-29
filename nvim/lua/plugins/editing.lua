@@ -9,7 +9,9 @@ return {
     -- <space>m - toggle
     -- <space>j - join
     -- <space>s - split (slow just because of <space>s is a prefix for other keys)
-    dependencies = { 'nvim-treesitter' },
+    dependencies = {
+      require('utils.nixos-shim').nvim_treesitter.base,
+    },
     event = 'VeryLazy',
     config = true,
   },

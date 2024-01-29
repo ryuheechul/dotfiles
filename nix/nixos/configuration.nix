@@ -6,6 +6,9 @@
 
 let
   system-pkgs = import ./system-pkgs.nix { pkgs = pkgs; };
+  shell-init = ''
+    export my_system_nixos="1";
+  '';
 in
 {
   # what the heck really is `imports` variable?
@@ -24,14 +27,20 @@ in
   # https://nixos.wiki/wiki/Fonts
   fonts = {
     fontDir.enable = true;
-    fonts = with pkgs;[
+    packages = with pkgs;[
       noto-fonts-cjk # Beautiful and free fonts for CJK languages
       noto-fonts-emoji # Color and Black-and-White emoji fonts
     ];
   };
 
   environment.systemPackages = system-pkgs;
-  programs.zsh.enable = true; # for shell = pkgs.zsh; at ./user.nix
+  programs.zsh = {
+    enable = true;
+    shellInit = shell-init;
+  };
+  programs.bash = {
+    shellInit = shell-init;
+  };
 
   # prevent going buck wild
   nix.settings.max-jobs = 4;
