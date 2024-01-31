@@ -31,5 +31,9 @@ let
       pyright
     ]
   );
+  natives = [
+    ruff # An extremely fast Python linter
+    ruff-lsp # A Language Server Protocol implementation for Ruff
+  ];
 in
-[ python-with-pkgs ] ++ via-npm
+[ python-with-pkgs ] ++ via-npm ++ natives

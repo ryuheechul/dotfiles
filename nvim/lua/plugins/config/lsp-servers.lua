@@ -125,6 +125,8 @@ return function(setup_default, node_root)
   --Enable (broadcasting) snippet capability for completion
   setup_jsonls.capabilities.textDocument.completion.completionItem.snippetSupport = true
 
+  local setup_ruff_lsp = merge(setup_default, {})
+
   -- determine if it's with container or localhost
   -- read more on that at ../../../remote-container.md
   local gen_setup_pyright = function()
@@ -194,14 +196,12 @@ return function(setup_default, node_root)
       local eslint = require 'efmls-configs.formatters.eslint'
       local denofmt = require 'efmls-configs.formatters.deno_fmt'
       local stylua = require 'efmls-configs.formatters.stylua'
-      local black = require 'efmls-configs.formatters.black'
 
       local ts_formatter = is_node_repo and eslint or denofmt
 
       local languages = {
         typescript = { ts_formatter },
         lua = { stylua },
-        python = { black },
       }
 
       return {
@@ -238,6 +238,7 @@ return function(setup_default, node_root)
     dockerls = setup_dockerls,
     ruby_ls = setup_ruby_ls,
     efm = setup_efm,
+    ruff_lsp = setup_ruff_lsp,
   }
 end
 
