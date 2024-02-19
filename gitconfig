@@ -4,7 +4,10 @@
   defaultBranch = main
 
 [pull]
-  ff = only
+  rebase = true
+
+[rebase]
+  autoStash = true
 
 [status]
   submoduleSummary = 5 ; 5 means it will show up to 5 logs
