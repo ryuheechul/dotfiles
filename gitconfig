@@ -1,7 +1,24 @@
 ; vim: set ft=gitconfig:
 
+; few options are explained at:
+; - https://jvns.ca/blog/2024/02/16/popular-git-config-options
+; - https://www.youtube.com/watch?v=aolI_Rz0ZqY
+
 [init]
   defaultBranch = main
+
+[column]
+  ; use columns when it can
+  ui = auto
+
+[commit]
+  verbose = true
+
+[transfer]
+  fsckObjects = true
+
+[push]
+  autoSetupRemote = true
 
 [pull]
   rebase = true
@@ -9,11 +26,20 @@
 [rebase]
   autoStash = true
 
+[merge]
+  ; include the original version before diverging
+  conflictStyle = zdiff3
+
+[submodule]
+  recurse = true
+
 [status]
   submoduleSummary = 5 ; 5 means it will show up to 5 logs
   ; using -1 will mean it's infinite so it will show every log
 
 [diff]
+  ; https://luppeng.wordpress.com/2020/10/10/when-to-use-each-of-the-git-diff-algorithms/
+  algorithm = histogram
   submodule = log
   tool = difftastic
 
@@ -25,6 +51,8 @@
 
 [core]
   pager = delta
+  ; speeds up git status
+  fsmonitor = true
 
 [pager]
   difftool = true
