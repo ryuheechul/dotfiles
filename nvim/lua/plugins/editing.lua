@@ -34,7 +34,13 @@ return {
     'numToStr/Comment.nvim',
     dependencies = {
       -- Neovim treesitter plugin for setting the commentstring based on the cursor location in a file.
-      'JoosepAlviste/nvim-ts-context-commentstring',
+      {
+        'JoosepAlviste/nvim-ts-context-commentstring',
+        opts = {
+          enable = true,
+          enable_autocmd = false,
+        },
+      },
     },
     event = 'VeryLazy',
     config = function()

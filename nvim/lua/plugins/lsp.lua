@@ -16,7 +16,15 @@ return {
         'williamboman/mason-lspconfig.nvim',
         dependencies = { 'williamboman/mason.nvim', config = true },
         opts = {
-          ensure_installed = { 'lua_ls', 'jsonls', 'astro', 'yamlls', 'dockerls' },
+          ensure_installed = {
+            -- disable `lua_ls` as there is a trouble executing it
+            -- falling back to the one from ../../../nix/pkgs/lang/lua.nix
+            -- 'lua_ls',
+            'jsonls',
+            'astro',
+            'yamlls',
+            'dockerls',
+          },
         },
       },
     },
