@@ -41,6 +41,13 @@ return {
     dependencies = {
       require('utils.nixos-shim').nvim_treesitter.base,
     },
+    opts = {
+      -- improves performance a lot (on slower state of the machine)
+      -- by removing the needs on calculating on cursor gliding through
+      -- different lines when top line is the same
+      mode = 'topline',
+      min_window_height = 10,
+    },
   },
   { -- debug treesitter context via `:TSPlaygroundToggle`
     'nvim-treesitter/playground',
