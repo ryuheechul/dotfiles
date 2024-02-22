@@ -1,4 +1,3 @@
-// vim: set ft=kdl:
 // I shouldn't need the comment above thanks to ../nvim/ftdetect/detect.vim
 // but it's currently not working related to the issue below
 // so keep it until https://github.com/neovim/neovim/issues/23522 gets resolved

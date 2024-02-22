@@ -1,5 +1,5 @@
 -- where I customize editing related behaviours per file type
--- go to `../../ftdetect/detect.vim` for detecting files
+-- go to `../../plugin/ftdetect.lua` for detecting files
 
 -- show some hidden characters
 vim.opt.list = true
