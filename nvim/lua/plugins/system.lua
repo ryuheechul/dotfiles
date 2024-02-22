@@ -153,6 +153,14 @@ return {
       },
     },
   },
+  { -- Simple winbar/statusline plugin that shows your current code context
+    'SmiteshP/nvim-navic',
+    event = 'VeryLazy',
+    opts = {
+      lazy_update_context = true,
+      click = true,
+    },
+  },
   { -- A VS Code like winbar for Neovim
     'utilyre/barbecue.nvim',
     dependencies = {
@@ -170,7 +178,7 @@ return {
     'nvim-lualine/lualine.nvim',
     dependencies = {
       'nvim-tree/nvim-web-devicons',
-      'SmiteshP/nvim-navic', -- Simple winbar/statusline plugin that shows your current code context
+      'SmiteshP/nvim-navic',
     },
     event = 'FocusGained',
     config = require 'plugins.config.bars',
