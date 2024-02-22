@@ -96,3 +96,17 @@ I've also tried many other things to see if there is any difference:
 And so far none of them worked (except the simple reboot).
 
 _I will leave more updates here if I ever find the cause and resolution, lol._
+
+#### Is this the end of the journey?
+
+Actually why haven't I noticed this one before?
+- https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#i-experience-weird-highlighting-issues-similar-to-78
+- https://github.com/nvim-treesitter/nvim-treesitter/issues/78
+
+Reading them and trying this and that made me realized that TS highlighting actually wasn't enabled!!! (probably ever since I made [this change](https://github.com/ryuheechul/dotfiles/commit/0a8bae199ea8151e1b90b4075e8925a6717839f5)). Now I discovered what was the issue and implemented a workaround to it at [../utils/nixos-shim.lua](../utils/nixos-shim.lua).
+
+Whoever experiences a similar issue, I would recommend you to start with these:
+- `:TSBufEnable highlight`
+- `:write | edit | TSBufEnable highlight`
+
+to see if it makes any changes or resolve the slowness, this will probably make you to reverify if your plugin setup was working as expected or not especially if you setup is as quirky as mine.
