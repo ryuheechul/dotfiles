@@ -28,6 +28,7 @@ return function()
       'hjson',
       'html',
       'http',
+      'hurl',
       'java',
       'javascript',
       'jsdoc',

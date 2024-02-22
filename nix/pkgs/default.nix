@@ -76,6 +76,7 @@ with pkgs;
   dasel # jq, yq replacement
   hyperfine # Command-line benchmarking tool
   httpie # A command line HTTP client whose goal is to make CLI human-friendly
+  hurl # Command line tool that performs HTTP requests defined in a simple plain text format
   xh # httpie reimplementation - use with `xh` and `xhs`
   curlie # front-end to curl that tries to mimic httpie
   choose # a human-friendly and fast alternative to cut and (sometimes) awk
