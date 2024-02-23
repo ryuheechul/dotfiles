@@ -23,9 +23,15 @@ return {
   {
     -- NeoSolarized: A fixed solarized colorscheme for better truecolor support.
     'JoveYu/NeoSolarized', -- using fork instead for this issue, https://github.com/overcache/NeoSolarized/issues/26
+    lazy = false,
+    priority = 900,
     dependencies = {
       'rktjmp/fwatch.nvim',
-      'sainnhe/everforest',
+      {
+        'neanias/everforest-nvim',
+        lazy = false,
+        priority = 1000,
+      },
     },
     init = function()
       -- set a theme first
