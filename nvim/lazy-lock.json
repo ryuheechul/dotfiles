@@ -88,7 +88,6 @@
   "open-jira.nvim": { "branch": "master", "commit": "dcbe121d675df64f93aa0e50f32c86a1d7439e28" },
   "open.nvim": { "branch": "master", "commit": "1cabf5fc2c0d59d6273c932546d5465104ad278f" },
   "package-info.nvim": { "branch": "master", "commit": "45acce5b12ce824332d8000cc2c91805b6710446" },
-  "playground": { "branch": "master", "commit": "ba48c6a62a280eefb7c85725b0915e021a1a0749" },
   "plenary.nvim": { "branch": "master", "commit": "4f71c0c4a196ceb656c824a70792f3df3ce6bb6d" },
   "popup.nvim": { "branch": "master", "commit": "b7404d35d5d3548a82149238289fa71f7f6de4ac" },
   "pretty-fold.nvim": { "branch": "master", "commit": "a7d8b424abe0eedf50116c460fbe6dfd5783b1d5" },

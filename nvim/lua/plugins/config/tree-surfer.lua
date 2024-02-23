@@ -1,4 +1,5 @@
 -- syntax-tree-surfer configuration
+-- learn more about tree-sitter at https://thevaluable.dev/tree-sitter-neovim-overview/
 
 -- tl;dr:
 --

@@ -49,13 +49,18 @@ return {
       min_window_height = 10,
     },
   },
-  { -- debug treesitter context via `:TSPlaygroundToggle`
-    'nvim-treesitter/playground',
-    event = 'VeryLazy',
-    dependencies = {
-      require('utils.nixos-shim').nvim_treesitter.base,
-    },
-  },
+  -- nvim-treesitter/playground has been replaced by Neovim itself (deprecation notice and the guide in the repo)
+  -- use these in place of :TSPlaygroundToggle
+  -- - `:Inspect` to show the highlight groups under the cursor
+  -- - `:InspectTree` to show the parsed syntax tree ("TSPlayground")
+  -- - `:EditQuery` to open the Live Query Editor (Nvim 0.10+)
+  -- { -- debug treesitter context via `:TSPlaygroundToggle`
+  --   'nvim-treesitter/playground',
+  --   event = 'VeryLazy',
+  --   dependencies = {
+  --     require('utils.nixos-shim').nvim_treesitter.base,
+  --   },
+  -- },
 }
 
 -- vim: ts=2 sts=2 sw=2 et
