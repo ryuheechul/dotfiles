@@ -89,6 +89,9 @@ end
 
 -- call it via `:lua require('utils.my-smart-quit')()`
 return function()
+  -- workaround until the issue is resolved, https://github.com/folke/trouble.nvim/issues/378
+  vim.cmd [[ TroubleClose ]]
+
   -- don't try to be too smart on 'nofile' `buftype`
   if vim.bo.buftype == 'nofile' then
     vim.cmd [[ q ]]
