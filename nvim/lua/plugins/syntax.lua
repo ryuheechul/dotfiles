@@ -8,6 +8,18 @@ return {
     'imsnif/kdl.vim',
     ft = 'kdl',
   },
+  -- vim-polyglot actually seems to conflict on how to handle treesitter handling highlights and stuff
+  -- and as I'm betting more on treesitter, time to say good bye
+  -- - https://github.com/nvim-treesitter/nvim-treesitter/issues/5812
+  -- { -- one plugin to accomodate many different filetypes
+  --   'sheerun/vim-polyglot',
+  --   -- couldn't figure out how to work this with lazy loading option yet
+  --   lazy = false,
+  --   init = function()
+  --     -- turn off sensible as I don't agree with it - https://github.com/sheerun/vim-polyglot/tree/master#default-settings
+  --     vim.g.polyglot_disabled = { 'sensible' }
+  --   end,
+  -- },
   -- Highlight, edit, and navigate code using a fast incremental parsing library
   require('utils.nixos-shim').nvim_treesitter.extend {
     -- 'nvim-treesitter/nvim-treesitter', -- <- this is provided via `extend`

@@ -97,7 +97,7 @@ And so far none of them worked (except the simple reboot).
 
 _I will leave more updates here if I ever find the cause and resolution, lol._
 
-#### Is this the end of the journey?
+#### Is This the End of the Journey?
 
 Actually why haven't I noticed this one before?
 - https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#i-experience-weird-highlighting-issues-similar-to-78
@@ -110,3 +110,11 @@ Whoever experiences a similar issue, I would recommend you to start with these:
 - `:write | edit | TSBufEnable highlight`
 
 to see if it makes any changes or resolve the slowness, this will probably make you to reverify if your plugin setup was working as expected or not especially if you setup is as quirky as mine.
+
+#### Well Finally the Real Deal
+
+Treesitter is actually quite fast but using Treesitter doesn't seem to guarantee the no use of regex even with `additional_vim_regex_highlighting` turned off.
+
+And you can tell by how much slower regex highlighting is (if you have access to a machine that let you feel the difference) by experimenting.
+
+However manually setting `syntax off` as workaround only worked for a moment and that got cancelled automatically randomly and turns out the culprit seems to be vim-polyglot, removing this finally resolved the issue, oh my!

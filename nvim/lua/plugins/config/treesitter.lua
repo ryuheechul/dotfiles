@@ -1,6 +1,14 @@
 -- Treesitter configuration
 
 return function()
+  -- `syntax off` should be unnecessary thanks to `additional_vim_regex_highlighting` at ../plugins/config/treesitter.lua
+  -- however I'm experiencing that to be not reliable at the time being
+  -- hence the extra step
+  vim.cmd [[ syntax off ]]
+
+  -- there is no zsh parser yet, so fall back to the bash one
+  vim.treesitter.language.register('bash', 'zsh')
+
   require('nvim-treesitter.configs').setup {
     ensure_installed = {
       'astro',
