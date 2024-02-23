@@ -1,13 +1,5 @@
 -- treesitter & other syntax highlighting stuff
 return {
-  { -- Highlight Earthfile syntax
-    'earthly/earthly.vim',
-    ft = 'Earthfile',
-  },
-  {
-    'imsnif/kdl.vim',
-    ft = 'kdl',
-  },
   -- vim-polyglot actually seems to conflict on how to handle treesitter handling highlights and stuff
   -- and as I'm betting more on treesitter, time to say good bye
   -- - https://github.com/nvim-treesitter/nvim-treesitter/issues/5812

@@ -6,8 +6,14 @@ return function()
   -- hence the extra step
   vim.cmd [[ syntax off ]]
 
-  -- there is no zsh parser yet, so fall back to the bash one
-  vim.treesitter.language.register('bash', 'zsh')
+  -- fallback when there is no known treesitter support that exists
+  for _, fallback_pair in ipairs {
+    -- { 'fallback', 'absence' }
+    { 'bash', 'zsh' },
+    { 'make', 'Earthfile' },
+  } do
+    vim.treesitter.language.register(fallback_pair[1], fallback_pair[2])
+  end
 
   require('nvim-treesitter.configs').setup {
     ensure_installed = {
@@ -44,6 +50,7 @@ return function()
       'json5',
       'jsonc',
       'julia',
+      'kdl',
       'kotlin',
       'llvm',
       'lua',
