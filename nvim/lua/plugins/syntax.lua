@@ -13,8 +13,8 @@ return {
   --   end,
   -- },
   -- Highlight, edit, and navigate code using a fast incremental parsing library
-  require('utils.nixos-shim').nvim_treesitter.extend {
-    -- 'nvim-treesitter/nvim-treesitter', -- <- this is provided via `extend`
+  { -- Nvim Treesitter configurations and abstraction layer
+    'nvim-treesitter/nvim-treesitter',
     dependencies = {
       'RRethy/nvim-treesitter-textsubjects',
       'nvim-treesitter/nvim-treesitter-textobjects', -- Additional textobjects for treesitter
@@ -22,12 +22,14 @@ return {
     -- Parsers must be installed manually via :TSInstall
     build = ':TSUpdate',
     config = require 'plugins.config.treesitter',
+    -- if `ensure_installed` are not kicked off, chances are the whole chunk is not being loaded for some reason
+    -- try clean install (by commenting out this whole chunk for lazy.nvim to detect and delete and uncomment)
   },
   { -- Highlight arguments' definitions and usages, using Treesitter
     'm-demare/hlargs.nvim',
     event = 'VeryLazy',
     dependencies = {
-      require('utils.nixos-shim').nvim_treesitter.base,
+      'nvim-treesitter/nvim-treesitter',
     },
     config = true,
   },
@@ -43,7 +45,7 @@ return {
     'nvim-treesitter/nvim-treesitter-context',
     event = 'VimEnter',
     dependencies = {
-      require('utils.nixos-shim').nvim_treesitter.base,
+      'nvim-treesitter/nvim-treesitter',
     },
     opts = {
       -- improves performance a lot (on slower state of the machine)
@@ -62,7 +64,7 @@ return {
   --   'nvim-treesitter/playground',
   --   event = 'VeryLazy',
   --   dependencies = {
-  --     require('utils.nixos-shim').nvim_treesitter.base,
+  --    'nvim-treesitter/nvim-treesitter',
   --   },
   -- },
 }

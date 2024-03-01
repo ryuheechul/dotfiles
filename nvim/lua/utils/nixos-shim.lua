@@ -1,3 +1,6 @@
+-- THIS IS NOW DEPRECATED, AS I REVERTED THE DECISION ON USING THE SHIM
+-- FROM THIS COMMIT https://github.com/ryuheechul/dotfiles/commit/0a8bae199ea8151e1b90b4075e8925a6717839f5
+
 -- to help dealing with nixos quarks
 
 -- also see these files:
@@ -5,10 +8,12 @@
 -- - ../../../nix/home/shims.nix
 local merge = require('utils.table').merge
 
+local should_override_for_nixos = vim.env.my_system_nixos ~= nil
+
 local nvim_treesitter_base = {
   'nvim-treesitter/nvim-treesitter',
   -- thanks to https://www.reddit.com/r/NixOS/comments/17el4x7/comment/k63xbwi
-  dev = vim.env.my_system_nixos ~= nil,
+  dev = should_override_for_nixos,
 }
 
 return {
@@ -20,7 +25,7 @@ return {
     -- - plugins still get to mark the dependency
     -- - by giving empty plugin, the main one still get to work "properly"
     -- - and this workaround should fix the slowness that I documented at [../plugins/README.md](../plugins/README.md#performance)
-    base = vim.env.my_system_nixos ~= nil and {} or nvim_treesitter_base,
+    base = should_override_for_nixos and {} or nvim_treesitter_base,
     -- base = nvim_treesitter_base,
     extend = function(tbl)
       return merge(nvim_treesitter_base, tbl)
