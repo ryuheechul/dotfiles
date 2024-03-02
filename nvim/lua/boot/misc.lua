@@ -90,9 +90,19 @@ vim.api.nvim_create_autocmd('BufEnter', {
 if vim.env.my_nvim_forget_line_number == nil then
   -- remember the last position and go to that line
   -- https://askubuntu.com/a/202077
-  vim.cmd [[if has("autocmd")
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-  endif]]
+  -- https://www.reddit.com/r/neovim/comments/1052d98/comment/j38dtlz
+  local lastplaceGrp = vim.api.nvim_create_augroup('LastPlace', { clear = true })
+  vim.api.nvim_create_autocmd('BufReadPost', {
+    group = lastplaceGrp,
+    callback = function()
+      local valid_line = vim.fn.line [['"]] >= 1 and vim.fn.line [['"]] < vim.fn.line '$'
+      local not_commit = vim.bo.filetype ~= 'gitcommit'
+
+      if valid_line and not_commit then
+        vim.cmd [[normal! g`"]]
+      end
+    end,
+  })
 end
 
 -- only show when there is more than two files are open
