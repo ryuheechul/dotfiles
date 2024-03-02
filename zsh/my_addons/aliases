@@ -282,7 +282,11 @@ sk ()
   fi
 }
 
-alias skp='sk --preview "preview {}"'
+skp ()
+{
+  # because sk seems to reset env vars unlike with the case of fzfp
+  sk --preview "BAT_THEME='${BAT_THEME}' preview {}"
+}
 
 ## convenient quick ways to select file to open in vim
 # 1. in the current directory
@@ -340,8 +344,8 @@ alias rgc5='rgc 5' # with context value that is 5
 
 alias glow='glow -p -s "$(theme-tone)"'
 
-alias fzfp='fzf --height 100% --preview "bat --style=numbers --color=always {}"'
-alias fzfpp='fzf|fpp'
+alias fzfp='fzf --height 100% --preview "preview {}"'
+alias fzfpp='fzfp|fpp'
 alias fpp='wrapped-fpp'
 
 # diff with bat
