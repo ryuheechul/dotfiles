@@ -111,6 +111,10 @@ local config = function()
       name = '+Generate',
     },
     l = { cmdify 'Luapad', 'open Luapad' },
+    n = {
+      name = '+Neotest',
+      r = { cmdify 'Neotest run', 'Neotest run' },
+    },
     t = {
       name = '+Treesitter',
       t = { cmdify 'TSPlaygroundToggle', 'TSPlaygroundToggle' },

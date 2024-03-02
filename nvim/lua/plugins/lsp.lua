@@ -11,7 +11,12 @@ return {
       'SmiteshP/nvim-navic', -- Simple winbar/statusline plugin that shows your current code context
       -- 💻 Neovim setup for init.lua and plugin development with full signature help, docs and completion for the nvim lua API.
       'lspcontainers/lspcontainers.nvim', -- Neovim plugin for lspcontainers
-      { 'folke/neodev.nvim', config = true },
+      {
+        'folke/neodev.nvim',
+        opts = {
+          library = { plugins = { 'neotest' }, types = true },
+        },
+      },
       {
         'williamboman/mason-lspconfig.nvim',
         dependencies = { 'williamboman/mason.nvim', config = true },

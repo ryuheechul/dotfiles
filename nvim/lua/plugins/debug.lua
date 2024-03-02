@@ -80,6 +80,28 @@ return {
     'gpanders/fennel-repl.nvim',
     event = 'VeryLazy',
   },
+  { -- A framework for interacting with tests within NeoVim.
+    'nvim-neotest/neotest',
+    event = 'VeryLazy',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'antoinemadec/FixCursorHold.nvim',
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-neotest/neotest-python',
+    },
+    config = function()
+      require('neotest').setup {
+        adapters = {
+          -- quickest to way to see how it works
+          -- clone - https://github.com/pytest-dev/pytest
+          -- setup venv and install packages - https://github.com/pytest-dev/pytest/blob/main/CONTRIBUTING.rst (search `venv`)
+          -- locate https://github.com/pytest-dev/pytest/blob/main/testing/example_scripts/doctest/main_py/test_normal_module.py locally
+          -- run `:Neotest run`
+          require 'neotest-python',
+        },
+      }
+    end,
+  },
 }
 
 -- vim: ts=2 sts=2 sw=2 et

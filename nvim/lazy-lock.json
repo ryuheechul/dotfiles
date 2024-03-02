@@ -1,5 +1,6 @@
 {
   "Comment.nvim": { "branch": "master", "commit": "0236521ea582747b58869cb72f70ccfa967d2e89" },
+  "FixCursorHold.nvim": { "branch": "master", "commit": "1900f89dc17c603eec29960f57c00bd9ae696495" },
   "LuaSnip": { "branch": "master", "commit": "f3b3d3446bcbfa62d638b1903ff00a78b2b730a1" },
   "NeoSolarized": { "branch": "master", "commit": "13bfe6f238df199a24eb1bc10ed93e37c467db39" },
   "alpha-nvim": { "branch": "main", "commit": "1356b9ef31b985d541d94314f2cf73c61124bf1d" },
@@ -55,6 +56,8 @@
   "neodev.nvim": { "branch": "main", "commit": "fdf6b3c58caf3ed1bfe40822d5dac340fc18c33b" },
   "neogen": { "branch": "main", "commit": "cb1f384df804c1bf729332c4f728253fe17962d4" },
   "neogit": { "branch": "master", "commit": "02d4c1b648fa1bcd809efef4fcbb56c7cc2bf7e6" },
+  "neotest": { "branch": "master", "commit": "4440cc2227894c2ae9b0673a30e6cc6f1836e8c2" },
+  "neotest-python": { "branch": "master", "commit": "2e83d2bc00acbcc1fd529dbf0a0e677cabfe6b50" },
   "neovim-throttle-debounce": { "branch": "main", "commit": "5247b097df15016ab31db672b77ec4938bb9cbfd" },
   "neural": { "branch": "main", "commit": "b1ea6ef06c83b82b8623368b07e0a209e3c65900" },
   "noice.nvim": { "branch": "main", "commit": "bf67d70bd7265d075191e7812d8eb42b9791f737" },
