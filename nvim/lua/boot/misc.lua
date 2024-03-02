@@ -1,6 +1,3 @@
--- last status
-vim.o.ls = 0
-
 -- command height
 vim.o.ch = 0
 
@@ -48,6 +45,14 @@ vim.g.onedark_terminal_italics = 2
 
 -- Replace https://github.com/luukvbaal/stabilize.nvim with Neovim 0.9.0 onward
 vim.o.splitkeep = 'screen'
+
+-- fancy pinpointing on the cursor
+if vim.env.my_nvim_no_cursor_pinpoint == nil then
+  vim.o.cursorline = true
+  vim.o.cursorcolumn = true
+  -- this makes it feel natural with the options above
+  vim.o.virtualedit = 'all'
+end
 
 -- Highlight on yank
 local yankHighlightGrp = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
