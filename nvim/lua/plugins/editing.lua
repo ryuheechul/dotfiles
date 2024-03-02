@@ -24,8 +24,7 @@ return {
   { -- replacing 'tpope/vim-commentary'
     'numToStr/Comment.nvim',
     dependencies = {
-      -- Neovim treesitter plugin for setting the commentstring based on the cursor location in a file.
-      {
+      { -- Neovim treesitter plugin for setting the commentstring based on the cursor location in a file.
         'JoosepAlviste/nvim-ts-context-commentstring',
         opts = {
           enable = true,
@@ -139,5 +138,19 @@ return {
     event = 'VeryLazy',
     cond = vim.env.my_nvim_syntax_tree_surfer ~= nil,
     config = require 'plugins.config.tree-surfer', -- follow the file to see key maps
+  },
+  { -- prevent the cursor from moving when using shift and filter actions
+    'gbprod/stay-in-place.nvim',
+    event = 'VeryLazy',
+    opts = {},
+  },
+  { -- The Refactoring library based off the Refactoring book by Martin Fowler
+    'ThePrimeagen/refactoring.nvim',
+    event = 'VeryLazy',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
+    },
+    opts = {},
   },
 }

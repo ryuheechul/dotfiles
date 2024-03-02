@@ -34,16 +34,6 @@ local init = function()
   )
   vim.keymap.set('n', 't', cmdify 'Telescope buffers', { noremap = true, silent = true, desc = ':Telescope buffers' })
 
-  --- disabling this as this interfered with something like `>ap`
-  --- and the original purpose wasn't working as intended either anyway
-  -- -- indent right away without waiting in normal mode
-  -- vim.keymap.set('n', '>', '>>', { noremap = true })
-  -- vim.keymap.set('n', '<', '<<', { noremap = true })
-
-  -- stay in visual mode after indentation in visual mode
-  vim.keymap.set('v', '>', '>gv', { noremap = true, desc = 'indent to >' })
-  vim.keymap.set('v', '<', '<gv', { noremap = true, desc = 'indent to <' })
-
   -- replace builtin spell suggestions - see `:h z=`
   vim.keymap.set('n', 'z=', cmdify 'Telescope spell_suggest', { noremap = true, desc = 'fix spelling' })
 
