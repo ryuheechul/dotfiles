@@ -133,10 +133,15 @@ local config = function()
       name = '+Windows/Workspace',
       d = { cmdify 'close', 'close window' },
       m = { cmdify 'silent exec "!tmux-zoom"' .. cmdify 'WindowsMaximize', 'maximize/minimize window' },
-      v = { cmdify 'WindowsMaximizeVertical', 'maximize/minimize window vertically' },
-      h = { cmdify 'WindowsMaximizeHorizontal', 'maximize/minimize window horizontally' },
+      v = { cmdify 'WindowsMaximizeVertically', 'maximize/minimize window vertically' },
+      h = { cmdify 'WindowsMaximizeHorizontally', 'maximize/minimize window horizontally' },
       ['/'] = { cmdify 'vsplit', 'split window vertically' },
       ['-'] = { cmdify 'split', 'split window horizontally' },
+      -- few convenient tmux controls - see also ../../../zsh/my_addons/aliases
+      -- no more ctrl+a[key] when not necessary!
+      t = { cmdify '!tmux choose-tree', 'choose tmux tree' },
+      n = { cmdify '!tmux new-window', 'new tmux window' },
+      p = { cmdify '!tmux split-window -h', 'new tmux panel' },
     },
     b = {
       name = '+Buffers',

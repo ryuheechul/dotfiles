@@ -224,6 +224,16 @@ alias gdc.='gdc .'
 # do this again although this is done by ../aliases already since this get overwritten by something along the way (probably OMZ)
 alias l="ls -lah -g --git"
 
+ # https://www.reddit.com/r/bash/comments/tkftlv/comment/iuhhz9g
+_nclr () { local j; for ((j = 0; j <= "${1:-1}"; j++ )); do tput cuu1; done; tput ed; }
+
+# quick way to navigate tmux windows - see also ../../nvim/lua/plugins/keymaps.lua
+alias wt='tmux choose-tree; _nclr 2'
+alias wn='tmux new-window; _nclr 2'
+alias wp='tmux split-window -h; _nclr 2'
+alias w/='tmux split-window -h; _nclr 2'
+alias w-='tmux split-window -v; _nclr 2'
+
 # this overwrites existing gap which is for git apply
 alias gap='git add -p'
 
