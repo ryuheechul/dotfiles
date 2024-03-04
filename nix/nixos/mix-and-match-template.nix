@@ -24,5 +24,7 @@
     ./recipes/1password.nix
     ./recipes/keyd-host-windows.nix
     ./recipes/keyd-guest.nix
+    # not proven
+    ./recipes/displaylink.nix
   ];
 }
