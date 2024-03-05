@@ -80,6 +80,7 @@ return function()
       'solidity',
       'svelte',
       -- 'swift',
+      'tmux',
       'todotxt',
       'toml',
       'tsx',
