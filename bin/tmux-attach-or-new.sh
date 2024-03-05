@@ -14,7 +14,7 @@ if [ -z "$(command -v nix)" ]; then
 fi
 
 # let brew (binaries) takes more priority then nix in case of apple silicon
-if test "Darwin" = "$(uname)" && test "arm64" = "$(arch)"; then
+if test "Darwin" = "$(uname)" && test "arm64" = "$(uname -m)"; then
   [ -x /opt/homebrew/bin/brew ] && eval $(/opt/homebrew/bin/brew shellenv)
 fi
 

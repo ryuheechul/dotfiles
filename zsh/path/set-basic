@@ -54,7 +54,7 @@ add-to-path "${my_dot_d}/bin/path/default"
 test -n "${WSL_DISTRO_NAME}" && add-to-path "${my_dot_d}/bin/path/wsl"
 
 # my custom scripts that should work on darwin
-test "$(uname)" = "Darwin" && add-to-path "${my_dot_d}/bin/path/darwin"
+uname | xargs test "Darwin" = && add-to-path "${my_dot_d}/bin/path/darwin"
 
 # add path for ssh
 test -n "${SSH_TTY}" && add-to-path "${my_dot_d}/bin/path/ssh"

@@ -12,7 +12,7 @@ alt_nixpkgs_stable_darwin="$("${get_path_for}" nixpkgs-stable-darwin)"
 alt_hm="$("${get_path_for}" home-manager)"
 
 channel_for_darwin=""
-test $(uname) = "Darwin" && channel_for_darwin="-I nixpkgs-stable-darwin=${alt_nixpkgs_stable_darwin}"
+uname | xargs test "Darwin" = && channel_for_darwin="-I nixpkgs-stable-darwin=${alt_nixpkgs_stable_darwin}"
 
 "${HOME}/.nix-profile/bin/home-manager" \
   -I "home-manager=${alt_hm}" \

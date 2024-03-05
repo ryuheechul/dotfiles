@@ -61,7 +61,7 @@ fi
 # - nix currently only run with Rosetta 2
 # - at least terminal and shell should run natively
 # - to prevent being forced to run only Intel based apps as child processes of the shell and terminal
-if test "arm64" = "$(arch)"; then
+if uname -m | xargs test "arm64" =; then
   brew install zsh bash tmux
 fi
 

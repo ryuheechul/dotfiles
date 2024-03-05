@@ -1,5 +1,5 @@
 # detect the absence of eterm-color on darwin and install it
-if test "$(uname)" = "Darwin"; then
+if uname | xargs test "Darwin" =; then
   /usr/bin/infocmp eterm-color &> /dev/null \
     || ~/.config/dfs-rhc/bin/darwin/terminfo-eterm-color.sh
 fi
