@@ -1,4 +1,6 @@
 # copy this file to ./mix-and-match.nix and tailor to the local device
+# aka "I wouldn't use this as is"
+
 { ... }:
 
 {
@@ -18,6 +20,7 @@
     ./recipes/docker.nix
     ./recipes/rosetta.nix
     ./recipes/waydroid.nix
+    ./recipes/captive-browser.nix
     ./recipes/virtualization.nix
     ./recipes/flatpak.nix
     ./recipes/tailscale.nix
