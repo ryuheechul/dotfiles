@@ -3,6 +3,7 @@
 
 let
   emacs = import ./custom/emacs.nix { pkgs = pkgs; };
+  urlview = import ./custom/urlview.nix { pkgs = pkgs; };
 in
 with pkgs;
 # just for fun/testing
@@ -100,6 +101,7 @@ with pkgs;
   duf # Disk Usage/Free Utility
   gping # ping with graph
   fpp # for tmux-fpp
+  urlview # for tmux-urlview
   extract_url # for tmux-urlview
   viu # A command-line application to view images from the terminal written in Rust
 ] ++

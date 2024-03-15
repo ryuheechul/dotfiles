@@ -78,6 +78,9 @@ ln -sf "${dfs_rhc}/lf" "${XDG_CONFIG_HOME}/lf"
 # rsop
 rm -rf "${XDG_CONFIG_HOME}/rsop"; ln -sf "${dfs_rhc}/rsop" "${XDG_CONFIG_HOME}/rsop"
 
+# urlscan
+ln -sf "${dfs_rhc}/urlscan" "${XDG_CONFIG_HOME}/urlscan"
+
 # espanso
 espanso_config="${XDG_CONFIG_HOME}/espanso" \
   && rm -rf "${espanso_config}" \
