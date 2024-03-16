@@ -117,4 +117,6 @@ Treesitter is actually quite fast but using Treesitter doesn't seem to guarantee
 
 And you can tell by how much slower regex highlighting is (if you have access to a machine that let you feel the difference) by experimenting.
 
-However manually setting `syntax off` as workaround only worked for a moment and that got cancelled automatically randomly and turns out the culprit seems to be vim-polyglot, removing this finally resolved the issue, oh my!
+However manually setting `syntax off` as workaround only worked for a moment and that got cancelled automatically randomly and turns out the culprit seems to be vim-polyglot, removing this plugin finally resolved the issue, oh my!
+
+There is also related post - https://www.reddit.com/r/neovim/comments/mmm4fd/word_of_advice_if_using_neovim_treesitter_the.

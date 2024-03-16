@@ -8,6 +8,7 @@ vim.filetype.add {
   },
   filename = {
     Earthfile = 'Earthfile',
+    ['.envrc'] = 'bash',
   },
 }
 
