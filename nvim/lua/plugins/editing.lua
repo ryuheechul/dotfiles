@@ -5,15 +5,21 @@ return {
   { 'tpope/vim-surround', event = 'VeryLazy' }, -- surround text with something like quotes
   { -- for splitting/joining blocks of code
     'Wansmer/treesj',
-    -- with default keymaps:
+    -- not using the default keymaps anymore:
     -- <space>m - toggle
     -- <space>j - join
     -- <space>s - split (slow just because of <space>s is a prefix for other keys)
+    -- and just use <space>ts - toggle
     dependencies = {
       'nvim-treesitter/nvim-treesitter',
     },
     event = 'VeryLazy',
-    config = true,
+    opts = { use_default_keymaps = false },
+    init = function()
+      vim.keymap.set('n', '<space>ts', function()
+        require('treesj').toggle()
+      end, { silent = true, noremap = true, desc = 'toggle "split" in a block' })
+    end,
   },
   { 'tpope/vim-repeat', event = 'VeryLazy' }, -- enhance `.` to repeat on non-native functionality like vim-surround
   { 'kana/vim-textobj-line', dependencies = { 'kana/vim-textobj-user' }, event = 'VeryLazy' },

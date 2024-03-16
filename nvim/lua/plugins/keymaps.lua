@@ -154,7 +154,14 @@ local config = function()
       cmd_nohlsearch .. cmdify '8ToggleTerm direction=horizontal',
       'open ToggleTerm direction=horizontal',
     },
-    j = 'split args', -- only set a text for an already configured keymap
+    -- add this to reflect sre page https://www.srepath.com/
+    -- https://www.srepath.com/10-tips-for-onboarding-new-sre-hires/
+    -- https://www.srepath.com/developer-survive-you-built-it-you-run-it/
+    -- https://www.srepath.com/rundown-of-linkedins-sre-practices/
+    -- https://github.com/mxssl/sre-interview-prep-guide?tab=readme-ov-file
+
+    k = { cmdify 'normal Lzt', 'next page' },
+    j = { cmdify 'normal Hzb', 'previous page' },
     ['<CR>'] = { '@q', 'macro q' }, -- setting a special key
     f = { -- set a nested structure
       name = '+Find',
