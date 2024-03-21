@@ -12,6 +12,7 @@
     # when it's virtualised
     ./recipes/vm-guest-utm.nix
     ./recipes/wsl.nix
+    ./recipes/mtu-probing.nix
     # services
     ./recipes/openssh.nix
     ./recipes/mdns.nix
