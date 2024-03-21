@@ -2,6 +2,7 @@
 # this may be used as an fallback
 
 # essential
+brew "coreutils" # https://formulae.brew.sh/formula/coreutils
 brew "zsh" # my favorite shell interface
 brew "git" # to replace possible old git comes with OS
 brew "bash" # use latest bash
@@ -13,18 +14,19 @@ brew "direnv" # auto loading env per dir
 brew "htop" # resource monitoring
 brew "gpg" # GnuPG
 brew "wget" # useful for downloading files
+brew "iproute2mac" # ip command
 
 # viewer
-brew "exa" # modern ls
+brew "eza" # modern ls
 brew "bat" # cat with wings
 brew "glow" # markdown render on cli
 brew "lf" # terminal file manager
 brew "fx" # json viewer
+brew "hexyl" # binary viewer
 
 # search
 brew "rg" # modern grep
-brew "the_silver_searcher" # another modern grep
-brew "fasd" # Command-line productivity booster, offers quick access to files and directories
+brew "zoxide" # Command-line productivity booster, offers quick access to files and directories
 brew "fd" # mordern find
 
 # helper
@@ -42,6 +44,7 @@ brew "pueue" # long running task manager
 
 # misc
 brew "neofetch"
+brew "yarn"
 
 # not core tap
 brew "kdabir/tap/has"
