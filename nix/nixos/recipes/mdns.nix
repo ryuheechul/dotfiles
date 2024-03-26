@@ -9,7 +9,7 @@ in
     # avahi to manage mdns
     enable = mkDefault true;
     # this allows to query *.local - aka being a mDNS client
-    nssmdns = mkDefault true;
+    nssmdns4 = mkDefault true;
     publish = {
       enable = mkDefault true;
       # this publish the addresses. e.g. [hostname].local - aka being a mDNS server
