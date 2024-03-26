@@ -4,9 +4,16 @@
 
 socket="${HOME}/.opener.sock"
 
+_real_xdg_open=$(which -a xdg-open | tail -n1)
+
+test -z "${1}" && {
+  echo "no args passed so falling back to ${_real_xdg_open}"
+  exec ${_real_xdg_open} "${@}"
+}
+
 test -S "${socket}" || {
-  echo "${socket} is not bound"
-  exit 1
+  echo "${socket} is not bound so falling back to ${_real_xdg_open}"
+  exec ${_real_xdg_open} "${@}"
 }
 
 if [ -p /dev/stdin ]; then
