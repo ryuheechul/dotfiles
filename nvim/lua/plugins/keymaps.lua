@@ -248,7 +248,15 @@ local config = function()
     t = {
       name = '+UI Toggles',
       b = { toggle_bg, 'toggle-background' },
+      -- Lf is better for preview purposes and more freedom but will fail on remote files
       f = { cmdify 'Lf', 'toggle lf' },
+      -- Oil is preferred on efficient bulk renaming of filenames or creating/deleting files quickly and safely
+      o = {
+        function()
+          require('oil').toggle_float()
+        end,
+        'toggle Oil',
+      },
       l = { cmdify 'set list!', 'toggle-hidden-listchars' },
     },
   }, { prefix = '<Space>' })

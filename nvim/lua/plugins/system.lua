@@ -96,6 +96,37 @@ return {
     },
     dependencies = { 'plenary.nvim', 'toggleterm.nvim' },
   },
+  { -- edit your filesystem like a normal Neovim buffer
+    -- handy for quickly editing remote files - but becareful as it will overwrite the file on the remote host and vice versa if simulatanously being edited
+    -- e.g. `:edit [user@]oil-ssh://remote-host//home/user/directory/`
+    -- or `:edit oil-ssh://remote-host/directory/` for the same as above
+    -- but not `:edit oil-ssh://remote-host:~/directory/` nor `:edit oil-ssh://remote-host/~/directory/`
+    -- as it's not the same as using `scp` command in a shell which typically i would use like `scp remote-host:~/directory/file .`
+    -- editing remote file is also possible even without oil though - https://gist.github.com/RRethy/ad8a9a3b1112a48226ec3336fa981224
+    'stevearc/oil.nvim',
+    opts = {
+      view_options = {
+        show_hidden = true,
+      },
+      keymaps = {
+        ['<Esc>'] = 'actions.close',
+        ['e'] = 'actions.select',
+        -- ['l'] = 'actions.select', this would be convenient and not at the same time
+        -- - convenient for entering sub directory the same way as lf
+        -- - inconvenient for editing the buffer freely
+        -- `-`: navigate to parent directory
+        -- see more default keymaps via `:h oil-config`
+      },
+      float = {
+        max_width = 100,
+        max_height = 30,
+        win_options = {
+          winblend = 20,
+        },
+      },
+    },
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+  },
   { -- A file explorer tree for neovim written in lua
     'nvim-tree/nvim-tree.lua',
     event = 'VeryLazy',
