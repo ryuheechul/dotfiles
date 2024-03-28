@@ -47,7 +47,12 @@ return {
     dependencies = {
       'anuvyklack/keymap-layer.nvim', -- Create a key layer in Neovim
       'jbyuki/one-small-step-for-vimkind', -- Debug adapter for Neovim lua files (including plugins)
-      'rcarriga/nvim-dap-ui', -- A UI for nvim-dap
+      { -- A UI for nvim-dap
+        'rcarriga/nvim-dap-ui',
+        dependencies = {
+          'nvim-neotest/nvim-nio', -- A library for asynchronous IO in Neovim
+        },
+      },
       -- adds virtual text support to nvim-dap. nvim-treesitter is used to find variable definitions.
       'theHamsta/nvim-dap-virtual-text',
       { -- nvim-dap adapter for vscode-js-debug
