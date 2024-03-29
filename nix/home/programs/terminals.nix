@@ -28,7 +28,36 @@ in
       hide_window_decorations = true;
       startup_session = startup_session_path;
       # unfortunately I couldn't find a way to set full screen startup in the configuration - https://github.com/kovidgoyal/kitty/issues/856
-      # in the meantime, run it with `kitty --start-as=fullscreen` from other terminal or need to create a .desktop file to that.
+      # in the meantime there are two workarounds:
+      # - a. run it with `kitty --start-as=fullscreen` from other terminal
+      # - b. modify kitty.desktop file
     };
   };
+
+  # this shadows the original desktop file that should have been at ~/.nix-profile/share/applications/kitty.desktop
+  # debug via `cat ~/.nix-profile/share/applications/kitty.desktop` both for before and after (by commenting this block below if it's for before)
+  xdg.desktopEntries.kitty = {
+    name = "kitty";
+    genericName = "Terminal emulator";
+    exec = "kitty --start-as=fullscreen"; # this is the main fix and the rest is to conform with original
+    icon = "kitty";
+    comment = "Fast, feature-rich, GPU based terminal";
+    categories = [ "System" "TerminalEmulator" ];
+    settings = {
+      TryExec = "kitty";
+    };
+  };
+  # below is from the original content at the time of capturing
+  # ```
+  # [Desktop Entry]
+  # Version=1.0
+  # Type=Application
+  # Name=kitty
+  # GenericName=Terminal emulator
+  # Comment=Fast, feature-rich, GPU based terminal
+  # TryExec=kitty
+  # Exec=kitty
+  # Icon=kitty
+  # Categories=System;TerminalEmulator;
+  # ```
 }
