@@ -97,12 +97,15 @@ return {
     dependencies = { 'plenary.nvim', 'toggleterm.nvim' },
   },
   { -- edit your filesystem like a normal Neovim buffer
-    -- handy for quickly editing remote files - but becareful as it will overwrite the file on the remote host and vice versa if simulatanously being edited
-    -- e.g. `:edit [user@]oil-ssh://remote-host//home/user/directory/`
-    -- or `:edit oil-ssh://remote-host/directory/` for the same as above
-    -- but not `:edit oil-ssh://remote-host:~/directory/` nor `:edit oil-ssh://remote-host/~/directory/`
-    -- as it's not the same as using `scp` command in a shell which typically i would use like `scp remote-host:~/directory/file .`
-    -- editing remote file is also possible even without oil though - https://gist.github.com/RRethy/ad8a9a3b1112a48226ec3336fa981224
+    -- handy for quickly editing remote files:
+    -- - but be careful as it will overwrite the file on the remote host and vice versa if simultaneously being edited
+    -- - example:
+    --   - `:edit [user@]oil-ssh://remote-host//home/user/directory/`
+    --   - or `:edit oil-ssh://remote-host/directory/` for the same as above
+    --   - but not `:edit oil-ssh://remote-host:~/directory/` nor `:edit oil-ssh://remote-host/~/directory/`
+    --     - as it's not the same as using `scp` command in a shell which typically i would use like `scp remote-host:~/directory/file .`
+    -- - editing remote file is also possible even without oil though - https://gist.github.com/RRethy/ad8a9a3b1112a48226ec3336fa981224
+    -- - and it's probably best to use `sshfs` instead of oil-ssh:// when possible
     'stevearc/oil.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     event = 'VeryLazy',

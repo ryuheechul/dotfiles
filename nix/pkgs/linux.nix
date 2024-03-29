@@ -11,5 +11,12 @@ with pkgs;(
       nmap # A free and open source utility for network discovery and security auditing
       ed # An implementation of the standard Unix editor
       distrobox # Wrapper around podman or docker to create and start containers
+      sshfs # FUSE-based filesystem that allows remote filesystems to be mounted over SSH
+      # example:
+      # - `sshfs remote-host:directory ~/mnt/target [-o reconnect]` # existing directories and files under will be shadowed
+      # - `cd ~/mnt/target` # do stuff
+      # - `cd -` # get out
+      # - `fusermount -u ~/mnt/target`
+      # more on sshfs, https://www.redhat.com/sysadmin/sshfs
     ]
 )
