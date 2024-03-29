@@ -33,12 +33,14 @@ return {
     },
     config = true,
   },
-  { -- A fast Neovim http client written in Lua
-    'rest-nvim/rest.nvim',
-    event = 'VeryLazy',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    config = require 'plugins.config.rest',
-  },
+  -- remove until it become stable as currently it is not https://github.com/rest-nvim/rest.nvim/issues/306
+  -- https://hurl.dev/ is the good alternative to `http` files + `rest.nvim`
+  -- { -- A fast Neovim http client written in Lua
+  --   'rest-nvim/rest.nvim',
+  --   event = 'VeryLazy',
+  --   dependencies = { 'nvim-lua/plenary.nvim' },
+  --   config = require 'plugins.config.rest',
+  -- },
   -- turn off due to occasional lags
   -- 'haringsrob/nvim_context_vt', -- show context via virtual text
   { -- Show code context

@@ -97,7 +97,6 @@
   "pretty-fold.nvim": { "branch": "master", "commit": "a7d8b424abe0eedf50116c460fbe6dfd5783b1d5" },
   "rainbow-delimiters.nvim": { "branch": "master", "commit": "90bab50ebf2ce8859fdd69064552665cc9882353" },
   "refactoring.nvim": { "branch": "master", "commit": "94444558fc651b7e36f39d86c518e44b4de15123" },
-  "rest.nvim": { "branch": "main", "commit": "c27a0bcb84ab5534d89065d638119ed2dbbae189" },
   "sad.nvim": { "branch": "master", "commit": "869c7f3ca3dcd28fd78023db6a7e1bf8af0f4714" },
   "significant.nvim": { "branch": "main", "commit": "5450e9d5917dc6aa9afb0fcbe32355799b8303fb" },
   "sniprun": { "branch": "master", "commit": "0079f9c4675a6825f84e108bbff866f67dd8762f" },

@@ -1,4 +1,5 @@
 -- rest-nvim settings
+-- it's currently very outdated and will revised when there is good time to do - https://github.com/rest-nvim/rest.nvim/issues/306
 
 return function()
   require('rest-nvim').setup {
