@@ -17,6 +17,7 @@ with pkgs;(
       # - `cd ~/mnt/target` # do stuff
       # - `cd -` # get out
       # - `fusermount -u ~/mnt/target`
-      # more on sshfs, https://www.redhat.com/sysadmin/sshfs
+      # - more on sshfs, https://www.redhat.com/sysadmin/sshfs
+      # - there is also sshocker, see that at ./extra/default.nix
     ]
 )

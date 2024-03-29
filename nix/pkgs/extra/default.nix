@@ -109,6 +109,18 @@ with pkgs;
 ++ ifEnv "MY_NIX_EXTRA_SSH"
   [
     openssh # An implementation of the SSH protocol
+    sshocker # Tool for SSH, reverse `sshfs` and port forwarder - see ../linux.nix for `sshfs`
+    # - docker volume mounting like experience (as well as port forwarding)
+    # - requires `sshfs` to be installed on the remote host
+    # - this is better experience for temporary mounting as unmount happens automatically on disconnection
+    #   - especially if the remote host has all the dev environments are configured and source code are stored, you can avoid slow disk reads unlike normal `sshfs`
+    #     - but typing latency can be a concern, so it's all trade off
+    # - example:
+    #   - `sshocker [-p 7070:8080] -v .:/tmp/mnt/sshfs remote-host`
+    #   - # you should be connected to remote host as if you run it with `ssh`
+    #   - `ls /tmp/mnt/sshfs` should list files of client's pwd as it's mounted with reverse       `sshfs`
+    #   - now at client side, `curl localhost:7070` should forward traffic to remote host's 8080 port (if you specified)
+    #   - `exit` from connection should unmount and stop forwarding just like docker container experience!
     xorg.xorgserver
     xorg.xauth
     # debug xauth - https://www.linuxquestions.org/questions/linux-newbie-8/warning-no-xauth-data-although-i%27m-using-%60ssh-y%60-4175525755/#post5272443
