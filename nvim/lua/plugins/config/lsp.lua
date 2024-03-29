@@ -4,17 +4,19 @@ local M = {}
 
 function M.setup_lsp_format()
   require('lsp-format').setup {
+    -- below are the ones that I don't want it to be formatted via lsp ones
     json = {
       exclude = { 'jsonls' },
     },
+    yaml = {
+      exclude = { 'yamlls' },
+    },
+    -- below are to avoid conflict with [efm](./lsp-servers.lua)
     lua = {
-      exclude = { 'lua_ls' }, -- to let only null_ls with stylua to format
+      exclude = { 'lua_ls' },
     },
     typescript = {
       exclude = { 'tsserver' },
-    },
-    yaml = {
-      exclude = { 'yamlls' },
     },
   }
 end
