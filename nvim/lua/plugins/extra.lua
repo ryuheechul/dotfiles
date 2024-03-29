@@ -504,4 +504,17 @@ return {
       vim.keymap.set('n', '<leader>rt', ':GoTestFile<CR>', { silent = true, noremap = true, desc = 'run :GoTestFile' })
     end,
   },
+  { -- Highlight, list and search todo comments in your projects with "tags" like below
+    -- TODO:
+    -- FIX:
+    -- HACK:
+    -- WARN:
+    -- PERF:
+    -- NOTE:
+    -- TEST:
+    'folke/todo-comments.nvim',
+    event = 'VeryLazy',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {},
+  },
 }

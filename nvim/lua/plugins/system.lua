@@ -104,6 +104,8 @@ return {
     -- as it's not the same as using `scp` command in a shell which typically i would use like `scp remote-host:~/directory/file .`
     -- editing remote file is also possible even without oil though - https://gist.github.com/RRethy/ad8a9a3b1112a48226ec3336fa981224
     'stevearc/oil.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    event = 'VeryLazy',
     opts = {
       view_options = {
         show_hidden = true,
@@ -125,7 +127,6 @@ return {
         },
       },
     },
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
   },
   { -- A file explorer tree for neovim written in lua
     'nvim-tree/nvim-tree.lua',
