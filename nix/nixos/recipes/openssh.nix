@@ -11,5 +11,5 @@
 
   # better security with disabling password auth on login
   # comment out in case temporarily allowing password auth
-  services.openssh.passwordAuthentication = false;
+  services.openssh.settings.PasswordAuthentication = false;
 }
