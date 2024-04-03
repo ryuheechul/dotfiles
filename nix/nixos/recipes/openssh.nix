@@ -8,4 +8,8 @@
     # to clean the disconnect socket and prevent connection errors
     StreamLocalBindUnlink yes
   '';
+
+  # better security with disabling password auth on login
+  # comment out in case temporarily allowing password auth
+  services.openssh.passwordAuthentication = false;
 }

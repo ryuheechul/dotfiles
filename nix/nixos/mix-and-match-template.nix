@@ -15,6 +15,7 @@
     ./recipes/mtu-probing.nix
     # services
     ./recipes/openssh.nix
+    ./recipes/pam-sshagent.nix
     ./recipes/mdns.nix
     ./recipes/airplay.nix
     ./recipes/desktop-gnome.nix
