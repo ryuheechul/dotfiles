@@ -3,3 +3,4 @@ tmuxinator
 Brewfile.lock.json
 .DS_Store
 .perf.log
+*.zwc
