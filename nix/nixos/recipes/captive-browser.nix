@@ -12,11 +12,15 @@
   #   - technically it doesn't have to Waydroid but any subsystem
   #     - (that can handle captive portal better than regular linux)
   # - open a browser (I used Chrome) from Waydroid
-  # - type `detectpartal.firefox.com` for address bar
+  # - type `detectportal.firefox.com` for address bar
   #   - despite it's from Firefox it worked with Chrome too
   # - and go through regular process of captive portal
   # - make sure internet works on Waydroid
   # - now it should work on the host side as well!
   # - I would `waydroid session stop` to save resource
   #   - (unless you still need waydroid running even after)
+  # - if there is any issue, few trouble shootings you can do:
+  #   - forget the network and reconnect freshly and try again
+  #   - if `detectportal.firefox.com` doesn't resolve the domain name,
+  #     use your other device to find the ip for the domain and type that to the address bar instead
 }
