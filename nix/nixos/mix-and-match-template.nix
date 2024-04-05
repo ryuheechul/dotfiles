@@ -20,6 +20,7 @@
     ./recipes/mdns.nix
     ./recipes/airplay.nix
     ./recipes/desktop-gnome.nix
+    ./recipes/rdp-server.nix
     ./recipes/docker.nix
     ./recipes/rosetta.nix
     ./recipes/waydroid.nix
