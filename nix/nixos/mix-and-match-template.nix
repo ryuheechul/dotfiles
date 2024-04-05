@@ -11,6 +11,7 @@
     ./recipes/oom.nix
     # when it's virtualised
     ./recipes/vm-guest-utm.nix
+    ./recipes/vm-guest-utm-mount.nix
     ./recipes/wsl.nix
     ./recipes/mtu-probing.nix
     # services
