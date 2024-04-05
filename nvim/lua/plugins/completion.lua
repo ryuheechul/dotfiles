@@ -29,8 +29,16 @@ return {
       { -- to turn github copilot into a cmp source
         'zbirenbaum/copilot-cmp',
         dependencies = {
-          { -- Fully featured & enhanced replacement for copilot.vim complete with API for interacting with Github Copilot
-            'zbirenbaum/copilot.lua',
+          { -- Chat with GitHub Copilot in Neovim
+            'CopilotC-Nvim/CopilotChat.nvim',
+            branch = 'canary',
+            dependencies = {
+              { -- Fully featured & enhanced replacement for copilot.vim complete with API for interacting with Github Copilot
+                'zbirenbaum/copilot.lua',
+                opts = {},
+              },
+              { 'nvim-lua/plenary.nvim' }, -- for curl, log wrapper
+            },
             opts = {},
           },
         },
