@@ -23,4 +23,6 @@
   #   - forget the network and reconnect freshly and try again
   #   - if `detectportal.firefox.com` doesn't resolve the domain name,
   #     use your other device to find the ip for the domain and type that to the address bar instead
+  #   - you may need to turn off VPN like Tailscale that changes the `nameserver` at `/etc/resolv.conf`
+  #     until captive the issue is resolved
 }
