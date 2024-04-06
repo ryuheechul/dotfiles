@@ -6,11 +6,16 @@
 # - `vmstat`
 # - `cat /proc/meminfo`
 
-# NOTE:
+# WARNING:
 # - applying/restoring   may require reboot
 #   - restoring can be done by commenting things out
 # - reboot may hiccup especially right after restoring
 #   - rebooting again may resolve the issue
+#   - few things like below is reported and I'm still figuring things out
+#     - https://bbs.archlinux.org/viewtopic.php?id=265342
+#     - https://www.reddit.com/r/NixOS/comments/129mdgp/gdm_only_showing_black_screen_and_white_cursor/
+#     - so far I just don't select the version of NixOS build on boot hoping to slow down the boot (assuming this is somehow a way to prevent the issue)
+#       - but I will need to find a better way to fix this properly later
 {
   # taking the recommendation from https://github.com/CryoByte33/steam-deck-utilities/blob/main/docs/tweak-explanation.md#swappiness
   # debug with `cat /proc/sys/vm/swappiness`
