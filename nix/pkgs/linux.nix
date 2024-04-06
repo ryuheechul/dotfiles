@@ -19,5 +19,6 @@ with pkgs;(
       # - `fusermount -u ~/mnt/target`
       # - more on sshfs, https://www.redhat.com/sysadmin/sshfs
       # - there is also sshocker, see that at ./extra/default.nix
+      usbimager # A very minimal GUI app that can write compressed disk images to USB drives
     ]
 )
