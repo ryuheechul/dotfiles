@@ -39,4 +39,12 @@
   # in addition, you can also enable swapfile to avoid memory pressure situation for longer
   # - https://nixos.wiki/wiki/Swap
   # - https://www.reddit.com/r/NixOS/comments/vbkpnf/how_do_i_add_my_swap_file_to_my/
+  # e.g. configure it like below at /etc/nixos/hardware-configuration.nix.
+  # ```nix
+  # swapDevices = [ {
+  #   device = "/var/lib/swapfile";
+  #   size = 16*1024;
+  # } ];
+  # ```
+  # look at ./perf-tweaks.nix for more performance related tweaks
 }

@@ -9,6 +9,7 @@
     ./recipes/surface-pro-intel.nix
     # handling oom to prevent freezing
     ./recipes/oom.nix
+    ./recipes/perf-tweaks.nix
     # when it's virtualised
     ./recipes/vm-guest-utm.nix
     ./recipes/vm-guest-utm-mount.nix
