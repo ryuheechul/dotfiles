@@ -9,6 +9,7 @@ live_config_reload: true
 key_bindings:
   # https://www.joshmedeski.com/posts/macos-keyboard-shortcuts-for-tmux
   - { key: K, mods: Command, chars: "\x01\x77" } # `^Aw`, pretty much `tmux lsw`
+  - { key: Insert, mods: Shift, action: PasteSelection } # make "regular" paste shortcut work on linux
 
 env: {}
 # I shouldn't need to set this as (default) `alacritty` terminfo should work better

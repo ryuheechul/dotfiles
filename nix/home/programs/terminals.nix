@@ -32,6 +32,11 @@ in
       # - a. run it with `kitty --start-as=fullscreen` from other terminal
       # - b. modify kitty.desktop file
     };
+
+    # https://sw.kovidgoyal.net/kitty/actions/#action-paste
+    keybindings = {
+      "shift+insert" = "paste_from_clipboard";
+    };
   };
 
   # this shadows the original desktop file that should have been at ~/.nix-profile/share/applications/kitty.desktop
