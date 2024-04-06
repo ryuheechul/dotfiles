@@ -16,4 +16,14 @@ with pkgs.lib;{
   packages = mkMerge [ ]; # since I already manage my packages via ../pkgs
   # if want a package that is NixOS specific look at ./system-pkgs.nix
   shell = mkForce pkgs.zsh;
+
+  # since `~/.ssh/authorized_keys` is being used here, it seems redundant
+  # however this is to make ./recipes/pam-sshagent.nix to be a bit more secure
+  # by only allowing the built one on `/etc/ssh/authorized_keys.d/$USER`
+  openssh.authorizedKeys.keyFiles =
+    let
+      authorized_keys = builtins.toPath "/home/${username}/.ssh/authorized_keys";
+      authorizedKeyFiles = [ ] ++ pkgs.lib.optionals (builtins.pathExists authorized_keys) [ authorized_keys ];
+    in
+    authorizedKeyFiles;
 }
