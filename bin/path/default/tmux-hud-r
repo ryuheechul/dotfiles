@@ -46,7 +46,11 @@ today ()
 
 weather ()
 {
-  curl wttr.in/?format=2 | tr -d '\n'
+  # best way to customize $WTTR_LOC per device/user via ~/.local.zshenv
+  # consult how that works at ../../../zsh/env
+  WTTR_PARAMS='?format=2' wttr | tr -d '\n'
+  # extra spaces just in case emojis breaks the alignment
+  echo -n '  '
 }
 
 if test -n "${WSL_DISTRO_NAME}"; then

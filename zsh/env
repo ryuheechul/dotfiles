@@ -23,3 +23,5 @@ source "${my_zsh_d}/fn/theme"
 source "${my_zsh_d}/aliases"
 
 source "${my_zsh_d}/modules/history"
+
+test -f "${HOME}/.local.zshenv" && source "${HOME}/.local.zshenv"
