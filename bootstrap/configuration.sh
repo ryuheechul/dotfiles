@@ -61,7 +61,7 @@ ln -sf "${dfs_rhc}/bat" "${XDG_CONFIG_HOME}/bat"
 bat cache --build || true
 
 # alacritty
-ln -sf "${dfs_rhc}/alacritty.yml" "${HOME}/.alacritty.yml"
+ln -sf "${dfs_rhc}/alacritty/unix.toml" "${HOME}/.alacritty.toml"
 
 # starship
 ln -sf "${dfs_rhc}/starship.toml" "${XDG_CONFIG_HOME}/starship.toml"

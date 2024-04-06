@@ -1,0 +1,62 @@
+# ref: `man 5 alacritty`
+
+### how to keep the source of truth in dotfiles in wsl
+# clone dotfiles in windows file system like `%appdata%/dotfiles-for-win`
+#
+# symlink from windows via `cd %appdata%\alacritty && mklink alarcritty.toml ..\dotfiles-for-win\alacritty\win.toml`
+# then now tracking and applying can be done with one file thanks to symlinks
+#
+# symlink from wsl `ln -s /mnt/c/Users/[windows username]/Roaming/dotfiles-for-win` (so that I can edit dotfiles on wsl)
+# keep one dotfiles on windows and one dotfiles on wsl and sync via git when necessary for better disk performance on wsl
+
+live_config_reload = true
+
+[env]
+# without this ubuntu-22.04 has issue with starship prompt
+# https://github.com/starship/starship/issues/2176
+# but unbuntu-20.04 works fine at the time of writing this
+LC_ALL = "C.UTF-8"
+# https://github.com/alacritty/alacritty/issues/2711#issuecomment-525027985
+TERM = "alacritty"
+# passing COLORTERM fixes color issues. e.g. doomemacs as TUI
+WSLENV = "TERM:LC_ALL:COLORTERM"
+
+[font]
+size = 11.0
+
+[font.normal]
+family = "FiraCode NF"
+style = "Regular"
+
+# skip specifying families to below to fallback to normal ones
+[font.bold]
+style = "Bold"
+
+# thanks to https://github.com/alacritty/alacritty/issues/894#issuecomment-647877980
+[font.italic]
+style = "Oblique"
+
+[font.bold_italic]
+style = "Bold Oblique"
+
+[[keyboard.bindings]]
+# To cancel ctrl+shift c/v - https://www.reddit.com/r/linuxquestions/comments/iovvc2/comment/g4ghw6q/?utm_source=share&utm_medium=web2x&context=3
+# skipping with ctrl+c as this is necessary to SIGINT
+# action = "Copy"
+# key = "C"
+# mods = "Control"
+action = "Paste"
+key = "V"
+mods = "Control"
+
+[shell]
+program = "wsl -- bash -c -l 'cd && zsh -c \"tmux-attach wsl\"'"
+
+[window]
+decorations = "full"
+startup_mode = "Fullscreen"
+title = "Alacritty"
+
+[window.padding]
+x = 0
+y = 0

@@ -1,0 +1,51 @@
+# ref: `man 5 alacritty`
+
+live_config_reload = true
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+# [env]
+# # I shouldn't need to set this as (default) `alacritty` terminfo should work better
+# TERM = "xterm-256color"
+
+
+[font]
+size = 15.0
+
+# adding Mono or not makes difference for characters like these [[tab:→\ ,eol:↵,trail:·,extends:↷,precedes:↶]]
+
+[font.normal]
+family = "FiraMono Nerd Font Mono"
+style = "Regular"
+# skip specifying families to below to fallback to normal ones
+[font.bold]
+style = "Bold"
+
+[font.bold_italic]
+style = "Bold Italic"
+
+[font.italic]
+style = "Italic"
+
+
+# [macOS] `^Aw`, pretty much `tmux lsw`
+[[keyboard.bindings]]
+chars = "\u0001w"
+key = "K"
+mods = "Command"
+
+# [linux] make "regular" paste shortcut work
+[[keyboard.bindings]]
+action = "PasteSelection"
+key = "Insert"
+mods = "Shift"
+
+[shell]
+args = ["zsh", "-c", "tmux-attach alacritty"]
+program = "env"
+
+[window]
+decorations = "full"
+startup_mode = "Fullscreen"
+title = "Alacritty"
