@@ -37,7 +37,7 @@ mods = "Command"
 
 # [linux] make "regular" paste shortcut work
 [[keyboard.bindings]]
-action = "PasteSelection"
+action = "Paste"
 key = "Insert"
 mods = "Shift"
 
