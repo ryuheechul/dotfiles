@@ -92,7 +92,8 @@ with pkgs;
   vivid # LS_COLORS generator
   eza # A modern, maintained replacement for ls
   bat # cat with wings
-  rich-cli # a command line toolbox for fancy output in the terminal
+  # comment out due to build error + not really using it at the moment
+  # rich-cli # a command line toolbox for fancy output in the terminal
   hexyl # A command-line hex viewer - to supplement `xxd`, `hexdump`
   glow # markdown render on cli
   lf # terminal file manager

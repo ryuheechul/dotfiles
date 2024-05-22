@@ -28,5 +28,6 @@ in
     ];
 
   users.users.$(whoami) = user;
+  nix.settings.trusted-users = [ "root" "$(whoami)" ]; # for devenv to use cachix cache
 }
 EOF

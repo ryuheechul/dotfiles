@@ -3,7 +3,6 @@
 let
   checkEnv = import ../../utils/checkEnv.nix;
   ifEnv = envName: pkgs.lib.optionals (checkEnv envName);
-  devenv = import ../custom/devenv.nix;
   src-cli = import ../custom/src-cli.nix;
   gitwatch = import ../custom/gitwatch.nix { pkgs = pkgs; };
 in

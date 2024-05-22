@@ -50,6 +50,7 @@ with pkgs;
     ngrep # Network packet analyzer
     tcpflow # TCP stream extractor
     termshark # A terminal user-interface for tshark, inspired by Wireshark.
+    whois # Intelligent WHOIS client from Debian
   ]
 ++ ifEnv "MY_NIX_EXTRA_TAG"
   [
