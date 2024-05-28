@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+curr_dir="$(dirname "$0")"
+pushd "${curr_dir}"
+
 mix_and_match=$(test -f ../../../nix/nixos/mix-and-match.nix && echo ../../../nix/nixos/mix-and-match.nix)
 
 cat << EOF > ./configuration.nix
@@ -15,8 +18,6 @@ let
   my-nixos = ../../../nix/nixos/configuration.nix;
   user = import ../../../nix/nixos/user.nix {
     username = "$(whoami)";
-    pkgs = pkgs;
-    config = config;
   };
 in
 {
@@ -25,9 +26,7 @@ in
       # Include the results of the hardware scan.
       my-nixos
       ${mix_and_match}
+      user
     ];
-
-  users.users.$(whoami) = user;
-  nix.settings.trusted-users = [ "root" "$(whoami)" ]; # for devenv to use cachix cache
 }
 EOF
