@@ -97,7 +97,7 @@ return function(setup_default, node_root)
   local setup_svelte = merge(setup_default, {})
   local setup_astro = merge(setup_default, {})
   local setup_dockerls = merge(setup_default, {})
-  local setup_ruby_ls = merge(setup_default, {})
+  local setup_ruby_lsp = merge(setup_default, {})
 
   local setup_yamlls = merge(setup_default, {
     settings = {
@@ -236,7 +236,7 @@ return function(setup_default, node_root)
     astro = setup_astro,
     yamlls = setup_yamlls,
     dockerls = setup_dockerls,
-    ruby_ls = setup_ruby_ls,
+    ruby_lsp = setup_ruby_lsp,
     efm = setup_efm,
     ruff_lsp = setup_ruff_lsp,
   }
