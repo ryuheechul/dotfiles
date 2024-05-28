@@ -1,4 +1,5 @@
 # see ./settings-min.nix and ./settings-full.nix for usages
+# ../../home/dconf.nix is also being used to customize shortcuts in settings
 
 {
   # Copy

@@ -1,6 +1,6 @@
 # Generated via dconf2nix: https://github.com/gvolpe/dconf2nix
 # like `dconf dump / | dconf2nix`
-# and obviously this is for linux not for darwin
+# and obviously this is for Linux only not for Darwin
 { lib, ... }:
 
 with lib.hm.gvariant; {
@@ -52,6 +52,13 @@ with lib.hm.gvariant; {
     };
 
     # keyboard shortcuts
+    # there is also ../nixos/keyd/meta-mac.nix
+
+    "org/gnome/shell/keybindings" = {
+      screenshot = [ "<Shift><Alt>3" ];
+      "show-screenshot-ui" = [ "<Shift><Alt>4" ];
+    };
+
     "org/gnome/settings-daemon/plugins/media-keys" = {
       screensaver = [ "<Control><Alt>q" ];
     };
