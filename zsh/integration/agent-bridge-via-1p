@@ -1,6 +1,7 @@
 # vim: set ft=zsh:
 
 # this file is expected to be sourced via bash or zsh
+# this is different from `./1p` which is a native way to integrate with 1password
 
 # code mostly made/inspired by:
 # - https://1password.community/discussion/128023/ssh-agent-on-windows-subsystem-for-linux

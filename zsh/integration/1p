@@ -1,0 +1,9 @@
+# vim: set ft=zsh:
+
+# this file is expected to be sourced via bash or zsh
+# this is different from `./agent-bridge-via-1p` which is meant for WSL environment to communicate with Windows host
+# an example of 1password being setup are followings:
+# - `../../nix/nixos/recipes/1password.nix`
+# - `../../nix/nixos/recipes/pam-sshagent.nix`
+
+test -S ~/.1password/agent.sock && export SSH_AUTH_SOCK=~/.1password/agent.sock

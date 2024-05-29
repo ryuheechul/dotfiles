@@ -1,0 +1,54 @@
+# vim: set ft=zsh:
+
+# meant to be sourced from ../zlogin
+
+# there shouldn't be any `COLORTERM` set at this point but respect if it's already there
+printenv COLORTERM > /dev/null || {
+  # because `COLORTERM` doesn't inherit from client unlike `TERM`
+  printenv TERM | grep -q 256color \
+    && export COLORTERM=truecolor
+}
+
+# fallback to `en_US.UTF-8` - this prevents an warning message like below
+# `bash: warning: setlocale: LC_ALL: cannot change locale (C.UTF-8): No such file or directory`
+# due to darwin doesn't seem to come with "C.UTF-8" by default
+test "${LC_ALL}" = "C.UTF-8" && export LC_ALL="en_US.UTF-8"
+
+# wslg is very convinient locally but doesn't seem to support X11 forwarding with SSH - https://github.com/microsoft/vscode-remote-release/issues/6591
+# so workaround with a method that I learned from https://taoofmac.com/space/til/2022/12/21/2000
+# I made more detailed note about this at https://gist.github.com/ryuheechul/9515381570a0cea994e62647d92a864f#when-forwardx11-yes-doesnt-work
+
+if test -z "${DISPLAY}"; then
+  # in case of `ssh -R 6020:/tmp/.X11-unix/X0 [host]`
+  # or `RemoteForward 6020 /tmp/.X11-unix/X0` in ~/.ssh/config
+  if nc -zv localhost 6020 &> /dev/null; then
+    export DISPLAY=:20
+
+  # could be useful when having a complete control of the "remote host"
+  # e.g. a direct VM guest that has some integration with the host machine
+  # aka mimicking ForwardX11 (only) in terms of clipboard sharing
+  # "local" is a relative term and here is being used in the perspective of the remote host
+  elif test -n "${PREFER_LOCAL_DISPLAY_AS_FALLBACK}" && fastcommandcheck systemctl; then
+    source "${my_zsh_d}/fn/linux"
+    sourcesystemuserenv DISPLAY
+    sourcesystemuserenv XAUTHORITY
+  fi
+fi
+
+# consider opening `zellij` only if not running under `tmux` already
+if ! printenv TMUX > /dev/null; then
+  # prevent infinite session opening with the same name, 'ssh'
+  zellij list-sessions \
+    | grep ssh | head -n1 | sed 's/ (current)$//' \
+    | grep -E '^ssh$' > /dev/null \
+    && {
+      echo 'an existing ssh session is found as below'
+      zellij list-sessions
+      echo 'attaching to zellij is being skipped to avoid potential nested sessions'
+      echo 'you can still attach via `zellij attach ssh`...'
+      sleep 3
+    } || {
+      echo 'Attempting to attach to zellij session and this might fail as zellij might be not stable'
+      UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec-zellij-attach ssh
+    }
+fi
