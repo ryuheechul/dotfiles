@@ -165,6 +165,7 @@ return {
       vim.o.foldlevelstart = 2
     end,
     config = true,
+    enabled = false, -- until https://github.com/anuvyklack/pretty-fold.nvim/issues/39 is resolved
   },
   { -- a lua powered greeter like vim-startify / dashboard-nvim
     'goolord/alpha-nvim',

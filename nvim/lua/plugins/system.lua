@@ -179,7 +179,7 @@ return {
   { -- A snazzy bufferline for Neovim - an upgrade from 'ap/vim-buftabline'
     'akinsho/bufferline.nvim',
     event = 'VeryLazy',
-    version = 'v3.*',
+    version = 'v4.*',
     dependencies = 'nvim-tree/nvim-web-devicons',
     opts = {
       options = {
@@ -215,7 +215,7 @@ return {
       'nvim-tree/nvim-web-devicons',
       'SmiteshP/nvim-navic',
     },
-    event = 'FocusGained',
+    event = 'UIEnter',
     config = require 'plugins.config.bars',
   },
   { -- A lua profiler for neovim that is discovered thanks to https://www.reddit.com/r/neovim/comments/xicxox/comment/ip2hprd
