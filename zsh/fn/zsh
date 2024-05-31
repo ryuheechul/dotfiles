@@ -6,7 +6,7 @@ function fastcommandcheck() {
 }
 
 # a helper function to determine if this shell is interactive
-function is_zsh_interactive() {
+function is-zsh-interactive() {
   case "$-" in
     *i*) return 0 ;;
     *) return 1 ;;

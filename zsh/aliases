@@ -29,4 +29,4 @@ alias exec-zellij-attach="exec ${my_dot_d}/bin/zellij-attach-or-new.sh"
 # to be used for building source code from neovim plugins -- because sometimes they require these processes
 alias np-build-via-nix-shell="${my_dot_d}/nvim/shell/build-via-nix-shell.sh"
 
-test -n "${WSL_DISTRO_NAME}" && alias wudo='python3 ~/.wsl-sudo/wsl-sudo.py'
+is-wsl && alias wudo='python3 ~/.wsl-sudo/wsl-sudo.py'

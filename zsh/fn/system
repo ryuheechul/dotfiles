@@ -3,3 +3,19 @@
 function is-nixos {
   grep "NAME=NixOS" /etc/os-release &> /dev/null
 }
+
+function is-linux {
+  uname | xargs test "Linux" =
+}
+
+function is-darwin {
+  uname | xargs test "Darwin" =
+}
+
+function is-wsl {
+  test -n "${WSL_DISTRO_NAME}"
+}
+
+function is-ssh {
+  test -n "${SSH_TTY}"
+}

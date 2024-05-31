@@ -3,13 +3,13 @@
 # - persist a session via zellij on SSH connection
 # - but avoid doing this for tramp-mode on emacs - https://www.emacswiki.org/emacs/TrampMode
 # - also guard this behaviour for non-interactive shell usage
-if is_zsh_interactive && test "${TERM}" != 'dumb'; then
-  if test -n "${SSH_TTY}"; then
+if is-zsh-interactive && test "${TERM}" != 'dumb'; then
+  if is-ssh; then
     source "${my_dot_d}/zsh/integration/interactive-ssh"
   else # when not SSH
     # to mimic secretive experience at macOS on NixOS
     is-nixos && source "${my_dot_d}/zsh/integration/1p"
     # to mimic secretive experience at macOS on WSL
-    test -n "${WSL_DISTRO_NAME}" && source "${my_dot_d}/zsh/integration/agent-bridge-via-1p"
+    is-wsl && source "${my_dot_d}/zsh/integration/agent-bridge-via-1p"
   fi
 fi

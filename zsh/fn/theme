@@ -9,7 +9,7 @@ function _change_my_base16_theme() {
     date +%s > ~/.base16_theme.updated-time
   }
 
-  if test -n "${SSH_TTY}"; then
+  if is-ssh; then
     echo 'abort changing base16-shell when accessed via SSH'
     return
   fi

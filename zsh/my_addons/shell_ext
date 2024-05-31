@@ -182,7 +182,7 @@ _tag navi
 
 function should_skip_loading_base16_shell()
 {
-  if test -n "${SSH_TTY}" || test -n "${INSIDE_EMACS}" || test -n "${VIMRUNTIME}" ; then
+  if is-ssh || test -n "${INSIDE_EMACS}" || test -n "${VIMRUNTIME}" ; then
     return 0 # true
   else
     return 1 # false

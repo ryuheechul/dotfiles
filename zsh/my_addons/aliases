@@ -73,7 +73,7 @@ function j() {
     dir="$(fasd -Rdl "$1" | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
 }
 
-if uname | xargs test "Darwin" =; then
+if is-darwin; then
   function _sound_for_return() {
     expr $? = 0 > /dev/null && afplay /System/Library/Sounds/Funk.aiff || afplay /System/Library/Sounds/Purr.aiff
   }
@@ -314,7 +314,7 @@ function emacs () {
     env emacs -nw ${@} # use `emacs` instead of `emacsclient` on SSH connection
   else
     if test $# -eq 0; then
-      if uname | xargs test "Darwin" =; then
+      if is-darwin; then
         "${my_dot_d}/bin/path/darwin/open-gui-emacs"
       else
         emacsclient
@@ -376,7 +376,7 @@ alias switch-home='home-manager switch |& nom'
 # unifying interface of applying updated nix expressions for different systems
 alias switch-nix='switch-home' # this is default for a simple system that only uses home-manager
 # on darwin, it will also do "switch" via nix-darwin
-uname | xargs test "Darwin" = \
+is-darwin \
   && alias switch-nix='switch-home; pushd "$my_dot_d/nix/darwin" && make switch; popd'
 # on nixos, rely on one script to do it all
 is-nixos \
