@@ -1,5 +1,7 @@
 # this file will "replace" /etc/nixos/configuration.nix
 # see `../../bootstrap/foundation/nixos/switch-nixos.sh` for more info
+# manual is at https://nixos.org/manual/nixos/stable/#sec-modularity
+# use `nixos-option` to debug
 { pkgs
 , ...
 }:

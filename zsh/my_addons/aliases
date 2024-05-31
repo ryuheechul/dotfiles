@@ -363,9 +363,6 @@ alias chtsh='cht --shell'
 alias googler='googler -n 3'
 alias ddgr='ddgr -n 3'
 
-function is-nixos {
-  grep "NAME=NixOS" /etc/os-release &> /dev/null
-}
 # https://nixos.wiki/wiki/Storage_optimization
 alias nix-collect-garbage='nix-collect-garbage --delete-older-than 30d'
 # set half of the available core to be default

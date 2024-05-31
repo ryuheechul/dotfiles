@@ -1,0 +1,5 @@
+# vim: set ft=zsh:
+
+function is-nixos {
+  grep "NAME=NixOS" /etc/os-release &> /dev/null
+}

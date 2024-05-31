@@ -11,6 +11,9 @@ source "${my_dot_d}/nix/bin/source/nix.sh"
 # to set $NIX_CONFIG
 source "${my_dot_d}/nix/bin/source/config.sh"
 
+# important functions that require "system-wide" availability
+source "${my_zsh_d}/fn/system"
+
 # basically helper utils for zsh
 source "${my_zsh_d}/fn/zsh"
 

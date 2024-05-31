@@ -58,3 +58,5 @@ uname | xargs test "Darwin" = && add-to-path "${my_dot_d}/bin/path/darwin"
 
 # add path for ssh
 test -n "${SSH_TTY}" && add-to-path "${my_dot_d}/bin/path/ssh"
+
+is-nixos && add-to-path "${my_dot_d}/bin/path/nixos"
