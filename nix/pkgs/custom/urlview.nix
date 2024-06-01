@@ -5,7 +5,7 @@
 # fake the name until https://github.com/tmux-plugins/tmux-urlview/issues/29 gets resolved
 let
   wrapped = pkgs.writeShellScriptBin "urlview" ''
-    exec ${pkgs.urlscan}/bin/urlscan -s
+    exec ${pkgs.urlscan}/bin/urlscan -s "$@"
   '';
 in
 pkgs.symlinkJoin {
