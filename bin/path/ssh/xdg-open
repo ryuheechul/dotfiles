@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 # this is for https://github.com/superbrothers/opener#remote-environment
+# check out the repo above on how to install on macOS host
+# in case for Linux host (via nixpkgs and home-manager), it's configured at `../../../nix/home/services/opener.nix`
 
 socket="${HOME}/.opener.sock"
 
@@ -28,4 +30,8 @@ fi
 # ```ssh-config
 # #             remote path (linux)       local path (macOS)
 # RemoteForward /home/[user]/.opener.sock /Users/[user]/.opener
+#
+# #     or (if username is the same for both)
+# #             remote path (linux)       local path (linux)
+# RemoteForward %d/.opener.sock           %d/.opener.sock
 # ```
