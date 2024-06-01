@@ -4,7 +4,8 @@
 # check out the repo above on how to install on macOS host
 # in case for Linux host (via nixpkgs and home-manager), it's configured at `../../../nix/home/services/opener.nix`
 
-socket="${HOME}/.opener.sock"
+# I'm using `.opener-publish.sock` instead of `.opener.sock` to avoid remote's opener to open things too (as well as the client's) when it's not intended
+socket="${HOME}/.opener-publish.sock"
 
 _real_xdg_open=$(which -a xdg-open | tail -n1)
 
@@ -29,9 +30,9 @@ fi
 # for example:
 # ```ssh-config
 # #             remote path (linux)       local path (macOS)
-# RemoteForward /home/[user]/.opener.sock /Users/[user]/.opener
+# RemoteForward /home/[user]/.opener-publish.sock /Users/[user]/.opener.sock
 #
 # #     or (if username is the same for both)
 # #             remote path (linux)       local path (linux)
-# RemoteForward %d/.opener.sock           %d/.opener.sock
+# RemoteForward %d/.opener-publish.sock           %d/.opener.sock
 # ```
