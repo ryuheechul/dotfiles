@@ -16,7 +16,16 @@ function M.setup_lsp_format()
       exclude = { 'lua_ls' },
     },
     typescript = {
-      exclude = { 'tsserver' },
+      exclude = {
+        'tsserver',
+        'eslint', -- this is being handled via autocmd - search EslintFixAll at ./lsp-servers.lua
+      },
+    },
+    typescriptreact = {
+      exclude = {
+        'tsserver',
+        'eslint', -- this is being handled via autocmd - search EslintFixAll at ./lsp-servers.lua
+      },
     },
   }
 end

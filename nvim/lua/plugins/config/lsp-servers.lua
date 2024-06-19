@@ -38,12 +38,11 @@ return function(setup_default, node_root)
   local node_root_dir, is_node_repo = node_root()
 
   local setup_tsserver = merge(setup_default, {
-    cmd = { 'typescript-language-server', '--stdio', '--tsserver-path', 'tsserver' },
+    cmd = { 'typescript-language-server', '--stdio' },
     root_dir = node_root_dir,
     autostart = is_node_repo and true or false,
   })
 
-  -- use :EslintFixAll to fix all - doesn't kick off automatically with format (on save)
   local setup_eslint = merge(setup_default, {
     -- thanks to https://neovim.discourse.group/t/is-it-possible-to-disable-lsp-in-node-modules-directory-file/444/5
     root_dir = function(filename)
@@ -52,6 +51,15 @@ return function(setup_default, node_root)
       end
       return require('lspconfig.server_configurations.eslint').default_config.root_dir(filename)
     end,
+    -- run `EslintFixAll` on save via autocmd, so exclude 'eslint' from lsp-format from ./lsp.lua
+    on_attach = function(client, bufnr)
+      setup_default.on_attach(client, bufnr)
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        buffer = bufnr,
+        command = 'EslintFixAll',
+      })
+    end,
+    -- or use `:EslintFixAll` to fix all manually - doesn't kick off automatically with format (on save)
   })
 
   local setup_denols = merge(setup_default, {
@@ -193,14 +201,16 @@ return function(setup_default, node_root)
     setup_default,
     (function()
       -- Register linters and formatters per language
-      local eslint = require 'efmls-configs.formatters.eslint'
-      local denofmt = require 'efmls-configs.formatters.deno_fmt'
+      -- local eslint = require 'efmls-configs.formatters.eslint'
+      -- local denofmt = require 'efmls-configs.formatters.deno_fmt'
       local stylua = require 'efmls-configs.formatters.stylua'
 
-      local ts_formatter = is_node_repo and eslint or denofmt
+      -- local ts_formatter = is_node_repo and eslint or denofmt
 
       local languages = {
-        typescript = { ts_formatter },
+        -- NOTE: disable eslint as it's problematic, now rely on setup_eslint from ./lsp-servers.lua
+        -- typescript = { ts_formatter },
+        -- typescriptreact = { ts_formatter },
         lua = { stylua },
       }
 
