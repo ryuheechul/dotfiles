@@ -204,7 +204,7 @@ alias df='duf'
 alias du='du -d 1 -h | sort -h -r'
 
 # help avoiding seeing diff for long generated files - somehow `:(exclude)**/[filename]` doesn't seem to cover some cases so `:(exclude)[filename]` to complement it
-exclude_for_pure="-- ':(exclude)package-lock.json' ':(exclude)**/package-lock.json' ':(exclude)lazy-lock.json' ':(exclude)**/lazy-lock.json'"
+exclude_for_pure="-- ':(exclude,top)package-lock.json' ':(exclude,top)**/package-lock.json' ':(exclude,top)pnpm-lock.yaml' ':(exclude,top)**/pnpm-lock.yaml' ':(exclude,top)lazy-lock.json' ':(exclude,top)**/lazy-lock.json'"
 # git
 alias tig='TERM=xterm-256color tig'
 alias gs='pwd; ls; git status'
