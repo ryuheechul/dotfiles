@@ -103,7 +103,9 @@ return function(setup_default, node_root)
   local setup_nimls = merge(setup_default, {})
   local setup_gopls = merge(setup_default, {})
   local setup_svelte = merge(setup_default, {})
-  local setup_astro = merge(setup_default, {})
+  local setup_astro = merge(setup_default, {
+    -- language server is installed via mason at ./lsp.lua
+  })
   local setup_dockerls = merge(setup_default, {})
   local setup_ruby_lsp = merge(setup_default, {})
 
