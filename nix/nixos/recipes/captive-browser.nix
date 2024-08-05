@@ -25,4 +25,5 @@
   #     use your other device to find the ip for the domain and type that to the address bar instead
   #   - you may need to turn off VPN like Tailscale that changes the `nameserver` at `/etc/resolv.conf`
   #     until captive the issue is resolved
+  # Actually I found a case that it didn't work with with the trick involving Waydroid but working with captive-browser! So I guess these two can complement each other.
 }
