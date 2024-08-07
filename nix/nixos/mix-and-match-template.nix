@@ -7,6 +7,7 @@
   imports = [
     # hardware/device specifics
     ./recipes/surface-pro-intel.nix
+    ./recipes/surface-pro-9-intel.nix
     ./recipes/no-sleep.nix
     # handling oom to prevent freezing
     ./recipes/oom.nix
