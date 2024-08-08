@@ -6,35 +6,30 @@
 # mimic https://github.com/jimeh/tmux-themepack/blob/master/powerline/block/cyan.tmuxtheme
 dress ()
 {
+  # TODO: drop the `first` and `style` maybe and simplify this function
+
   style="minimal"
 
-  first="#[fg=colour238,bg=colour0]#[fg=colour243,bg=colour238] #H"
-  second="#[fg=colour240,bg=colour238]#[fg=colour0,bg=colour240] ${1}"
-  last="#[fg=colour0,bg=colour240]#[fg=colour247,bg=colour0] ${2}"
+  _host="#[fg=colour238,bg=colour0]#[fg=colour243,bg=colour238] #H"
+  first="#[fg=colour240,bg=colour238]#[fg=colour0,bg=colour240] ${1}"
+  second="#[fg=colour0,bg=colour240]#[fg=colour247,bg=colour0] ${2}"
 
   test "${style}" = "minimal" \
-    && echo "#[fg=colour240,bg=colour0]#[fg=colour0,bg=colour240] ${1} ${last} " \
-    || echo "${first} ${second} ${last} "
+    && echo -n "#[fg=colour240,bg=colour0]#[fg=colour0,bg=colour240] ${1} ${second} " \
+    || echo -n "${_host} ${first} ${second} "
+
+  # extra stuff at the end only there is third item
+  if test -n "${3}"; then
+    echo -n "#[fg=colour238,bg=colour0]#[fg=colour0,bg=colour238] ${3} #[fg=colour0,bg=colour238]"
+  fi
 }
 
-battery ()
+_battery ()
 {
-  percent="$(cat /sys/class/power_supply/BAT1/capacity)"
+  percent="$(battery)"
+  icon="$(battery-icon)"
 
-  icon=''
-  # be very careful not forget to wrap > with ''
-  # to avoid using them as a redirection
-  if expr "${percent}" '>' 80; then
-    icon=''
-  elif expr "${percent}" '>' 50; then
-    icon=''
-  elif expr "${percent}" '>' 25; then
-    icon=''
-  elif expr "${percent}" '>' 10; then
-    icon=''
-  fi
-
-  echo -n "${percent}% ${icon}"
+  echo -n "${icon} ${percent}%"
 }
 
 today ()
@@ -49,14 +44,13 @@ weather ()
   # best way to customize $WTTR_LOC per device/user via ~/.local.zshenv
   # consult how that works at ../../../zsh/env
   WTTR_PARAMS='?format=2' wttr | tr -d '\n'
-  # extra spaces just in case emojis breaks the alignment
-  echo -n '  '
 }
 
 if test -n "${WSL_DISTRO_NAME}"; then
-  # thanks to https://askubuntu.com/a/1317728/1666783
-  dress "$(today)" "$(battery)"
-
+  dress "$(today)" "$(_battery)"
 else
-  dress "$(today)" "$(weather)"
+  dress "$(today)" "$(weather)" "$(_battery)"
 fi
+
+# extra spaces just in case emojis breaks the alignment
+echo '  '

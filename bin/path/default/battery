@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# thanks to https://askubuntu.com/a/1317728/1666783
+cat /sys/class/power_supply/BAT1/capacity
