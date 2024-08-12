@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
 
 # thanks to https://askubuntu.com/a/1317728/1666783
-cat /sys/class/power_supply/BAT1/capacity
+cat /sys/class/power_supply/BAT?/capacity
+
+# examine battery information with `cat /sys/class/power_supply/BAT?/uevent`
+# and decode numbers with https://docs.kernel.org/power/power_supply_class.html#attributes-properties-detailed
