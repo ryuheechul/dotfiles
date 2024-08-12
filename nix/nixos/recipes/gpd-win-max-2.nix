@@ -21,6 +21,10 @@
   # how to verify: `fprintd-verify`
   # check from gnome setting: "Settings > Users"
 
+  # INFO: [Troubleshoot] when device ever disappear (with `lsusb`)
+  # - this can be caused by bios "favoring" Windows - so might as well disable on Windows side
+  # - fixing is possible by resetting the bios would help https://github.com/Sabrina-Fox/WM2-Help?tab=readme-ov-file#potential-fix-for-touchscreen-or-other-hardwareeg-fingerprint-sensor-related-issues
+
   # this probably prevents keyring to be still locked even after login via fprint
   security.pam.services.login.fprintAuth = true;
 
