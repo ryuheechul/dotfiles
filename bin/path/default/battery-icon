@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
 
 percent="$(battery)"
+is_charging="$(battery-status | xargs test "Charging" = && echo 1 || echo 0)"
 
-icon=''
+# find icons from https://www.nerdfonts.com/cheat-sheet
+
+test "${is_charging}" = 1 && icon='󰢜' || icon=''
 # be very careful not forget to wrap > with ''
 # to avoid using them as a redirection
 if expr "${percent}" '>' 80 > /dev/null ; then
-  icon=''
+  test "${is_charging}" = 1 && icon='󰂋' || icon=''
 elif expr "${percent}" '>' 50 > /dev/null; then
-  icon=''
+  test "${is_charging}" = 1 && icon='󰢞' || icon=''
 elif expr "${percent}" '>' 25 > /dev/null; then
-  icon=''
+  test "${is_charging}" = 1 && icon='󰂈' || icon=''
 elif expr "${percent}" '>' 10 > /dev/null; then
-  icon=''
+  test "${is_charging}" = 1 && icon='󰂇' || icon=''
 fi
 
 echo "${icon}"

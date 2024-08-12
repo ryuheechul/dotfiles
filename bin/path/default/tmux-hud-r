@@ -20,7 +20,7 @@ dress ()
 
   # extra stuff at the end only there is third item
   if test -n "${3}"; then
-    echo -n "#[fg=colour238,bg=colour0]#[fg=colour0,bg=colour238] ${3} #[fg=colour0,bg=colour238]"
+    echo -n "#[fg=colour238,bg=colour0]#[fg=colour0,bg=colour238] ${3} #[fg=colour0,bg=colour238]#[fg=colour238,bg=colour0]"
   fi
 }
 
@@ -53,4 +53,4 @@ else
 fi
 
 # extra spaces just in case emojis breaks the alignment
-echo '  '
+echo '   '
