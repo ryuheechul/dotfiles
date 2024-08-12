@@ -1,9 +1,17 @@
 { ... }:
 
+# https://github.com/Sabrina-Fox/WM2-Help
 {
   imports = [
     <nixos-hardware/gpd/win-max-2>
   ];
+
+  # try this when the audio from bluetooth headset is choppy
+  # - maybe just forget the device and reconnect might just fix
+  # - or maybe just reboot?
+  # - or connect it on the Windows first and come back to linux and try again?
+  # - or maybe low battery causes the issue, who knows
+  # - one of above worked for me
 
   # regarding fprintd in general:
   # - https://sbulav.github.io/nix/nix-fingerprint-authentication/
@@ -12,6 +20,9 @@
   # how to enroll: `sudo fprintd-enroll [username]`
   # how to verify: `fprintd-verify`
   # check from gnome setting: "Settings > Users"
+
+  # this probably prevents keyring to be still locked even after login via fprint
+  security.pam.services.login.fprintAuth = true;
 
   # regarding fprintd specifically for GPD Win Max 2:
   # - https://wiki.archlinux.org/title/GPD_Win_Max
