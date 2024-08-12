@@ -4,6 +4,7 @@
 {
   imports = [
     <nixos-hardware/gpd/win-max-2>
+    ./laptop.nix
   ];
 
   # try this when the audio from bluetooth headset is choppy
