@@ -183,6 +183,7 @@ alias -s {org,el}='emacsclient'
 alias -s git='git clone'
 
 ## better defaults
+alias rsync='rsync --exclude=.git' # prevents disasters of overriding git history in case local is not fully synced with remote yet
 alias shellcheck='shellcheck --color=always'
 alias distrobox='STARTSHIP_SESSION_KEY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 distrobox'
 alias gh='GLAMOUR_STYLE=$(theme-tone) gh'
