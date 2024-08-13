@@ -398,6 +398,7 @@ alias shebang='_shebang | pbcopy ; _shebang'
 alias executable='chmod +x'
 alias lf='UNSET_ALL_MY_ZSH_STUFF_LOADED=1 lf'
 alias quickvenv='python3 -m venv "${MY_QUICK_VENV_PATH:-.venv}" && source "${MY_QUICK_VENV_PATH:-.venv}/bin/activate"'
+alias quickserve='nix-shell -p caddy --run "caddy file-server --browse -l :9090"'
 
 alias nis='npm install --save'
 alias nisd='npm install --save-dev'
