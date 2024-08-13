@@ -37,6 +37,7 @@
     ./recipes/captive-browser.nix
     ./recipes/tailscale.nix
     ./recipes/1password.nix
+    ./recipes/dropbox.nix
     # not proven
     ./recipes/displaylink.nix
   ];
