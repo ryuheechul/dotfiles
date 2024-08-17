@@ -24,7 +24,8 @@
   # but that will be disregarded by individual user's settings
   # hence do this via ../../home/dconf.nix
   i18n.inputMethod = {
-    enabled = "ibus";
+    type = "ibus";
+    enable = true;
     ibus.engines = with pkgs.ibus-engines; [ hangul ];
   };
   # if were to choose alternative to ibus (and ibus-hangul), I might consider https://github.com/Riey/kime
