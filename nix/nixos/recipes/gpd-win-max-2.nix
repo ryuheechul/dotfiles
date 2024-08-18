@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 # https://github.com/Sabrina-Fox/WM2-Help
 
@@ -13,6 +13,9 @@
     <nixos-hardware/gpd/win-max-2>
     ./laptop.nix
   ];
+
+  # probably better to benefit from the latest kernel unless there is an issue
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # "ignore" means it ignores sleeping I guess
   # using this as gpd-wm2 seems to be a good device to act as a server
@@ -35,6 +38,7 @@
   # INFO: [Troubleshoot] when device ever disappear (with `lsusb`)
   # - this can be caused by bios "favoring" Windows - so might as well disable on Windows side
   # - fixing is possible by resetting the bios would help https://github.com/Sabrina-Fox/WM2-Help?tab=readme-ov-file#potential-fix-for-touchscreen-or-other-hardwareeg-fingerprint-sensor-related-issues
+  # - but resetting bios also might undo firmware updates (e.g. touchpad, etc.) - in that case retry via https://www.gpd.hk/gpdwinmax2firmwareanddriver
 
   # regarding fprintd specifically for GPD Win Max 2:
   # - https://wiki.archlinux.org/title/GPD_Win_Max
