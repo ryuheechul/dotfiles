@@ -6,7 +6,8 @@
 {
   imports = [
     # hardware/device specifics
-    ./recipes/laptop.nix
+    ./recipes/firmware.nix
+    # ./recipes/laptop.nix - this usually gets included via others like surface-pro... and gpd-win-max-2
     ./recipes/surface-pro-intel.nix
     ./recipes/surface-pro-9-intel.nix
     ./recipes/gpd-win-max-2.nix
