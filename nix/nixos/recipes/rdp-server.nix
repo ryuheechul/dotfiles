@@ -1,5 +1,8 @@
 { pkgs, ... }:
 
+# NOTE: with Gnome, this should be favored instead, https://release.gnome.org/46/#:~:text=Remote%20Login%20with%20RDP
+# read more at ./desktop-gnome.nix
+
 # https://nixos.wiki/wiki/Remote_Desktop
 {
   services.xrdp = {

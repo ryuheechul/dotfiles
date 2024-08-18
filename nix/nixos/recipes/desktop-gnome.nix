@@ -45,4 +45,21 @@
   # - 'dconf dump / |less'
   # - 'dconf watch /'
   # - 'gsettings get org.gnome.desktop.input-sources sources'
+
+  ##### Regarding Remote Login (read about it at ./rdp-server.nix) enabled via Gnome 46 #####
+  #
+  # - enable it via Settings > System > Remote Desktop > Remote Login
+  # - username/password can be anything and it is not the same as actual users (it's only needed to establish connection)
+  # - reboot seems to stop the service which can be mitigated via `systemctl start gnome-remote-desktop.service` if you can SSH into it
+  # - Remmina app might work better than the default Connection app
+
+  # below is necessary if you connect directly (via IP address) instead of via something like Tailscale
+  # ```
+  # networking = {
+  #   firewall = {
+  #     enable = true;
+  #     allowedTCPPorts = [ 3389 ];
+  #   };
+  # };
+  # ```
 }
