@@ -57,6 +57,11 @@ return {
       min_window_height = 10,
     },
   },
+  { -- Good enough syntax highlight for MDX in Neovim using Treesitter
+    'davidmh/mdx.nvim',
+    config = true,
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+  },
   -- nvim-treesitter/playground has been replaced by Neovim itself (deprecation notice and the guide in the repo)
   -- use these in place of :TSPlaygroundToggle
   -- - `:Inspect` to show the highlight groups under the cursor
