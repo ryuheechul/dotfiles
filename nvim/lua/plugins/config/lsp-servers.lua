@@ -100,6 +100,7 @@ return function(setup_default, node_root)
       },
     },
   })
+  local setup_harper_ls = merge(setup_default, {})
   local setup_nimls = merge(setup_default, {})
   local setup_gopls = merge(setup_default, {})
   local setup_svelte = merge(setup_default, {})
@@ -235,6 +236,7 @@ return function(setup_default, node_root)
     clangd = setup_default,
     rust_analyzer = setup_default,
     pyright = gen_setup_pyright(),
+    harper_ls = setup_harper_ls,
     tsserver = setup_tsserver,
     denols = setup_denols,
     lua_ls = setup_lua_ls,

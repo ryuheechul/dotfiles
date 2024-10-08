@@ -17,6 +17,7 @@
   "cmp-under-comparator": { "branch": "master", "commit": "6857f10272c3cfe930cece2afa2406e1385bfef8" },
   "cmp_luasnip": { "branch": "master", "commit": "05a9ab28b53f71d1aece421ef32fee2cb857a843" },
   "conjure": { "branch": "master", "commit": "e97e0db338f76f943f3043089000252adbecc966" },
+  "diagflow.nvim": { "branch": "main", "commit": "fc09d55d2e60edc8ed8f9939ba97b7b7e6488c99" },
   "diffview.nvim": { "branch": "main", "commit": "3afa6a053f680e9f1329c4a151db988a482306cd" },
   "dressing.nvim": { "branch": "master", "commit": "3c38ac861e1b8d4077ff46a779cde17330b29f3a" },
   "efmls-configs-nvim": { "branch": "main", "commit": "eb2be5b24dbf7200a80bcd5c64bc63afbc8ae86f" },

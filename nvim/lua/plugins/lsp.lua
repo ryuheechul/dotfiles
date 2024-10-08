@@ -4,10 +4,10 @@ return {
     'neovim/nvim-lspconfig',
     dependencies = {
       'ray-x/lsp_signature.nvim', -- for floating signature hints
-      'lukas-reineke/lsp-format.nvim', -- A wrapper around Neovims native LSP formatting
+      'lukas-reineke/lsp-format.nvim', -- A wrapper around Neovim's native LSP formatting
       -- thanks for the news from https://dotfyle.com/this-week-in-neovim/48#creativenull/efmls-configs-nvim
       'creativenull/efmls-configs-nvim', -- An unofficial collection of linters and formatters configured for efm-langserver for neovim
-      'arkav/lualine-lsp-progress', -- LSP Progress lualine componenet
+      'arkav/lualine-lsp-progress', -- LSP Progress lualine component
       'SmiteshP/nvim-navic', -- Simple winbar/statusline plugin that shows your current code context
       -- 💻 Neovim setup for init.lua and plugin development with full signature help, docs and completion for the nvim lua API.
       'lspcontainers/lspcontainers.nvim', -- Neovim plugin for lspcontainers
@@ -21,14 +21,16 @@ return {
         'williamboman/mason-lspconfig.nvim',
         dependencies = { 'williamboman/mason.nvim', config = true },
         opts = {
+          -- debug: open a terminal within Neovim and run `which [bin name for the tool]` and run
+          -- in case of NixOS, any of these binaries could fail to run due to the nature of pre compiled binaries;
+          -- a solution and explanation is at ../../../nix/nixos/recipes/compat.nix
           ensure_installed = {
-            -- disable `lua_ls` as there is a trouble executing it
-            -- falling back to the one from ../../../nix/pkgs/lang/lua.nix
-            -- 'lua_ls',
+            'lua_ls', -- now this works with NixOS thanks to ../../../nix/nixos/recipes/compat.nix (make sure it's enabled since it's optional for now)
             'jsonls',
             'astro',
             'yamlls',
             'dockerls',
+            'harper_ls',
           },
         },
       },

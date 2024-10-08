@@ -14,6 +14,7 @@
     ./recipes/no-sleep.nix
     # handling oom to prevent freezing
     ./recipes/oom.nix
+    ./recipes/compat.nix
     ./recipes/perf-tweaks.nix
     # when it's virtualised/containerized
     ./recipes/vm-guest-utm.nix

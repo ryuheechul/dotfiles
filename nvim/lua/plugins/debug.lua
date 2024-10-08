@@ -24,6 +24,7 @@ return {
       auto_open = true,
       auto_close = true,
       auto_preview = false, -- this being up could cause the feeling of cursors jumping around with auto_open/close
+      severity = vim.diagnostic.severity.ERROR, -- use `s` to toggle between levels
     },
     event = 'VeryLazy',
   },
@@ -86,7 +87,7 @@ return {
     'gpanders/fennel-repl.nvim',
     event = 'VeryLazy',
   },
-  { -- A framework for interacting with tests within NeoVim.
+  { -- A framework for interacting with tests within Neovim.
     'nvim-neotest/neotest',
     event = 'VeryLazy',
     dependencies = {
