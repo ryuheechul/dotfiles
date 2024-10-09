@@ -331,6 +331,7 @@ alias vimdiff='nvim -dR'
 alias diff='git diff --no-index'
 alias cat='bat'
 alias k9s='TERM=xterm COLORTERM= k9s'
+alias delta='delta --detect-dark-light=never'
 
 ## ripgrep
 # alias rg='rg -p -i' # with pretty (-p) and ignore case (-i)

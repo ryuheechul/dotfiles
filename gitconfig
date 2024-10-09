@@ -50,7 +50,7 @@
   cmd = difft "$LOCAL" "$REMOTE"
 
 [core]
-  pager = delta
+  pager = delta --detect-dark-light=never
   ; speeds up git status
   fsmonitor = true
 
@@ -61,7 +61,7 @@
   dft = difftool
 
 [interactive]
-  diffFilter = delta --color-only
+  diffFilter = delta --color-only --detect-dark-light=never
 
 [delta]
   features = line-numbers decorations
