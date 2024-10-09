@@ -81,6 +81,7 @@ with pkgs;
   xh # httpie reimplementation - use with `xh` and `xhs`
   curlie # front-end to curl that tries to mimic httpie
   choose # a human-friendly and fast alternative to cut and (sometimes) awk
+  sq # Swiss army knife for data (jq like experience for SQL database)
   jq # json processor
   jqp # a TUI playground for exploring jq
   # not sure if sqlite is "modern" but keep it here so I can avoid having to build sqlite by an arbitrary npm package which happened quite often
