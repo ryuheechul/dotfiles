@@ -472,6 +472,7 @@ which-browse ()
 
 alias inspect-bash='/bin/bash -lixc exit 2>&1 | sed -n "s/^+* \(source\|\.\) //p"' # via https://stackoverflow.com/a/65922714/1570165
 alias inspect-iommu="bash -c 'dmesg | rg IOMMU'" # wrap with bash in mind of being called with other command such as sudo
+alias dmesg='sudo dmesg -H --nopager --color=always | less' # since dmesg doesn't respect PAGER nor seem to use less
 
 # mimic `command-not-found` via `nix-index` shell hook when it's not available
 fastcommandcheck command-not-found || alias command-not-found='bash -ic '

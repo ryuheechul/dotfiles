@@ -68,6 +68,7 @@ export DOCKER_BUILDKIT=1
 
 # `-j.5`: https://superuser.com/questions/257605/how-to-center-search-results-in-less-instead-of-moving-matched-line-to-top-of-t#comment266859_257626
 export LESS='-j.5 --RAW-CONTROL-CHARS --IGNORE-CASE'
+export SYSTEMD_LESS="${LESS} -FRSXMK" # since systemd tools (i.e. journalctl, systemctl, etc.) ignore `$LESS`
 
 # theme for bat
 export BAT_THEME="Solarized (light)"
