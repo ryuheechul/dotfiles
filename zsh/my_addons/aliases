@@ -57,7 +57,7 @@ function simple_bench_disk () {
 
 # when I don't feel liking adding `| less` at the end
 function show () {
-  "$@" | less -R -i
+  "$@" | less
 }
 
 # use help like man
@@ -329,7 +329,6 @@ function emacs () {
 # viewer and filter
 alias vimdiff='nvim -dR'
 alias diff='git diff --no-index'
-alias less='less -R -i'
 alias cat='bat'
 alias k9s='TERM=xterm COLORTERM= k9s'
 

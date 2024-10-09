@@ -66,13 +66,13 @@ export DOCKER_BUILDKIT=1
 # difftastic options see `difft --help` for more
 # export DFT_DISPLAY=inline # but comment out for now as side-by-side actually complements with the usual diff as difftool
 
-# https://superuser.com/questions/257605/how-to-center-search-results-in-less-instead-of-moving-matched-line-to-top-of-t#comment266859_257626
-export LESS='-j.5'
+# `-j.5`: https://superuser.com/questions/257605/how-to-center-search-results-in-less-instead-of-moving-matched-line-to-top-of-t#comment266859_257626
+export LESS='-j.5 --RAW-CONTROL-CHARS --IGNORE-CASE'
 
 # theme for bat
 export BAT_THEME="Solarized (light)"
 # set it as env var here instead of ~/.config/bat/config as the issue is described in the file
-export BAT_PAGER="less --RAW-CONTROL-CHARS --quit-if-one-screen --mouse -I"
+export BAT_PAGER="less --quit-if-one-screen --mouse"
 
 # set LS_COLORS with vivid
 if fastcommandcheck vivid; then

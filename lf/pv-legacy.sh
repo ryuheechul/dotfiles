@@ -63,7 +63,7 @@ file-via-bat () {
   #   fi
   #
   #   # basically get rid of `--quit-if-one-screen` option
-  #   BAT_PAGER="less --RAW-CONTROL-CHARS --mouse -I"
+  #   BAT_PAGER="less --mouse"
   #
   #   # this might not be necessary as `auto` might still pick up paging
   #   # but nothing wrong to set it explicitly
