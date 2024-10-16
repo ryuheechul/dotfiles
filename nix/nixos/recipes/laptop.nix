@@ -1,13 +1,27 @@
-{ ... }:
+{ lib, config, ... }:
 
 # may work more efficiently with laptop/tablet devices
 # https://nixos.wiki/wiki/Laptop
 {
+  services.power-profiles-daemon.enable = false; # to deal with the conflict with auto-cpufreq
   # services.thermald.enable = true; # this is only for intel and it's being used at ./surface-pro-intel.nix
   services.auto-cpufreq.enable = true;
   # run `auto-cpufreq --stats` to see the effects
 
-  services.power-profiles-daemon.enable = false; # to deal with the conflict with auto-cpufreq
+  # disable pstate module (depends on the CPU platform) to follow recommendation of auto-cpufreq - debug with `cat /proc/cmdline`
+  boot.kernelParams =
+    let
+      # determining if `intel_pstate` module is present by looking at "kvm-intel" is suboptimal but I don't know a better way yet
+      shouldDisableIntelPstate = builtins.elem "kvm-intel" config.boot.kernelModules;
+      # determining if `amd-pstate` module is present by looking at "kvm-intel" is suboptimal but I don't know a better way yet
+      shouldDisableAmdPstate = builtins.elem "kvm-amd" config.boot.kernelModules;
+    in
+    [ ] ++ lib.optionals shouldDisableIntelPstate [
+      "intel_pstate=disable"
+    ] ++ lib.optionals shouldDisableAmdPstate [
+      "initcall_blacklist=amd_pstate_init"
+      "amd_pstate.enable=0"
+    ];
 
   ##### "keep it alive as long as it's connected to power supply" #####
   #

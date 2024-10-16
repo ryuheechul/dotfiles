@@ -22,16 +22,16 @@ alt_nixpkgs="$("${get_path_for}" nixos)"
 alt_hardware="$("${get_path_for}" nixos-hardware)"
 
 alt_config=./configuration.nix
+nix_path="nixpkgs=${alt_nixpkgs}:nixos-hardware=${alt_hardware}:nixos-config=${alt_config}"
 
 echo "[info] The default 'NIX_PATH=$(sudo printenv NIX_PATH)' will be overridden by..."
 echo "[info] 'nixpkgs=${alt_nixpkgs}' and 'nixos-config=${alt_config}' and 'nixos-hardware=${alt_hardware}'"
 
-sudo NIX_BUILD_CORES="${nix_build_cores}" nixos-rebuild \
-  "${action}" \
-  --max-jobs 1 \
-  -I nixpkgs=${alt_nixpkgs} \
-  -I nixos-hardware=${alt_hardware} \
-  -I nixos-config=${alt_config}
+sudo NIX_BUILD_CORES="${nix_build_cores}" nix_path="${nix_path}" action=${action} \
+  bash -c 'NIX_PATH="${nix_path}" nixos-rebuild ${action} --max-jobs 1'
+# wrapping once more like above because below doesn't work as $NIX_PATH somehow get overridden
+# `sudo NIX_BUILD_CORES="${nix_build_cores}" NIX_PATH="${nix_path}" nixos-rebuild ${action} --max-jobs 1`
 
 # Troubleshooting:
 # - use https://gitlab.com/khumba/nvd to see the diff between generations
+# - e.g. `nvd diff /run/current-system result`
