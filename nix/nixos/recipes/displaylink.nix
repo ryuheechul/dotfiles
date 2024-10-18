@@ -7,6 +7,7 @@
 
   # I ventured out to this setting because my monitor started to not work after I changed the cable from HDMI to DisplayPort
   # and this setting actually didn't help the situation and what actually worked is following:
-  # - (`cat .config/monitors.xml*` before delete if you want to see)
-  # - `rm .config/monitors.xml*` via https://askubuntu.com/a/1450629/1666783
+  # - (`cat ~/.config/monitors.xml*` before delete if you want to see)
+  # - `rm ~/.config/monitors.xml*` via https://askubuntu.com/a/1450629/1666783
+  # if above doesn't work, try to adjust the refresh rate especially if there are lots of option for certain display
 }

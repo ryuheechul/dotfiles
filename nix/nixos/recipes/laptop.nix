@@ -15,13 +15,23 @@
       shouldDisableIntelPstate = builtins.elem "kvm-intel" config.boot.kernelModules;
       # determining if `amd-pstate` module is present by looking at "kvm-intel" is suboptimal but I don't know a better way yet
       shouldDisableAmdPstate = builtins.elem "kvm-amd" config.boot.kernelModules;
+      # this is probably not going to realize but leave for a documentation purpose
+      shouldUseGuidedForAmdPstate = ! shouldDisableAmdPstate && ! shouldDisableIntelPstate;
     in
     [ ] ++ lib.optionals shouldDisableIntelPstate [
       "intel_pstate=disable"
     ] ++ lib.optionals shouldDisableAmdPstate [
       "initcall_blacklist=amd_pstate_init"
       "amd_pstate.enable=0"
+    ] ++ lib.optionals shouldUseGuidedForAmdPstate [
+      # optimizing temperatures (which in turns makes fan quiet): thanks to https://www.reddit.com/r/NixOS/comments/1emk6sr/nixos_is_awesome_and_a_little_guide_on_using/
+      "amd_pstate=guided"
     ];
+
+  environment.systemPackages = [
+    # for a debugging (e.g. `cpupower frequency-info`)
+    config.boot.kernelPackages.cpupower
+  ];
 
   ##### "keep it alive as long as it's connected to power supply" #####
   #
