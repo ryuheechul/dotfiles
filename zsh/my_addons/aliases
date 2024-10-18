@@ -385,6 +385,11 @@ is-nixos \
   && alias switch-nix-dry='"$my_dot_d/bootstrap/foundation/nixos/nixos-rebuild.sh"' \
   && alias switch-nix='"$my_dot_d/bootstrap/foundation/nixos/switch.sh"'
 
+# run this with "current configuration" before having to build anything new so that `/boot` can be cleaned first to make space
+# thanks to https://discourse.nixos.org/t/what-to-do-with-a-full-boot-partition/2049/4
+is-nixos \
+  && alias clean-boot='sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3 && nix-collect-garbage && ls /nix/var/nix/profiles/system && df'
+
 # commandify
 alias reenter='cd ~ && cd -'
 alias fulltimezsh='FORCE_LOAD_MY_ZSH_STUFF=1 timezsh'
