@@ -1,3 +1,14 @@
 #!/usr/bin/env bash
 
-NIXOS_CONFIG="${my_dot_d}/bootstrap/foundation/nixos/configuration.nix" nix-shell -p nixos-option --command "nixos-option ${@}"
+curr_dir="$(dirname "$0")"
+pushd "${curr_dir}" > /dev/null
+
+nix_d="../../../nix"
+get_path_for="${nix_d}/niv-shim/bin/get-path-for.sh"
+
+alt_nixpkgs="$("${get_path_for}" nixos)"
+alt_hardware="$("${get_path_for}" nixos-hardware)"
+nix_path="nixpkgs=${alt_nixpkgs}:nixos-hardware=${alt_hardware}"
+
+# making sure NIX_PATH matches same as the build time similar to ../../../bootstrap/foundation/nixos/nixos-rebuild.sh
+nix_path="${nix_path}" NIXOS_CONFIG="${my_dot_d}/bootstrap/foundation/nixos/configuration.nix" nix-shell -p nixos-option --command "NIX_PATH=\"\${nix_path}\" nixos-option ${@}"
