@@ -40,6 +40,9 @@ let
     glxinfo # Test utilities for OpenGL - `glxinfo -B`
     bindfs # A FUSE filesystem for mounting a directory to another location
     powertop # Analyze power consumption on Intel-based laptops
+    resources # Monitor your system resources and processes
+    # comment below out since it doesn't work but the flatpak version works great via ./recipes/flatpak.nix
+    # gpu-viewer # A front-end to glxinfo, vulkaninfo, clinfo and es2_info
   ];
 in
 # system pkgs for any nixOS
