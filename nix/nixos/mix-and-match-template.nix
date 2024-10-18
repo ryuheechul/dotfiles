@@ -41,7 +41,7 @@
     ./recipes/1password.nix
     ./recipes/dropbox.nix
     # not proven
-    ./recipes/displaylink.nix
+    # ./recipes/displaylink.nix
     # ./recipes/syncthing.nix - should not be used to favor ../home/services/syncthing.nix except for testing
   ];
 }
