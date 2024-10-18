@@ -25,6 +25,8 @@ in
   # https://anarc.at/blog/2022-01-23-chrony/
   # https://chrony-project.org/comparison.html
   services.chrony.enable = true;
+  # debug with: `chronyc rtcdata` and `chronyc ntpdata`
+  # also see ./recipes/chrony-step.nix
 
   # https://nixos.wiki/wiki/Fonts
   fonts = {

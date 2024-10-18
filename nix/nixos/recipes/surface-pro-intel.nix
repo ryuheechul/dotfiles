@@ -3,6 +3,7 @@
 {
   imports = [
     <nixos-hardware/microsoft/surface/surface-pro-intel>
+    ./chrony-step.nix
     ./laptop.nix
   ];
 

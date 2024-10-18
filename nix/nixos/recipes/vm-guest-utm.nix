@@ -2,6 +2,10 @@
 { ... }:
 
 {
+  imports = [
+    ./chrony-step.nix
+  ];
+
   # https://docs.getutm.app/guest-support/linux/#qemu-agent
   services.qemuGuest.enable = true;
   # https://docs.getutm.app/guest-support/linux/#spice-agent
