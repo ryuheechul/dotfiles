@@ -1,5 +1,8 @@
 { pkgs }:
 
+let
+  grace = import ./custom/grace.nix { pkgs = pkgs; };
+in
 with pkgs;(
   [ ]
   ++ lib.optionals stdenv.isLinux
@@ -20,5 +23,6 @@ with pkgs;(
       # - more on sshfs, https://www.redhat.com/sysadmin/sshfs
       # - there is also sshocker, see that at ./extra/default.nix
       usbimager # A very minimal GUI app that can write compressed disk images to USB drives
+      grace # 🪛 It's strace, with colours.
     ]
 )

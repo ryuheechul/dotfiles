@@ -17,6 +17,11 @@
   # probably better to benefit from the latest kernel unless there is an issue
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  environment.systemPackages = with pkgs;[
+    nvtopPackages.amd
+    amdgpu_top
+  ];
+
   services.fprintd.enable = true;
   # how to enroll: `sudo fprintd-enroll [username]`
   # how to verify: `fprintd-verify`

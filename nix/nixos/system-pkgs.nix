@@ -19,6 +19,7 @@ let
     dconf2nix # Convert dconf files to Nix, as expected by Home Manager
   ];
   missing-commons = with pkgs;[
+    dnsutils # including dig and nslookup
     zip # Compressor/archiver for creating and modifying zipfiles
     vim # The most popular clone of the VI editor
     file # A program that shows the type of files
