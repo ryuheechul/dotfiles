@@ -27,8 +27,13 @@ nix_path="nixpkgs=${alt_nixpkgs}:nixos-hardware=${alt_hardware}:nixos-config=${a
 echo "[info] The default 'NIX_PATH=$(sudo printenv NIX_PATH)' will be overridden by..."
 echo "[info] 'nixpkgs=${alt_nixpkgs}' and 'nixos-config=${alt_config}' and 'nixos-hardware=${alt_hardware}'"
 
+# shim nix-output-monitor since it doesn't exist on bare nixos
+function nom {
+ nix-shell -p nix-output-monitor --command "nom"
+}
+
 sudo NIX_BUILD_CORES="${nix_build_cores}" nix_path="${nix_path}" action=${action} \
-  bash -c 'NIX_PATH="${nix_path}" nixos-rebuild ${action} --max-jobs 1'
+  bash -c 'NIX_PATH="${nix_path}" nixos-rebuild ${action} --max-jobs 1' |& nom
 # wrapping once more like above because below doesn't work as $NIX_PATH somehow get overridden
 # `sudo NIX_BUILD_CORES="${nix_build_cores}" NIX_PATH="${nix_path}" nixos-rebuild ${action} --max-jobs 1`
 

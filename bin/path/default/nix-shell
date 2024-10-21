@@ -3,10 +3,26 @@
 # why this wrapper?
 # - avoid using channel and use the explicit source set by `niv`
 
+function is-nixos {
+  grep "NAME=NixOS" /etc/os-release &> /dev/null
+}
+
+# this is what I'm contemplating to use to be closer with vanilla setting
+# but this also evidently creates another diversion since I already use nixpkgs (that is not necessarily the same rev as the nixos for homemanager )
+# maybe i will consider unifying to one channel (in case of nixos) in the future but until then nix-shell will just favor nixpkgs
+function _choose_nixpkgs {
+  is-nixos && echo nixos || echo nixpkgs
+}
+
+# but I will just stick with the old implementation for now
+function choose_nixpkgs {
+  echo nixpkgs
+}
+
 curr_d="$(dirname "$0")"
 nix_d="${curr_d}/../../../nix"
 get_path_for="${nix_d}/niv-shim/bin/get-path-for.sh"
-alt_nixpkgs="$("${get_path_for}" nixpkgs)"
+alt_nixpkgs="$("${get_path_for}" "$(choose_nixpkgs)")"
 alt_hw="$("${get_path_for}" nixos-hardware)"
 
 # `-I "nixpkgs=${alt_nixpkgs}" seems to have a trouble when installing home-manager on NixOS
