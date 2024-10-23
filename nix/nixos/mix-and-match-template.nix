@@ -43,5 +43,21 @@
     # not proven
     # ./recipes/displaylink.nix
     # ./recipes/syncthing.nix - should not be used to favor ../home/services/syncthing.nix except for testing
-  ];
+  ]
+  # usage examples for `./recipes/meta` (you will need to replace values accordingly):
+  # ++ (
+  #   let
+  #     network = "5y3o4u9r4n9e2t58"; # a Zerotier network
+  #     address = "10.149.19.239"; # IP address of zeronsd
+  #   in
+  #   [
+  #     # for Zerotier to work
+  #     (import ./recipes/meta/zerotier.nix { network = network; })
+  #     # for zeronsd to work (server only)
+  #     (import ./recipes/meta/zeronsd.nix { network = network; })
+  #     # for zeronsd to work (client only) - typically you should choose just either server or client
+  #     (import ./recipes/meta/zerotier-dns-client.nix { address = address; })
+  #   ]
+  # )
+  ++ [ /* stub line for to make it easy to toggle comment block above */ ];
 }
