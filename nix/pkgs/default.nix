@@ -87,6 +87,7 @@ with pkgs;
   # not sure if sqlite is "modern" but keep it here so I can avoid having to build sqlite by an arbitrary npm package which happened quite often
   sqlite # A self-contained, serverless, zero-configuration, transactional SQL database engine
   earthly # Build automation for the container era
+  dogdns # Command-line DNS client - as a replacement of dig
 ] ++
 # viewer
 [
@@ -106,6 +107,7 @@ with pkgs;
   urlview # for tmux-urlview
   extract_url # for tmux-urlview
   viu # A command-line application to view images from the terminal written in Rust
+  grc # A generic text colouriser
 ] ++
 # search
 [

@@ -174,6 +174,9 @@ EOF
 fi
 }
 
+# to make this to surive through piping; let's see if this is a good idea
+alias grc='grc --colour=on'
+
 # https://www.stefanjudis.com/today-i-learned/suffix-aliases-in-zsh/
 alias -s md=glow
 alias -s {ts,tsx,js,jsx,json,yaml,yml,toml}=vi
@@ -188,7 +191,7 @@ alias shellcheck='shellcheck --color=always'
 alias distrobox='STARTSHIP_SESSION_KEY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 distrobox'
 alias gh='GLAMOUR_STYLE=$(theme-tone) gh'
 # equip auxww by default for convenience: basically show all process with full command
-alias ps='ps auxww'
+alias ps='grc ps auxww'
 # better than bare info but still not the best
 alias info='info --vi-keys'
 # ignore case on searching with keyword
@@ -197,12 +200,16 @@ alias man='man -i'
 alias htop='btm -b'
 # overwrite essential stuff
 alias which='which -a'
+alias ping='grc ping'
 alias ping='gping'
+alias traceroute='grc traceroute'
 alias ip='ip -c'
+# colorize `dig` or there is also `dog`
+alias dig='grc dig'
 
 # human friendly df and du
 alias df='duf'
-alias du='du -d 1 -h | sort -h -r'
+alias du='grc du -d 1 -h | sort -h -r' # or there is `dust` as an alternative
 
 # help avoiding seeing diff for long generated files - somehow `:(exclude)**/[filename]` doesn't seem to cover some cases so `:(exclude)[filename]` to complement it
 exclude_for_pure="-- ':(exclude,top)package-lock.json' ':(exclude,top)**/package-lock.json' ':(exclude,top)pnpm-lock.yaml' ':(exclude,top)**/pnpm-lock.yaml' ':(exclude,top)lazy-lock.json' ':(exclude,top)**/lazy-lock.json'"
