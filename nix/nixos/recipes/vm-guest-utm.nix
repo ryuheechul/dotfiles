@@ -1,13 +1,12 @@
 # this is to support the case when it's running as a VM via UTM (powered by QEMU)
+# see also at ./vm-guest-qemu.nix
 { ... }:
 
 {
   imports = [
-    ./chrony-step.nix
+    ./vm-guest-qemu.nix
   ];
 
-  # https://docs.getutm.app/guest-support/linux/#qemu-agent
-  services.qemuGuest.enable = true;
   # https://docs.getutm.app/guest-support/linux/#spice-agent
   services.spice-vdagentd.enable = true;
   # https://docs.getutm.app/guest-support/linux/#spice-webdav

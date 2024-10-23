@@ -17,6 +17,7 @@
     ./recipes/compat.nix
     ./recipes/perf-tweaks.nix
     # when it's virtualised/containerized
+    ./recipes/vm-guest-qemu.nix
     ./recipes/vm-guest-utm.nix
     ./recipes/vm-guest-utm-mount.nix
     ./recipes/wsl.nix
