@@ -25,5 +25,18 @@
   #     use your other device to find the ip for the domain and type that to the address bar instead
   #   - you may need to turn off VPN like Tailscale that changes the `nameserver` at `/etc/resolv.conf`
   #     until captive the issue is resolved
+  #     - there is issue regarding above: https://github.com/tailscale/tailscale/issues/1634
+  #     - in case tailscale's detection (https://tailscale.com/kb/1457/captive-portals) isn't helping
+  #       - [v1.72 or higher should have better support and communication on captive portal](https://tailscale.com/changelog#2024-08-19)
   # Actually I found a case that it didn't work with with the trick involving Waydroid but working with captive-browser! So I guess these two can complement each other.
+  #
+  # More on captive portal
+  # - https://www.chromium.org/chromium-os/chromiumos-design-docs/network-portal-detection/
+  # - https://datatracker.ietf.org/doc/html/rfc8952
+  #
+  # Alternatives to `detectportal.firefox.com`
+  # - http://neverssl.com
+  # - http://captive.apple.com
+  # - http://connectivitycheck.gstatic.com/generate_204
+  # - http://1.1.1.1 (when DNS is unstable)
 }
