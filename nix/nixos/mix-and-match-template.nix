@@ -23,6 +23,7 @@
     ./recipes/wsl.nix
     ./recipes/mtu-probing.nix
     # services
+    ./recipes/resolved.nix
     ./recipes/desktop-gnome.nix
     ./recipes/keyd-host-windows.nix
     ./recipes/keyd-guest.nix

@@ -205,7 +205,7 @@ alias ping='gping'
 alias traceroute='grc traceroute'
 alias ip='ip -c'
 # colorize `dig` or there is also `dog`
-alias dig='grc dig'
+alias dig='grc dig +search' # host and dog seems to search by default but not dig - https://serverfault.com/a/434583/633069
 
 # human friendly df and du
 alias df='duf'
