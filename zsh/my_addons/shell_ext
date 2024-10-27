@@ -47,6 +47,12 @@ function _evalable_vivid_generate_solarized_light {
 
 _tag fn-def
 
+if is-nixos; then
+  # this is mainly for nixd at ../../nvim/lua/plugins/config/lsp-servers.lua but also why not
+  export NIX_PATH="$(${my_dot_d}/nix/niv-shim/bin/nix-path-via-niv.sh nixpkgs=nixos:nixos-hardware):nixos-config=${my_dot_d}/bootstrap/foundation/nixos/configuration.nix"
+  _tag nix
+fi
+
 _arch="$(_evalcache _evalable_arch)"
 
 # intel chip (at least not powerful ones) can't seem to handle this, so disabled for them for now

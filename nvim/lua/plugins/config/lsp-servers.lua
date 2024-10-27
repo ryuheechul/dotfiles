@@ -90,12 +90,23 @@ return function(setup_default, node_root)
     },
   })
 
-  -- for nix
-  local setup_nil_ls = merge(setup_default, {
+  -- moved on to nixd below
+  -- local setup_nil_ls = merge(setup_default, {
+  --   settings = {
+  --     ['nil'] = {
+  --       formatting = {
+  --         command = { 'nixfmt' },
+  --       },
+  --     },
+  --   },
+  -- })
+
+  -- https://discourse.nixos.org/t/nixd-nix-language-server/28910/40
+  local setup_nixd = merge(setup_default, {
     settings = {
-      ['nil'] = {
+      nixd = {
         formatting = {
-          command = { 'nixpkgs-fmt' },
+          command = { 'nixfmt' },
         },
       },
     },
@@ -240,7 +251,8 @@ return function(setup_default, node_root)
     tsserver = setup_tsserver,
     denols = setup_denols,
     lua_ls = setup_lua_ls,
-    nil_ls = setup_nil_ls,
+    -- nil_ls = setup_nil_ls,
+    nixd = setup_nixd,
     eslint = setup_eslint,
     sqlls = setup_sqlls,
     jsonls = setup_jsonls,
