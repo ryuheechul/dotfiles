@@ -11,26 +11,19 @@ function is-nixos {
 # but this also evidently creates another diversion since I already use nixpkgs (that is not necessarily the same rev as the nixos for homemanager )
 # maybe i will consider unifying to one channel (in case of nixos) in the future but until then nix-shell will just favor nixpkgs
 function _choose_nixpkgs {
-  is-nixos && echo nixos || echo nixpkgs
+  is-nixos && echo nixpkgs=nixos:nixos-hardware || echo nixpkgs:nixos-hardware
 }
 
 # but I will just stick with the old implementation for now
 function choose_nixpkgs {
-  echo nixpkgs
+  echo nixpkgs:nixos-hardware
 }
 
 curr_d="$(dirname "$0")"
 nix_d="${curr_d}/../../../nix"
-get_path_for="${nix_d}/niv-shim/bin/get-path-for.sh"
-alt_nixpkgs="$("${get_path_for}" "$(choose_nixpkgs)")"
-alt_hw="$("${get_path_for}" nixos-hardware)"
-
-# `-I "nixpkgs=${alt_nixpkgs}" seems to have a trouble when installing home-manager on NixOS
-# thus altering $NIX_PATH instead
-# NIX_PATH="nixpkgs=${alt_nixpkgs}[other=package]:${NIX_PATH}" \
-alt_nix_path="nixpkgs=${alt_nixpkgs}:nixos-hardware=${alt_hw}:${NIX_PATH}"
-
-alt_hm="$("${get_path_for}" home-manager)"
+path_for="${nix_d}/niv-shim/bin/nix-path-via-niv.sh"
+nix_path="$("${path_for}" "$(choose_nixpkgs)")"
+alt_hm="$("${path_for}" home-manager)"
 
 # try this first
 bin_nix_shell=/nix/var/nix/profiles/default/bin/nix-shell
@@ -38,7 +31,9 @@ bin_nix_shell=/nix/var/nix/profiles/default/bin/nix-shell
 # fall back to this one for NixOS
 test -x "${bin_nix_shell}" || bin_nix_shell=/run/current-system/sw/bin/nix-shell
 
-NIX_PATH="${alt_nix_path}" \
+# `-I "nixpkgs=${alt_nixpkgs}[:...]" seems to have a trouble when installing home-manager on NixOS
+# thus altering $NIX_PATH instead
+NIX_PATH="${nix_path}" \
   "${bin_nix_shell}" \
-  -I "home-manager=${alt_hm}" \
+  -I "${alt_hm}" \
   "$@"

@@ -16,20 +16,19 @@ test -n "${WSL_DISTRO_NAME}" && sudo mount -o remount,rw /tmp/.X11-unix
 nix_build_cores="$(getconf _NPROCESSORS_ONLN | xargs -I _ expr _ / 2)"
 
 nix_d="../../../nix"
-get_path_for="${nix_d}/niv-shim/bin/get-path-for.sh"
+path_for="${nix_d}/niv-shim/bin/nix-path-via-niv.sh"
 # to use the source from a deterministic way (powered by niv) instead of relying on a channel
-alt_nixpkgs="$("${get_path_for}" nixos)"
-alt_hardware="$("${get_path_for}" nixos-hardware)"
-
+alt_paths="$("${path_for}" nixpkgs=nixos:nixos-hardware)"
 alt_config=./configuration.nix
-nix_path="nixpkgs=${alt_nixpkgs}:nixos-hardware=${alt_hardware}:nixos-config=${alt_config}"
+
+nix_path="${alt_paths}:nixos-config=${alt_config}"
 
 echo "[info] The default 'NIX_PATH=$(sudo printenv NIX_PATH)' will be overridden by..."
-echo "[info] 'nixpkgs=${alt_nixpkgs}' and 'nixos-config=${alt_config}' and 'nixos-hardware=${alt_hardware}'"
+echo "[info] '${nix_path}'"
 
 # shim nix-output-monitor since it doesn't exist on bare nixos
 function nom {
- nix-shell -p nix-output-monitor --command "nom"
+  ../../../nix/bin/nix-shell.sh -p nix-output-monitor --command "nom"
 }
 
 sudo NIX_BUILD_CORES="${nix_build_cores}" nix_path="${nix_path}" action=${action} \
