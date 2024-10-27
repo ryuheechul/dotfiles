@@ -11,7 +11,7 @@
   services.thermald.enable = true;
 
   # improve pen experience
-  services.iptsd.config.Touchscren = {
+  services.iptsd.config.Touchscreen = {
     DisableOnPalm = true;
     DisableOnStylus = true;
   };
