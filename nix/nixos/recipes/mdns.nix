@@ -5,6 +5,7 @@ let
   mkDefault = pkgs.lib.mkDefault;
 in
 {
+  # https://wiki.archlinux.org/title/Avahi
   services.avahi = {
     # avahi to manage mdns
     enable = mkDefault true;
