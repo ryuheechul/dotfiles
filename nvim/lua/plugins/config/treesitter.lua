@@ -11,6 +11,7 @@ return function()
     -- { 'fallback', 'absence' }
     { 'bash', 'zsh' },
     { 'make', 'Earthfile' },
+    { 'toml', 'editorconfig' }, -- I guess it's close enough...
   } do
     vim.treesitter.language.register(fallback_pair[1], fallback_pair[2])
   end

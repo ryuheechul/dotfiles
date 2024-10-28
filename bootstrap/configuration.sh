@@ -13,7 +13,9 @@ cd "$(dirname "$0")" || exit
 cd ../ || exit
 
 # enable nix for the rest of script - wrap with `set +e` to be compatible with older version `[da]sh` like the one the macOS
-set +e; source ./nix/bin/source/nix.sh; set -e
+set +e
+source ./nix/bin/source/nix.sh
+set -e
 
 if [ -z "$(command -v nix)" ]; then
   echo 'Warning: `nix` is still not found but trying to run the rest of this script anyway'
@@ -47,10 +49,13 @@ dfs_rhc="${XDG_CONFIG_HOME}/dfs-rhc"
 export PATH="${dfs_rhc}/bin/path/default:${PATH}"
 
 # source my gitconfig
-cat << EOF >> "${HOME}/.gitconfig"
+cat <<EOF >>"${HOME}/.gitconfig"
 [include]
   path = "${dfs_rhc}/gitconfig"
 EOF
+
+# symlink .editorconfig
+ln -sf "${dfs_rhc}/.editorconfig" "${HOME}/.editorconfig"
 
 # symlink gh config
 mkdir -p "${XDG_CONFIG_HOME}/gh"
@@ -76,21 +81,22 @@ touch "${HOME}/.base16_theme.updated-time"
 ln -sf "${dfs_rhc}/lf" "${XDG_CONFIG_HOME}/lf"
 
 # rsop
-rm -rf "${XDG_CONFIG_HOME}/rsop"; ln -sf "${dfs_rhc}/rsop" "${XDG_CONFIG_HOME}/rsop"
+rm -rf "${XDG_CONFIG_HOME}/rsop" &&
+  ln -sf "${dfs_rhc}/rsop" "${XDG_CONFIG_HOME}/rsop"
 
 # urlscan
 ln -sf "${dfs_rhc}/urlscan" "${XDG_CONFIG_HOME}/urlscan"
 
 # espanso
-espanso_config="${XDG_CONFIG_HOME}/espanso" \
-  && rm -rf "${espanso_config}" \
-  && ln -sf "${dfs_rhc}/espanso" "${espanso_config}"
+espanso_config="${XDG_CONFIG_HOME}/espanso" &&
+  rm -rf "${espanso_config}" &&
+  ln -sf "${dfs_rhc}/espanso" "${espanso_config}"
 
 # espanso for darwin
-uname | xargs test "Darwin" = \
-  && espanso_config_for_darwin="${HOME}/Library/Preferences/espanso" \
-  && rm -rf "${espanso_config_for_darwin}" \
-  && ln -sf "${espanso_config}" "${espanso_config_for_darwin}"
+uname | xargs test "Darwin" = &&
+  espanso_config_for_darwin="${HOME}/Library/Preferences/espanso" &&
+  rm -rf "${espanso_config_for_darwin}" &&
+  ln -sf "${espanso_config}" "${espanso_config_for_darwin}"
 
 # viddy
 ln -sf "${dfs_rhc}/viddy.toml" "${XDG_CONFIG_HOME}/viddy.toml"
@@ -107,12 +113,12 @@ ln -sf "${dfs_rhc}/zellij" "${XDG_CONFIG_HOME}/zellij"
 # tmux
 ln -sf "${dfs_rhc}/tmux.conf" "${HOME}/.tmux.conf"
 git clone https://github.com/tmux-plugins/tpm "${HOME}/.tmux/plugins/tpm" || bash -c 'cd "${HOME}/.tmux/plugins/tpm" && git pull'
-tmux start-server && \
-  tmux new-session -d && \
-  sleep 1 && \
-  "${HOME}/.tmux/plugins/tpm/bin/install_plugins" && \
-  sleep 1 && \
-  tmux kill-server || true
+tmux start-server &&
+  tmux new-session -d &&
+  sleep 1 &&
+  "${HOME}/.tmux/plugins/tpm/bin/install_plugins" &&
+  sleep 1 &&
+  { tmux kill-server || true; }
 
 # avoid using `/usr/local/bin` as a global path for yarn
 yarn config set prefix "${HOME}/.yarn"
@@ -123,7 +129,7 @@ ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
 PATH="${ASDF_DIR}/bin:${ASDF_DATA_DIR}/shims:${PATH}"
 ln -sf "${dfs_rhc}/asdf/tool-versions" "${HOME}/.tool-versions"
 
-git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.8.0 || true
+git clone https://github.com/asdf-vm/asdf.git "${ASDF_DIR}" --branch v0.8.0 || true
 
 ## installing packages with asdf has been replaced with Nix - look at ../nix/pkgs.nix
 
@@ -168,9 +174,9 @@ fi
 
 # SpaceVim - this still may be used for vim but not with nvim
 spacevim_ver="v1.6.0"
-git clone https://github.com/SpaceVim/SpaceVim "${HOME}/.SpaceVim" || bash -c 'cd "${HOME}/.SpaceVim" && git checkout master && git pull' \
-  && cd "${HOME}/.SpaceVim" \
-  && git checkout ${spacevim_ver}
+git clone https://github.com/SpaceVim/SpaceVim "${HOME}/.SpaceVim" || bash -c 'cd "${HOME}/.SpaceVim" && git checkout master && git pull' &&
+  cd "${HOME}/.SpaceVim" &&
+  git checkout ${spacevim_ver}
 ln -sf "${dfs_rhc}/SpaceVim.d" "${HOME}/.SpaceVim.d"
 # shim vimrc
 ln -sf "${HOME}/.SpaceVim" "${HOME}/.vim"
