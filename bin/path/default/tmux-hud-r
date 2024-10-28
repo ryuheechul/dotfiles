@@ -4,8 +4,7 @@
 # set -g status-right '#(tmux-hud-r)'
 
 # mimic https://github.com/jimeh/tmux-themepack/blob/master/powerline/block/cyan.tmuxtheme
-dress ()
-{
+dress() {
   # TODO: drop the `first` and `style` maybe and simplify this function
 
   style="minimal"
@@ -14,9 +13,9 @@ dress ()
   first="#[fg=colour240,bg=colour238]#[fg=colour0,bg=colour240] ${1}"
   second="#[fg=colour0,bg=colour240]#[fg=colour247,bg=colour0] ${2}"
 
-  test "${style}" = "minimal" \
-    && echo -n "#[fg=colour240,bg=colour0]#[fg=colour0,bg=colour240] ${1} ${second} " \
-    || echo -n "${_host} ${first} ${second} "
+  test "${style}" = "minimal" &&
+    echo -n "#[fg=colour240,bg=colour0]#[fg=colour0,bg=colour240] ${1} ${second} " ||
+    echo -n "${_host} ${first} ${second} "
 
   # extra stuff at the end only there is third item
   if test -n "${3}"; then
@@ -24,23 +23,20 @@ dress ()
   fi
 }
 
-_battery ()
-{
+_battery() {
   percent="$(battery)"
   icon="$(battery-icon)"
 
   echo -n "${icon} ${percent}%"
 }
 
-today ()
-{
+today() {
   date +'%a %d' | tr -d '\n'
   # date +'%a %d %b %H:%M' # not showing time until this issue below is completely fixed
   # https://stackoverflow.com/q/65086856/1570165
 }
 
-weather ()
-{
+weather() {
   # best way to customize $WTTR_LOC per device/user via ~/.local.zshenv
   # consult how that works at ../../../zsh/env
   WTTR_PARAMS='?format=2' wttr | tr -d '\n'

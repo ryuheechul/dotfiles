@@ -30,9 +30,9 @@ if test -f "${the_path}"; then
   the_pgid="$(ps "${the_pid}" -o pgid= | tr -d ' ')"
 
   # kill if the pid belongs to the binary
-  ps -p "${the_pid}" | grep "${the_cmd}" >/dev/null \
-    && echo "pid ${the_pid} was found for existing one so closing it first." \
-    && kill -- "-${the_pgid}"
+  ps -p "${the_pid}" | grep "${the_cmd}" >/dev/null &&
+    echo "pid ${the_pid} was found for existing one so closing it first." &&
+    kill -- "-${the_pgid}"
 fi
 
 # completely detach from terminal - https://stackoverflow.com/a/10408906/1570165

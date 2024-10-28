@@ -4,4 +4,4 @@ XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
 my_dot_d="${XDG_CONFIG_HOME}/dfs-rhc"
 lf_d="${my_dot_d}/lf"
 
-echo "${@}" | squote | xargs ${lf_d}/pv.sh
+echo "${@}" | squote | xargs "${lf_d}/pv.sh"

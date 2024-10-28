@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 tempdir="$(mktemp -d)"
-pushd "${tempdir}"
+pushd "${tempdir}" || exit
 wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info
 cat ./alacritty.info
 tic -xe alacritty,alacritty-direct ./alacritty.info
 infocmp alacritty
-popd
+popd || exit
 rm -r "${tempdir}"

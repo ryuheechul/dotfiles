@@ -31,6 +31,7 @@ return {
             'yamlls',
             'dockerls',
             'harper_ls',
+            'bashls',
           },
         },
       },

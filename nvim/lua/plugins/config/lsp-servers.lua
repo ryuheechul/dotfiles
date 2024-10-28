@@ -111,6 +111,7 @@ return function(setup_default, node_root)
       },
     },
   })
+  local setup_bashls = merge(setup_default, {})
   local setup_harper_ls = merge(setup_default, {})
   local setup_nimls = merge(setup_default, {})
   local setup_gopls = merge(setup_default, {})
@@ -265,6 +266,7 @@ return function(setup_default, node_root)
     ruby_lsp = setup_ruby_lsp,
     efm = setup_efm,
     ruff_lsp = setup_ruff_lsp,
+    bashls = setup_bashls,
   }
 end
 

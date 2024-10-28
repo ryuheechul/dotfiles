@@ -8,13 +8,13 @@ is_charging="$(battery-status | xargs test "Charging" = && echo 1 || echo 0)"
 test "${is_charging}" = 1 && icon='󰢜' || icon=''
 # be very careful not forget to wrap > with ''
 # to avoid using them as a redirection
-if expr "${percent}" '>' 80 > /dev/null ; then
+if expr "${percent}" '>' 80 >/dev/null; then
   test "${is_charging}" = 1 && icon='󰂋' || icon=''
-elif expr "${percent}" '>' 50 > /dev/null; then
+elif expr "${percent}" '>' 50 >/dev/null; then
   test "${is_charging}" = 1 && icon='󰢞' || icon=''
-elif expr "${percent}" '>' 25 > /dev/null; then
+elif expr "${percent}" '>' 25 >/dev/null; then
   test "${is_charging}" = 1 && icon='󰂈' || icon=''
-elif expr "${percent}" '>' 10 > /dev/null; then
+elif expr "${percent}" '>' 10 >/dev/null; then
   test "${is_charging}" = 1 && icon='󰂇' || icon=''
 fi
 

@@ -5,6 +5,6 @@
 should_be_latest_zsh="${1:-$(which zsh)}"
 
 # only add if not already exist
-cat /etc/shells | grep "${should_be_latest_zsh}" || {
-  echo "${should_be_latest_zsh}" >> /etc/shells
+grep "${should_be_latest_zsh}" /etc/shells || {
+  echo "${should_be_latest_zsh}" >>/etc/shells
 }

@@ -15,7 +15,7 @@ set -e
 bin_path="$(which "${1}")"
 
 # error if it's not from .nix-profile/bin
-echo -n "${bin_path}" | grep '.nix-profile/bin' > /dev/null
+echo -n "${bin_path}" | grep '.nix-profile/bin' >/dev/null
 
 real_path="$(realpath "${bin_path}")"
 dirname "$(dirname "${real_path}")" | tr -d '\n'

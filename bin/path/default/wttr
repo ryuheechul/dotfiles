@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-curl wttr.in/${WTTR_LOC}${WTTR_PARAMS}
+curl "wttr.in/${WTTR_LOC}${WTTR_PARAMS}"
 
 # examples of arguments
 # WTTR_LOC=NewYork

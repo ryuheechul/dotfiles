@@ -4,7 +4,7 @@
 # - avoid using channel and use the explicit source set by `niv`
 
 function is-nixos {
-  grep "NAME=NixOS" /etc/os-release &> /dev/null
+  grep "NAME=NixOS" /etc/os-release &>/dev/null
 }
 
 # this is what I'm contemplating to use to be closer with vanilla setting

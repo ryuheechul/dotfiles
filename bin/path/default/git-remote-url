@@ -3,12 +3,12 @@
 # A helper script to extract url from `git remote -v`
 
 echo -n 'https://'
-git remote -v \
-  | head -n1 | cut -f2 \
-  | sed 's|^https://||' \
-  | sed 's|^ssh://git@||' \
-  | sed 's|.git\ .*$||' \
-  | sed 's| .*$||'
+git remote -v |
+  head -n1 | cut -f2 |
+  sed 's|^https://||' |
+  sed 's|^ssh://git@||' |
+  sed 's|.git\ .*$||' |
+  sed 's| .*$||'
 
 # basically transform this one
 # ```
