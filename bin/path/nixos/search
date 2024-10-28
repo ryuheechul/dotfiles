@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# help searching nix related stuff
+
+# these might be helpful - I will take a look later
+# https://github.com/mlvzk/manix
+# https://github.com/lf-/nix-doc
+
+command -v gum >/dev/null || { echo 'you need gum to proceed' exit 1; }
+
+echo 'This is a helper to search nix related stuff'
+
+exit_on_sigint() {
+  # https://github.com/charmbracelet/gum/issues/469#issuecomment-1865391607
+  if [[ $? -eq 130 ]]; then
+    exit 130
+  fi
+}
+
+echo 'run `man configuration.nix` for nixos options'
+echo 'run `man home-configuration.nix` for home-manager options'
+echo
+echo 'Now, enter a keyword for nixpkgs'
+keyword="$(gum input --placeholder "installable package to search (e.g. k9s)")"
+
+exit_on_sigint
+
+set -x
+nix search nixpkgs "${keyword}"
