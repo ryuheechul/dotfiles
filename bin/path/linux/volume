@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# help discover commands and find the audio sink and select volume
+
+command -v gum >/dev/null || { echo 'you need gum to proceed' exit 1; }
+
+exit_on_sigint() {
+  # https://github.com/charmbracelet/gum/issues/469#issuecomment-1865391607
+  if [[ $? -eq 130 ]]; then
+    exit 130
+  fi
+}
+
+tldr wpctl
+
+echo 'probing to find selected sink...'
+
+echo '...'
+grepped="$(wpctl status | rg --multiline 'Sinks:(\n.*?)*Sources' -m 1 --color=never)"
+echo '...'
+
+echo "${grepped}"
+
+selected_line="$(echo "${grepped}" | grep '\*')"
+supposed_id="$(echo "${selected_line}" | awk '{ print $3 }' | cut -d'.' -f1)"
+supposed_current_volume="$(echo "${selected_line}" | sed 's/^.*\[vol: //' | sed 's/\].*$//')"
+
+echo 'select the sink:'
+
+selected_id="$(gum input --value "${supposed_id}")"
+
+exit_on_sigint
+
+volume="$(seq .0 .01 1.0 | gum filter --height=10 --prompt="choose volume [0.00-1.00]> " --value "${supposed_current_volume}")"
+
+exit_on_sigint
+
+echo "${selected_id}"
+echo "${volume}"
+
+cmd="wpctl set-volume ${selected_id} ${volume}"
+gum confirm "run \`${cmd}\`?" &&
+  ${cmd}
+
+set -x
+wpctl get-volume "${selected_id}"

@@ -50,6 +50,9 @@ add-to-path "${HOME}/.local/my-bin"
 # my custom scripts that should work on any platform
 add-to-path "${my_dot_d}/bin/path/default"
 
+# my custom scripts that should work on Linux
+is-linux && add-to-path "${my_dot_d}/bin/path/linux"
+
 # my custom scripts that should work on WSL
 is-wsl && add-to-path "${my_dot_d}/bin/path/wsl"
 

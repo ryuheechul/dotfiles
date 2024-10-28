@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# help discover commands and view status and select device
+
+command -v gum >/dev/null || { echo 'you need gum to proceed' exit 1; }
+
+exit_on_sigint() {
+  # https://github.com/charmbracelet/gum/issues/469#issuecomment-1865391607
+  if [[ $? -eq 130 ]]; then
+    exit 130
+  fi
+}
+
+tldr bluetoothctl
+
+echo 'select a bluetooth device to connect:'
+
+device=$(bluetoothctl devices | gum choose)
+
+exit_on_sigint
+
+macaddr="$(echo "${device}" | awk '{ print $2 }')"
+
+# https://stackoverflow.com/a/32774373/1570165
+name="$(echo "${device}" | awk '{ n=2; a="^["FS"]*[^"FS"]+["FS"]+"; for(i=1;i<=n;i++) sub( a , "" , $0 ) } 1 ')"
+
+echo "${macaddr} [${name}] is selected"
+
+if bluetoothctl devices Connected | grep "${macaddr}"; then
+  echo "and it's currently connected"
+  cmd="bluetoothctl disconnect ${macaddr}"
+else
+  cmd="bluetoothctl connect ${macaddr}"
+fi
+
+gum confirm "run \`${cmd}\`?" &&
+  gum spin --spinner dot --title "running '${cmd}' ..." -- ${cmd}
+
+exit_on_sigint
+
+set -x
+bluetoothctl devices

@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+# help discover commands and view status and select ssid
+
+command -v gum >/dev/null || { echo 'you need gum to proceed' exit 1; }
+
+exit_on_sigint() {
+  # https://github.com/charmbracelet/gum/issues/469#issuecomment-1865391607
+  if [[ $? -eq 130 ]]; then
+    exit 130
+  fi
+}
+
+tldr nmcli device
+
+gum spin --spinner dot --title "listing WiFi..." -- nmcli dev wifi list
+# above command somehow doesn't stay so call the below again (which hits the cached list)
+
+exit_on_sigint
+
+result=$(nmcli dev wifi list)
+echo "${result}" | head -n1
+
+chosen="$(echo "${result}" | awk 'NR>1 { print $0 }' | gum choose)"
+
+exit_on_sigint
+
+first_item=$(echo "${chosen}" | awk '{ print $1 }')
+
+if test "${first_item}" = '*'; then
+  ssid="$(echo "${chosen}" | awk '{ print $3 }')"
+else
+  ssid="$(echo "${chosen}" | awk '{ print $2 }')"
+fi
+
+cmd="nmcli dev wifi connect ${ssid}"
+gum confirm "run \`${cmd}\`?" &&
+  gum spin --spinner dot --title "running '${cmd}' ..." -- ${cmd}
+
+exit_on_sigint
+
+set -x
+nmcli dev wifi list --rescan no
