@@ -1,0 +1,97 @@
+#!/usr/bin/env zsh
+# (use zsh shebang to avoid shellcheck to be in effect)
+
+# This is not really to run these commands all at once;
+# but to document any useful diagnostic information regarding Linux
+# the commands may added with or without comments after the line `exit 0`
+command -v gum >/dev/null || { echo 'you need gum to proceed' exit 1; }
+
+gum spin --spinner dot --title "going to show documented commands to run" -- sleep 2
+
+# find the line for `exit 0`
+nr="$(grep '^exit 0' "$0" -n | cut -d':' -f1 | head -n1)"
+
+sanitized="$(cat "$0" | awk "NR > ${nr}" | awk '!/^#/' | grep -v '^$')"
+
+echo 'Choose a command to run'
+# anything before "${nr}" would be ignored
+cmd="$(echo "${sanitized}" | gum filter)"
+
+# exit on sigint - https://github.com/charmbracelet/gum/issues/469#issuecomment-1865391607
+test $? -eq 130 && exit 130
+
+# confirm to run or not
+echo "'${cmd}' is selected to run"
+gum confirm "run \`${cmd}\`?" &&
+  bash -c "${cmd}"
+
+# this is how it prevents to run the rest of commands
+exit 0
+
+## now this is where I can list actual runnable commands that is useful to run more about the system; it's sort of like personal mini tldr.sh
+
+uname -a       # print system information
+bootctl status # shows brief information about the system firmware
+lsusb
+lsscsi
+mount # list mounted
+lsblk -f
+sudo blkid
+sudo fdisk -l
+netstat -nlp # see open ports
+netstat -i   # kernel interface table
+lshw
+# https://askubuntu.com/a/654928/1666783
+lshw -c network -businfo
+# for NetworkManager (basically when there is no /etc/network/interfaces)
+# https://askubuntu.com/a/1321815/1666783
+# https://nixos.org/manual/nixos/stable/#sec-networkmanager
+nmcli # there is also nmtui
+nmcli device
+nmcli device wifi
+ip a # ip addr
+ip r # ip route
+ip l # ip link
+# https://developers.redhat.com/articles/2022/04/06/introduction-linux-bridging-commands-and-features#vlan_tunnel_mapping
+bridge link show
+brctl show
+# for details on network devices
+ls /sys/class/net
+lscpu
+vmstat
+drmdevice
+lspci
+# map between hardware and interfaces https://unix.stackexchange.com/a/658392/396504
+ls -lah /sys/class/net/
+lsmod # show the status of modules in the linux kernel
+
+fi_info # libfabric
+glxinfo -B
+vainfo
+loginctl # list login sessions
+systemctl
+systemctl status
+portablectl
+resolvectl
+systemd-cgls  # list cgroups
+systemd-cgtop # top cgroups
+sudo powertop # see power consumption
+journalctl
+journalctl -u systemd-logind.service
+systemctl status | head
+systemctl status --failed # will shot nothing if none failed
+
+xlsclients # list x client applications running on a display
+
+ss      # investigate sockets - see `tldr ss` for more
+ss -xlp # list unix sockets
+sudo libinput list-devices
+xinput --list
+swapon -s # summary of swaps
+cat /proc/filesystems
+cat /proc/meminfo
+hostname    # print hostname
+hostnamectl # show system hostname and related information sort of like neofetch
+
+systemctl --user show-environment # print environment for the user before I pollute
+arp                               # show system's ARP cache
