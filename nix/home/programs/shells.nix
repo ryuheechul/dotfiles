@@ -38,7 +38,7 @@ in
   };
 
   programs.command-not-found = {
-    enable = ! pkgs.stdenv.isDarwin;
+    enable = !pkgs.stdenv.isDarwin;
   };
 
   # fallback to nix-index on darwin in place of command-not-found
@@ -141,5 +141,10 @@ in
       # HISTSIZE=1000000;
       size = 1000000;
     };
+  };
+
+  programs.nushell = {
+    # simply enable for now since investing in this shell would take a lot of time
+    enable = true;
   };
 }

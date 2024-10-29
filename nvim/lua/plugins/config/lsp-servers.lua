@@ -108,6 +108,11 @@ return function(setup_default, node_root)
         formatting = {
           command = { 'nixfmt' },
         },
+        options = {
+          home_manager = {
+            expr = '(import <home-manager/modules> { configuration = ~/.config/home-manager/home.nix; pkgs = import <nixpkgs> {}; }).options',
+          },
+        },
       },
     },
   })
