@@ -1,12 +1,28 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   packages = import ../pkgs { };
-  prgs = import ./programs { pkgs = pkgs; config = config; };
-  svcs = import ./services { pkgs = pkgs; };
+  prgs = import ./programs {
+    pkgs = pkgs;
+    config = config;
+  };
+  svcs = import ./services {
+    pkgs = pkgs;
+    config = config;
+  };
   dconf = import ./dconf.nix { lib = lib; };
   shims = import ./shims.nix { pkgs = pkgs; };
-  imports = [ prgs svcs dconf shims ];
+  imports = [
+    prgs
+    svcs
+    dconf
+    shims
+  ];
 in
 {
   inherit imports;

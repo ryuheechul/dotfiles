@@ -10,8 +10,14 @@ function _change_my_base16_theme() {
   }
 
   if is-ssh; then
-    echo 'abort changing base16-shell when accessed via SSH'
-    return
+    if command -v gum >/dev/null; then
+      gum confirm "You appeared to be connected via SSH and this will change the theme on remote machine not client, still proceed?" &&
+        true ||
+        return
+    else
+      echo 'abort changing base16-shell when accessed via SSH'
+      return
+    fi
   fi
 
   # change theme manually - by coping how base16-shell theme change works

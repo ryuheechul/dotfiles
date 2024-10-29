@@ -3,7 +3,8 @@
 # and obviously this is for Linux only not for Darwin
 { lib, ... }:
 
-with lib.hm.gvariant; {
+with lib.hm.gvariant;
+{
   dconf.settings = {
     # relies on below from ../nixos/recipes/desktop-gnome.nix
     # ```
@@ -23,7 +24,16 @@ with lib.hm.gvariant; {
 
     # this also relies on ibus configuration above
     "org/gnome/desktop/input-sources" = {
-      sources = [ (mkTuple [ "xkb" "us" ]) (mkTuple [ "ibus" "hangul" ]) ];
+      sources = [
+        (mkTuple [
+          "xkb"
+          "us"
+        ])
+        (mkTuple [
+          "ibus"
+          "hangul"
+        ])
+      ];
       per-window = false;
       show-all-sources = true;
     };
@@ -65,6 +75,7 @@ with lib.hm.gvariant; {
 
     # gnome shell
     "org/gnome/shell" = {
+      disable-user-extensions = false;
       enabled-extensions = [
         # https://search.nixos.org/packages?show=gnomeExtensions.pop-shell
         "pop-shell@system76.com"
@@ -76,7 +87,15 @@ with lib.hm.gvariant; {
         "gestureImprovements@gestures"
         # https://extensions.gnome.org/extension/6048/peek-top-bar-on-fullscreen/
         "peek-top-bar-on-fullscreen@marcinjahn.com"
+        # https://extensions.gnome.org/extension/841/freon/
+        "system-monitor@gnome-shell-extensions.gcampax.github.com"
       ];
+    };
+
+    "org/gnome/shell/extensions/nightthemeswitcher/commands" = {
+      enabled = true;
+      sunrise = "zsh -c light";
+      sunset = "zsh -c dark";
     };
 
     # pop-shell
