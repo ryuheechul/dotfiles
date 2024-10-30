@@ -397,6 +397,9 @@ is-nixos \
 is-nixos \
   && alias clean-boot='sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3 && nix-collect-garbage && ls /nix/var/nix/profiles/system && df'
 
+# quicker way to reboot by skipping hardware checks but subsequent quick reboot may result in coma
+is-linux && alias quickreboot='sudo systemctl kexec'
+
 # commandify
 alias reenter='cd ~ && cd -'
 alias fulltimezsh='FORCE_LOAD_MY_ZSH_STUFF=1 timezsh'

@@ -120,3 +120,4 @@ xdg-settings get default-web-browser
 fwupdmgr get-devices | less # print device firmware info
 fwupdmgr security | less
 which tpm2_getcap && sudo tpm2_getcap algorithms # list tpm algorithms
+modinfo iwlwifi |less

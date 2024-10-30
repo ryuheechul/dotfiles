@@ -32,6 +32,8 @@ with pkgs;
 
   ++ ifEnv "MY_NIX_EXTRA_LINUX_HOTSPOT" [
     # https://nixos.wiki/wiki/Internet_Connection_Sharing
+    # Watch out for some hardware (e.g. Intel) not working very well with AP mode - https://www.reddit.com/r/debian/comments/10u76li/hostapd_with_wifi_6e_card/
     linux-wifi-hotspot # Feature-rich wifi hotspot creator for Linux which provides both GUI and command-line interface
+    linux-router # Set Linux as router / Wifi hotspot / proxy in one command
   ]
 )
