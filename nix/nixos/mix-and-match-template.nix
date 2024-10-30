@@ -31,6 +31,7 @@ username:
       # services
       ./recipes/resolved.nix
       ./recipes/desktop-gnome.nix
+      # ./recipes/desktop-kde.nix
       ./recipes/keyd-host-windows.nix
       ./recipes/keyd-guest.nix
       ./recipes/flatpak.nix
