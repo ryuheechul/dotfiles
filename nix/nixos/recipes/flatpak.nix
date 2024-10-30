@@ -18,7 +18,8 @@
     "com.github.tchx84.Flatseal" # Flatseal
     "com.google.Chrome" # Google Chrome
     "io.github.arunsivaramanneo.GPUViewer" # GPU-Viewer
-    "io.github.zen_browser.zen" # Zen
+    # run `xdg-settings set default-web-browser io.github.zen_browser.zen.desktop` to set Zen as default browser - https://unix.stackexchange.com/a/614911/396504
+    "io.github.zen_browser.zen" # Zen browser
     "io.github.plrigaux.sysd-manager" # a GUI to manage systemd units
     # "net.lutris.Lutris" # Lutris
     # "com.slack.Slack" # Slack
