@@ -2,8 +2,9 @@
 # see `../../bootstrap/foundation/nixos/switch-nixos.sh` for more info
 # manual is at https://nixos.org/manual/nixos/stable/#sec-modularity
 # use `nixos-option` to debug
-{ pkgs
-, ...
+{
+  pkgs,
+  ...
 }:
 
 let
@@ -15,11 +16,10 @@ in
 {
   # what the heck really is `imports` variable?
   # best answer that I found so far - https://nixos.wiki/wiki/NixOS_modules
-  imports =
-    [
-      # Include the default configuration that is generated on installation as a good default
-      /etc/nixos/configuration.nix # will import `/etc/nixos/hardware-configuration.nix` too
-    ];
+  imports = [
+    # Include the default configuration that is generated on installation as a good default
+    /etc/nixos/configuration.nix # will import `/etc/nixos/hardware-configuration.nix` too
+  ];
 
   # https://nixos.wiki/wiki/NTP
   # https://anarc.at/blog/2022-01-23-chrony/
@@ -31,7 +31,7 @@ in
   # https://nixos.wiki/wiki/Fonts
   fonts = {
     fontDir.enable = true;
-    packages = with pkgs;[
+    packages = with pkgs; [
       noto-fonts-cjk # Beautiful and free fonts for CJK languages
       noto-fonts-emoji # Color and Black-and-White emoji fonts
     ];
