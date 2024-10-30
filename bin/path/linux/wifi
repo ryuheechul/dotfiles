@@ -21,7 +21,7 @@ exit_on_sigint
 result=$(nmcli dev wifi list)
 echo "${result}" | head -n1
 
-chosen="$(echo "${result}" | awk 'NR>1 { print $0 }' | gum choose)"
+chosen="$(echo "${result}" | awk 'NR>1 { print $0 }' | gum filter)"
 
 exit_on_sigint
 

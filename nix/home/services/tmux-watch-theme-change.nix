@@ -2,6 +2,7 @@
 
 # this basically doing a similar thing as ../../../bin/path/darwin/react-to-appearance-changes
 # may require to run this `systemctl --user start tmux-watch-theme-change.service`
+# debug with `systemctl --user cat tmux-watch-theme-change.service`
 let
   args = [
     "${config.programs.zsh.package}/bin/zsh"

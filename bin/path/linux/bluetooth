@@ -15,7 +15,7 @@ tldr bluetoothctl
 
 echo 'select a bluetooth device to connect:'
 
-device=$(bluetoothctl devices | gum choose)
+device=$(bluetoothctl devices | gum filter --height=10) # use filter (same for wifi)
 
 exit_on_sigint
 

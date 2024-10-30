@@ -6,7 +6,7 @@
 # the commands may added with or without comments after the line `exit 0`
 command -v gum >/dev/null || { echo 'you need gum to proceed' exit 1; }
 
-gum spin --spinner dot --title "going to show documented commands to run" -- sleep 2
+gum spin --spinner dot --title "going to show documented commands to run" -- sleep 1
 
 # find the line for `exit 0`
 nr="$(grep '^exit 0' "$0" -n | cut -d':' -f1 | head -n1)"
@@ -30,8 +30,9 @@ exit 0
 
 ## now this is where I can list actual runnable commands that is useful to run more about the system; it's sort of like personal mini tldr.sh
 
-uname -a       # print system information
-bootctl status # shows brief information about the system firmware
+uname -a                              # print system information
+echo "${XDG_DATA_DIRS}" | tr ':' '\n' # print XDG_DATA_DIRS
+bootctl status                        # shows brief information about the system firmware
 lsusb
 lsscsi
 mount # list mounted
@@ -69,17 +70,9 @@ fi_info # libfabric
 glxinfo -B
 vainfo
 loginctl # list login sessions
-systemctl
-systemctl status
 portablectl
 resolvectl
-systemd-cgls  # list cgroups
-systemd-cgtop # top cgroups
 sudo powertop # see power consumption
-journalctl
-journalctl -u systemd-logind.service
-systemctl status | head
-systemctl status --failed # will shot nothing if none failed
 
 xlsclients # list x client applications running on a display
 
@@ -90,8 +83,40 @@ xinput --list
 swapon -s # summary of swaps
 cat /proc/filesystems
 cat /proc/meminfo
-hostname    # print hostname
-hostnamectl # show system hostname and related information sort of like neofetch
+ls /sys/fs/cgroup/ # introspect cgroups
+arp                # show system's ARP cache
+hostname           # print hostname
+hostnamectl        # show system hostname and related information sort of like neofetch
 
+systemctl
+systemctl status
+systemctl status --failed         # will shot nothing if none failed
 systemctl --user show-environment # print environment for the user before I pollute
-arp                               # show system's ARP cache
+systemctl list-unit-files         # discover unitfiles
+systemctl list-dependencies
+systemctl list-dependencies systemd-logind.service
+systemctl --user list-dependencies
+systemctl cat systemd-logind.service
+systemctl show -p Restart systemd-logind.service
+systemctl show systemd-logind.service
+systemd-delta         # find overriden configurations files
+systemd-analyze       # debug systemd
+systemd-analyze blame # debug systemd
+systemd-analyze critical-chain
+systemd-analyze --user critical-chain
+systemd-analyze security
+systemd-analyze --user security
+systemd-cgls  # list cgroups
+systemd-cgtop # top cgroups
+
+journalctl
+journalctl -u systemd-logind.service
+
+busctl # introspect D-Bus bus
+gdbus monitor --system --dest org.freedesktop.DBus
+gnome-extensions list
+gnome-extensions list --enabled
+xdg-settings get default-web-browser
+fwupdmgr get-devices | less # print device firmware info
+fwupdmgr security | less
+which tpm2_getcap && sudo tpm2_getcap algorithms # list tpm algorithms
