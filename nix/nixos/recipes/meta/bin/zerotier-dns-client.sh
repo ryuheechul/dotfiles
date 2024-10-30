@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# although this script will work with or without being a systemd service
+# the best way to use this is just via ../zerotier.nix (in case systemd-resolved is being used)
+
 ## Some background information regarding this script
 ##
 ## # What it does
@@ -63,43 +66,55 @@
 # # How to undo
 # `sudo resolvectl revert [interface]`
 
+# a wrapper to make sure it works with or without sudo (e.g. run as root without sudo)
+sudo() {
+  { set +x; } 2>/dev/null # thanks to https://stackoverflow.com/a/19226038/1570165
+  if which sudo >/dev/null; then
+    env sudo "${@}"
+  else
+    "${@}"
+  fi
+  set -x
+}
+
 echo '[info] going to run `sudo zerotier-cli listnetworks -j` to parse necessary network information'
 networks=$(sudo zerotier-cli listnetworks -j)
 
-if ! echo "${networks}" | jq > /dev/null 2>&1; then
+if ! echo "${networks}" | jq >/dev/null 2>&1; then
   echo "[error] the result below doesn't seem to be in the right format"
   echo "${networks}"
   exit 1
 fi
 
 # thanks to https://stackoverflow.com/a/33952539/1570165
-echo $networks | jq -c '.[]' | while read network; do
-  domain="$(echo $network | jq -r '.dns.domain')"
-  dns_list="$(echo $network | jq -r '.dns.servers | join(" ")')"
-  interface="$(echo $network | jq -r '.portDeviceName')"
+echo "${networks}" | jq -c '.[]' | while read -r network; do
+  domain="$(echo "${network}" | jq -r '.dns.domain')"
+  dns_list="$(echo "${network}" | jq -r '.dns.servers | join(" ")')"
+  interface="$(echo "${network}" | jq -r '.portDeviceName')"
 
-  echo "[info] detected values: \$domain ($domain), \$dns_list ($dns_list), \$interface ($interface)"
-  if test -z "$domain" || test -z "$dns_list" || test -z "$interface"; then
+  echo "[info] detected values: \$domain (${domain}), \$dns_list (${dns_list}), \$interface (${interface})"
+  if test -z "${domain}" || test -z "${dns_list}" || test -z "${interface}"; then
     echo "[warn] Any of the values above might be wrong so skpping this interface."
   else
     echo "[info] before the change:"
-    resolvectl status $interface
+    resolvectl status "${interface}"
     echo "[info] configuring with ..."
     set -x
-    sudo resolvectl revert $interface
-    sudo resolvectl dns $interface $dns_list
-    sudo resolvectl default-route $interface "false"
-    sudo resolvectl domain $interface $domain
+    sudo resolvectl revert "${interface}"
+    sudo resolvectl dns "${interface}" "${dns_list}"
+    sudo resolvectl default-route "${interface}" "false"
+    sudo resolvectl domain "${interface}" "${domain}"
     { set +x; } 2>/dev/null # thanks to https://stackoverflow.com/a/19226038/1570165
     echo "[info] after change:"
     set -x
-    resolvectl status $interface
+    resolvectl status "${interface}"
     { set +x; } 2>/dev/null
   fi
 done
 
 # TODO: (potential)
-# - register this as a systemd service so that there is no need to manually run this
+# - [x] register this as a systemd service so that there is no need to manually run this
 #   - however that means, some sort of continuously detecting the state of the environment necessary to function reliably
-# - package this as a standalone program that doesn't require implicit dependencies like jq
+#     - actually I just took a very simply approach which is a oneshot service since I can tolerate the drift that would mostly because my own action
+# - [ ] package this as a standalone program that doesn't require implicit dependencies like jq
 #   - which allows this to be portable for any linux system
