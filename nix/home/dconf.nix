@@ -98,6 +98,11 @@ with lib.hm.gvariant;
       sunset = "zsh -c dark";
     };
 
+    "org/gnome/shell/extensions/nightthemeswitcher/time" = {
+      sunrise = 6.0;
+      sunset = 20.0;
+    };
+
     # pop-shell
     "org/gnome/shell/extensions/pop-shell" = {
       active-hint = false;

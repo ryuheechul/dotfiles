@@ -200,6 +200,7 @@ alias man='man -i'
 alias htop='btm -b'
 # overwrite essential stuff
 alias which='which -a'
+alias stat='grc stat'
 alias ping='grc ping'
 alias ping='gping'
 alias traceroute='grc traceroute'
