@@ -29,7 +29,7 @@
     (lib.mkIf useResolved {
       systemd.services.zerotier-dns-resolved = {
         wantedBy = [ "multi-user.target" ];
-        requires = [ "zerotierone.service" ];
+        after = [ "zerotierone.service" ];
 
         serviceConfig = {
           Type = "oneshot";
