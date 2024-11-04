@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -15,4 +15,8 @@
     DisableOnPalm = true;
     DisableOnStylus = true;
   };
+
+  environment.systemPackages = [
+    pkgs.nvtopPackages.intel
+  ];
 }

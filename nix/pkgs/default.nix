@@ -158,6 +158,7 @@ with pkgs;
     vhs # A tool for generating terminal GIFs with code
     nix-output-monitor # Parses output of nix-build to show additional information
     iperf # Tool to measure IP bandwidth using UDP or TCP
+    lynis # Security auditing tool for Linux, macOS, and UNIX-based systems
   ]
 ++ (import ./lang { pkgs = pkgs; })
 ++ (import ./fonts { pkgs = pkgs; })

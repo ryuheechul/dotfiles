@@ -13,6 +13,7 @@ with pkgs;
     sysstat # A collection of performance monitoring tools for Linux (such as sar, iostat and pidstat)
     traceroute # Tracks the route taken by packets over an IP network
     unixtools.netstat
+    bridge-utils # Userspace tool to configure linux bridges (deprecated in favour or iproute2)
     nmap # A free and open source utility for network discovery and security auditing
     ed # An implementation of the standard Unix editor
     distrobox # Wrapper around podman or docker to create and start containers

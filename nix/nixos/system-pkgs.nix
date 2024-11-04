@@ -2,8 +2,10 @@
 
 let
   # system pkgs for local only
-  local-only = pkgs.lib.optionals (builtins.pathExists ./system-pkgs-local.nix) (import ./system-pkgs-local.nix { pkgs = pkgs; });
-  pop-shell-stuff = with pkgs;[
+  local-only = pkgs.lib.optionals (builtins.pathExists ./system-pkgs-local.nix) (
+    import ./system-pkgs-local.nix { pkgs = pkgs; }
+  );
+  pop-shell-stuff = with pkgs; [
     # this is need for pop-shell to use launcher
     # https://github.com/NixOS/nixpkgs/issues/174353#issuecomment-1416152982
     pop-launcher # Modular IPC-based desktop launcher service
@@ -14,11 +16,11 @@ let
     gnomeExtensions.night-theme-switcher # Automatically toggle your desktop’s color scheme between light and dark, switch backgrounds and run custom commands at sunset and sunrise.
     gnomeExtensions.gesture-improvements # Improve touchpad gestures for Wayland/X11
   ];
-  nix-utils = with pkgs;[
+  nix-utils = with pkgs; [
     nvd # Nix/NixOS package version diff tool
     dconf2nix # Convert dconf files to Nix, as expected by Home Manager
   ];
-  missing-commons = with pkgs;[
+  missing-commons = with pkgs; [
     dnsutils # including dig and nslookup
     zip # Compressor/archiver for creating and modifying zipfiles
     vim # The most popular clone of the VI editor
@@ -30,7 +32,7 @@ let
     kmod # for `modinfo`
     file # A program that shows the type of files
   ];
-  hardware-support = with pkgs;[
+  hardware-support = with pkgs; [
     glmark2 # OpenGL (ES) 2.0 benchmark
     usbutils # for lsusb
     lshw # Provide detailed information on the hardware configuration of the machine
@@ -47,7 +49,8 @@ let
   ];
 in
 # system pkgs for any nixOS
-with pkgs; [
+with pkgs;
+[
   alacritty # A cross-platform, GPU-accelerated terminal emulator
   remmina # Remote desktop client written in GTK
 ]
@@ -55,7 +58,4 @@ with pkgs; [
 ++ nix-utils
 ++ hardware-support
 ++ pop-shell-stuff
-  # ++ lib.optionals stdenv.isx86_64 [
-  #   intel-gpu-tools # for intel_gpu_top
-  # ]
 ++ local-only
