@@ -4,7 +4,7 @@
 # - but avoid doing this for tramp-mode on emacs - https://www.emacswiki.org/emacs/TrampMode
 # - also guard this behaviour for non-interactive shell usage
 if is-zsh-interactive && test "${TERM}" != 'dumb'; then
-  if is-ssh; then
+  if is-ssh && ! printenv DISTROBOX_ENTER_PATH >/dev/null; then
     source "${my_dot_d}/zsh/integration/interactive-ssh"
   else # when not SSH
     # to mimic secretive experience at macOS on NixOS
