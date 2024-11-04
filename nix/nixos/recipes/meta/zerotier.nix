@@ -33,6 +33,7 @@
 
         serviceConfig = {
           Type = "oneshot";
+          Restart = "on-failure"; # https://unix.stackexchange.com/a/777329/396504
         };
 
         path = [
