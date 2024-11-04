@@ -13,6 +13,11 @@ username:
       # hardware/device specifics
       ./recipes/firmware.nix
       (import ./recipes/meta/tpm.nix username)
+      # virtualisations
+      ./recipes/docker.nix
+      ./recipes/libvirt.nix
+      ./recipes/incus.nix
+      ./recipes/waydroid.nix
       # ./recipes/laptop.nix - this usually gets included via others like surface-pro... and gpd-win-max-2
       ./recipes/surface-pro-intel.nix
       ./recipes/surface-pro-9-intel.nix
@@ -41,9 +46,6 @@ username:
       ./recipes/airplay.nix
       ./recipes/steam.nix
       ./recipes/rdp-server.nix
-      ./recipes/docker.nix
-      ./recipes/virtualization.nix
-      ./recipes/waydroid.nix
       ./recipes/rosetta.nix
       ./recipes/captive-browser.nix
       ./recipes/tailscale.nix
