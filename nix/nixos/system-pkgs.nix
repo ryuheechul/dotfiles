@@ -52,7 +52,6 @@ in
 with pkgs;
 [
   alacritty # A cross-platform, GPU-accelerated terminal emulator
-  remmina # Remote desktop client written in GTK
 ]
 ++ missing-commons
 ++ nix-utils

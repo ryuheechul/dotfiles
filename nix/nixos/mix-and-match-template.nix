@@ -33,10 +33,13 @@ username:
       ./recipes/vm-guest-utm-mount.nix
       ./recipes/wsl.nix
       ./recipes/mtu-probing.nix
-      # services
-      ./recipes/resolved.nix
+      # desktop
       ./recipes/desktop-gnome.nix
       # ./recipes/desktop-kde.nix
+      ./recipes/rdp-server.nix
+      ./recipes/sunshine.nix
+      # services
+      ./recipes/resolved.nix
       ./recipes/keyd-host-windows.nix
       ./recipes/keyd-guest.nix
       ./recipes/flatpak.nix
@@ -45,7 +48,6 @@ username:
       ./recipes/mdns.nix
       ./recipes/airplay.nix
       ./recipes/steam.nix
-      ./recipes/rdp-server.nix
       ./recipes/rosetta.nix
       ./recipes/captive-browser.nix
       ./recipes/tailscale.nix

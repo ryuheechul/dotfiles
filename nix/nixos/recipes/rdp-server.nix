@@ -19,3 +19,4 @@
 # actually https://wiki.gnome.org/Projects/Mutter/RemoteDesktop seems to work better for gnome environment
 # "Settings > System > Desktop" Sharing to configure
 # `grdctl status` to debug
+# ./sunshine.nix can augment the experience of "remote desktop"

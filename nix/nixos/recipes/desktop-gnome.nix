@@ -52,7 +52,7 @@
   # - username/password can be anything and it is not the same as actual users (it's only needed to establish connection)
   # - reboot seems to stop the service which can be mitigated via `systemctl start gnome-remote-desktop.service` if you can SSH into it
   # - Remmina app might work better than the default Connection app
-
+  #
   # below is necessary if you connect directly (via IP address) instead of via something like Tailscale
   # ```
   # networking = {
@@ -61,5 +61,7 @@
   #     allowedTCPPorts = [ 3389 ];
   #   };
   # };
+  #
+  # and there is also ./sunshine.nix (at least read it for unlocking session)
   # ```
 }

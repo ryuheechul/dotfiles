@@ -21,7 +21,10 @@
     # run `xdg-settings set default-web-browser io.github.zen_browser.zen.desktop` to set Zen as default browser - https://unix.stackexchange.com/a/614911/396504
     "io.github.zen_browser.zen" # Zen browser
     "io.github.plrigaux.sysd-manager" # a GUI to manage systemd units
+    "org.remmina.Remmina" # remote desktop client
+    "com.moonlight_stream.Moonlight" # game streaming client
     # "net.lutris.Lutris" # Lutris
     # "com.slack.Slack" # Slack
   ];
+  # run `flatpak list` to find the ids of installed app
 }

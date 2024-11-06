@@ -16,6 +16,7 @@ let
           "qemu-libvirtd"
         ]
         ++ pkgs.lib.optionals config.virtualisation.incus.enable [ "incus-admin" ]
+        ++ pkgs.lib.optionals config.services.sunshine.enable [ "input" ]
         ++ pkgs.lib.optionals config.services.davfs2.enable [ "davfs2" ];
     in
     with pkgs.lib;
