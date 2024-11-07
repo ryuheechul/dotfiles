@@ -63,6 +63,9 @@ with lib.hm.gvariant;
 
     # keyboard shortcuts
     # there is also ../nixos/keyd/meta-mac.nix
+    "org/gnome/desktop/wm/keybindings" = {
+      close = [ "<Control>q" ];
+    };
 
     "org/gnome/shell/keybindings" = {
       screenshot = [ "<Shift><Alt>3" ];

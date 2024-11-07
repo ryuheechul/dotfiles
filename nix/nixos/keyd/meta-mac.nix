@@ -1,5 +1,6 @@
-# see ./settings-min.nix and ./settings-full.nix for usages
+# see ./settings-min.nix and ./settings-full-windows.nix for usages
 # ../../home/dconf.nix is also being used to customize shortcuts in settings
+# List available keys with `nix-shell -p keyd --command 'keyd list-keys'`.
 
 {
   # Copy
@@ -13,7 +14,9 @@
   # Undo (and redo with shift)
   z = "C-z";
   # Close window
-  w = "C-w";
+  w = "C-w"; # note that this is not very universal in gnome use `C-q` below to close (single window) app
+  # Close app
+  q = "C-q";
   # Refresh
   r = "C-r";
   # Settings
@@ -35,9 +38,13 @@
   # comment uncomment
   "/" = "C-/";
   # Zoom in: `=` would not work, so `equal`
-  equal = "C-+";
+  equal = "C-="; # `equal = "C-+"` was a mistake which only worked with some applications not all
   # Zoom out
   "-" = "C--";
+  # go backward
+  "[" = "C-[";
+  # go forward
+  "]" = "C-]";
   # Move cursor to beginning of line
   left = "home";
   # Move cursor to end of Line
