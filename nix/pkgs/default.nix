@@ -156,6 +156,7 @@ with pkgs;
     gum # Tasty Bubble Gum for your shell
     vale # A syntax-aware linter for prose built with speed and extensibility in mind
     vhs # A tool for generating terminal GIFs with code
+    nix-tree # Interactively browse a Nix store paths dependencies
     nix-output-monitor # Parses output of nix-build to show additional information
     iperf # Tool to measure IP bandwidth using UDP or TCP
     lynis # Security auditing tool for Linux, macOS, and UNIX-based systems

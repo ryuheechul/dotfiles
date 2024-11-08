@@ -487,6 +487,13 @@ which-browse ()
   which-trace $1 | xargs lf
 }
 
+# `w` to see deps (relative to the current root) `/` to search
+alias nix-tree-profile='nix-tree ~/.nix-profile'
+alias nix-tree-system='nix-tree /run/current-system'
+# https://github.com/utdemir/nix-tree/issues/26
+alias nix-deps='fzf | xargs -o nix-tree' # e.g. which lxc | nix-deps
+alias nix-referrers='fzf | xargs nix-store --query --referrers' # e.g. which lxc | nix-referrers
+
 alias inspect-bash='/bin/bash -lixc exit 2>&1 | sed -n "s/^+* \(source\|\.\) //p"' # via https://stackoverflow.com/a/65922714/1570165
 alias inspect-iommu="bash -c 'dmesg | rg IOMMU'" # wrap with bash in mind of being called with other command such as sudo
 alias dmesg='sudo dmesg -H --nopager --color=always | less' # since dmesg doesn't respect PAGER nor seem to use less
