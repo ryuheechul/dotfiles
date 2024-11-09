@@ -15,6 +15,7 @@ username:
       (import ./recipes/meta/tpm.nix username)
       # virtualisations
       ./recipes/docker.nix
+      ./recipes/podman.nix
       ./recipes/libvirt.nix
       ./recipes/incus.nix
       ./recipes/waydroid.nix
