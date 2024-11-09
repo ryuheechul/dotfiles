@@ -58,5 +58,17 @@
         "type": "tarball",
         "url": "https://github.com/NixOS/nixpkgs/archive/20643cc9a93e6d09f3b131e068cfafddb083921b.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nur": {
+        "branch": "master",
+        "description": "Nix User Repository: User contributed nix packages [maintainer=@Mic92]",
+        "homepage": "https://nur.nix-community.org/",
+        "owner": "nix-community",
+        "repo": "nur",
+        "rev": "367e68920e3f1dfb183c651378433661fd6b5426",
+        "sha256": "05fi00km21rr5xrv2jknjq8qm1rnivvdsi5j1qvynr8id06wgizn",
+        "type": "tarball",
+        "url": "https://github.com/nix-community/nur/archive/367e68920e3f1dfb183c651378433661fd6b5426.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
