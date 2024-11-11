@@ -64,7 +64,7 @@ with lib.hm.gvariant;
     # keyboard shortcuts
     # there is also ../nixos/keyd/meta-mac.nix
     "org/gnome/desktop/wm/keybindings" = {
-      close = [ "<Control>q" ];
+      close = [ "<Alt>q" ];
     };
 
     "org/gnome/shell/keybindings" = {
