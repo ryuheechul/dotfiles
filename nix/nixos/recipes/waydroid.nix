@@ -25,4 +25,7 @@
       # `sudo waydroid-script install libndk`
       # debug via `lf /var/lib/waydroid/overlay`
     ];
+
+  # it looks like it randomly starts interfering the session sleep - https://github.com/waydroid/waydroid/issues/168
+  # remedy: restart waydroid or upgrade the image to see if that fixes, or just manually stop waydroid session to prevent it for sure
 }

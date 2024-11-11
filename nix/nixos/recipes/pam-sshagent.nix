@@ -5,6 +5,7 @@
   # debug with `ssh-add -l`
   security.pam.sshAgentAuth = {
     enable = true;
+    # `cat /etc/pam.d/sudo` to debug not `/etc/pam.d/login`
     authorizedKeysFiles = [
       # relying on ../user.nix to set this up
       "/etc/ssh/authorized_keys.d/%u"
