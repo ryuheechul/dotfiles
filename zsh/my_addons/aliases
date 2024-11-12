@@ -415,6 +415,7 @@ alias executable='chmod +x'
 alias lf='UNSET_ALL_MY_ZSH_STUFF_LOADED=1 lf'
 alias quickvenv='python3 -m venv "${MY_QUICK_VENV_PATH:-.venv}" && source "${MY_QUICK_VENV_PATH:-.venv}/bin/activate"'
 alias quickserve='nix-shell -p caddy --run "caddy file-server --browse -l :9090"'
+alias su='sudo su' # `sudo -i` or `sudo --login` can do the similar thing in a simple case - https://www.redhat.com/en/blog/difference-between-sudo-su
 
 alias nis='npm install --save'
 alias nisd='npm install --save-dev'
@@ -478,7 +479,7 @@ inspect-home-manager ()
 # useful to trace symlinked binaries the ones from nixpkgs
 which-trace ()
 {
-  env which $1 | xargs realpath
+  which $1 | fzf | xargs realpath
 }
 
 # useful to browse other binaries in the same directory
