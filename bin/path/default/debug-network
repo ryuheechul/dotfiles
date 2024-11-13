@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# this is to enhance the experience of debugging the status of network
+# there is also ./debug-resolve
+
+_run-cmd() {
+  x="${1}"
+  if command -v "${x}" >/dev/null; then
+    # https://www.shellcheck.net/wiki/SC2145
+    echo '[info] `'"${*}"'`'
+    "${@}"
+    echo
+  else
+    echo "[info] '${x}' not found - skipping"
+    return 1
+  fi
+}
+
+pager='less'
+command -v delta >/dev/null && pager='delta'
+
+_debug-network() {
+  _run-cmd tailscale status
+  _run-cmd warp-cli status
+  _run-cmd ip -c link || _run-cmd ip link
+  _run-cmd ip -c route || _run-cmd ip route
+  _run-cmd ip -c tuntap || _run-cmd ip tuntap
+  _run-cmd ip -c address || _run-cmd ip address
+
+  echo "more commands to run to further debug:"
+  echo "- \`ip -c neigh\`"
+  echo "- \`sudo ip -c -d tuntap\`"
+
+  echo '[info] there is also `'"debug-resolve"' example.com` that you can run'
+}
+
+_debug-network "${@}" | ${pager}
