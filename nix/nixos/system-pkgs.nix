@@ -31,6 +31,8 @@ let
     drm_info # Small utility to dump info about DRM devices
     kmod # for `modinfo`
     file # A program that shows the type of files
+    # with the below, no more missing entries regarding system calls
+    man-pages # Linux development manual pages
   ];
   hardware-support = with pkgs; [
     glmark2 # OpenGL (ES) 2.0 benchmark
