@@ -7,7 +7,8 @@
 {
   virtualisation.podman.enable = true;
 
-  environment.systemPackages = [
-    pkgs.toolbox # this is not necessary but why not
+  environment.systemPackages = with pkgs; [
+    toolbox # this is not necessary but why not
+    podman-compose # An implementation of docker-compose with podman backend
   ];
 }
