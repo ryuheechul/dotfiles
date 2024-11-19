@@ -189,7 +189,7 @@ _tag navi
 
 function should_skip_loading_base16_shell()
 {
-  if is-ssh || test -n "${INSIDE_EMACS}" || test -n "${VIMRUNTIME}" ; then
+  if is-ssh || test -n "${INSIDE_EMACS}" || test -n "${VIMRUNTIME}" || test -n "${NVIM}" ; then
     return 0 # true
   else
     return 1 # false
@@ -211,9 +211,30 @@ else
   export BASE16_THEME="$(current-base16)"
 
   source ~/.base16_theme
+
+  _tag base16
 fi
 
-_tag base16
+
+# detect podman only environment and make it easy for other apps like `lazydocker` or `../../nix/pkgs/custom/termimagenator.nix` (which relies on docker) to work
+if test -z "${DOCKER_HOST}" && test -S "${XDG_RUNTIME_DIR}/podman/podman.sock" && which docker | xargs readlink -f | egrep 'podman$' >/dev/null; then
+  # running `systemctl --user start podman.socket` (once) will be required for "${XDG_RUNTIME_DIR}/podman/podman.sock" to exist
+  export DOCKER_HOST="unix://${XDG_RUNTIME_DIR}/podman/podman.sock"
+  if test -S /run/docker.sock; then
+    echo "[INFO] \$DOCKER_HOST is set to '${DOCKER_HOST}'"
+    echo "[WARN] \`/run/docker.sock\` still exists" 
+    if readlink -f /run/docker.sock | egrep 'podman.sock$' >/dev/null; then
+      echo "[WARN] and it points to $(readlink -f /run/docker.sock)"
+    fi
+    echo "[INFO] you might want to delete \`/run/docker.sock\` file if it's uncollected garbage from an inactive (rootful) docker daemon"
+    echo "[INFO] you can find this error message by running \`show-docker-host-err-message\`"
+    alias show-docker-host-err-message="cat \"${my_zsh_d}/my_addons/shell_ext\""
+    sleep 2
+  fi
+
+  _tag podman_docker_shim
+fi
+
 
 # although home-manager might enable this,
 # it's also ignored by ../../nix/home/programs/shells.nix

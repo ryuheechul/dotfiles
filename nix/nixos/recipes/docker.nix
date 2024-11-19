@@ -3,7 +3,10 @@
 {
   imports = [ ./podman.nix ];
   virtualisation.podman.dockerCompat = true;
+  # run `systemctl --user start podman.socket` in case providing the socket API (e.g. for `lazydocker` or `../../pkgs/custom/termimagenator.nix`);
+  # setting $DOCKER_HOST will be assisted by `../../../zsh/my_addons/shell_ext` as long as the socket is active
 }
+
 # unfortunately, the below is not feasible for my setup due to the use of `systemd-resolved` - https://github.com/NixOS/nixpkgs/issues/231191
 # hence just enable the compat for now until the issue is resolved (maybe docker will chose pasta network as default one day just like podman?)
 

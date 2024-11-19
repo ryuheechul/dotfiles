@@ -14,7 +14,7 @@ source "${znap_path}/znap.zsh"
 # export STARSHIP_LOG=trace
 _evalcache starship init zsh # it used to be at ./shell_ext but moved here to show prompt quickly
 # `znap prompt` makes your prompt visible in just 15-40ms!
-znap prompt
+znap prompt # comment this to prevent any debug messages to disappear
 
 ## `znap source` automatically downloads and starts your plugins.
 

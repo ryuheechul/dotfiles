@@ -7,9 +7,13 @@ let
   user =
     # groups might be reflected only after re-login
     let
+      # check `./recipes/podman-rootful-docker.nix` for more info
+      is-rootful-podman-used-in-place-of-docker =
+        config.virtualisation.podman.dockerSocket.enable && !config.virtualisation.docker.enable;
       groups =
         [ ]
         ++ pkgs.lib.optionals config.virtualisation.docker.enable [ "docker" ]
+        ++ pkgs.lib.optionals is-rootful-podman-used-in-place-of-docker [ "podman" ]
         ++ pkgs.lib.optionals config.services.syncthing.enable [ "syncthing" ]
         ++ pkgs.lib.optionals config.virtualisation.libvirtd.enable [
           "libvirtd"
