@@ -402,6 +402,8 @@ is-nixos \
 is-linux && alias quickreboot='sudo systemctl kexec'
 
 # commandify
+alias neofetch='fastfetch'
+alias fetch='neofetch; ipfetch'
 alias reenter='cd ~ && cd -'
 alias fulltimezsh='FORCE_LOAD_MY_ZSH_STUFF=1 timezsh'
 alias vzshrc='nvim ~/.local.zshrc ~/.zlogin ~/.zshenv ~/.zshrc'
