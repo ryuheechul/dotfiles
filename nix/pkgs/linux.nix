@@ -16,6 +16,7 @@ with pkgs;
     bridge-utils # Userspace tool to configure linux bridges (deprecated in favour or iproute2)
     nmap # A free and open source utility for network discovery and security auditing
     ed # An implementation of the standard Unix editor
+    toolbox # Tool for containerized command line environments on Linux
     distrobox # Wrapper around podman or docker to create and start containers
     # FYI, waypipe actually seems to be slow (at the time of writing) on its own even with a local socket like below without any network overhead (e.g. ssh)
     # I didn't know this and I tried to increase the speed between two machines and only later I tried sshing to localhost and it was still slow with much faster network (~40 Gbits/sec - similar lagginess compare to ~200 Mbits/sec) that's when I tried it without any network overhead like below
