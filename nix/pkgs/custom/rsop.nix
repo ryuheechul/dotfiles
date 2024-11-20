@@ -5,19 +5,20 @@
 # https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/rust.section.md
 { pkgs }:
 
-with pkgs; rustPlatform.buildRustPackage rec {
+with pkgs;
+rustPlatform.buildRustPackage rec {
   pname = "rsop";
-  version = "1.3.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = pname;
     rev = "${version}";
 
-    sha256 = "sha256-GaG0Z4CPsH0D9eor919NWAy3ULiSLJcn6d2XwzVHU2g=";
+    sha256 = "sha256-DbAtCExLcH6CxVmfiY0komGDvtLbDJsGCVfKeoSrOfo=";
   };
 
-  cargoSha256 = "sha256-I9DM/gtB8QYY21k9MJEFW+KW2HArguDfHCfObHzuJL0=";
+  cargoHash = "sha256-fwtJrIgquGaz3BjZv8noN7FjBIpWdVnufwMNvBQGLQo=";
 
   postInstall = ''
     ln -rs "$out"/bin/rs{op,o}

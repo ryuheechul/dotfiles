@@ -184,4 +184,6 @@ ln -sf "${HOME}/.SpaceVim" "${HOME}/.vim"
 # wudo in case of WSL
 test -n "${WSL_DISTRO_NAME}" && git clone https://github.com/Chronial/wsl-sudo.git "${HOME}/.wsl-sudo"
 
+cat "${dfs_rhc}/bootstrap/local.zshrc.template" >>"${HOME}/.local.zshrc"
+
 echo "configuration.sh seemed to have run successfully!"

@@ -1,0 +1,85 @@
+# vim: set ft=zsh:
+
+################################################
+# this is set (most likely) by `~/.config/dfs-rhc/bootstrap/local.zshrc.template`
+# motivation:
+# - keep the default experience as slim as possible by excluding some of the packages and plugins
+#   - it allows it to be
+#     - slightly less opinionated
+#     - faster to install
+#     - more resilient to unexpected failure points (at least for initial bootstrapping)
+#       - as subsequent installing (of more packages and plugins) will only happen later
+# - but maintain knobs to easier enable more stuff
+#
+# usage:
+# - uncomment the ones you want to enable
+# - comment the ones you don't
+# - some of them come as uncomment by default if it's likely to be uncommented most of the time anyway
+#
+# todo: maybe avoid using env vars and find a proper and consistent way to achieve the same things
+################################################
+
+export NIXPKGS_ALLOW_UNFREE=1
+
+# some of the MY_NIX_EXTRA is not necessary for nixos
+
+# export MY_NIX_EXTRA_CI=1
+export MY_NIX_EXTRA_GIT=1
+export MY_NIX_EXTRA_BAT=1
+# export MY_NIX_EXTRA_AWS=1
+# export MY_NIX_EXTRA_TAG=1
+# export MY_NIX_EXTRA_K8S=1
+# export MY_NIX_EXTRA_SSH=1
+# export MY_NIX_EXTRA_LIMA=1
+# export MY_NIX_EXTRA_HIRED=1
+export MY_NIX_EXTRA_DEVENV=1
+# export MY_NIX_EXTRA_NETWORK=1
+# export MY_NIX_EXTRA_EXERCISM=1
+# export MY_NIX_EXTRA_TERRAFORM=1
+# export MY_NIX_EXTRA_NOTCURSES=1
+# export MY_NIX_EXTRA_TAILSCALE=1
+# export MY_NIX_EXTRA_LINUX_HOTSPOT=1
+# export MY_NIX_EXTRA_NIGHTLY_ALACRITTY=1
+
+# export MY_NIX_EXTRA_LANG_GO=1
+# export MY_NIX_EXTRA_LANG_NIM=1
+# export MY_NIX_EXTRA_LANG_SQL=1
+# export MY_NIX_EXTRA_LANG_RUST=1
+# export MY_NIX_EXTRA_LANG_WASM=1
+# export MY_NIX_EXTRA_LANG_JAVA=1
+# export MY_NIX_EXTRA_LANG_JANET=1
+# export MY_NIX_EXTRA_LANG_ERLANG=1
+# export MY_NIX_EXTRA_LANG_GRAALVM=1
+# export MY_NIX_EXTRA_LANG_PYTHON_JUPYTER=1
+
+# export MY_NIX_OVERRIDE_EMACS_29=1
+# export MY_NIX_OVERRIDE_EMACS_STABLE=1
+# export MY_NIX_OVERLAY_NEOVIM_NIGHTLY=1
+
+# it affects the GUI version of Emacs - requires the desktop GUI session to restart
+export MY_EMACS_FONT_SIZE=17 # edit this to fit each device
+
+# export my_nvim_ghost=1
+# export my_nvim_use_sg=1
+export my_nvim_tabnine=1
+# export my_nvim_copilot=1
+# export my_nvim_jira_url=1
+export my_nvim_enable_drop=1
+# export my_nvim_visual_multi=1
+# export my_nvim_winbar_barbecue=1
+# export my_nvim_theme_solarized=1
+# export my_nvim_syntax_tree_surfer=1
+# export my_nvim_forget_line_number=1
+# export my_nvim_no_cursor_pinpoint=1
+# export my_nvim_plugins_default_to_lazy=1
+
+# export my_zsh_plugin_zsh_autocomplete=1
+
+# export PREFER_LOCAL_DISPLAY_AS_FALLBACK=1
+
+################################################
+# end of pre populated stuff from the template #
+#                                              #
+# now you can write your own other stuff below #
+################################################
+

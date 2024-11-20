@@ -26,5 +26,5 @@ rustPlatform.buildRustPackage rec {
     ./update-cargo-toml.patch
   ];
 
-  cargoSha256 = "sha256-FW7qOJhFIsoRMfdCFpk0kIYHv0Yo30fhbvsFmD0RC6A=";
+  cargoHash = "sha256-FW7qOJhFIsoRMfdCFpk0kIYHv0Yo30fhbvsFmD0RC6A=";
 }
