@@ -30,6 +30,7 @@ exit 0
 
 ## now this is where I can list actual runnable commands that is useful to run more about the system; it's sort of like personal mini tldr.sh
 
+sudo -l                               # debug `/etc/sudoers`
 uname -a                              # print system information
 echo "${XDG_DATA_DIRS}" | tr ':' '\n' # print XDG_DATA_DIRS
 bootctl status                        # shows brief information about the system firmware
@@ -80,13 +81,19 @@ lsmod # show the status of modules in the linux kernel
 fi_info # libfabric
 glxinfo -B
 vainfo
+groups   # print groups
+id       # print uid and gid and groups
+id root  # print uid and gid and groups for root user
 who      # show who is logged on
 tty      # print the file name of the terminal connected to standard input
 stty -a  # print terminal line settings
 loginctl # list login sessions
 loginctl show-user
 tldr loginctl
-portablectl # https://systemd.io/PORTABLE_SERVICES/
+cat /proc/self/uid_map      # to determine fake root
+cat /etc/subuid /etc/subgid # to determine fake root
+capsh --print               # https://stackoverflow.com/questions/35469038/how-to-find-out-what-linux-capabilities-a-process-requires-to-work
+portablectl                 # https://systemd.io/PORTABLE_SERVICES/
 resolvectl
 sudo powertop # see power consumption
 
@@ -97,6 +104,8 @@ ss -xlp # list unix sockets
 sudo libinput list-devices
 xinput --list
 swapon -s # summary of swaps
+man hier  # explains the filesystem hierarchy of "typical" linux systems - https://unix.stackexchange.com/questions/176215/difference-between-dev-and-sys
+cat /etc/tmpfiles.d/static-nodes-permissions.conf
 cat /proc/filesystems
 cat /proc/meminfo
 ls /sys/fs/cgroup/ # introspect cgroups
@@ -104,9 +113,14 @@ arp                # show system's ARP cache
 hostname           # print hostname
 hostnamectl        # show system hostname and related information sort of like neofetch
 
+cat /proc/fb # print about which framebuffer is being used
+
 systemctl
 systemctl status
 systemctl status --failed         # will shot nothing if none failed
+systemctl status '*.device'       # related to udev
+systemctl status '*.scope'        # processes that are not managed by systemd
+systemctl --user status '*.scope' # e.g. for waydroid
 systemctl --user show-environment # print environment for the user before I pollute
 systemctl list-unit-files         # discover unitfiles
 systemctl list-dependencies
@@ -145,6 +159,7 @@ gdbus monitor --system --dest org.freedesktop.DBus
 gnome-extensions list
 gnome-extensions list --enabled
 xdg-settings get default-web-browser
+udevadm info --tree         # for debugging udev / devices
 fwupdmgr get-devices | less # print device firmware info
 fwupdmgr security | less
 which tpm2_getcap && sudo tpm2_getcap algorithms # list tpm algorithms
