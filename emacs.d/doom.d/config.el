@@ -60,6 +60,12 @@
       ;; - https://github.com/ryanoasis/nerd-fonts/commit/8b3257d6766f40c98289c6193209e0700a4cc3d0
       doom-unicode-font doom-font)
 
+;; remapping https://github.com/doomemacs/doomemacs/blob/master/modules/config/default/%2Bevil-bindings.el for better zoom experience;
+;; by stealing the shortcut from 'text-scale-[increase|decrease]'
+(after! evil
+  (map! :n "C-=" #'doom/increase-font-size
+        :n "C--" #'doom/decrease-font-size))
+
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
