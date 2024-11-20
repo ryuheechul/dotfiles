@@ -3,13 +3,13 @@
 ## set path for nix otherwise tmux server can't access some binaries like `fpp`
 
 if [ -z "$(command -v nix)" ]; then
-  [ -f ~/.nix-profile/etc/profile.d/nix.sh ] && \
+  [ -f ~/.nix-profile/etc/profile.d/nix.sh ] &&
     . ~/.nix-profile/etc/profile.d/nix.sh
 fi
 
 # try another way next
 if [ -z "$(command -v nix)" ]; then
-  [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ] && \
+  [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ] &&
     . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 fi
 
@@ -23,4 +23,4 @@ SHELL=$(which zsh)
 session_name="${1:-default}"
 
 # recommended via https://stackoverflow.com/a/49134974/1570165
-tmux new-session -A -s "${session_name}"
+exec tmux new-session -A -s "${session_name}"

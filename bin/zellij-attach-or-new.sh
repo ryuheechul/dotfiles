@@ -3,13 +3,13 @@
 ## set path for nix otherwise tmux/zellij server can't access some binaries like `fpp`
 
 if [ -z "$(command -v nix)" ]; then
-  [ -f ~/.nix-profile/etc/profile.d/nix.sh ] && \
+  [ -f ~/.nix-profile/etc/profile.d/nix.sh ] &&
     . ~/.nix-profile/etc/profile.d/nix.sh
 fi
 
 # try another way next
 if [ -z "$(command -v nix)" ]; then
-  [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ] && \
+  [ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ] &&
     . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 fi
 
@@ -22,4 +22,4 @@ fi
 SHELL=$(which zsh)
 # set it `default` as default sessions name when no name is given
 session_name="${1:-default}"
-zellij a -c "${session_name}"
+exec zellij a -c "${session_name}"

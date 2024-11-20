@@ -4,7 +4,7 @@ let
   startup_session_file = pkgs.writeTextFile {
     name = "kitty_startup_session";
     text = ''
-      launch zsh -c 'tmux-attach kitty'
+      launch zsh -c 'exec-tmux-attach kitty'
     '';
   };
   # below works the same way as above for current purpose
@@ -47,7 +47,10 @@ in
     exec = "kitty --start-as=fullscreen"; # this is the main fix and the rest is to conform with original
     icon = "kitty";
     comment = "Fast, feature-rich, GPU based terminal";
-    categories = [ "System" "TerminalEmulator" ];
+    categories = [
+      "System"
+      "TerminalEmulator"
+    ];
     settings = {
       TryExec = "kitty";
     };
