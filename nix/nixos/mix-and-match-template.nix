@@ -12,6 +12,7 @@ username:
     [
       # hardware/device specifics
       ./recipes/firmware.nix
+      ./recipes/droidcam.nix
       (import ./recipes/meta/tpm.nix username)
       # virtualisations
       ./recipes/docker.nix

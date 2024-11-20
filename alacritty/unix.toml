@@ -1,7 +1,4 @@
 # ref: `man 5 alacritty`
-
-live_config_reload = true
-
 [colors]
 draw_bold_text_with_bright_colors = true
 
@@ -41,7 +38,7 @@ action = "Paste"
 key = "Insert"
 mods = "Shift"
 
-[shell]
+[terminal.shell]
 args = ["zsh", "-c", "tmux-attach alacritty"]
 program = "env"
 
@@ -49,3 +46,9 @@ program = "env"
 decorations = "full"
 startup_mode = "Fullscreen"
 title = "Alacritty"
+
+[general]
+
+live_config_reload = true
+
+[terminal]

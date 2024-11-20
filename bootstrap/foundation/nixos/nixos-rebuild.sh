@@ -10,11 +10,6 @@ test -n "${WSL_DISTRO_NAME}" && sudo mount -o remount,rw /tmp/.X11-unix
 
 ./gen-configuration.sh
 
-# to prevent CPU being too busy during paralleled compilations (happened with building a custom kernel)
-# I rather take time than compilations taking complete control especially with low resource machines
-# https://nixos.org/manual/nix/stable/advanced-topics/cores-vs-jobs.html
-nix_build_cores="$(getconf _NPROCESSORS_ONLN | xargs -I _ expr _ / 2)"
-
 nix_d="../../../nix"
 path_for="${nix_d}/niv-shim/bin/nix-path-via-niv.sh"
 # to use the source from a deterministic way (powered by niv) instead of relying on a channel
@@ -31,8 +26,8 @@ function nom {
   ../../../nix/bin/nix-shell.sh -p nix-output-monitor --command "nom"
 }
 
-sudo NIX_BUILD_CORES="${nix_build_cores}" nix_path="${nix_path}" action=${action} \
-  bash -c 'NIX_PATH="${nix_path}" nixos-rebuild ${action} --max-jobs 1' |& nom
+sudo --preserve-env=SSH_AUTH_SOCK,NIX_CONFIG,NIX_BUILD_CORES nix_path="${nix_path}" action="${action}" \
+  bash -c 'NIX_PATH="${nix_path}" nixos-rebuild ${action}' |& nom
 # wrapping once more like above because below doesn't work as $NIX_PATH somehow get overridden
 # `sudo NIX_BUILD_CORES="${nix_build_cores}" NIX_PATH="${nix_path}" nixos-rebuild ${action} --max-jobs 1`
 

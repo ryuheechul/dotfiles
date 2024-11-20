@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# use this to debug the evaluation of $NIX_CONFIG or files mentioned in `man nix.conf`
+# optionally you can run this command with `sudo` as well to see it from a root perspective
+
+{
+  nix --extra-experimental-features nix-command config show
+  echo "run \`man nix.conf\` to debug further"
+} | less

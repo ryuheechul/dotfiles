@@ -82,12 +82,8 @@ with lib.hm.gvariant;
       enabled-extensions = [
         # https://search.nixos.org/packages?show=gnomeExtensions.pop-shell
         "pop-shell@system76.com"
-        # https://search.nixos.org/packages?show=gnomeExtensions.pop-launcher-super-key
-        "pop-launcher-super-key@ManeLippert"
         # https://search.nixos.org/packages?show=gnomeExtensions.night-theme-switcher
         "nightthemeswitcher@romainvigier.fr"
-        # https://search.nixos.org/packages?show=gnomeExtensions.gesture-improvements
-        "gestureImprovements@gestures"
         # https://extensions.gnome.org/extension/6048/peek-top-bar-on-fullscreen/
         "peek-top-bar-on-fullscreen@marcinjahn.com"
         # https://extensions.gnome.org/extension/841/freon/
