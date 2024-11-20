@@ -1,9 +1,17 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 
 let
   env-vars = config.home.sessionVariables;
+  nix-index-enable = (import ../../pkgs/custom/nix-index-database).default;
 in
 {
+  imports = [
+    # in place of `programs.command-not-found.enable` or `programs.nix-index.enable`; 
+    # powered by https://github.com/nix-community/nix-index-database
+    nix-index-enable
+    # https://github.com/bennofs/nix-index#usage-as-a-command-not-found-replacement
+  ];
+
   # compatibility with linux inspired by https://github.com/marlonrichert/zsh-snap/blob/de5f789de661883bc118d96c8fd862935b6d3364/scripts/init.zsh#LL28-L31
   xdg = {
     # `cat ~/.nix-profile/etc/profile.d/hm-session-vars.sh` to debug
@@ -35,16 +43,6 @@ in
   home.shellAliases = {
     q = "exit";
     printpath = ''echo ''${PATH} | tr ":" "\n"'';
-  };
-
-  programs.command-not-found = {
-    enable = !pkgs.stdenv.isDarwin;
-  };
-
-  # fallback to nix-index on darwin in place of command-not-found
-  # https://github.com/bennofs/nix-index#usage-as-a-command-not-found-replacement
-  programs.nix-index = {
-    enable = pkgs.stdenv.isDarwin;
   };
 
   programs.bash = {
