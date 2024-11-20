@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# this is just a shim to help my muscle memory with open from macOS
+xdg-open "$@"
