@@ -5,3 +5,8 @@ root = true
 [*]
 indent_style = space
 indent_size = 2
+
+# inspired by https://github.com/Dreamscapes/makefiles/blob/master/.editorconfig
+[{Makefile,**.mk}]
+# Use tabs for indentation (Makefiles require tabs)
+indent_style = tab
