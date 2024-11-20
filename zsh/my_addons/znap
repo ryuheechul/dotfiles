@@ -14,7 +14,10 @@ source "${znap_path}/znap.zsh"
 # export STARSHIP_LOG=trace
 _evalcache starship init zsh # it used to be at ./shell_ext but moved here to show prompt quickly
 # `znap prompt` makes your prompt visible in just 15-40ms!
-znap prompt # comment this to prevent any debug messages to disappear
+
+# comment this to prevent any debug messages to disappear or to check any other glitches due to this hack;
+# e.g. entering distrobox prints prompts twice on entering - skip this for distrobox as it takes some time anyway
+printenv DISTROBOX_ENTER_PATH >/dev/null || znap prompt
 
 ## `znap source` automatically downloads and starts your plugins.
 

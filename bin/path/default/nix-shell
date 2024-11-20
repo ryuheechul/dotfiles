@@ -25,11 +25,16 @@ path_for="${nix_d}/niv-shim/bin/nix-path-via-niv.sh"
 nix_path="$("${path_for}" "$(choose_nixpkgs)")"
 alt_hm="$("${path_for}" home-manager)"
 
-# try this first
-bin_nix_shell=/nix/var/nix/profiles/default/bin/nix-shell
+path_to_search_excluding_the_self_override="$(printenv PATH | tr ':' '\n' | grep -E -v "${HOME}.*/bin/path/default" | tr '\n' ':' | sed 's/:$/\n/')"
+bin_nix_shell="$(PATH="${path_to_search_excluding_the_self_override}" which nix-shell)"
 
-# fall back to this one for NixOS
-test -x "${bin_nix_shell}" || bin_nix_shell=/run/current-system/sw/bin/nix-shell
+if ! test -x "${bin_nix_shell}"; then
+  echo "[ERROR] '${bin_nix_shell}' is not executable"
+fi
+
+if test "$0" = "${bin_nix_shell}"; then
+  echo "[ERROR] failed to find the real \`nix-shell\` and aborting"
+fi
 
 # `-I "nixpkgs=${alt_nixpkgs}[:...]" seems to have a trouble when installing home-manager on NixOS
 # thus altering $NIX_PATH instead
