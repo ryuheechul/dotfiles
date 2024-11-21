@@ -3,7 +3,8 @@
 let
   env-vars = config.home.sessionVariables;
   # nix-index-enable = (import ../../pkgs/custom/nix-index-database).default;
-  nix-index-enable = import ../../pkgs/custom/alt-nix-index-database; # favor non-flake glue
+  # nix-index-enable = import ../../pkgs/custom/alt-nix-index-database; # favor non-flake glue
+  nix-index-enable = import ../../pkgs/custom/alt-nid; # favor a even simpler version
 in
 {
   imports = [

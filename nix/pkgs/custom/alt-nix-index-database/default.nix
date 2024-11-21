@@ -12,3 +12,5 @@ let
   result = recipe.defaultNix;
 in
 result.hmModules.nix-index
+
+# NOTE: now there is even simpler version at `../alt-nid`
