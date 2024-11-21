@@ -4,7 +4,7 @@ let
   startup_session_file = pkgs.writeTextFile {
     name = "kitty_startup_session";
     text = ''
-      launch zsh -c 'exec-tmux-attach kitty'
+      launch zsh -c 'source ~/.base16_theme; exec-tmux-attach kitty'
     '';
   };
   # below works the same way as above for current purpose

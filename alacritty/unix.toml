@@ -39,7 +39,7 @@ key = "Insert"
 mods = "Shift"
 
 [terminal.shell]
-args = ["zsh", "-c", "exec-tmux-attach alacritty"]
+args = ["zsh", "-c", "source ~/.base16_theme; exec-tmux-attach alacritty"]
 program = "env"
 
 [window]
