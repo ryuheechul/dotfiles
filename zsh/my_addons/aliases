@@ -195,7 +195,7 @@ alias ps='grc ps auxww'
 # better than bare info but still not the best
 alias info='info --vi-keys'
 # ignore case on searching with keyword
-alias man='man -i'
+alias man='man -i'; fastcommandcheck batman && alias man='batman'
 # replace htop with bottom
 alias htop='btm -b'
 # overwrite essential stuff
