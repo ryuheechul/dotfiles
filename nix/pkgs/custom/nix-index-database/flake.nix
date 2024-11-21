@@ -1,3 +1,5 @@
+# NOTE: now there is another version that does the same thing without having to write a flake at ../alt-nix-index-database
+
 {
   description = "nix-index for home-manager via nix-index-database";
 
