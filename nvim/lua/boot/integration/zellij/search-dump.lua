@@ -21,8 +21,11 @@ vim.api.nvim_create_autocmd('VimEnter', {
     })
 
     vim.defer_fn(function()
+      -- rely on 'ggandor/leap.nvim' as this resemble tmux-jump more
+      vim.cmd [[ normal H ]] -- move cursor to the top of the viewport
+      require('leap').leap {} -- same as `normal s` except `normal s` somehow doesn't work
       -- https://www.reddit.com/r/neovim/comments/104lc26/how_can_i_press_escape_key_using_lua/
-      vim.api.nvim_feedkeys('/', 'n', false)
+      -- consider this as a secondary choice, `vim.api.nvim_feedkeys('/', 'n', false)`
     end, 100)
   end,
   group = searchGrp,
