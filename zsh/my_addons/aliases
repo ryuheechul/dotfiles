@@ -237,11 +237,21 @@ alias l="ls -lah -g --git"
 _nclr () { local j; for ((j = 0; j <= "${1:-1}"; j++ )); do tput cuu1; done; tput ed; }
 
 # quick way to navigate tmux windows - see also ../../nvim/lua/plugins/keymaps.lua
-alias wt='tmux choose-tree; _nclr 2'
-alias wn='tmux new-window; _nclr 2'
-alias wp='tmux split-window -h; _nclr 2'
-alias w/='tmux split-window -h; _nclr 2'
-alias w-='tmux split-window -v; _nclr 2'
+
+if test -n "${TMUX_PANE}"; then
+  alias wt='tmux choose-tree; _nclr 2'
+  alias wn='tmux new-window; _nclr 2'
+  alias wp='tmux split-window -h; _nclr 2'
+  alias w/='tmux split-window -h; _nclr 2'
+  alias w-='tmux split-window -v; _nclr 2'
+fi
+if test -n "${ZELLIJ_SESSION_NAME}"; then
+  alias wt='zellij action launch-or-focus-plugin -f sessionpicker; _nclr 2'
+  alias wn='zellij action new-tab; _nclr 2'
+  alias wp='zellij action new-pane; _nclr 2'
+  alias w/='zellij action new-pane -d "right"; _nclr 2'
+  alias w-='zellij action new-pane -d "down"; _nclr 2'
+fi
 
 # this overwrites existing gap which is for git apply
 alias gap='git add -p'

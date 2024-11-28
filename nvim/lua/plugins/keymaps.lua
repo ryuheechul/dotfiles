@@ -133,9 +133,23 @@ local config = function()
       ['-'] = { cmdify 'split', 'split window horizontally' },
       -- few convenient tmux controls - see also ../../../zsh/my_addons/aliases
       -- no more ctrl+a[key] when not necessary!
-      t = { cmdify '!tmux choose-tree', 'choose tmux tree' },
-      n = { cmdify '!tmux new-window', 'new tmux window' },
-      p = { cmdify '!tmux split-window -h', 'new tmux panel' },
+      t = {
+        cmdify(
+          'silent exec '
+            .. '"!'
+            .. (vim.env.ZELLIJ_SESSION_NAME and 'zellij action launch-or-focus-plugin -f sessionpicker' or 'tmux choose-tree')
+            .. '"'
+        ),
+        'choose (t)mux tree',
+      },
+      n = {
+        cmdify(vim.env.ZELLIJ_SESSION_NAME and '!zellij action new-tab' or '!tmux new-window'),
+        'new (t)mux window',
+      },
+      p = {
+        cmdify(vim.env.ZELLIJ_SESSION_NAME and '!zellij action new-pane' or '!tmux split-window'),
+        'new (t)mux panel',
+      },
     },
     b = {
       name = '+Buffers',

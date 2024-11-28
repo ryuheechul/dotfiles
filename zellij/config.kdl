@@ -180,6 +180,13 @@ keybinds {
       // WriteChars "/"; // <- this doesn't work due to not be able to wait before seding the char;
       // but don't worry ../nvim/lua/boot/integration/zellij/search-dump.lua will take care the rest with a even better experience
     }
+    bind "s" { LaunchOrFocusPlugin "sessionpicker" {
+        floating true
+        move_to_focused_tab true
+        show_plugins false
+      };
+      SwitchToMode "Locked";
+    }
   }
   shared_except "locked" {
     bind "Ctrl g" { SwitchToMode "Locked"; }
@@ -313,6 +320,8 @@ plugins {
   plugin-manager location="zellij:plugin-manager"
 
   vim-zellij-navigator location="https://github.com/hiasr/vim-zellij-navigator/releases/download/0.2.1/vim-zellij-navigator.wasm"
+  // there is an issue - https://github.com/laperlej/zellij-choose-tree/issues/3
+  sessionpicker location="https://github.com/laperlej/zellij-choose-tree/releases/download/v0.4.1/zellij-choose-tree.wasm"
 }
 
 // Plugins to load in the background when a new session starts
