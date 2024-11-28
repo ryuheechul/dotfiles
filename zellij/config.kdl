@@ -62,7 +62,7 @@ keybinds {
     bind "r" { SwitchToMode "RenameTab"; TabNameInput 0; }
     bind "h" "Left" "Up" "k" { GoToPreviousTab; }
     bind "l" "Right" "Down" "j" { GoToNextTab; }
-    bind "n" { NewTab; SwitchToMode "Normal"; }
+    bind "n" { NewTab; SwitchToMode "Locked"; }
     bind "x" { CloseTab; SwitchToMode "Normal"; }
     bind "s" { ToggleActiveSyncTab; SwitchToMode "Normal"; }
     bind "1" { GoToTab 1; SwitchToMode "Normal"; }
@@ -136,12 +136,22 @@ keybinds {
     bind "Right" { MoveFocus "Right"; SwitchToMode "Locked"; }
     bind "Down" { MoveFocus "Down"; SwitchToMode "Locked"; }
     bind "Up" { MoveFocus "Up"; SwitchToMode "Locked"; }
-    bind "h" { MoveFocus "Left"; SwitchToMode "Locked"; }
-    bind "l" { MoveFocus "Right"; SwitchToMode "Locked"; }
-    bind "j" { MoveFocus "Down"; SwitchToMode "Locked"; }
-    bind "k" { MoveFocus "Up"; SwitchToMode "Locked"; }
+    // the chunk below is no longer needed thanks to vim-zellij-navigator
+    // ```
+    // bind "h" { MoveFocus "Left"; SwitchToMode "Locked"; }
+    // bind "l" { MoveFocus "Right"; SwitchToMode "Locked"; }
+    // bind "j" { MoveFocus "Down"; SwitchToMode "Locked"; }
+    // bind "k" { MoveFocus "Up"; SwitchToMode "Locked"; }
+    // ```
     bind "o" "Tab" { FocusNextPane; }
     bind "d" { Detach; }
+    // mimic https://github.com/schasse/tmux-jump
+    bind "j" {
+      EditScrollback;
+      SwitchToMode "Locked";
+      // WriteChars "/"; // <- this doesn't work due to not be able to wait before seding the char;
+      // but don't worry ../nvim/lua/boot/integration/zellij/search-dump.lua will take care the rest with a even better experience
+    }
   }
   shared_except "locked" {
     bind "Ctrl g" { SwitchToMode "Locked"; }
@@ -177,6 +187,78 @@ keybinds {
   }
   shared_except "tmux" {
     bind "Ctrl b" { SwitchToMode "Tmux"; }
+
+    // vim-zellij-navigator
+    bind "Ctrl h" {
+      MessagePlugin "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.2.1/vim-zellij-navigator.wasm" {
+        name "move_focus_or_tab";
+        payload "left";
+
+        // Plugin Configuration
+        move_mod "ctrl"; // Optional, should be added on every command if you want to use it
+      };
+      SwitchToMode "locked";
+    }
+    bind "Ctrl j" {
+      MessagePlugin "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.2.1/vim-zellij-navigator.wasm" {
+        name "move_focus";
+        payload "down";
+
+        move_mod "ctrl";
+      };
+      SwitchToMode "locked";
+    }
+    bind "Ctrl k" {
+      MessagePlugin "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.2.1/vim-zellij-navigator.wasm" {
+        name "move_focus";
+        payload "up";
+
+        move_mod "ctrl";
+      };
+      SwitchToMode "locked";
+    }
+    bind "Ctrl l" {
+      MessagePlugin "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.2.1/vim-zellij-navigator.wasm" {
+        name "move_focus_or_tab";
+        payload "right";
+
+        move_mod "ctrl";
+      };
+      SwitchToMode "locked";
+    }
+    bind "Alt h" {
+      MessagePlugin "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.2.1/vim-zellij-navigator.wasm" {
+        name "resize";
+        payload "left";
+
+        resize_mod "alt"; // Optional, should be added on every command if you want to use it
+      };
+    }
+    bind "Alt j" {
+      MessagePlugin "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.2.1/vim-zellij-navigator.wasm" {
+        name "resize";
+        payload "down";
+
+        resize_mod "alt";
+      };
+    }
+    bind "Alt k" {
+      MessagePlugin "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.2.1/vim-zellij-navigator.wasm" {
+        name "resize";
+        payload "up";
+
+        resize_mod "alt";
+      };
+    }
+    bind "Alt l" {
+      MessagePlugin "https://github.com/hiasr/vim-zellij-navigator/releases/download/0.2.1/vim-zellij-navigator.wasm" {
+        name "resize";
+        payload "right";
+
+        resize_mod "alt";
+      };
+    }
+    // end of vim zellij vim-zellij-navigator
   }
 }
 

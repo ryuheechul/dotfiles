@@ -77,10 +77,10 @@ return function()
     -- -- see https://github.com/akinsho/toggleterm.nvim/issues/63 for more details
     -- vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
     vim.keymap.set('n', '<esc>', cmdify 'close', opts)
-    vim.keymap.set('t', '<C-h>', cmdify 'TmuxNavigateLeft', opts)
-    vim.keymap.set('t', '<C-j>', cmdify 'TmuxNavigateDown', opts)
-    vim.keymap.set('t', '<C-k>', cmdify 'TmuxNavigateUp', opts)
-    vim.keymap.set('t', '<C-l>', cmdify 'TmuxNavigateRight', opts)
+    vim.keymap.set('t', '<C-h>', cmdify 'NavigatorLeft', opts)
+    vim.keymap.set('t', '<C-j>', cmdify 'NavigatorDown', opts)
+    vim.keymap.set('t', '<C-k>', cmdify 'NavigatorUp', opts)
+    vim.keymap.set('t', '<C-l>', cmdify 'NavigatorRight', opts)
   end
 
   local termGrp = vim.api.nvim_create_augroup('MyTerm', { clear = true })
@@ -92,7 +92,7 @@ return function()
     group = termGrp,
   })
 
-  -- setup an handler to bring the most recent terminal back
+  -- setup a handler to bring the most recent terminal back
   vim.api.nvim_create_autocmd('TermEnter', {
     pattern = 'term://*',
     callback = function()

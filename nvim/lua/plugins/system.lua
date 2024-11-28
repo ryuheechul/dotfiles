@@ -16,7 +16,20 @@ return {
       vim.keymap.set('n', 'q', require 'utils.my-smart-quit', { noremap = true, desc = 'quit smarter' })
     end,
   },
-  { 'christoomey/vim-tmux-navigator', event = 'VimEnter' }, -- navigate with tmux key binding
+  -- { 'christoomey/vim-tmux-navigator', event = 'VimEnter' }, -- navigate with tmux key binding
+  { -- pretty much same as above but also for zellij
+    -- consider switching to when the PR is merged https://github.com/numToStr/Navigator.nvim/pull/35
+    'dynamotn/Navigator.nvim',
+    lazy = true,
+    event = 'VeryLazy',
+    keys = {
+      { '<c-h>', '<cmd>NavigatorLeft<cr>', { silent = true, desc = 'navigate left or zellij tab' } },
+      { '<c-j>', '<cmd>NavigatorDown<cr>', { silent = true, desc = 'navigate down' } },
+      { '<c-k>', '<cmd>NavigatorUp<cr>', { silent = true, desc = 'navigate up' } },
+      { '<c-l>', '<cmd>NavigatorRight<cr>', { silent = true, desc = 'navigate right or zellij tab' } },
+    },
+    opts = {},
+  },
   { -- a great ergonomic terminal customization
     'akinsho/toggleterm.nvim',
     config = require 'plugins.config.term',

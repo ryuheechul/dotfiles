@@ -48,6 +48,7 @@ return {
       -- correct comment character
       ft.set('mermaid', '%%%s')
       ft.set('Earthfile', '#%s')
+      ft.set('kdl', '//%s')
     end,
   },
   { -- kind of like vim-surround but not that enables `ds%` and `cs%` via vim-matchup

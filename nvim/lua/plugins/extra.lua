@@ -74,7 +74,7 @@ return {
   },
   { -- Automatically expand width of the current window. Maximizes and restore it. And all this with nice animations!
     'anuvyklack/windows.nvim',
-    event = 'FocusGained',
+    event = 'VeryLazy',
     -- this plugin basically replaces the plugins below for my use case
     -- 'junegunn/goyo.vim', -- a helper to focus on one window
     -- 'beauwilliams/focus.nvim', -- automatically adjust the size for focused windows
@@ -89,7 +89,7 @@ return {
       local windowsGrp = vim.api.nvim_create_augroup('MyWindowsAG', { clear = true })
       vim.api.nvim_create_autocmd('WinEnter', {
         callback = require('throttle-debounce').throttle_leading(function()
-          vim.cmd [[silent exec "!tmux-zoom"]]
+          vim.cmd [[silent exec "!mux-zoom"]]
         end, 500),
         group = windowsGrp,
       })
