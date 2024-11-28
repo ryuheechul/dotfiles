@@ -235,6 +235,17 @@ if test -z "${DOCKER_HOST}" && test -S "${XDG_RUNTIME_DIR}/podman/podman.sock" &
   _tag podman_docker_shim
 fi
 
+if test -n "${TMUX_PANE}"; then
+  tmux-which-key() { tmux show-wk-menu-root; }
+  zle -N tmux-which-key
+  bindkey -M vicmd " " tmux-which-key
+fi
+if test -n "${ZELLIJ_SESSION_NAME}"; then
+  zellij-which-key() { zellij action switch-mode normal; }
+  zle -N zellij-which-key
+  bindkey -M vicmd " " zellij-which-key
+fi
+_tag mux_which_key
 
 # although home-manager might enable this,
 # it's also ignored by ../../nix/home/programs/shells.nix

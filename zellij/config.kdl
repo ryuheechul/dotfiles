@@ -16,6 +16,7 @@ keybinds {
     // uncomment this and adjust key if using copy_on_select=false
     // bind "Alt c" { Copy; }
     bind "Esc" { SwitchToMode "Locked"; }
+    bind "q" { SwitchToMode "Locked"; }
   }
   locked {
     bind "Ctrl g" { SwitchToMode "Normal"; }
