@@ -19,6 +19,9 @@ zinit light mroth/evalcache
 # this loads zsh-defer faster
 zinit light romkatv/zsh-defer
 
+# 💻 A better and friendly vi(vim) mode plugin for ZSH
+zinit light jeffreytse/zsh-vi-mode # see `../integration/zvm` for my customization
+
 # git aliases like grt
 zinit snippet OMZP::git
 # j to jump around directory

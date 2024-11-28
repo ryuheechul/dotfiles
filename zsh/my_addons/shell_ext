@@ -107,6 +107,12 @@ export FZF_CTRL_T_OPTS='--preview "preview {}"'
 export FZF_ALT_C_COMMAND='fd -t d'
 export FZF_ALT_C_OPTS='--preview "preview {}"'
 
+# # free me from having to hold ctrl before `r` or `t` (since my ctrl act as ESC on tap)
+# bindkey -M vicmd 'r' fzf-history-widget
+# bindkey -M vicmd 't' fzf-file-widget
+# above would work with regular vi-mode but conflict with the advanced zvm
+# now it's taken care of at `../integration/zvm`
+
 # better history search with fzf via https://nixos.wiki/wiki/Fzf
 
 if fastcommandcheck fzf-share; then
@@ -246,6 +252,9 @@ if test -n "${ZELLIJ_SESSION_NAME}"; then
   bindkey -M vicmd " " zellij-which-key
 fi
 _tag mux_which_key
+
+source "${my_zsh_d}/integration/zvm" # `../integration/zvm`
+_tag customize_zvm
 
 # although home-manager might enable this,
 # it's also ignored by ../../nix/home/programs/shells.nix

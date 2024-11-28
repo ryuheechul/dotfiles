@@ -1,0 +1,57 @@
+# vim: set ft=zsh:
+
+# being sourced at `../my_addons/shell_ext`
+
+# Only changing the escape key to `jk` in insert mode, we still
+# keep using the default keybindings `^[` in other modes
+ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
+
+# hight colors that works well with my terminal theme (solarized)
+ZVM_VI_HIGHLIGHT_FOREGROUND=green   # Color name
+ZVM_VI_HIGHLIGHT_BACKGROUND=#e0f6d2 # Hex value - play with https://bizarre-binary.github.io/toys/color
+ZVM_VI_HIGHLIGHT_EXTRASTYLE=bold    # bold
+
+# fix yank/paste to work with system clipboard https://github.com/jeffreytse/zsh-vi-mode/issues/19#issuecomment-1597553775
+
+for f in zvm_kill_line zvm_backward_kill_region zvm_yank zvm_replace_selection zvm_change_surround_text_object zvm_vi_delete zvm_vi_change zvm_vi_change_eol; do
+  eval "$(echo "_$f() {"; declare -f $f | tail -n +2)"
+  eval "$f() { _$f; echo -en \$CUTBUFFER | pbcopy }"
+done
+
+for f in zvm_vi_put_after zvm_vi_put_before; do
+  eval "$(echo "_$f() {"; declare -f $f | tail -n +2)"
+  eval "$f() { CUTBUFFER=\$(pbpaste); _$f; zvm_highlight clear }"
+done
+
+my_zvm_kill_line() {
+  zvm_kill_line
+  zvm_enter_insert_mode
+}
+
+my-fzf-history-widget() {
+  fzf-history-widget
+  zvm_append_eol
+}
+
+my-fzf-file-widget() {
+  CURSOR=$((CURSOR+1)) # in case the cursor is not a space, advance the cursor to the right (learned from zvm_append_eol and https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html or `man zshzle`)
+  # another safety to add more space to avoid any case of not having any space with previous word which affects `fzf-file-widget` below
+  LBUFFER="${(MS)LBUFFER##[[:graph:]]*[[:graph:]]} "
+  # the simple `LBUFFER="${LBUFFER} "` is trimmed via https://stackoverflow.com/a/68288735/1570165
+
+  fzf-file-widget
+  zvm_enter_insert_mode # this allows to start editing normal right away
+}
+
+# bindkey -M vicmd 't' fzf-file-widget
+
+# https://github.com/jeffreytse/zsh-vi-mode
+zvm_after_lazy_keybindings() {
+  zvm_define_widget my_zvm_kill_line
+  zvm_define_widget my-fzf-history-widget
+  zvm_define_widget my-fzf-file-widget
+
+  zvm_bindkey vicmd  'q' my_zvm_kill_line # `p` to bring back the killed line
+  zvm_bindkey vicmd '/' my-fzf-history-widget # aka ctrl+r
+  zvm_bindkey vicmd  't' my-fzf-file-widget   # aka ctrl+t
+}
