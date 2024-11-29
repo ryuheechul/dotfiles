@@ -88,47 +88,7 @@ fi
 
 _tag vivid
 
-# fzf + fd # fd ignores .gitignore files/directories by default
-# default
-export FZF_DEFAULT_COMMAND='fd --type f'
-# color is based on https://github.com/junegunn/fzf/wiki/Color-schemes#solarized-light
-export FZF_DEFAULT_OPTS='
-  --height 40%
-  --layout=reverse
-  --color fg:240,hl:33,fg+:241,bg+:221,hl+:33
-  --color info:33,prompt:33,pointer:166,marker:166,spinner:33
-  '
-
-# CTRL-T - Paste the selected files and directories onto the command-line
-export FZF_CTRL_T_COMMAND='fd'
-export FZF_CTRL_T_OPTS='--preview "preview {}"'
-
-# ALT-C - cd into the selected directory
-export FZF_ALT_C_COMMAND='fd -t d'
-export FZF_ALT_C_OPTS='--preview "preview {}"'
-
-# # free me from having to hold ctrl before `r` or `t` (since my ctrl act as ESC on tap)
-# bindkey -M vicmd 'r' fzf-history-widget
-# bindkey -M vicmd 't' fzf-file-widget
-# above would work with regular vi-mode but conflict with the advanced zvm
-# now it's taken care of at `../integration/zvm`
-
-# better history search with fzf via https://nixos.wiki/wiki/Fzf
-
-if fastcommandcheck fzf-share; then
-  path_from_fzf_share="$(_evalcache _evalable_fzf_share)"
-  source "${path_from_fzf_share}/key-bindings.zsh"
-  source "${path_from_fzf_share}/completion.zsh"
-else # falling back to brew
-  # in case of enabling with brew via https://github.com/junegunn/fzf#using-homebrew
-  if fastcommandcheck brew; then
-    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-    # configuring completions for brew installed packages
-    # this FPATH will be needed in ../zshrc and should be accessible this way too
-    FPATH="$(_evalcache _evalable_brew_prefix)/share/zsh/site-functions:$FPATH"
-  fi
-fi
-
+source "${my_zsh_d}/integration/fzf" # `../integration/fzf`
 _tag fzf
 
 ## binaries by language global packages, for example, npm, rust, go, etc.
