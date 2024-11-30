@@ -88,192 +88,192 @@ local config = function()
 
   local wk = require 'which-key'
   wk.setup {
-    window = {
-      winblend = 20,
+    -- ignore warning on start up but can manually check via `:checkhealth which-key`
+    notify = false,
+  }
+
+  wk.add {
+    { '<leader>p', paste_after_here, desc = 'paste after here' },
+    { '<leader>P', paste_before_here, desc = 'paste before here' },
+    { '<leader>e', group = 'Eval' },
+    { '<leader>el', cmdify 'FennelRepl', desc = 'Fennel Repl' },
+    { '<leader>es', cmdify 'SnipRun', desc = 'SnipRun' },
+    { '<leader>r', group = 'Run/Debug' },
+    { '<leader>rc', group = 'Conjure' },
+    { '<leader>g', group = 'Generate' },
+    { '<leader>l', cmdify 'Luapad', desc = 'open Luapad' },
+    { '<leader>n', group = 'Neotest' },
+    { '<leader>nr', cmdify 'Neotest run', desc = 'Neotest run' },
+    { '<leader>t', group = 'Treesitter' },
+    { '<leader>tt', cmdify 'TSPlaygroundToggle', desc = 'TSPlaygroundToggle' },
+    { '<leader>s', cmdify 'suspend', desc = ':suspend - go to background - `fg` to comeback' },
+  }
+
+  wk.add {
+    {
+      "<Space>'",
+      -- use count 9 to be independent from the horizontal one
+      cmd_nohlsearch .. cmdify '9ToggleTerm direction=float',
+      desc = 'open ToggleTerm direction=float',
+    },
+    {
+      '<Space>/',
+      -- use count 8 to be independent from the float one
+      cmd_nohlsearch .. cmdify '8ToggleTerm direction=horizontal',
+      desc = 'open ToggleTerm direction=horizontal',
+    },
+    { '<Space><CR>', '@q', desc = 'macro q' }, -- setting a special key
+    { '<Space><Tab>', cmdify 'bn', desc = 'rotate buffer' },
+    { '<Space><space>', cmdify 'Telescope oldfiles', desc = 'Telescope: recent files' },
+  }
+
+  wk.add {
+    { '<Space>b', group = 'Buffers' },
+    { '<Space>bb', cmdify 'Telescope buffers', desc = 'search buffer' },
+    { '<Space>bd', cmdify 'bd', desc = 'close buffer' },
+  }
+
+  wk.add {
+    { '<Space>f', group = 'Find' },
+    { '<Space>fb', cmdify 'Telescope buffers', desc = 'buffers' },
+    { '<Space>fc', group = 'Commands' },
+    { '<Space>fcc', cmdify 'Telescope commands', desc = 'commands' },
+    { '<Space>fch', cmdify 'Telescope command_history', desc = 'history' },
+    {
+      '<Space>fd',
+      function()
+        require('telescope').extensions.dap.commands()
+      end,
+      desc = 'dap commands',
+    },
+    {
+      '<Space>fe',
+      function()
+        vim.cmd([[silent exec "!open 'org-protocol://find-file?path=]] .. vim.fn.expand '%:p' .. [['"]])
+      end,
+      desc = 'open in Emacs',
+    },
+    { '<Space>ff', cmdify 'Telescope find_files', desc = 'find files' },
+    { '<Space>fg', group = 'Git' },
+    { '<Space>fgb', cmdify 'Telescope git_branches', desc = 'branches' },
+    { '<Space>fgc', cmdify 'Telescope git_bcommits', desc = 'bcommits' },
+    { '<Space>fgg', cmdify 'Telescope git_commits', desc = 'commits' },
+    { '<Space>fgs', cmdify 'Telescope git_status', desc = 'status' },
+    { '<Space>fh', cmdify 'Telescope help_tags', desc = 'help tags' },
+    { '<Space>fk', cmdify 'Telescope keymaps', desc = 'search keymaps' },
+    { '<Space>fn', cmdify 'new', desc = 'new file' },
+    { '<Space>fq', cmdify 'Telescope quickfix', desc = 'quickfix' },
+    { '<Space>fr', cmdify 'Telescope oldfiles', desc = 'recent files' },
+    { '<Space>fs', cmdify 'w', desc = 'save file' },
+    { '<Space>ft', cmdify 'Telescope', desc = 'telescope' },
+  }
+
+  wk.add {
+    { '<Space>g', group = 'Git' },
+    { '<Space>gb', group = 'Blame' },
+    { '<Space>gbb', cmdify 'Git blame', desc = 'toggle git blame pane' },
+    { '<Space>gd', cmdify 'DiffviewOpen', desc = 'show git diff' },
+    -- { '<Space>gg', require('gfold').pick_repo, desc = 'pick repo via gfold' },
+    { '<Space>gn', cmdify 'Neogit', desc = 'open Neogit' },
+    { '<Space>gr', cmdify 'Gcd', desc = 'go to git root' },
+    { '<Space>gx', cmdify 'GBrowse', desc = 'open file in browser' },
+  }
+
+  wk.add {
+    { '<Space>j', cmdify 'normal Hzb', desc = 'previous page' },
+    { '<Space>k', cmdify 'normal Lzt', desc = 'next page' },
+  }
+
+  wk.add {
+    { '<Space>l', group = 'Lazy' },
+    { '<Space>ll', cmdify 'Lazy', desc = 'run :Lazy' },
+    { '<Space>ls', cmdify 'Lazy sync', desc = 'run :Lazy sync' },
+    { '<Space>lu', cmdify 'Lazy update', desc = 'run :Lazy update' },
+    { '<Space>li', cmdify 'Lazy install', desc = 'run :Lazy install' },
+    { '<Space>lp', cmdify 'Lazy profile', desc = 'run :Lazy profile' },
+  }
+
+  wk.add {
+    { '<Space>r', group = 'Rename' },
+  }
+
+  wk.add {
+    { '<Space>s', group = 'Searching/Symbol' },
+    { '<Space>s?', cmdify 'Telescope oldfiles', desc = 'old files' },
+    { '<Space>sb', cmdify 'Telescope current_buffer_fuzzy_find', desc = 'current buffer fuzzy' },
+    { '<Space>sc', cmdify 'nohlsearch', desc = 'clear hihglight' },
+    { '<Space>sd', cmdify 'Telescope grep_string', desc = 'grep string' },
+    { '<Space>sf', cmdify 'Telescope find_files', desc = 'find files' },
+    {
+      '<Space>sg',
+      function()
+        require('telescope').extensions.repo.list { search_dirs = { '~/play' } }
+      end,
+      desc = 'Telescope repo',
+    },
+    { '<Space>sh', cmdify 'Telescope help_tags', desc = 'help tags' },
+    {
+      '<Space>so',
+      function()
+        require('telescope.builtin').tags { only_current_buffer = true }
+      end,
+      desc = 'tags only current buffer',
+    },
+    { '<Space>sp', cmdify 'Telescope live_grep', desc = 'live grep in project' },
+    { '<Space>st', cmdify 'Telescope tags', desc = 'tags' },
+  }
+
+  wk.add {
+    { '<Space>t', group = 'UI Toggles' },
+    { '<Space>tb', toggle_bg, desc = 'toggle-background' },
+    -- Lf is better for preview purposes and more freedom but will fail on remote files
+    { '<Space>tf', cmdify 'Lf', desc = 'toggle lf' },
+    { '<Space>tl', cmdify 'set list!', desc = 'toggle-hidden-listchars' },
+    -- Oil is preferred on efficient bulk renaming of filenames or
+    {
+      '<Space>to',
+      function()
+        require('oil').toggle_float()
+      end,
+      desc = 'toggle Oil',
     },
   }
 
-  wk.register({
-    p = { paste_after_here, 'paste after here' },
-    P = { paste_before_here, 'paste before here' },
-    e = {
-      name = '+Eval',
-      l = { cmdify 'FennelRepl', 'Fennel Repl' },
-      s = { cmdify 'SnipRun', 'SnipRun' },
+  wk.add {
+    { '<Space>w', group = 'Windows/Workspace' },
+    { '<Space>w-', cmdify 'split', desc = 'split window horizontally' },
+    { '<Space>w/', cmdify 'vsplit', desc = 'split window vertically' },
+    { '<Space>wd', cmdify 'close', desc = 'close window' },
+    { '<Space>wh', cmdify 'WindowsMaximizeHorizontally', desc = 'maximize/minimize window horizontally' },
+    { '<Space>wv', cmdify 'WindowsMaximizeVertically', desc = 'maximize/minimize window vertically' },
+    {
+      '<Space>wm',
+      cmdify 'silent exec "!mux-zoom"' .. cmdify 'WindowsMaximize',
+      desc = 'maximize/minimize window',
     },
-    r = {
-      name = '+Run/Debug',
-      c = {
-        name = '+Conjure',
-      },
+    {
+      '<Space>wn',
+      cmdify(vim.env.ZELLIJ_SESSION_NAME and '!zellij action new-tab' or '!tmux new-window'),
+      desc = 'new (t)mux window',
     },
-    g = {
-      name = '+Generate',
+    {
+      '<Space>wp',
+      cmdify(vim.env.ZELLIJ_SESSION_NAME and '!zellij action new-pane' or '!tmux split-window'),
+      desc = 'new (t)mux panel',
     },
-    l = { cmdify 'Luapad', 'open Luapad' },
-    n = {
-      name = '+Neotest',
-      r = { cmdify 'Neotest run', 'Neotest run' },
+    -- few convenient tmux controls - see also ../../../zsh/my_addons/aliases
+    -- no more ctrl+a[key] when not necessary!
+    {
+      '<Space>wt',
+      cmdify(
+        'silent exec '
+          .. '"!'
+          .. (vim.env.ZELLIJ_SESSION_NAME and 'zellij action launch-plugin -f sessionpicker' or 'tmux choose-tree')
+          .. '"'
+      ),
+      desc = 'choose (t)mux tree',
     },
-    t = {
-      name = '+Treesitter',
-      t = { cmdify 'TSPlaygroundToggle', 'TSPlaygroundToggle' },
-    },
-    s = { cmdify 'suspend', ':suspend - go to background - `fg` to comeback' },
-  }, { prefix = '<leader>' })
-
-  wk.register({
-    w = {
-      name = '+Windows/Workspace',
-      d = { cmdify 'close', 'close window' },
-      m = { cmdify 'silent exec "!mux-zoom"' .. cmdify 'WindowsMaximize', 'maximize/minimize window' },
-      v = { cmdify 'WindowsMaximizeVertically', 'maximize/minimize window vertically' },
-      h = { cmdify 'WindowsMaximizeHorizontally', 'maximize/minimize window horizontally' },
-      ['/'] = { cmdify 'vsplit', 'split window vertically' },
-      ['-'] = { cmdify 'split', 'split window horizontally' },
-      -- few convenient tmux controls - see also ../../../zsh/my_addons/aliases
-      -- no more ctrl+a[key] when not necessary!
-      t = {
-        cmdify(
-          'silent exec '
-            .. '"!'
-            .. (vim.env.ZELLIJ_SESSION_NAME and 'zellij action launch-or-focus-plugin -f sessionpicker' or 'tmux choose-tree')
-            .. '"'
-        ),
-        'choose (t)mux tree',
-      },
-      n = {
-        cmdify(vim.env.ZELLIJ_SESSION_NAME and '!zellij action new-tab' or '!tmux new-window'),
-        'new (t)mux window',
-      },
-      p = {
-        cmdify(vim.env.ZELLIJ_SESSION_NAME and '!zellij action new-pane' or '!tmux split-window'),
-        'new (t)mux panel',
-      },
-    },
-    b = {
-      name = '+Buffers',
-      b = { cmdify 'Telescope buffers', 'search buffer' },
-      d = { cmdify 'bd', 'close buffer' },
-    },
-    ['<space>'] = { cmdify 'Telescope oldfiles', 'Telescope: recent files' },
-    ['<Tab>'] = { cmdify 'bn', 'rotate buffer' },
-    ["'"] = {
-      -- use count 9 to be independent from the horizontal one
-      cmd_nohlsearch .. cmdify '9ToggleTerm direction=float',
-      'open ToggleTerm direction=float',
-    },
-    ['/'] = {
-      -- use count 8 to be independent from the float one
-      cmd_nohlsearch .. cmdify '8ToggleTerm direction=horizontal',
-      'open ToggleTerm direction=horizontal',
-    },
-    -- add this to reflect sre page https://www.srepath.com/
-    -- https://www.srepath.com/10-tips-for-onboarding-new-sre-hires/
-    -- https://www.srepath.com/developer-survive-you-built-it-you-run-it/
-    -- https://www.srepath.com/rundown-of-linkedins-sre-practices/
-    -- https://github.com/mxssl/sre-interview-prep-guide?tab=readme-ov-file
-
-    k = { cmdify 'normal Lzt', 'next page' },
-    j = { cmdify 'normal Hzb', 'previous page' },
-    ['<CR>'] = { '@q', 'macro q' }, -- setting a special key
-    f = { -- set a nested structure
-      name = '+Find',
-      b = { cmdify 'Telescope buffers', 'buffers' },
-      e = {
-        function()
-          vim.cmd([[silent exec "!open 'org-protocol://find-file?path=]] .. vim.fn.expand '%:p' .. [['"]])
-        end,
-        'open in Emacs',
-      },
-      h = { cmdify 'Telescope help_tags', 'help tags' },
-      c = {
-        name = '+Commands',
-        c = { cmdify 'Telescope commands', 'commands' },
-        h = { cmdify 'Telescope command_history', 'history' },
-      },
-      d = {
-        function()
-          require('telescope').extensions.dap.commands()
-        end,
-        'dap commands',
-      },
-      f = { cmdify 'Telescope find_files', 'find files' },
-      k = { cmdify 'Telescope keymaps', 'search keymaps' },
-      q = { cmdify 'Telescope quickfix', 'quickfix' },
-      g = {
-        name = '+Git',
-        g = { cmdify 'Telescope git_commits', 'commits' },
-        c = { cmdify 'Telescope git_bcommits', 'bcommits' },
-        b = { cmdify 'Telescope git_branches', 'branches' },
-        s = { cmdify 'Telescope git_status', 'status' },
-      },
-      n = { cmdify 'new', 'new file' },
-      t = { cmdify 'Telescope', 'telescope' },
-      s = { cmdify 'w', 'save file' },
-      r = { cmdify 'Telescope oldfiles', 'recent files' },
-    },
-    g = {
-      name = '+Git',
-      b = {
-        name = '+Blame',
-        b = { cmdify 'Git blame', 'toggle git blame pane' },
-      },
-      d = { cmdify 'DiffviewOpen', 'show git diff' },
-      -- g = { require('gfold').pick_repo, 'pick repo via gfold' },
-      n = { cmdify 'Neogit', 'open Neogit' },
-      r = { cmdify 'Gcd', 'go to git root' },
-      x = { cmdify 'GBrowse', 'open file in browser' },
-    },
-    l = {
-      name = '+Lazy',
-      l = { cmdify 'Lazy', 'run :Lazy' },
-      p = { cmdify 'Lazy profile', 'run :Lazy profile' },
-      i = { cmdify 'Lazy install', 'run :Lazy install' },
-      u = { cmdify 'Lazy update', 'run :Lazy update' },
-      s = { cmdify 'Lazy sync', 'run :Lazy sync' },
-    },
-    s = {
-      name = '+Searching/Symbol',
-      ['?'] = { cmdify 'Telescope oldfiles', 'old files' },
-      c = { cmd_nohlsearch, 'clear hihglight' },
-      f = { cmdify 'Telescope find_files', 'find files' },
-      b = { cmdify 'Telescope current_buffer_fuzzy_find', 'current buffer fuzzy' },
-      h = { cmdify 'Telescope help_tags', 'help tags' },
-      t = { cmdify 'Telescope tags', 'tags' },
-      d = { cmdify 'Telescope grep_string', 'grep string' },
-      p = { cmdify 'Telescope live_grep', 'live grep in project' },
-      o = {
-        function()
-          require('telescope.builtin').tags { only_current_buffer = true }
-        end,
-        'tags only current buffer',
-      },
-      g = {
-        function()
-          require('telescope').extensions.repo.list { search_dirs = { '~/play' } }
-        end,
-        'Telescope repo',
-      },
-    },
-    r = {
-      name = '+Rename',
-    },
-    t = {
-      name = '+UI Toggles',
-      b = { toggle_bg, 'toggle-background' },
-      -- Lf is better for preview purposes and more freedom but will fail on remote files
-      f = { cmdify 'Lf', 'toggle lf' },
-      -- Oil is preferred on efficient bulk renaming of filenames or creating/deleting files quickly and safely
-      o = {
-        function()
-          require('oil').toggle_float()
-        end,
-        'toggle Oil',
-      },
-      l = { cmdify 'set list!', 'toggle-hidden-listchars' },
-    },
-  }, { prefix = '<Space>' })
+  }
 end
 
 --- anything above here is not accessible from `config` function below
@@ -283,6 +283,9 @@ return {
     init = init,
     event = 'VeryLazy',
     config = config,
+    dependencies = {
+      'echasnovski/mini.icons', -- Icon provider. Part of 'mini.nvim' library.
+    },
   },
   -- 'b0o/mapx.nvim', -- see if I would like to use this when keymapping code need optimized
 }

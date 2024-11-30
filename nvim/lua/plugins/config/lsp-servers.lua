@@ -37,8 +37,7 @@ return function(setup_default, node_root)
 
   local node_root_dir, is_node_repo = node_root()
 
-  local setup_tsserver = merge(setup_default, {
-    cmd = { 'typescript-language-server', '--stdio' },
+  local setup_ts_ls = merge(setup_default, {
     root_dir = node_root_dir,
     autostart = is_node_repo and true or false,
   })
@@ -49,7 +48,7 @@ return function(setup_default, node_root)
       if string.find(filename, 'node_modules/') then
         return nil
       end
-      return require('lspconfig.server_configurations.eslint').default_config.root_dir(filename)
+      return require('lspconfig.configs.eslint').default_config.root_dir(filename)
     end,
     -- run `EslintFixAll` on save via autocmd, so exclude 'eslint' from lsp-format from ./lsp.lua
     on_attach = function(client, bufnr)
@@ -153,7 +152,7 @@ return function(setup_default, node_root)
   --Enable (broadcasting) snippet capability for completion
   setup_jsonls.capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-  local setup_ruff_lsp = merge(setup_default, {})
+  local setup_ruff = merge(setup_default, {})
 
   -- determine if it's with container or localhost
   -- read more on that at ../../../remote-container.md
@@ -254,7 +253,7 @@ return function(setup_default, node_root)
     rust_analyzer = setup_default,
     pyright = gen_setup_pyright(),
     harper_ls = setup_harper_ls,
-    tsserver = setup_tsserver,
+    ts_ls = setup_ts_ls,
     denols = setup_denols,
     lua_ls = setup_lua_ls,
     -- nil_ls = setup_nil_ls,
@@ -270,7 +269,7 @@ return function(setup_default, node_root)
     dockerls = setup_dockerls,
     ruby_lsp = setup_ruby_lsp,
     efm = setup_efm,
-    ruff_lsp = setup_ruff_lsp,
+    ruff = setup_ruff,
     bashls = setup_bashls,
   }
 end

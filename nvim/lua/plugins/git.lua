@@ -31,13 +31,20 @@ return {
     dependencies = { 'nvim-lua/plenary.nvim' },
     opts = {
       signs = {
-        add = { hl = 'GitGutterAdd', text = '+' },
-        change = { hl = 'GitGutterChange', text = '~' },
-        delete = { hl = 'GitGutterDelete', text = '_' },
-        topdelete = { hl = 'GitGutterDelete', text = '‾' },
-        changedelete = { hl = 'GitGutterChange', text = '~' },
+        add = { text = '+' },
+        change = { text = '~' },
+        delete = { text = '_' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '~' },
       },
     },
+    init = function()
+      vim.api.nvim_set_hl(0, 'GitSignsAdd', { link = 'GitGutterAdd' })
+      vim.api.nvim_set_hl(0, 'GitSignsChange', { link = 'GitGutterChange' })
+      vim.api.nvim_set_hl(0, 'GitSignsChangedelete', { link = 'GitGutterChange' })
+      vim.api.nvim_set_hl(0, 'GitSignsDelete', { link = 'GitGutterDelete' })
+      vim.api.nvim_set_hl(0, 'GitSignsTopdelete', { link = 'GitGutterDelete' })
+    end,
   },
 }
 

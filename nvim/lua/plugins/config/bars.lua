@@ -23,7 +23,7 @@ local item_gitblame = {
   end,
   cond = function()
     local ft = vim.bo.filetype
-    local ignored_fts = vim.g.gitblame_ignored_filetypes
+    local ignored_fts = vim.g.gitblame_ignored_filetypes or { 'gitcommit' }
 
     for _, ignored_ft in ipairs(ignored_fts) do
       if ft == ignored_ft then
