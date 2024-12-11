@@ -36,6 +36,8 @@
   g = "C-g";
   # Focus address bar
   l = "C-l";
+  # print
+  p = "C-p";
   # comment uncomment
   "/" = "C-/";
   # Zoom in: `=` would not work, so `equal`
