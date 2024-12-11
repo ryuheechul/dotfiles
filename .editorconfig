@@ -6,6 +6,9 @@ root = true
 indent_style = space
 indent_size = 2
 
+[*.py]
+indent_size = 4
+
 # inspired by https://github.com/Dreamscapes/makefiles/blob/master/.editorconfig
 [{Makefile,**.mk}]
 # Use tabs for indentation (Makefiles require tabs)
