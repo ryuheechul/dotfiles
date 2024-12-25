@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# INFO: [Usage] call from a client with something like `[SSH_AUTH_SOCK=...] ssh target-host zsh -c unlock-sessions`
+
+# do this instead of `loginctl unlock-sessions` since it doesn't seem to respect $SSH_AUTH_SOCK
+loginctl --json=short | jq '.[] | select(.idle==true) | .session' | xargs loginctl unlock-session
