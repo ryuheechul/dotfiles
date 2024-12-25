@@ -17,5 +17,8 @@ function is-wsl {
 }
 
 function is-ssh {
-  test -n "${SSH_TTY}"
+  # test -n "${SSH_TTY}" # since SSH_TTY is not present when there is no pseudo-terminal allocation;
+  # which prevents non interactive invocation will fail to have a path set via ../path/set-basic
+  # hence relies on another ENV_VAR that should be present whether it's interactive or not
+  test -n "${SSH_CLIENT}"
 }
