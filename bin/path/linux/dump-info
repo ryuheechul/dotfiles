@@ -30,6 +30,7 @@ exit 0
 
 ## now this is where I can list actual runnable commands that is useful to run more about the system; it's sort of like personal mini tldr.sh
 
+cat /proc/version                     # https://www.reddit.com/r/linuxquestions/comments/1084zh0/tell_the_difference_between_kernel_compiled_with/
 sudo -l                               # debug `/etc/sudoers`
 uname -a                              # print system information
 echo "${XDG_DATA_DIRS}" | tr ':' '\n' # print XDG_DATA_DIRS
@@ -49,6 +50,7 @@ tldr ethtool
 lspci -tv | less
 lsscsi
 lsblk -f
+cat /etc/fstab
 mount # list mounted
 sudo blkid
 sudo fdisk -l
@@ -60,6 +62,8 @@ netstat -i   # kernel interface table
 nmcli # there is also nmtui
 nmcli device
 nmcli device wifi
+networkctl
+networkctl status
 ip a # ip addr
 ip r # ip route
 ip l # ip link
@@ -77,6 +81,7 @@ drm_info | less # print information about monitor/screen
 # map between hardware and interfaces https://unix.stackexchange.com/a/658392/396504
 ls -lah /sys/class/net/
 lsmod # show the status of modules in the linux kernel
+kmon  # TUI for lsmod and others
 
 fi_info # libfabric
 glxinfo -B
