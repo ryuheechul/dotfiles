@@ -391,7 +391,7 @@ is-nixos && alias nix-collect-garbage='nix-collect-garbage --delete-older-than 3
 # https://nixos.org/manual/nix/stable/advanced-topics/cores-vs-jobs.html
 export NIX_BUILD_CORES="$(getconf _NPROCESSORS_ONLN | xargs -I _ expr _ / 2)"
 
-alias switch-home='home-manager switch |& nom; evalcache-clear >/dev/null'
+alias switch-home='home-manager switch |& nom && evalcache-clear >/dev/null'
 
 # unifying interface of applying updated nix expressions for different systems
 alias switch-nix='switch-home' # this is default for a simple system that only uses home-manager
@@ -406,7 +406,7 @@ is-nixos \
 # run this with "current configuration" before having to build anything new so that `/boot` can be cleaned first to make space
 # thanks to https://discourse.nixos.org/t/what-to-do-with-a-full-boot-partition/2049/4
 is-nixos \
-  && alias clean-boot='sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3 && nix-collect-garbage && ls /nix/var/nix/profiles/system && df'
+  && alias clean-boot='sudo nix-env -p /nix/var/nix/profiles/system --delete-generations +3 && sudo nix-collect-garbage && ls /nix/var/nix/profiles/system && df'
 
 # quicker way to reboot by skipping hardware checks but subsequent quick reboot may result in coma
 is-linux && alias quickreboot='sudo systemctl kexec'

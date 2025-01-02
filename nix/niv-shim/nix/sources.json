@@ -17,10 +17,10 @@
         "homepage": "",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5e4fbfb6b3de1aa2872b76d49fafc942626e2add",
-        "sha256": "127dk2l5fr0922an96rmlzg32vh6pxh7r6qyvkhwf20jdzg9k61r",
+        "rev": "88195a94f390381c6afcdaa933c2f6ff93959cb4",
+        "sha256": "1fs25csg0lq3v34jdzxr2qdvnyvylimmfh0qxlf39h4j1hclvbyj",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/5e4fbfb6b3de1aa2872b76d49fafc942626e2add.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/88195a94f390381c6afcdaa933c2f6ff93959cb4.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixos-hardware": {
@@ -29,10 +29,10 @@
         "homepage": "",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "672ac2ac86f7dff2f6f3406405bddecf960e0db6",
-        "sha256": "0fkrf91x3hm2cgvznvskxwn9j3qaff8ivpsqcyarj9bhk08sc5aj",
+        "rev": "7c674c6734f61157e321db595dbfcd8523e04e19",
+        "sha256": "1a6wihld450lhj9f5a3j4a039hmf0q1zw5912if2dl8z6j10x4kv",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixos-hardware/archive/672ac2ac86f7dff2f6f3406405bddecf960e0db6.tar.gz",
+        "url": "https://github.com/NixOS/nixos-hardware/archive/7c674c6734f61157e321db595dbfcd8523e04e19.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs": {
@@ -41,10 +41,10 @@
         "homepage": "",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5e4fbfb6b3de1aa2872b76d49fafc942626e2add",
-        "sha256": "127dk2l5fr0922an96rmlzg32vh6pxh7r6qyvkhwf20jdzg9k61r",
+        "rev": "69b9a8c860bdbb977adfa9c5e817ccb717884182",
+        "sha256": "12ljkkjg3gicamvryxr2bnfcdb05qdlbc5wv4lcw9sxamszp4cp7",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/5e4fbfb6b3de1aa2872b76d49fafc942626e2add.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/69b9a8c860bdbb977adfa9c5e817ccb717884182.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs-stable-darwin": {
