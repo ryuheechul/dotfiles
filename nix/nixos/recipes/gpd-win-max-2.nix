@@ -2,7 +2,14 @@
 
 # https://github.com/Sabrina-Fox/WM2-Help
 
-# try below when the audio from bluetooth headset is choppy
+# WARN: https://github.com/AdnanHodzic/auto-cpufreq/issues/796#issuecomment-2573083773
+
+# INFO: Regarding the fan noise
+# It's best to rely on manual "silent" fan mode via "Fn + Left Shift";
+# which is explained at the QnA PDF at https://www.gpd.hk/gpdwinmax2firmwareanddriver;
+# if dynamic not so smooth curved fan sound bothers you
+
+# NOTE: try below when the audio from Bluetooth headset is choppy
 # - maybe just forget the device and reconnect might just fix
 # - or maybe just reboot?
 # - or connect it on the Windows first and come back to linux and try again?
@@ -17,7 +24,7 @@
   # probably better to benefit from the latest kernel unless there is an issue
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  environment.systemPackages = with pkgs;[
+  environment.systemPackages = with pkgs; [
     nvtopPackages.amd
     amdgpu_top
   ];
