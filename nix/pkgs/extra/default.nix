@@ -15,6 +15,7 @@ let
   alacritty-nightly = import ../custom/alacritty-nightly.nix;
   wsl = import ./wsl.nix { pkgs = pkgs; };
   rsop = import ../custom/rsop.nix { pkgs = pkgs; };
+  ghostty = import ../custom/ghostty.nix { pkgs = pkgs; };
 in
 with pkgs;
 [
@@ -24,6 +25,9 @@ with pkgs;
 ]
 ++ ifEnv "MY_NIX_EXTRA_NIGHTLY_ALACRITTY" [
   alacritty-nightly
+]
+++ ifEnv "MY_NIX_EXTRA_GHOSTTY" [
+  ghostty
 ]
 ++ ifEnv "MY_NIX_EXTRA_HIRED" [
   hired # A modern take on 'ed'

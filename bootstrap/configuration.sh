@@ -65,6 +65,10 @@ ln -sf "${dfs_rhc}/gh/config.yml" "${XDG_CONFIG_HOME}/gh/config.yml"
 ln -sf "${dfs_rhc}/bat" "${XDG_CONFIG_HOME}/bat"
 bat cache --build || true
 
+# ghostty terminal
+rm -rf "${XDG_CONFIG_HOME}/ghostty" &&
+  ln -sf "${dfs_rhc}/ghostty" "${XDG_CONFIG_HOME}/ghostty"
+
 # alacritty
 ln -sf "${dfs_rhc}/alacritty/unix.toml" "${HOME}/.alacritty.toml"
 

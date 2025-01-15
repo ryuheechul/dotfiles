@@ -1,0 +1,5 @@
+fullscreen = true
+window-decoration = false
+initial-command = "zsh -c 'source ~/.base16_theme; exec-tmux-attach ghostty'"
+font-size = 15
+# font-family = "FiraMono Nerd Font Mono" # somehow this is not working on my system

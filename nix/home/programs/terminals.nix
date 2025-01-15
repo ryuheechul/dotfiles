@@ -68,4 +68,20 @@ in
   # Icon=kitty
   # Categories=System;TerminalEmulator;
   # ```
+
+  # referencing https://github.com/ghostty-org/ghostty/blob/main/dist/linux/app.desktop
+  xdg.desktopEntries.ghostty = {
+    name = "Ghostty";
+    exec = "ghostty"; # this is the main fix and the rest is to conform with original
+    icon = "com.mitchellh.ghostty";
+    comment = "A terminal emulator";
+    categories = [
+      "System"
+      "TerminalEmulator"
+    ];
+    settings = {
+      Keywords = "terminal;tty;pty;";
+    };
+    startupNotify = true;
+  };
 }

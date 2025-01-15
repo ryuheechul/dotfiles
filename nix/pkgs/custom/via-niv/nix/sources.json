@@ -11,6 +11,18 @@
         "url": "https://github.com/edolstra/flake-compat/archive/0f9255e01c2351cc7d116c072cb317785dd33b33.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "ghostty": {
+        "branch": "main",
+        "description": "👻 Ghostty is a fast, feature-rich, and cross-platform terminal emulator that uses platform-native UI and GPU acceleration.",
+        "homepage": "https://ghostty.org",
+        "owner": "ghostty-org",
+        "repo": "ghostty",
+        "rev": "ff9414d9ea7b16a375d41cde8f6f193de7e5db72",
+        "sha256": "0j75hdccyv6jjrvcx8cg80jawvlakv2n2338dx1mndx4gphp5f9q",
+        "type": "tarball",
+        "url": "https://github.com/ghostty-org/ghostty/archive/ff9414d9ea7b16a375d41cde8f6f193de7e5db72.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "nix-index-database": {
         "branch": "main",
         "description": "Weekly updated nix-index database [maintainer=@Mic92]",
