@@ -391,7 +391,7 @@ is-nixos && alias nix-collect-garbage='nix-collect-garbage --delete-older-than 3
 # https://nixos.org/manual/nix/stable/advanced-topics/cores-vs-jobs.html
 export NIX_BUILD_CORES="$(getconf _NPROCESSORS_ONLN | xargs -I _ expr _ / 2)"
 
-alias switch-home='home-manager switch |& nom && evalcache-clear >/dev/null'
+alias switch-home='home-manager switch |& nom && evalcache-clear >/dev/null && bat cache --build'
 
 # unifying interface of applying updated nix expressions for different systems
 alias switch-nix='switch-home' # this is default for a simple system that only uses home-manager
