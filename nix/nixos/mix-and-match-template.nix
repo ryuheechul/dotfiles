@@ -14,6 +14,7 @@ username:
       ./recipes/firmware.nix
       ./recipes/droidcam.nix
       (import ./recipes/meta/tpm.nix username)
+      ./recipes/auto-timezone.nix
       # virtualisations
       ./recipes/docker.nix
       # ./recipes/docker-rootful.nix
