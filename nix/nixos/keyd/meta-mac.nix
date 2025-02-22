@@ -49,9 +49,9 @@
   # go forward
   "]" = "C-]";
   # Move cursor to beginning of line
-  left = "home";
+  left = "home"; # Also don't forget `"option_mac:M" = { left = "C-left"; }` at `./settings-full-windows.nix`
   # Move cursor to end of Line
-  right = "end";
+  right = "end"; # Also don't forget `"option_mac:M" = { right = "C-right"; }` at `./settings-full-windows.nix`
   # Switch between windows
   "`" = "A-f6";
 }

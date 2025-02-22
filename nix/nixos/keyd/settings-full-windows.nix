@@ -1,6 +1,7 @@
 # - to be used for ../recipes/keyd-host.nix
 # - you may debug with `sudo showkey` but there should should be better way too
 #   - or with `sudo libinput debug-events --show-keycodes`
+# - "windows" of "settings-full-windows" means the original hardware platform - aka originally a windows keyboard
 
 let
   meta_mac = import ./meta-mac.nix;
@@ -57,5 +58,10 @@ in
   "meta_mac:A" = meta_mac;
 
   # option_mac modifier layer; inherits from 'Alt' modifier layer
-  "option_mac:M" = { };
+  "option_mac:M" = {
+    # move to the word on the left like on macOS
+    left = "C-left";
+    # move to the word on the right like on macOS
+    right = "C-right";
+  };
 }
