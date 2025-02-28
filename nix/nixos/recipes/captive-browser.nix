@@ -30,6 +30,10 @@
   #       - [v1.72 or higher should have better support and communication on captive portal](https://tailscale.com/changelog#2024-08-19)
   # Actually I found a case that it didn't work with with the trick involving Waydroid but working with captive-browser! So I guess these two can complement each other.
   #
+  # And when nothing seems to work, we might need to turn off `resolved` temporarily by the line below
+  # `services.resolved.enable = lib.mkForce false;` # to temporarily deal with not so up-to-date captive portals
+  # make sure to undo this after captive portal step is done and if somehow DNS fails sometime after this you may want to run `systemctl restart systemd-resolved.service`
+  #
   # More on captive portal
   # - https://www.chromium.org/chromium-os/chromiumos-design-docs/network-portal-detection/
   # - https://datatracker.ietf.org/doc/html/rfc8952
