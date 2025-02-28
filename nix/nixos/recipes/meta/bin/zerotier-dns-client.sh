@@ -101,7 +101,7 @@ echo "${networks}" | jq -c '.[]' | while read -r network; do
     echo "[info] configuring with ..."
     set -x
     sudo resolvectl revert "${interface}"
-    sudo resolvectl dns "${interface}" "${dns_list}"
+    sudo resolvectl dns "${interface}" ${dns_list} # unqoute to pass as list 
     sudo resolvectl default-route "${interface}" "false"
     sudo resolvectl domain "${interface}" "${domain}"
     { set +x; } 2>/dev/null # thanks to https://stackoverflow.com/a/19226038/1570165
