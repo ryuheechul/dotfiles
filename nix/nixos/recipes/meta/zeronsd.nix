@@ -1,4 +1,7 @@
-{ network, tokenPath ? "/var/lib/zeronsd/apitoken" }:
+{
+  network,
+  tokenPath ? "/var/lib/zeronsd/apitoken",
+}:
 { config, lib, ... }:
 
 # this is a to run a name server that works like a authoritative name server for a zero tier network
@@ -16,12 +19,15 @@
 {
   services.zeronsd.servedNetworks = {
     ${network} =
-      if (builtins.pathExists tokenPath) then {
-        settings = {
-          token = tokenPath;
-          log_level = "trace";
-        };
-      } else builtins.trace "token file (${tokenPath}) doesn't exist on the path" { };
+      if (builtins.pathExists tokenPath) then
+        {
+          settings = {
+            token = tokenPath;
+            log_level = "trace";
+          };
+        }
+      else
+        builtins.trace "token file (${tokenPath}) doesn't exist on the path" { };
   };
 
   # need to open port 53 to serve traffic from other machines
@@ -29,6 +35,13 @@
     firewall = {
       allowedTCPPorts = [ 53 ];
       allowedUDPPorts = [ 53 ];
+    };
+  };
+
+  systemd.services."zeronsd-${network}" = {
+    serviceConfig = {
+      # not a fan to do this but without this, how would it be possible to read `/var/lib/zerotier-one/authtoken.secret`?
+      User = lib.mkForce "root";
     };
   };
 }
