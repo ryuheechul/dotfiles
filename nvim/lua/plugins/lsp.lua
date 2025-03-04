@@ -32,6 +32,8 @@ return {
             'dockerls',
             'harper_ls',
             'bashls',
+            'tailwindcss',
+            'cssls',
           },
         },
       },

@@ -123,6 +123,8 @@ return function(setup_default, node_root)
   local setup_astro = merge(setup_default, {
     -- language server is installed via mason at ./lsp.lua
   })
+  local setup_tailwindcss = merge(setup_default, {})
+  local setup_cssls = merge(setup_default, {})
   local setup_dockerls = merge(setup_default, {})
   local setup_ruby_lsp = merge(setup_default, {})
 
@@ -265,6 +267,8 @@ return function(setup_default, node_root)
     gopls = setup_gopls,
     svelte = setup_svelte,
     astro = setup_astro,
+    cssls = setup_cssls,
+    tailwindcss = setup_tailwindcss,
     yamlls = setup_yamlls,
     dockerls = setup_dockerls,
     ruby_lsp = setup_ruby_lsp,
