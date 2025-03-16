@@ -133,6 +133,32 @@ function theme-tone () {
   # printenv BASE16_THEME | sed s/solarized-//
 }
 
+# a helper also that warns about the `git reset --hard`, read more at https://jwiegley.github.io/git-from-the-bottom-up/3-Reset/4-doing-a-hard-reset.html
+# I indeed accidentally blow some unstaged changes few times... hence this function to prevent that
+function git-reset-hard() {
+  echo '`git reset --hard` will permanently delete unstaged changes, so you should run `git stash` before and run `git stash pop` after. And I will print `git status` for you.'
+
+  git status
+
+  gum confirm "continue? (CHECK IF YOU NEED TO STASH BEFORE)" && {
+    selected=$(git log --oneline | gum filter --placeholder "choose the commit...")
+    hash="$(echo "${selected}" | awk '{ print $1 }')"
+    commit_log="$(echo "${selected}" | awk '{ $1 = ""; print $0 }' |sed 's/^ //g')"
+
+    echo "you chose \"${selected}\""
+
+    cmd_to_run="git reset --hard ${hash}"
+    gum confirm "run \`${cmd_to_run}\`? (MAKE SURE YOU STASHED UNSTAGED ONES)" && {
+      which git
+      echo "running \`${cmd_to_run}\`..."
+      bash -c "${cmd_to_run}"
+      echo "running \`git stash list\`"
+      git stash list
+      echo 'now you probably want to run `git stash pop` if you stashed before'
+    }
+  }
+}
+
 # a helper script to quickly set git author in global config
 function git-config-author() {
   function _print_config() {
