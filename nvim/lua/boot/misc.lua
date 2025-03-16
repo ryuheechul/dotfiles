@@ -119,6 +119,24 @@ vim.opt.pumblend = 20
 
 -- sync clipboard with the system's one - https://stackoverflow.com/a/30691754/1570165
 vim.opt.clipboard = 'unnamedplus'
+-- For the option above to work across SSH connection, `ForwardX11 yes` (and `ForwardX11Trusted yes` if `ForwardX11` wasn't enough) options would be required. Otherwise the OSC 52 would make it trivial to copy and paste, however not all layers support it, notably Zellij currently doesn't support pasting
+
+local isInsideZellij = vim.env.ZELLIJ_SESSION_NAME ~= nil
+
+if not isInsideZellij then
+  -- without this, it will rely on X11 `$DISPLAY` env var via xsel or similar instead of OSC 52 way
+  vim.g.clipboard = {
+    name = 'OSC 52',
+    copy = {
+      ['+'] = require('vim.ui.clipboard.osc52').copy '+',
+      ['*'] = require('vim.ui.clipboard.osc52').copy '*',
+    },
+    paste = {
+      ['+'] = require('vim.ui.clipboard.osc52').paste '+',
+      ['*'] = require('vim.ui.clipboard.osc52').paste '*',
+    },
+  }
+end
 
 -- to assist ../shell/source.zsh
 vim.env.NVIM_LISTEN_ADDRESS = vim.v.servername

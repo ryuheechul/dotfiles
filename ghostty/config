@@ -1,5 +1,12 @@
+# vim: set ft=toml:
+# although it's not toml syntax, it helps with highlighting
+
+# doc: https://ghostty.org/docs/config
+
 fullscreen = true
 window-decoration = false
 initial-command = "zsh -c 'source ~/.base16_theme; exec-tmux-attach ghostty'"
 font-size = 15
 # font-family = "FiraMono Nerd Font Mono" # somehow this is not working on my system
+clipboard-read = allow
+adw-toast = no-clipboard-copy

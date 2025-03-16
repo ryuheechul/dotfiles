@@ -1,18 +1,25 @@
 #!/usr/bin/env bash
 
-# when either X11 is on local or forwarded
-# temporarily added `test -n "${SSH_TTY}"` to fallback to /usr/bin/pbpaste on macOS client
-# when accessing the shell locally
-if test -n "${DISPLAY}" && test -n "${SSH_TTY}"; then
+should-use-osc() {
+  test -z "${ZELLIJ_SESSION_NAME}" && command -v osc >/dev/null
+}
+
+is-remote-display-via-x11-forward() {
+  test -n "${DISPLAY}" && test -n "${SSH_TTY}"
+}
+
+is-mac-os-local-connection() {
+  test -x /usr/bin/pbpaste && ! is-remote-display-via-x11-forward
+}
+
+if is-mac-os-local-connection; then
+  /usr/bin/pbpaste "$@"
+elif should-use-osc; then
+  osc paste
+elif is-remote-display-via-x11-forward; then
   xsel -o -b | sed $'s/\r$//' # custom sed instead of dos2unix since it somwhow still carried the last line
   # thanks to https://stackoverflow.com/a/2613834/1570165
-# when there is no sign of using X11
 else
-  # favor pbpaste
-  if test -x /usr/bin/pbpaste; then
-    /usr/bin/pbpaste "$@"
   # fallback to xsel
-  else
-    xsel -o -b
-  fi
+  xsel -o -b
 fi

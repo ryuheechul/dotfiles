@@ -1,17 +1,27 @@
 #!/usr/bin/env bash
 
-# when either X11 is on local or forwarded
-# temporarily added `test -n "${SSH_TTY}"` to fallback to /usr/bin/pbcopy on macOS client
-# when accessing the shell locally
-if test -n "${DISPLAY}" && test -n "${SSH_TTY}"; then
+should-use-osc() {
+  # until this comment find a good answer https://github.com/theimpostor/osc/commit/4401feeeb146adcab48855f77535d2ac288a8c11#r153792038
+  printenv TMUX >/dev/null && tmux show -gv allow-passthrough | grep on >/dev/null && tmux set allow-passthrough on
+
+  test -z "${ZELLIJ_SESSION_NAME}" && command -v osc >/dev/null
+}
+
+is-remote-display-via-x11-forward() {
+  test -n "${DISPLAY}" && test -n "${SSH_TTY}"
+}
+
+is-mac-os-local-connection() {
+  test -x /usr/bin/pbpaste && ! is-remote-display-via-x11-forward
+}
+
+if is-mac-os-local-connection; then
+  /usr/bin/pbpaste "$@"
+elif should-use-osc; then
+  osc copy
+elif is-remote-display-via-x11-forward; then
   tee <&0 | nohup xsel -i -b >/dev/null 2>&1 & # use nohup to return quickly since this can be very slow
-# when there is no sign of using X11
 else
-  # favor pbpaste
-  if test -x /usr/bin/pbcopy; then
-    /usr/bin/pbcopy "$@"
   # fallback to xsel
-  else
-    xsel -i -b
-  fi
+  xsel -i -b
 fi

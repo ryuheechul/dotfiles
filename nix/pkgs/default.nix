@@ -35,6 +35,7 @@ with pkgs;
     wget # useful for downloading files
     unzip # The UnZip package contains ZIP extraction utilities
     xsel # clipboard - https://ostechnix.com/access-clipboard-contents-using-xclip-and-xsel-in-linux/
+    osc # Command line tool to access the system clipboard from anywhere using the ANSI OSC52 sequence
     gnupg # GnuPG
     gcc # the GNU Compiler Collection
     # `ncurses` comes with utilities below - this also enhances experiences with terminal on macOS (darwin) a lot better

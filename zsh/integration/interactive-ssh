@@ -35,8 +35,39 @@ if test -z "${DISPLAY}"; then
   fi
 fi
 
-# consider opening `zellij` only if not running under `tmux` already
-if ! printenv TMUX > /dev/null; then
+function is-connected-via-mosh () {
+  pgrep -U $USER mosh-server > /dev/null && test -n "${SSH_TTY}" && ! test -c "${SSH_TTY}"
+}
+
+function is-in-tmux() {
+  printenv TMUX > /dev/null
+}
+function can-use-tmux () {
+  ! is-in-tmux
+}
+
+function should-use-zellij () {
+  # not using zellij until the issue below is resolved
+  #   - https://github.com/zellij-org/zellij/issues/2647
+  return -1
+
+  # consider opening `zellij` only if not running under `tmux` already and not connected via mosh
+  can-use-tmux && ! is-connected-via-mosh
+  # why not with mosh though?
+  # - with mosh, x11 forwarding would not work
+  # - with zellij, osc 52 (pasting) would not work at the moment
+  #   - https://github.com/zellij-org/zellij/issues/2647
+  # - and this is kind of OK as mosh is resilient to network disturbances
+}
+
+if is-connected-via-mosh;then
+  # due to: https://github.com/theimpostor/osc/issues/7
+  unset SSH_TTY
+  # there is a supposedly a fix but it didn't work for me
+  # https://gist.github.com/yudai/95b20e3da66df1b066531997f982b57b
+fi
+
+if should-use-zellij; then
   # prevent infinite session opening with the same name, 'ssh'
   zellij list-sessions \
     | grep ssh | head -n1 | sed 's/ (current)$//' \
@@ -49,6 +80,21 @@ if ! printenv TMUX > /dev/null; then
       sleep 3
     } || {
       echo 'Attempting to attach to zellij session and this might fail as zellij might be not stable'
-      UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec-zellij-attach ssh
+      SSH_TTY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec "${my_dot_d}/bin/zellij-attach-or-new.sh" ssh
     }
+elif can-use-tmux; then
+  SSH_TTY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec "${my_dot_d}/bin/tmux-attach-or-new.sh" ssh
+elif is-in-tmux; then
+  tmux set status-position bottom
+
+  # if it's not differentiated with gold color already, set it
+  tmux show -gv @tmux_power_theme | grep gold > /dev/null || {
+    tmux set -g @tmux_power_theme 'gold'
+    tmux set -g @tmux_power_g2 "3" # to get along with 'gold'
+    ~/.tmux/plugins/tpm/tpm # this applies the new theme
+  }
+  # unfortunately the above (with `-g` option) will affect all sessions but I don't use the same machine remotely and locally at the same time, so competing theme for non overlapping time is fine for me
+
+  # override the status-right
+  tmux set status-right '#(tmux-hud-r)'
 fi
