@@ -78,6 +78,7 @@
 ;; https://www.emacswiki.org/emacs/TrampMode#h5o-33
 ;; https://nixos.wiki/wiki/Emacs#Cannot_find_all_binaries_on_a_remote_system_with_TRAMP
 (after! tramp-sh
+  ;; (setq tramp-histfile-override nil) ;; uncomment this to debug (I manually undo histfile from `../../zsh/zshrc` to exclude history from `dumb` ones but not the interactive ones)
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 ;; until this issue is resolved - https://github.com/doomemacs/doomemacs/issues/8277

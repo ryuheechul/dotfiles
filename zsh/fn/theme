@@ -10,7 +10,10 @@ function _change_my_base16_theme() {
   }
 
   if is-ssh; then
-    if command -v gum >/dev/null; then
+    if echo "${INSIDE_EMACS}" | grep tramp >/dev/null; then
+      echo 'abort changing base16-shell when accessed via TRAMP'
+      return
+    elif command -v gum >/dev/null; then
       gum confirm "You appeared to be connected via SSH and this will change the theme on remote machine not client, still proceed?" &&
         true ||
         return

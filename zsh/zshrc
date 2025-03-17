@@ -34,6 +34,9 @@ if [ -z "$MY_BASIC_ZSH_STUFF_LOADED" ] || [ -n "$FORCE_LOAD_MY_ZSH_STUFF" ]; the
   # enable reverse-i-search
   bindkey '^R' history-incremental-search-backward
 
+  # because I want the history with interactive SSH session even via TRAMP
+  test "${HISTFILE}" = "~/.tramp_history" && unset HISTFILE # comment this to debug
+
   export MY_BASIC_ZSH_STUFF_LOADED=1
 fi
 

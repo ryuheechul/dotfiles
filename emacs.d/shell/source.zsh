@@ -5,7 +5,10 @@ if uname | xargs test "Darwin" =; then
 fi
 
 # fail fast
-test -z "${INSIDE_DOOM_EMACS}" && return
+test -z "${INSIDE_DOOM_EMACS}" &&
+  test -z "${INSIDE_EMACS_RUN_CMD_ON_START_UP}" &&
+  return
+
 # continue after the condition is met above
 
-source ~/.config/dfs-rhc/emacs.d/doom.d/shell/source.zsh
+source "${my_dot_d}/emacs.d/doom.d/shell/source.zsh"

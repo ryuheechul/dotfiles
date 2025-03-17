@@ -6,9 +6,9 @@ script_d="${0:a:h}"
 shell_integration_sh="${script_d}/shim/emacs-vterm-zsh.zsh"
 
 # fail fast if the condition is not met
-if test "${INSIDE_EMACS}" = 'vterm' \
-  && test -n "${EMACS_VTERM_PATH}" \
-  && test -f "${shell_integration_sh}"
+if echo "${INSIDE_EMACS}" | grep 'vterm' >/dev/null &&
+  test -n "${EMACS_VTERM_PATH}" &&
+  test -f "${shell_integration_sh}"
 then
   # optional integration for https://github.com/akermu/emacs-libvterm#shell-side-configuration-files
   source "${shell_integration_sh}"
@@ -60,8 +60,11 @@ alias lf='TERM=xterm-256color lf'
 # alias e='vi $(fzf)'
 
 # sync in case of drift between Emacs and base16-shell
-test "${DOOM_EMACS_THEME}" = "base16-$(current-base16)" \
-  || { test "${DOOM_EMACS_THEME}" = "base16-solarized-dark" && dark || light }
+echo "${INSIDE_EMACS}" | grep tramp >/dev/null ||
+  {
+    test "${DOOM_EMACS_THEME}" = "base16-$(current-base16)" ||
+      { test "${DOOM_EMACS_THEME}" = "base16-solarized-dark" && dark || light }
+  }
 
 # run command on start up requested from Emacs
 # TODO: this technically don't need to wait for all the things above, so consider moving up there to skip extra things to wait
