@@ -15,7 +15,7 @@
 ;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
 ;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
 ;;   presentations or streaming.
-;; - `doom-unicode-font' -- for unicode glyphs
+;; - `doom-symbol-font' -- for symbols
 ;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
 ;;
 ;; See 'C-h v doom-font' for documentation and more examples of what they
@@ -73,6 +73,12 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
+
+;; https://www.gnu.org/software/tramp/
+;; https://www.emacswiki.org/emacs/TrampMode#h5o-33
+;; https://nixos.wiki/wiki/Emacs#Cannot_find_all_binaries_on_a_remote_system_with_TRAMP
+(after! tramp-sh
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 (when (or IS-MAC IS-LINUX)
   ;; see for "flash of unstyled Emacs" - https://www.reddit.com/r/emacs/comments/oza47b/comment/h7yfxjz

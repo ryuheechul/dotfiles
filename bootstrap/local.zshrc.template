@@ -52,8 +52,6 @@ export MY_NIX_EXTRA_GHOSTTY=1
 # export MY_NIX_EXTRA_LANG_GRAALVM=1
 # export MY_NIX_EXTRA_LANG_PYTHON_JUPYTER=1
 
-# export MY_NIX_OVERRIDE_EMACS_29=1
-# export MY_NIX_OVERRIDE_EMACS_STABLE=1
 # export MY_NIX_OVERLAY_NEOVIM_NIGHTLY=1
 
 # it affects the GUI version of Emacs - requires the desktop GUI session to restart

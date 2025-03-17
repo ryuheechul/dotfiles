@@ -13,9 +13,9 @@ pushd "${curr_d}"
 # this is not perfect but I don't actually care to run `home-manager switch`
 # in some cases if it's rare enough
 # don't apply this filter when it's on a SSH connection
-printenv TMUX ZELLIJ | xargs test -z \
-  || printenv SSH_CLIENT > /dev/null \
-  || exit 0
+printenv TMUX ZELLIJ | xargs test -z ||
+  printenv SSH_CLIENT >/dev/null ||
+  exit 0
 
 nix_d="../../../nix"
 # home-manager init and switch ("idempotent")

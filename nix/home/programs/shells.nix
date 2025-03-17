@@ -8,7 +8,7 @@ let
 in
 {
   imports = [
-    # in place of `programs.command-not-found.enable` or `programs.nix-index.enable`; 
+    # in place of `programs.command-not-found.enable` or `programs.nix-index.enable`;
     # powered by https://github.com/nix-community/nix-index-database
     nix-index-enable
     # https://github.com/bennofs/nix-index#usage-as-a-command-not-found-replacement
@@ -81,7 +81,15 @@ in
     # I'm treating this like `.zlogin` and delegating handling ssh login shell case
     # to zsh in case zsh is not the default shell
     profileExtra = ''
-      test -n "''${SSH_TTY}" && source "''${my_dot_d}/nix/bin/source/nix.sh" && exec zsh -l
+      test -n "''${SSH_TTY}" && {
+        # e.g. emacs tramp
+        if test "''${TERM}" == "dumb"; then
+          grep "NAME=NixOS" /etc/os-release &> /dev/null &&
+            __ETC_PROFILE_SOURCED= __NIXOS_SET_ENVIRONMENT_DONE= source /etc/profile
+        else
+          source "''${my_dot_d}/nix/bin/source/nix.sh" && exec zsh -l
+        fi
+      }
     '';
   };
 

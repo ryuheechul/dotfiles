@@ -28,3 +28,10 @@ source "${my_zsh_d}/aliases"
 source "${my_zsh_d}/modules/history"
 
 test -f "${HOME}/.local.zshenv" && source "${HOME}/.local.zshenv"
+
+# handling the special case of being spawned via Emacs Tramp
+if echo "${INSIDE_EMACS}" | grep tramp >/dev/null; then
+  export UNSET_ALL_MY_ZSH_STUFF_LOADED=1
+  export UNSET_MY_BASIC_ZSH_STUFF_LOADED=1
+  export UNSET_HOST_ALWAYS_USE_TMUX=1
+fi
