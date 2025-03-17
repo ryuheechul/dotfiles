@@ -121,9 +121,9 @@ vim.opt.pumblend = 20
 vim.opt.clipboard = 'unnamedplus'
 -- For the option above to work across SSH connection, `ForwardX11 yes` (and `ForwardX11Trusted yes` if `ForwardX11` wasn't enough) options would be required. Otherwise the OSC 52 would make it trivial to copy and paste, however not all layers support it, notably Zellij currently doesn't support pasting
 
-local isInsideZellij = vim.env.ZELLIJ_SESSION_NAME ~= nil
+local shouldOsc52pasteBeAvailable = vim.env.ZELLIJ_SESSION_NAME == nil and vim.env.INSIDE_EMACS == nil
 
-if not isInsideZellij then
+if shouldOsc52pasteBeAvailable then
   -- without this, it will rely on X11 `$DISPLAY` env var via xsel or similar instead of OSC 52 way
   vim.g.clipboard = {
     name = 'OSC 52',
@@ -136,6 +136,23 @@ if not isInsideZellij then
       ['*'] = require('vim.ui.clipboard.osc52').paste '*',
     },
   }
+else
+  -- Since `osc` command (that is being invoked via `../../../bin/path/default/pb[copy|paste]`) is wasn't able to handle `/dev/tty` when it's not connected to SSH (`$SSH_TTY` is being used in this case)
+  if vim.env.SSH_TTY ~= nil then
+    vim.g.clipboard = {
+      name = 'pbcopy/pbpaste',
+      copy = {
+        ['+'] = 'pbcopy',
+        ['*'] = 'pbcopy',
+      },
+      paste = {
+        ['+'] = 'pbpaste',
+        ['*'] = 'pbpaste',
+      },
+    }
+  else
+    -- Let nvim to figure out what to do for a local terminal (without native osc 52) by doing nothing (after setting `vim.opt.clipboard = 'unnamedplus'` above for all cases)
+  end
 end
 
 -- to assist ../shell/source.zsh

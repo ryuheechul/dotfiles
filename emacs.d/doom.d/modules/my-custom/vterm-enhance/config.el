@@ -7,6 +7,10 @@
 
 (setq tui-emacs (eq window-system nil))
 
+;; allow yank but not paste as libvterm does not support
+(setq
+ vterm-enable-manipulate-selection-data-by-osc52 t)
+
 (defun prep-env-to-quickly-open-with-neovim ()
   (setenv "ALL_MY_ZSH_STUFF_LOADED" "1")
   (setenv "fast_shell_in_editor" "1")

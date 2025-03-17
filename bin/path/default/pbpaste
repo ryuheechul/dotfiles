@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 should-use-osc() {
-  test -z "${ZELLIJ_SESSION_NAME}" && command -v osc >/dev/null
+  ! test -n "${INSIDE_EMACS}" &&
+    test -z "${ZELLIJ_SESSION_NAME}" &&
+    command -v osc >/dev/null
 }
 
 is-remote-display-via-x11-forward() {

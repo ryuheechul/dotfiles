@@ -65,6 +65,8 @@ with pkgs;
   # editor - mostly for neovim
   [
     emacs # coming from my customization at ./custom/emacs.nix
+    # ispell for emacs
+    ispell # Interactive spell-checking program for Unix
     neovim # my favorite editor
     neovim-remote # 👌 Support for --remote and friends.
     tree-sitter # An incremental parsing system for programming tools

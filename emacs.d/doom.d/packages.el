@@ -47,3 +47,6 @@
 ;; (unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
+
+;; manually enabling at ./config.el until this issue is resolved - https://github.com/doomemacs/doomemacs/issues/8277
+(package! diff-hl)
