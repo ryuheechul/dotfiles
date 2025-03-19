@@ -194,12 +194,12 @@
        ;;literate
        (default +bindings +smartparens)
 
+       ;; from here and below are my private modules
        :my-custom          ; my own modules
+       morevil             ; ./modules/my-custom/morevil/
        vterm-enhance       ; bring tighter integration with my existing tools
        org                 ; addtional stuff for org mode
        lab)                ; where my new configs will be added initially
-       ;; (default +bindings +smartparens)
-
 
 ;; this section is for cli usages https://github.com/doomemacs/doomemacs/issues/2434#issuecomment-629572501
 (when noninteractive

@@ -28,3 +28,11 @@
             (find-file (org-protocol-find-file-fix-wsl-path f))
             (raise-frame)
             (select-frame-set-input-focus (selected-frame)))))
+
+;;; enhancing org-mode experience
+
+;; enable real-auto-save-mode for org-mode
+(add-hook 'org-mode-hook 'real-auto-save-mode)
+
+;; why not
+(setq org-startup-with-inline-images t)
