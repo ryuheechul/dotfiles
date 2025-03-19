@@ -11,5 +11,15 @@ if is-zsh-interactive && test "${TERM}" != 'dumb'; then
     is-nixos && source "${my_dot_d}/zsh/integration/1p"
     # to mimic secretive experience at macOS on WSL
     is-wsl && source "${my_dot_d}/zsh/integration/agent-bridge-via-1p"
+
+    # restore theme that might have been changed via SSH connection
+    if printenv TMUX > /dev/null; then
+      # see `./integration/interactive-ssh` to understand why this is needed
+      tmux show -gv @tmux_power_theme | grep gold > /dev/null && {
+        tmux set -g @tmux_power_theme 'colour39'
+        tmux set -g @tmux_power_g2 "4"
+        ~/.tmux/plugins/tpm/tpm
+      }
+    fi
   fi
 fi

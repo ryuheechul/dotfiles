@@ -14,7 +14,7 @@ pushd "${curr_d}"
 # in some cases if it's rare enough
 # don't apply this filter when it's on a SSH connection
 printenv TMUX ZELLIJ | xargs test -z ||
-  printenv SSH_CLIENT >/dev/null ||
+  printenv SSH_CONNECTION >/dev/null ||
   exit 0
 
 nix_d="../../../nix"

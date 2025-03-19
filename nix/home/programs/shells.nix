@@ -117,7 +117,7 @@ in
       # to prevent loading zsh stuff twice in case tmux is the default shell command for terminal emulators
       # but skip in ssh - https://unix.stackexchange.com/a/9606
       if uname | xargs test "Darwin" =; then
-        if [ -n "''${SSH_CLIENT}" ] || [ -n "''${SSH_TTY}" ] || [ -n "''${SSH_CONNECTION}" ] ; then
+        if [ -n "''${SSH_CONNECTION}" ] || [ -n "''${SSH_CLIENT}" ] || [ -n "''${SSH_TTY}" ] ; then
           true
         else
           export HOST_ALWAYS_USE_TMUX=1
