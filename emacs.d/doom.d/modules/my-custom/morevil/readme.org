@@ -1,4 +1,4 @@
 #+title: Readme - morevil
 
 * Like leaning to evil more
-This is where I heavily customize to reduce the gap regarding muscle memory with [[../../../../../nvim/][my nvim config]].
+This is where I heavily customize things to reduce the gap regarding muscle memory and visual consistency with [[../../../../../nvim/][my nvim config]].

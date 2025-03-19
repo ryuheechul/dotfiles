@@ -194,13 +194,15 @@
        ;;literate
        (default +bindings +smartparens)
 
-       ;; from here and below are my private modules
+       ;; from here and below are my more obvious private modules
        :my-custom          ; my own modules
-       morevil             ; ./modules/my-custom/morevil/
+       morevil             ; when there is more dark power needed
        vterm-enhance       ; bring tighter integration with my existing tools
+       soom                ; when doomemacs does not agree with me
        org                 ; addtional stuff for org mode
        lab)                ; where my new configs will be added initially
 
+;;;; this is essentially for when =doom env=/=doom sync= running
 ;; this section is for cli usages https://github.com/doomemacs/doomemacs/issues/2434#issuecomment-629572501
 (when noninteractive
   ;; ignore terminal and tmux related env vars

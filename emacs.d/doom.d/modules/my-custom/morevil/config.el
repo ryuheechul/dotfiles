@@ -1,5 +1,8 @@
 ;;; my-custom/morevil/config.el -*- lexical-binding: t; -*-
 
+;; equivalent to =:lua vim.wo.wrap = false= in Neovim
+(global-visual-line-mode t)
+
 ;; enables cil, cal, vil, val, dil, dal, yil, yal, etc
 (use-package! evil-textobj-line)
 

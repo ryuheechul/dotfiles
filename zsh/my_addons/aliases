@@ -348,16 +348,23 @@ alias c='cs | xargs ${EDITOR}'
 # for now, it only print the command not run
 alias clean-nvim-cmd='echo "rm -rf  ~/.local/share/nvim/lazy ~/.cache/nvim/lazy"'
 
+alias emacsclientgui="env emacsclient -a '' -c -n -F\"'(fullscreen . fullboth)\""
+
 # open in terminal using daemon process (create if it doesn't exist yet)
-alias emacsclient="emacsclient -nw -c -a ''"
+alias emacsclient="emacsclient -nw -a ''"
 
 # just a dirty hack to make `emacs` command to use a handle which work more smoothly
 # in terms of being able to activate the window like any other app on macOS
 typeset -f emacs &> /dev/null && unfunction emacs
 function emacs () {
   if test -n "${SSH_CONNECTION}"; then
-    env emacs -nw ${@} # use `emacs` instead of `emacsclient` on SSH connection
+    # env emacs -nw ${@} # use `emacs` instead of `emacsclient` on SSH session
+    emacsclient "${@}" # just realized that there is no reason to avoid emacsclient in SSH session, hence cancelling the line above
+    # NOTE: there are also these below that I can consider in the future:
+    # - https://mina86.com/2021/emacs-remote/
+    #   - https://irreal.org/blog/?p=9457
   else
+    # when no args
     if test $# -eq 0; then
       if is-darwin; then
         "${my_dot_d}/bin/path/darwin/open-gui-emacs"
@@ -365,7 +372,7 @@ function emacs () {
         emacsclient
       fi
     else
-      emacsclient ${@}
+      emacsclient "${@}"
     fi
   fi
 }

@@ -30,6 +30,8 @@ in
     LESSUTFCHARDEF = "E000-F8FF:p,F0000-FFFFD:p,100000-10FFFD:p";
     # https://github.com/microsoft/WSL/issues/4446
     LESSCHARSET = "utf-8";
+    # mostly to fix the issue describe here, https://www.reddit.com/r/emacs/comments/10lkwgr/emacsclient_in_terminal_doesnt_show_theme/ but also why not?
+    COLORTERM = "truecolor";
   };
 
   # `cat ~/.nix-profile/etc/profile.d/hm-session-vars.sh` to debug

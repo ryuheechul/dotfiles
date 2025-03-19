@@ -35,6 +35,7 @@
 ;; (setq doom-theme 'doom-solarized-light)
 (setq doom-font
       ;; provide a way to favor the font size value from env var
+      ;; NOTE (to be able to get that value) make sure to run =doom env= if your shell has set MY_EMACS_FONT_SIZE if there is any trouble laoding the env var
       (let ((size (string-to-number (or (getenv "MY_EMACS_FONT_SIZE") "12")))
             (family "FiraMono Nerd Font Mono"))
         (font-spec :family family :size size))
@@ -80,39 +81,18 @@
 (after! tramp-sh
   ;; (setq tramp-histfile-override nil) ;; uncomment this to debug (I manually undo histfile from `../../zsh/zshrc` to exclude history from `dumb` ones but not the interactive ones)
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+;; NOTE make sure to run =doom env= if to match =$SSH_AUTH_SOCK= from my shell
 
-;; until this issue is resolved - https://github.com/doomemacs/doomemacs/issues/8277
-(use-package! diff-hl
-  :hook (doom-first-file . global-diff-hl-mode)
-  :config
-  ;; Fix Doom disabling vc in remote buffers
-  (after! tramp
-    (setopt vc-ignore-dir-regexp locate-dominating-stop-dir-regexp))
-  ;;;; below is a verbatim copy from https://github.com/doomemacs/doomemacs/blob/466490c252d06f42a9c165f361de74a6e6abad8d/modules/ui/vc-gutter/config.el#L78-L93
-  ;; HACK: diff-hl won't be visible in TTY frames, but there's no simple way to
-  ;;   use the fringe in GUI Emacs *and* use the margin in the terminal *AND*
-  ;;   support daemon users, so we need more than a static `display-graphic-p'
-  ;;   check at startup.
-  (if (not (daemonp))
-      (unless (display-graphic-p)
-        (add-hook 'global-diff-hl-mode-hook #'diff-hl-margin-mode))
-    (when (modulep! :os tty)
-      (put 'diff-hl-mode 'last t)
-      (add-hook! 'doom-switch-window-hook
-        (defun +vc-gutter-use-margins-in-tty-h ()
-          (when (bound-and-true-p global-diff-hl-mode)
-            (let ((graphic? (display-graphic-p)))
-              (unless (eq (get 'diff-hl-mode 'last) graphic?)
-                (diff-hl-margin-mode (if graphic? -1 +1))
-                (put 'diff-hl-mode 'last graphic?)))))))))
+(add-to-list 'default-frame-alist '(fullscreen . fullboth))
+;; above now replaces the commented one below
 
-(when (or IS-MAC IS-LINUX)
-  ;; see for "flash of unstyled Emacs" - https://www.reddit.com/r/emacs/comments/oza47b/comment/h7yfxjz
-  ;; also it's possible that maybe somehow *skipping* of running `doom install` might have caused this.
-  ;; if it's a very first time running the GUI that gets stuck or hangs, running `emacsclient` first might fix it.
-  ;;
-  ;; to trigger emacs to be full screen on start up - https://emacsredux.com/blog/2020/12/04/maximize-the-emacs-frame-on-startup/
-  (add-hook 'window-setup-hook #'toggle-frame-fullscreen))
+;; (when (or IS-MAC IS-LINUX)
+;;   ;; see for "flash of unstyled Emacs" - https://www.reddit.com/r/emacs/comments/oza47b/comment/h7yfxjz
+;;   ;; also it's possible that maybe somehow *skipping* of running `doom install` might have caused this.
+;;   ;; if it's a very first time running the GUI that gets stuck or hangs, running `emacsclient` first might fix it.
+;;   ;;
+;;   ;; to trigger emacs to be full screen on start up - https://emacsredux.com/blog/2020/12/04/maximize-the-emacs-frame-on-startup/
+;;   (add-hook 'window-setup-hook #'toggle-frame-fullscreen))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.

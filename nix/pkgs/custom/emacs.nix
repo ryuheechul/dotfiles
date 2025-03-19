@@ -5,11 +5,17 @@ let
   # https://blog.phundrak.com/emacs-29-what-can-we-expect/
   # emacs-pgtk: wayland native via pure gtk
   emacs = if pkgs.stdenv.isLinux then pkgs.emacs-pgtk else pkgs.emacs;
-  emacsWithNativeComp = emacs.override { withNativeCompilation = true; };
-  emacsWithPackages = (pkgs.emacsPackagesFor emacsWithNativeComp).emacsWithPackages;
-  customizedEmacs = emacsWithPackages (epkgs: [ epkgs.vterm ]); # include libvterm
+  emacsWithOptions = emacs.override {
+    # these are pretty much the default but still making it explicit for documentation purpose
+    withNativeCompilation = true; # this is pretty much default
+    withTreeSitter = true; # this is the default for 29+ version
+  };
+  emacsWithPackages = (pkgs.emacsPackagesFor emacsWithOptions).emacsWithPackages;
+  customizedEmacs = emacsWithPackages (epkgs: [
+    epkgs.vterm
+  ]); # include libvterm
   # above is basically the broken down version of below
-  # ((emacsPackagesFor (emacs.override { withNativeCompilation = true; })).emacsWithPackages (epkgs: [ epkgs.vterm ]))
+  # ((emacsPackagesFor (emacs.override { ... })).emacsWithPackages (epkgs: [ epkgs.vterm ]))
 in
 customizedEmacs # emacs editor including GUI, `emacs -nw` to run as TUI
 

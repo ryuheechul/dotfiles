@@ -1,0 +1,6 @@
+#+title: Readme - soom
+
+Soon on doom?
+Shim for doom?
+
+Anyhow some modifications to workaround what "lacks" at doomemacs
