@@ -1,0 +1,10 @@
+#+title: Readme - treesit-support
+
+This module is a way to bridge the gap between [[https://github.com/doomemacs/doomemacs/tree/master/modules/tools/tree-sitter][the old way]] and the lack of support for the new way in the doom yet.
+
+Therefore, powering the support for tree-sitter via =treesit= until this issue, https://github.com/doomemacs/doomemacs/issues/7623 is resolved.
+
+* Some Links
+- https://robbmann.io/posts/emacs-treesit-auto/
+- https://github.com/emacs-tree-sitter/treesit-langs
+- https://github.com/renzmann/treesit-auto

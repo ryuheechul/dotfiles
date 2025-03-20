@@ -1,0 +1,6 @@
+#+title: Readme - lang/astro module
+
+It started from https://github.com/edmundmiller/.doom.d/tree/3f53f48071035fdc498a5cf36fff31e51b537367/modules/lang/astro
+.
+
+Discovered by https://edmundmiller.dev/posts/emacs-astro/.
