@@ -98,7 +98,8 @@
        ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        lookup              ; navigate your code and its documentation
-       ;;lsp               ; M-x vscode
+       (lsp +peek)       ; M-x vscode
+       lsp-support       ; ./modules/tools/lsp-support/
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
@@ -152,7 +153,7 @@
        ;;lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
-       ;;nix               ; I hereby declare "nix geht mehr!"
+       (nix +lsp)        ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        (org +pretty)     ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
