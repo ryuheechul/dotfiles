@@ -7,3 +7,11 @@
 # - combined with https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/history.zsh
 # - via ../my_addons/zinit
 setopt HIST_IGNORE_ALL_DUPS; HISTSIZE=1000000; SAVEHIST=1000000;
+
+# because I want the history with interactive SSH session even via TRAMP
+test -n "${HISTFILE}" && test "${HISTFILE}" != ~/.zsh.history && >&2 echo "\$HISTFILE was ${HISTFILE}"
+# regarding `>&2 echo ...`: https://stackoverflow.com/a/23550347/1570165
+
+# setting a new path to avoid polluting from external source (e.g. tramp);
+# anything before this, should be at ~/.zsh_history
+export HISTFILE=~/.zsh.history

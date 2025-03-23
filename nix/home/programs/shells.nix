@@ -85,8 +85,9 @@ in
     profileExtra = ''
       test -n "''${SSH_TTY}" && {
         # e.g. emacs tramp
-        if test "''${TERM}" == "dumb"; then
-          grep "NAME=NixOS" /etc/os-release &> /dev/null &&
+        if test "''${TERM}" = "dumb"; then
+          ! echo "''${PATH}" | grep '\.nix-profile\/bin' &&
+            grep "NAME=NixOS" /etc/os-release &> /dev/null &&
             __ETC_PROFILE_SOURCED= __NIXOS_SET_ENVIRONMENT_DONE= source /etc/profile
         else
           source "''${my_dot_d}/nix/bin/source/nix.sh" && exec zsh -l

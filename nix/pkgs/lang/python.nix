@@ -26,6 +26,17 @@ let
       isort
       coverage
     ]
+    # ++ [
+    #   epc
+    #   orjson
+    #   sexpdata
+    #   six
+    #   setuptools
+    #   paramiko
+    #   rapidfuzz
+    #   watchdog
+    #   packaging
+    # ] # for https://github.com/manateelazycat/lsp-bridge/wiki/NixOS
     ++ ifEnv "MY_NIX_EXTRA_LANG_PYTHON_JUPYTER" [
       jupyter # The Jupyter HTML notebook is a web-based notebook environment for interactive computing
     ]

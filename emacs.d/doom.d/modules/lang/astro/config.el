@@ -1,21 +1,26 @@
 ;;; lang/astro/config.el -*- lexical-binding: t; -*-
 
-(if (modulep! :tools treesit-support)
-    (after! treesit-langs
-      (use-package! astro-ts-mode
-        :init
-        (when (modulep! +lsp)
-          (add-hook 'astro-ts-mode-hook #'lsp! 'append)))))
+(when (and (modulep! :tools lsp +eglot)(modulep! +lsp))
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '(astro-ts-mode . ("astro-ls" "--stdio"
+                                    :initializationOptions (:typescript (:tsdk "node_modules/typescript/lib")))))))
 
+;; requires `lsp-install-server' for `lsp-mode' but that might not work on NixOS:
+;; or make sure to install it manually and it's discoverable via `$PATH'
+(use-package! astro-ts-mode
+  :after treesit-langs
+  :init
+  (when (and (modulep! :tools lsp)(modulep! +lsp))
+    (add-hook 'astro-ts-mode-hook #'lsp! 'append)))
 
 (set-formatter! 'prettier-astro
-                '("npx" "prettier" "--parser=astro"
-                  (apheleia-formatters-indent "--use-tabs" "--tab-width" 'astro-ts-mode-indent-offset))
-                :modes '(astro-ts-mode))
-
+  '("npx" "prettier" "--parser=astro"
+    (apheleia-formatters-indent "--use-tabs" "--tab-width" 'astro-ts-mode-indent-offset))
+  :modes '(astro-ts-mode))
 
 (use-package! lsp-tailwindcss
-  :when (modulep! +lsp)
+  :when (and (modulep! :tools lsp -eglot)(modulep! +lsp))
   :after lsp-mode
   :init
   ;; don't forget to install the server via (lsp-install-server)
@@ -27,8 +32,7 @@
   :config
   (add-to-list 'lsp-tailwindcss-major-modes 'astro-ts-mode))
 
-
 ;; MDX Support
 (add-to-list 'auto-mode-alist '("\\.\\(mdx\\)$" . markdown-mode))
-(when (modulep! +lsp)
+(when (and (modulep! :tools lsp -eglot)(modulep! +lsp))
   (add-hook 'markdown-mode-local-vars-hook #'lsp! 'append))

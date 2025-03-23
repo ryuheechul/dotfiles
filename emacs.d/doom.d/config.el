@@ -1,5 +1,20 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
+;; NOTE refrain adding too much code directly here
+;; - there is ./modules/ that I can split code
+;;   - and don't forget to add that module to ./init.el and run =doom sync= or just run =(doom/reload)=
+;;   - (doom/help-modules) to index and access modules
+;;   - (doom/help-pacakges) to look up packages
+;; - try using =(doom/reload)= to see if applying the new changes can be faster without much delay such as restarting
+;;   - but even before that just running to code at the cursor with `eval-last-sexp'
+;;     - (place cursor at the end of the expression, like ="= or =)=)
+;;   - there is also =(doom/restart)= when reload is not good enough
+;;   - actually more methods are documented here,  https://github.com/doomemacs/doomemacs/blob/master/docs/getting_started.org#reloading-your-config
+;; - there is also my note, [[https://gist.github.com/ryuheechul/1363eec4e945b6840989d255cdbd09e3][emacs.md]]
+;; - https://github.com/doomemacs/doomemacs/blob/master/docs/getting_started.org
+;; - https://github.com/doomemacs/doomemacs/blob/master/docs/faq.org
+;; NOTE make sure to run =doom env= if to match =$SSH_AUTH_SOCK= from my shell
+
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
@@ -75,15 +90,8 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
 
-;; https://www.gnu.org/software/tramp/
-;; https://www.emacswiki.org/emacs/TrampMode#h5o-33
-;; https://nixos.wiki/wiki/Emacs#Cannot_find_all_binaries_on_a_remote_system_with_TRAMP
-(after! tramp-sh
-  ;; (setq tramp-histfile-override nil) ;; uncomment this to debug (I manually undo histfile from `../../zsh/zshrc` to exclude history from `dumb` ones but not the interactive ones)
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
-;; NOTE make sure to run =doom env= if to match =$SSH_AUTH_SOCK= from my shell
-
-(add-to-list 'default-frame-alist '(fullscreen . fullboth))
+;; now this is done at ./init.el
+;; (add-to-list 'default-frame-alist '(fullscreen . fullboth))
 ;; above now replaces the commented one below
 
 ;; (when (or IS-MAC IS-LINUX)

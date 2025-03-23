@@ -4,7 +4,7 @@
 ;; https://github.com/Sorixelle/astro-ts-mode
 (package! astro-ts-mode)
 
-(when (modulep! +lsp)
+(when (and (modulep! :tools lsp -eglot)(modulep! +lsp))
   ;; https://github.com/merrickluo/lsp-tailwindcss
   (package! lsp-tailwindcss
     :recipe (:host github :repo "merrickluo/lsp-tailwindcss")))

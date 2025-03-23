@@ -8,6 +8,7 @@ in
 with pkgs;
 [
   efm-langserver # General purpose Language Server
+  emacs-lsp-booster # Emacs LSP performance booster - ../../../emacs.d/doom.d/modules/tools/lsp-support
 ]
 ++ ifEnv "MY_NIX_EXTRA_GIT" [
   git-lfs # git extention for large file storage

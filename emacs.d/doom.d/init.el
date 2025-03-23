@@ -57,7 +57,10 @@
        (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
        fold              ; (nigh) universal code folding
-       ;;(format +onsave)  ; automated prettiness
+       ;; this actually gives worse experience like mis matching the buffer and file and doesn't get fixed over time
+       ;; (format +onsave +lsp) ; automated prettiness
+       ;; the below on the other hand, still work with lsp even with `+lsp' flag.
+       (format +onsave) ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
        ;;;; avoid lispy until there is a good solution to this issue (conflict with evil-escape), https://github.com/abo-abo/lispy/issues/635
        ;;lispy             ; vim for lisp, for people who don't like vim
@@ -98,7 +101,7 @@
        ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        lookup              ; navigate your code and its documentation
-       (lsp +peek)       ; M-x vscode
+       (lsp +eglot)       ; M-x vscode
        lsp-support       ; ./modules/tools/lsp-support/
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
@@ -107,6 +110,7 @@
        ;;prodigy           ; FIXME managing external services & code builders
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
+       tramp-support     ; ./modules/tools/tramp-support/
        ;;tree-sitter       ; syntax and parsing, sitting in a tree...
        treesit-support   ; ./modules/tools/treesit-support/
        ;;upload            ; map local to remote projects via ssh/ftp
@@ -181,6 +185,10 @@
        ;;yaml              ; JSON, but readable
        ;;zig               ; C, but simpler
 
+       :ext-lang
+       (nix +lsp)         ; ./modules/ext-lang/nix/
+       typescript         ; ./modules/ext-lang/typescript/
+
        :email
        ;;(mu4e +org +gmail)
        ;;notmuch
@@ -204,6 +212,9 @@
        soom                ; when doomemacs does not agree with me
        org                 ; addtional stuff for org mode
        lab)                ; where my new configs will be added initially
+
+;; set it early here instead of ./config.el to avoid seeing frame changes on start up
+(add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
 ;;;; this is essentially for when =doom env=/=doom sync= running
 ;; this section is for cli usages https://github.com/doomemacs/doomemacs/issues/2434#issuecomment-629572501

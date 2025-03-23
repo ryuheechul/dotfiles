@@ -1,0 +1,39 @@
+#+title: Readme - lsp-support
+
+* Why I chose =eglot= over =lsp-mode= or =lsp-bridge=?
+
+** long story short:
+- eglot works the best with in terms of the consistency between local and tramp mode and with other two (=lsp-mode= and =lsp-bridge=), I found them not working well with tramp
+- and tramp usage is very importan to me
+
+** a bit longer
+*** =lsp-mode=
+**** it was quite featureful out of the box but ...
+**** [[https://github.com/emacs-lsp/lsp-mode/issues/1845][[GH Issue] lsp starting stuck when open tramp file. #1845]]
+*** [[https://github.com/manateelazycat/lsp-bridge?tab=readme-ov-file#remote-usage][=lsp-bridge='s remote usage]] is not based on tramp
+**** it was quite performant which is good but ...
+**** and this also doesn't seem to make use of =~/.ssh/config= (then it ignores =$SSH_AUTH_SOCK=)
+***** further more can't use domain name in =~/.ssh/config= ...
+*** =eglot= is the built-in choice but lacks the support of multiple language servers at the same time
+**** TODO but there seems to be a workaround being discussed, https://github.com/joaotavora/eglot/discussions/1429
+**** [[https://github.com/jdtsmith/eglot-booster][eglot-booster]] makes it very easy to make use of =emacs-lsp-booster=
+
+*** since it's only the beginning of adapting LSP on Emacs for me, I might change my setup later on but at least this is the initial version of the most optimal setup that make sense to me
+
+** so what's the criteria I'm looking for?
+- least sluggish possible
+  - hence =emacs-lsp-booster= and =eglot-booster= and considering =lsp-bridge=
+- easily configurable and extendible
+- editing via tramp feels just like the local one (besides the inevitable but small enough latencies on LSP actions)
+  - this is actually the motivation for me to try out emacs with tramp instead of my most familiar approach (SSH with Neovim)
+    - I'm very comfortable with Neovim and it's great but typing (and echoing) every letter with variable latencies got me searching for better solution
+      - tried mosh but it had many issues for me enough that I stopped trying
+  - hopefully Emacs with Tramp can rock the remote coding for me but we will see!
+
+
+* Links regarding =lsp-mode=
+- https://emacs-lsp.github.io/lsp-mode/
+- https://emacs-lsp.github.io/lsp-mode/page/faq
+
+=(lsp-doctor)=
+=(lsp-describe-thing-at-point)=

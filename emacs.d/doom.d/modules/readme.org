@@ -1,0 +1,4 @@
+#+title: Readme - modules
+
+* =ext-*= convention to define modules that are not upstream but developed as my private modules
+- e.g. [[./ext-lang][./ext-lang]]
