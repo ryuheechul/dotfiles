@@ -86,11 +86,15 @@ in
       test -n "''${SSH_TTY}" && {
         # e.g. emacs tramp
         if test "''${TERM}" = "dumb"; then
-          ! echo "''${PATH}" | grep '\.nix-profile\/bin' &&
+          ! echo "''${PATH}" | grep '\.nix-profile/bin' >/dev/null &&
             grep "NAME=NixOS" /etc/os-release &> /dev/null &&
             __ETC_PROFILE_SOURCED= __NIXOS_SET_ENVIRONMENT_DONE= source /etc/profile
         else
           source "''${my_dot_d}/nix/bin/source/nix.sh" && exec zsh -l
+        fi
+
+        if test -n "''${INSIDE_EMACS}" && ! echo "''${PATH}" | grep 'nvim/mason/bin' >/dev/null; then
+          export PATH="''${XDG_DATA_HOME}/nvim/mason/bin:''${PATH}"
         fi
       }
     '';

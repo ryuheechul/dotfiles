@@ -16,6 +16,11 @@ else
   echo "Some error are expected. Make sure `emacs-vterm-zsh.[z]sh` is discoverable"
 fi
 
+# see also `../modules/compat/neovim/config.el` and `../../../nix/home/programs/shells.nix`
+if test -n "${INSIDE_EMACS}" && ! echo "${PATH}" | grep 'nvim/mason/bin' >/dev/null; then
+  export PATH="${XDG_DATA_HOME}/nvim/mason/bin:''${PATH}"
+fi
+
 # fix cursor shape in the shell inside vterm - https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
 echo '\e[2 q'
 
@@ -48,6 +53,9 @@ export TERM=eterm-color
 # this way would prevent the shell to be actually closed and open again needlessly which makes toggle feel prompt (after initial opening)
 # when you need an actual exit, just type `exit`
 printenv ZELLIJ || alias q='vterm_cmd vterm/hide && clear' # `clear` give you the illusion of opening the shell again (promptly) - don't use `clear` when debugging
+
+# to work in tandem with ../modules/my-custom/morevil/
+alias fg='vterm_cmd vterm/hide' # this override `fg` completely which is not good in case I need `fg` within emacs - TODO: fix it
 
 # despite its name it should only work for the "full screen one"
 vterm_cmd vterm/unhide-mode-line

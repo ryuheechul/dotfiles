@@ -110,6 +110,8 @@ local config = function()
   }
 
   wk.add {
+    -- similar experience to doomemacs' keybinding for `M-x`
+    { '<Space>:', cmdify 'Telescope commands', desc = 'commands' },
     {
       "<Space>'",
       -- use count 9 to be independent from the horizontal one
@@ -124,7 +126,7 @@ local config = function()
     },
     { '<Space><CR>', '@q', desc = 'macro q' }, -- setting a special key
     { '<Space><Tab>', cmdify 'bn', desc = 'rotate buffer' },
-    { '<Space><space>', cmdify 'Telescope oldfiles', desc = 'Telescope: recent files' },
+    { '<Space><space>', cmdify 'Telescope find_files', desc = 'find files' },
   }
 
   wk.add {
@@ -153,7 +155,7 @@ local config = function()
       end,
       desc = 'open in Emacs',
     },
-    { '<Space>ff', cmdify 'Telescope find_files', desc = 'find files' },
+    { '<Space>ff', cmdify 'Telescope file_browser', desc = 'file browser' }, -- mimic the experience from doomemacs
     { '<Space>fg', group = 'Git' },
     { '<Space>fgb', cmdify 'Telescope git_branches', desc = 'branches' },
     { '<Space>fgc', cmdify 'Telescope git_bcommits', desc = 'bcommits' },
@@ -175,6 +177,7 @@ local config = function()
     { '<Space>gd', cmdify 'DiffviewOpen', desc = 'show git diff' },
     -- { '<Space>gg', require('gfold').pick_repo, desc = 'pick repo via gfold' },
     { '<Space>gn', cmdify 'Neogit', desc = 'open Neogit' },
+    { '<Space>gg', cmdify 'Neogit', desc = 'open Neogit' }, -- to provide same keybinding as doomemacs magit status
     { '<Space>gr', cmdify 'Gcd', desc = 'go to git root' },
     { '<Space>gx', cmdify 'GBrowse', desc = 'open file in browser' },
   }

@@ -21,8 +21,8 @@
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
-       company           ; the ultimate code completion backend
-       (corfu +orderless)  ; complete with cap(f), cape and a flying feather!
+       ;; company           ; the ultimate code completion backend
+       (corfu +icons)    ; complete with cap(f), cape and a flying feather!
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
@@ -156,7 +156,7 @@
        ;;latex             ; writing papers in Emacs has never been so fun
        ;;lean              ; for folks with too much to prove
        ;;ledger            ; be audit you can be
-       ;;lua               ; one-based indices? one-based indices
+       lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        (nix +lsp)        ; I hereby declare "nix geht mehr!"
@@ -187,6 +187,7 @@
 
        :ext-lang
        (nix +lsp)         ; ./modules/ext-lang/nix/
+       (lua +lsp)         ; ./modules/ext-lang/lua/
        typescript         ; ./modules/ext-lang/typescript/
 
        :email
@@ -204,6 +205,9 @@
        :config
        ;;literate
        (default +bindings +smartparens)
+
+       :compat
+       neovim              ; ./modules/compat/neovim
 
        ;; from here and below are my more obvious private modules
        :my-custom          ; my own modules

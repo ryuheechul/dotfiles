@@ -105,6 +105,7 @@
   "stay-in-place.nvim": { "branch": "main", "commit": "0628b6db8970fc731abf9608d6f80659b58932c9" },
   "telescope-dap.nvim": { "branch": "master", "commit": "783366bd6c1e7fa0a5c59c07db37f49c805a28df" },
   "telescope-emoji.nvim": { "branch": "master", "commit": "86248d97be84a1ce83f0541500ef9edc99ea2aa1" },
+  "telescope-file-browser.nvim": { "branch": "master", "commit": "626998e5c1b71c130d8bc6cf7abb6709b98287bb" },
   "telescope-heading.nvim": { "branch": "main", "commit": "e85c0f69cb64048f56e76548dcb2f10277576df9" },
   "telescope-luasnip.nvim": { "branch": "master", "commit": "07a2a2936a7557404c782dba021ac0a03165b343" },
   "telescope-repo.nvim": { "branch": "master", "commit": "a5395a4bf0fd742cc46b4e8c50e657062f548ba9" },

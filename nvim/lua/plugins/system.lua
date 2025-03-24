@@ -59,6 +59,7 @@ return {
       'xiyaowong/telescope-emoji.nvim',
       'cljoly/telescope-repo.nvim',
       'nvim-telescope/telescope-dap.nvim',
+      'nvim-telescope/telescope-file-browser.nvim',
     },
     config = function()
       local telescope = require 'telescope'
@@ -82,6 +83,21 @@ return {
           },
           spell_suggest = {
             theme = 'cursor',
+          },
+        },
+        extensions = {
+          file_browser = {
+            theme = 'ivy',
+            -- disables netrw and use telescope-file-browser in its place
+            hijack_netrw = true,
+            mappings = {
+              ['i'] = {
+                -- your custom insert mode mappings
+              },
+              ['n'] = {
+                -- your custom normal mode mappings
+              },
+            },
           },
         },
       }

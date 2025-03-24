@@ -1,10 +1,12 @@
 ;;; my-custom/morevil/config.el -*- lexical-binding: t; -*-
 
+;; if it's beyond muscle memory or keybinding related, there is =../../compat/neovim/=
+
 ;; equivalent to =:lua vim.wo.wrap = false= in Neovim
 (global-visual-line-mode t)
 
 ;; enables cil, cal, vil, val, dil, dal, yil, yal, etc
-(use-package! evil-textobj-line)
+(use-package! evil-textobj-line :after evil)
 
 ;; to algin with my neovim keybindings
 (map! :textobj "e" #'+evil:whole-buffer-txtobj         #'+evil:whole-buffer-txtobj)
@@ -67,3 +69,10 @@
       :g
       "c"
       #'evil-ex-nohighlight)
+
+;;;; to match with my muscle memory with ../../../../../nvim/lua/plugins/keymaps.lua
+(map! :leader :prefix "f" :g "h" #'doom/help-search)
+(map! :n "gx" #'browse-url-xdg-open)
+(map! :n "go" #'xref-go-back)
+;; to give the illusion of putting the editor in the background (in case as if emacs was terminal)
+(map! :n "\\s" #'vterm/full-w/toggle)

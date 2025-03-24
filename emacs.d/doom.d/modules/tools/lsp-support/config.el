@@ -1,6 +1,7 @@
 ;;; tools/lsp-support/config.el -*- lexical-binding: t; -*-
 
-;; lsp working with `tramp' requires additional touch and see ../tramp-support/ for some tweaks
+;; LSP working with `tramp' requires additional touch and see ../tramp-support/ for some tweaks
+;; LSP executables already installed via neovim is added to the =$PATH= via =../../compat/neovim/=
 
 (define-minor-mode +format-with-eglot-mode
   "Run eglot-format-buffer as a before-save-hook."
