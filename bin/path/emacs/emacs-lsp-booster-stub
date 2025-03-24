@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+cmd="$(echo "${0}" | xargs basename)"
+
+# most likely via tramp
+if echo "${PATH}" | grep 'bin/path/emacs' >/dev/null; then
+  realc="$(which -a "${cmd}" | sed -n '2 p')"
+# most likely locally via `(add-to-list 'exec-path "~/dotfiles/bin/path/emacs")`
+else
+  realc="$(which -a "${cmd}" | head -n 1)"
+fi
+
+emacs-lsp-booster --disable-bytecode -- ${realc} "${@}"

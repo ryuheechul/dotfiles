@@ -89,6 +89,12 @@ in
           ! echo "''${PATH}" | grep '\.nix-profile\/bin' &&
             grep "NAME=NixOS" /etc/os-release &> /dev/null &&
             __ETC_PROFILE_SOURCED= __NIXOS_SET_ENVIRONMENT_DONE= source /etc/profile
+
+            if test -n "''${SET_PATH_FOR_EMACS}" || {
+              test -n "''${INSIDE_EMACS}" && ! echo "''${PATH}" | grep 'bin/path/emacs'
+            }; then
+              export PATH="''${my_dot_d}/bin/path/emacs:''${PATH}"
+            fi
         else
           source "''${my_dot_d}/nix/bin/source/nix.sh" && exec zsh -l
         fi

@@ -9,3 +9,8 @@
 ;;            (eq with-editor-emacsclient-executable nil))
 ;;       (setq with-editor-emacsclient-executable
 ;;             (shell-command-to-string "command -v emacsclient"))))
+
+
+;; necessary for local but in tramp case, the shell has to set this up
+;; but in local case, eglot will only respect this one instead of the shell one
+(add-to-list 'exec-path (concat (getenv "my_dot_d") "/bin/path/emacs"))
