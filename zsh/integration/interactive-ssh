@@ -1,4 +1,4 @@
-# vim: set ft=zsh:
+# -*- mode: sh; -*- vim: set ft=zsh:
 
 # meant to be sourced from ../zlogin
 

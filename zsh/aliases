@@ -1,4 +1,4 @@
-# vim: set ft=zsh:
+# -*- mode: sh; -*- vim: set ft=zsh:
 
 # aliases that is should be available for non-interactive shell too
 

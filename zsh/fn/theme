@@ -1,4 +1,4 @@
-# vim: set ft=zsh:
+# -*- mode: sh; -*- vim: set ft=zsh:
 
 export BASE16_SHELL="${XDG_CONFIG_HOME}/base16-shell"
 

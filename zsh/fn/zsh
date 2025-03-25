@@ -1,4 +1,4 @@
-# vim: set ft=zsh:
+# -*- mode: sh; -*- vim: set ft=zsh:
 
 # inspired by https://www.topbug.net/blog/2016/10/11/speed-test-check-the-existence-of-a-command-in-bash-and-zsh/
 function fastcommandcheck() {

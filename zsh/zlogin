@@ -1,4 +1,4 @@
-# vim: set ft=zsh:
+# -*- mode: sh; -*- vim: set ft=zsh:
 
 # - persist a session via zellij on SSH connection
 # - but avoid doing this for tramp-mode on emacs - https://www.emacswiki.org/emacs/TrampMode

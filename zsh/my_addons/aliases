@@ -1,4 +1,4 @@
-# vim: set ft=zsh:
+# -*- mode: sh; -*- vim: set ft=zsh:
 
 # define functions first so that it doesn't get affected by aliases being defined here
 

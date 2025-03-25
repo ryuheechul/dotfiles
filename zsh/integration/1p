@@ -1,4 +1,4 @@
-# vim: set ft=zsh:
+# -*- mode: sh; -*- vim: set ft=zsh:
 
 # this file is expected to be sourced via bash or zsh
 # this is different from `./agent-bridge-via-1p` which is meant for WSL environment to communicate with Windows host

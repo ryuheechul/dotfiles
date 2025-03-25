@@ -1,4 +1,4 @@
-# vim: set ft=zsh:
+# -*- mode: sh; -*- vim: set ft=zsh:
 
 setopt no_global_rcs # prevent /etc/zshrc and /etc/zprofile to surprise me
 

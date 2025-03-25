@@ -1,4 +1,4 @@
-# vim: set ft=zsh:
+# -*- mode: sh; -*- vim: set ft=zsh:
 
 # optimize and enhance history management
 # - https://www.soberkoder.com/better-zsh-history/

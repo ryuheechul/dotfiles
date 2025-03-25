@@ -1,4 +1,4 @@
-# vim: set ft=zsh:
+# -*- mode: sh; -*- vim: set ft=zsh:
 
 # escape hatches for editors (that can be opened via/and inside shell) that has has its own terminal emulator that runs will run this shell
 test -z "${IGNORE_UNSET_MY_BASIC_ZSH_STUFF_LOADED}" && test -n "${UNSET_MY_BASIC_ZSH_STUFF_LOADED}" && unset MY_BASIC_ZSH_STUFF_LOADED && unset UNSET_MY_BASIC_ZSH_STUFF_LOADED
