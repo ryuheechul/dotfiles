@@ -1,4 +1,16 @@
 {
+    "fix-python": {
+        "branch": "master",
+        "description": "A simple CLI tool to use Python venv \"normally\" on NixOS",
+        "homepage": null,
+        "owner": "GuillaumeDesforges",
+        "repo": "fix-python",
+        "rev": "e9162f7761a9b9b5712f564682560ce1b16e7219",
+        "sha256": "02yzvv3ac8a788zh257yizci1wyw7161axz2970h4m89j9hqcxwv",
+        "type": "tarball",
+        "url": "https://github.com/GuillaumeDesforges/fix-python/archive/e9162f7761a9b9b5712f564682560ce1b16e7219.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "flake-compat": {
         "branch": "master",
         "description": null,

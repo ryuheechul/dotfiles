@@ -62,3 +62,6 @@ is-darwin && add-to-path "${my_dot_d}/bin/path/darwin"
 is-ssh && add-to-path "${my_dot_d}/bin/path/ssh"
 
 is-nixos && add-to-path "${my_dot_d}/bin/path/nixos"
+
+test -n "${ADDITIONAL_PATH_FOR_EMACS}" &&
+  add-to-path "$(echo ${ADDITIONAL_PATH_FOR_EMACS} | sed 's|^~|'"${HOME}"'|')"

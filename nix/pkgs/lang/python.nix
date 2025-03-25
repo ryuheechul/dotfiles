@@ -3,6 +3,7 @@
 let
   checkEnv = import ../../utils/checkEnv.nix;
   ifEnv = envName: pkgs.lib.optionals (checkEnv envName);
+  fix-python = import ../custom/fix-python.nix;
 in
 with pkgs;
 let
@@ -51,5 +52,8 @@ let
   natives = [
     ruff # An extremely fast Python linter and a Language Server Protocol implementation for Ruff
   ];
+  break-free = [
+    fix-python # A simple CLI tool to use Python venv "normally" on NixOS
+  ];
 in
-[ python-with-pkgs ] ++ via-npm ++ natives
+[ python-with-pkgs ] ++ via-npm ++ natives ++ break-free
