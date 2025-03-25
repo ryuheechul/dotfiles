@@ -102,7 +102,7 @@
        (eval +overlay)     ; run code, run (also, repls)
        lookup              ; navigate your code and its documentation
        (lsp +eglot)       ; M-x vscode
-       lsp-support       ; ./modules/tools/lsp-support/
+       (lsp-support +hover); ./modules/tools/lsp-support/
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds

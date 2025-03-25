@@ -1,5 +1,8 @@
 ;;; tools/lsp-support/config.el -*- lexical-binding: t; -*-
 
+(when (and (modulep! :tools lsp) (modulep! +hover))
+  (use-package! eldoc-box))
+
 ;; LSP working with `tramp' requires additional touch and see ../tramp-support/ for some tweaks
 ;; LSP executables already installed via neovim is added to the =$PATH= via =../../compat/neovim/=
 
@@ -22,7 +25,9 @@
     :after eglot
     :config (eglot-booster-mode))
   ;; (setq eglot-booster-io-only t) ;; is this way would be better with emacs 30+?
-  (add-hook 'eglot-managed-mode-hook #'+format-with-eglot-mode))
+  (add-hook 'eglot-managed-mode-hook #'+format-with-eglot-mode)
+  (when (modulep! +eldoc-box)
+    (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-at-point-mode t)))
 
 ;; NOTE from here and below, I actually choose to not use neither `lsp-mode' nor `lsp-bridge'
 ;; since I chose `eglot' for a choice of lsp layer, see ./readme.org for why I made that decision

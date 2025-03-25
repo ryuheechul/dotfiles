@@ -4,6 +4,9 @@
 ;; `eglot' is builtin
 ;; installing `lsp-mode' is handled via dooemacs modeul =:tools lsp=
 
+(when (and (modulep! :tools lsp) (modulep! +hover))
+  (package! eldoc-box))
+
 (when (modulep! :tools lsp +eglot)
   (package! eglot-booster
     :recipe (:host github
