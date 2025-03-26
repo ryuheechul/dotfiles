@@ -2,7 +2,7 @@
 
 # this will be used few places including ../init.el and ./source.zsh
 
-# both for doom sync and on loading shell
+# both for doom sync and on loading shell until it says otherwise
 echo -n "TERM
 TERM_PROGRAM
 TERM_PROGRAM_VERSION
@@ -21,6 +21,59 @@ ZELLIJ_SESSION_NAME
 ZELLIJ_PANE_ID
 ALACRITTY_SOCKET
 ALACRITTY_LOG
+"
+
+# direnv related - prevent contamination directly from DIRENV;
+# it will mess the state of the shell inside emacs
+echo -n "DIRENV_CONFIG
+DIRENV_BASH
+DIRENV_DEBUG
+DIRENV_DIR
+DIRENV_FILE
+DIRENV_WATCHES
+DIRENV_DIFF
+DIRENV_DUMP_FILE_PATH
+"
+
+# devenv related - prevent contamination directly from devenv
+echo -n "DEVENV_STATE
+DEVENV_PROFILE
+DEVENV_RUNTIME
+DEVENV_TASKS
+DEVENV_ROOT
+DEVENV_DOTFILE
+PKG_CONFIG
+NIX_LDFLAGS
+NIX_HARDENING_ENABLE
+NIX_CC_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu
+NIX_CC
+NIX_PKG_CONFIG_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu
+NIX_CFLAGS_COMPILE
+NIX_STORE
+NIX_BINTOOLS
+NIX_BINTOOLS_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu
+IN_NIX_SHELL
+NIX_ENFORCE_NO_NATIVE
+RANLIB
+CONFIG_SHELL
+CC
+OBJDUMP
+STRIP
+OBJCOPY
+NM
+AS
+AR
+SIZE
+READELF
+LD
+cmakeFlags
+system
+CXX
+SOURCE_DATE_EPOCH
+STRINGS
+mesonFlags
+configureFlags
+hardeningDisable
 "
 
 # only for doom sync - things that I don't want shell to unset

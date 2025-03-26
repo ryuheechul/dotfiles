@@ -93,10 +93,17 @@ in
           source "''${my_dot_d}/nix/bin/source/nix.sh" && exec zsh -l
         fi
 
-        if test -n "''${INSIDE_EMACS}" && ! echo "''${PATH}" | grep 'nvim/mason/bin' >/dev/null; then
-          export PATH="''${XDG_DATA_HOME}/nvim/mason/bin:''${PATH}"
+        # since emacs tends to use /bin/sh for tramp
+        if test -n "''${INSIDE_EMACS}"; then
+          if ! echo "''${PATH}" | grep 'nvim/mason/bin' >/dev/null; then
+            export PATH="''${XDG_DATA_HOME}/nvim/mason/bin:''${PATH}"
+          fi
+          export PATH="''${my_dot_d}/bin/path/lspx:''${PATH}"
         fi
       }
+
+      # this is the local access, which my emacs does not use nor zsh source this naturally;
+      # so look at ~/.config/dfs-rhc/zsh for further configurations
     '';
   };
 

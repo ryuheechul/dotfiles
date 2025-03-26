@@ -18,12 +18,15 @@ then
   # block in case of SSH, otherwise it will try to open the clients (if there is the same path exist)
   test -z "${SSH_CONNECTION}" && alias emacs="find-file"
 else
-  echo "Some error are expected. Make sure `emacs-vterm-zsh.[z]sh` is discoverable"
+  >&2 echo "Some error are expected. Make sure `emacs-vterm-zsh.[z]sh` is discoverable"
 fi
 
-# see also `../modules/compat/neovim/config.el` and `../../../nix/home/programs/shells.nix`
-if test -n "${INSIDE_EMACS}" && ! echo "${PATH}" | grep 'nvim/mason/bin' >/dev/null; then
-  export PATH="${XDG_DATA_HOME}/nvim/mason/bin:${PATH}"
+# see also `../../../zsh/path/set-basic` and `../../../nix/home/programs/shells.nix`
+if test -n "${INSIDE_EMACS}"; then
+  if ! echo "${PATH}" | grep 'nvim/mason/bin' >/dev/null; then
+    export PATH="${XDG_DATA_HOME}/nvim/mason/bin:${PATH}"
+  fi
+  export PATH="${my_dot_d}/bin/path/lspx:${PATH}"
 fi
 
 # fix cursor shape in the shell inside vterm - https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+cmd="$(echo "${0}" | xargs basename)"
+realc="$(which -a "${cmd}" | sed -n '2 p')"
+
+# add `-r` after run to refresh
+deno run -E --allow-run jsr:@frontside/lspx \
+    --lsp "${realc} --stdio" \
+    --lsp "tailwindcss-language-server --stdio"
