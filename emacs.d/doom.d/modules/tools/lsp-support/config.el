@@ -20,14 +20,32 @@
       (apheleia-mode nil))))
 
 (when (modulep! :tools lsp +eglot)
+  ;;;; this is only necessary for local access
+  ;; for tramp access, it relies soley on the remote side's PATH via the shell:
+  ;; - tramp seems to SSH with user's login shell (in my case zsh)
+  ;;   - and then run interactive basic shell with =/bin/sh -i=
+  ;; in my "identical" systems that would be via:
+  ;; - =../../../../../zsh/path/set-special=
+  (let (
+        ;; piggyback LSP servers installed executable by Neovim!
+        (mason-path (concat (getenv "XDG_DATA_HOME") "/nvim/mason/bin"))
+        ;; NOTE lspx is not related to Neovim at all, this should be separarted one day?
+        (lspx-path (concat (getenv "my_dot_d") "/bin/path/lspx")))
+    (dolist (path (list mason-path lspx-path))
+      (add-to-list 'exec-path path)))
+  ;;;;
+
   ;; look at buffers like =*EGLOT ([dir]/[xyz-mode])) events*= (via stderr) if booster is used or not
   (use-package! eglot-booster
     :after eglot
     :config (eglot-booster-mode))
   ;; (setq eglot-booster-io-only t) ;; is this way would be better with emacs 30+?
   (add-hook 'eglot-managed-mode-hook #'+format-with-eglot-mode)
-  (when (modulep! +eldoc-box)
-    (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-at-point-mode t)))
+
+  (when (modulep! +hover)
+    (if (not (daemonp))
+        (if (display-graphic-p)
+            (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-at-point-mode t)))))
 
 ;; NOTE from here and below, I actually choose to not use neither `lsp-mode' nor `lsp-bridge'
 ;; since I chose `eglot' for a choice of lsp layer, see ./readme.org for why I made that decision

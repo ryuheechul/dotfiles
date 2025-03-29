@@ -1,0 +1,39 @@
+# -*- mode: sh; -*- vim: set ft=zsh:
+
+# expected to be sourced after ./set-basic by ../env
+
+# avoid $PATH polluted by duplicates - also new ones take precedence
+typeset -U path
+
+is_likely_from_emacs_tramp() {
+  # at this stage, tramp hasn't set the env var such as INSIDE_EMACS;
+  # that will be later (after this and before a command gets executed)
+  test "${TERM}" = "dumb" && test -n "${SSH_TTY}"
+  # printenv # uncomment this to debug with tramp (e.g. with eglot)
+}
+
+# local direct access - invoked via emacs
+is_inside_emacs() {
+  test -n "${INSIDE_EMACS}" || test -n "${INSIDE_DOOM_EMACS}"
+}
+
+if is_inside_emacs || is_likely_from_emacs_tramp; then
+  # originally thought to have this at ../../emacs.d/doom.d/modules/compat/neovim/
+  # but it belongs here
+  if ! echo "${PATH}" | grep 'nvim/mason/bin' >/dev/null; then
+    add-to-path "${XDG_DATA_HOME}/nvim/mason/bin"
+  fi
+
+  add-to-path "${my_dot_d}/bin/path/lspx"
+fi
+
+# only set it when it's necessary:
+# - e.g. ssh via tramp for the purpose of using nixd
+#   - nixd basically crashed without this correct value (since I don't rely on default channels understandably)
+# - although this is fast enough, there is still some latencies due to the involvement of `nix eval` in the script
+#   - hence avoid when it's not necessary
+#   - and in "normal" environment this is taken care from `../my_addons/shell_ext`
+is_likely_from_emacs_tramp && echo "${NIX_PATH}" | grep channels >/dev/null &&
+  export NIX_PATH="$(${my_dot_d}/nix/niv-shim/bin/nix-path-via-niv.sh nixpkgs=nixos:nixos-hardware:home-manager):nixos-config=${my_dot_d}/bootstrap/foundation/nixos/configuration.nix"
+
+unset -f is_inside_emacs is_likely_from_emacs_tramp

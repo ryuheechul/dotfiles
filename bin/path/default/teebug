@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# teebug: debug with tee!
+#
+# test using commands below;
+# with multiple panes with tmux as described here - https://stackoverflow.com/questions/29274841/stdout-and-stderr-side-by-side-preview
+# - `1>/dev/pts/x 2>/dev/pts/y teebug bash -c 'echo out; >&2 echo err'`
+
+TEEBUG_LOG_PATH="${TEEBUG_LOG_PATH:-${HOME}/.teebug.log/}"
+
+mkdir -p "${TEEBUG_LOG_PATH}"
+file_in="${TEEBUG_LOG_PATH}in"
+file_out="${TEEBUG_LOG_PATH}out"
+file_err="${TEEBUG_LOG_PATH}err"
+
+errcho() {
+    >&2 gum style --foreground 3 "${@}"
+}
+
+errcho 'If this hangs as it waits for /dev/stdin, ^D to force feeding EOF'
+errcho "tail -f ${file_in} to debug /dev/stdin"
+errcho "tail -f ${file_out} to debug /dev/stdout"
+errcho "tail -f ${file_err} to debug /dev/stderr"
+
+# capture stdin  | target redirects stdout to `tee $file_out` and stderr to `tee $file_err`
+tee "${file_in}" | "${@}" > >(tee "${file_out}") 2> >(tee "${file_err}" >&2)
+# while the stdout and stderr is still "untouched"
+# thanks to https://labex.io/tutorials/linux-how-to-use-tee-to-capture-standard-error-417673!
+
+errcho "tail -f ${file_in} to debug /dev/stdin"
+errcho "tail -f ${file_out} to debug /dev/stdout"
+errcho "tail -f ${file_err} to debug /dev/stderr"

@@ -35,10 +35,11 @@ in
   };
 
   # `cat ~/.nix-profile/etc/profile.d/hm-session-vars.sh` to debug
-  # I don't like that these goes after $PATH not before - let me think about a workaround
-  # and of course the related issues can be found here! - https://github.com/nix-community/home-manager/issues/3324
+  # there was a issue that these paths goes after $PATH not before - https://github.com/nix-community/home-manager/issues/3324
+  # which now it seems to be resolved!
   home.sessionPath = [
-    ''''${XDG_CONFIG_HOME}/dfs-rhc/bin/path/default''
+    # maybe not necessary anymore? - let's see
+    # ''''${XDG_CONFIG_HOME}/dfs-rhc/bin/path/default''
   ];
 
   # only the super basic ones that should be shared across shells
@@ -73,9 +74,6 @@ in
         command -v tea 2>&1 >/dev/null && export PATH="''${my_dot_d}/bin/path/tea/bin:''${PATH}"
       fi
 
-      # overriding due to https://github.com/nix-community/home-manager/issues/3324
-      export PATH="''${XDG_CONFIG_HOME}/dfs-rhc/bin/path/default:''${PATH}"
-
       # to prevent zsh to miss this in case bash was the first one to load
       unset __HM_SESS_VARS_SOURCED
     '';
@@ -83,27 +81,9 @@ in
     # I'm treating this like `.zlogin` and delegating handling ssh login shell case
     # to zsh in case zsh is not the default shell
     profileExtra = ''
-      test -n "''${SSH_TTY}" && {
-        # e.g. emacs tramp
-        if test "''${TERM}" = "dumb"; then
-          ! echo "''${PATH}" | grep '\.nix-profile/bin' >/dev/null &&
-            grep "NAME=NixOS" /etc/os-release &> /dev/null &&
-            __ETC_PROFILE_SOURCED= __NIXOS_SET_ENVIRONMENT_DONE= source /etc/profile
-        else
-          source "''${my_dot_d}/nix/bin/source/nix.sh" && exec zsh -l
-        fi
+      # WARN: NEVER use `source` here and use `.` instead for posix complice which is required for `/bin/sh` !!!
 
-        # since emacs tends to use /bin/sh for tramp
-        if test -n "''${INSIDE_EMACS}"; then
-          if ! echo "''${PATH}" | grep 'nvim/mason/bin' >/dev/null; then
-            export PATH="''${XDG_DATA_HOME}/nvim/mason/bin:''${PATH}"
-          fi
-          export PATH="''${my_dot_d}/bin/path/lspx:''${PATH}"
-        fi
-      }
-
-      # this is the local access, which my emacs does not use nor zsh source this naturally;
-      # so look at ~/.config/dfs-rhc/zsh for further configurations
+      # It actually seems that I don't need anything here, so let's see and see the git blame for previous lines
     '';
   };
 

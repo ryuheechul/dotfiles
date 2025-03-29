@@ -5,6 +5,15 @@
 ;; https://www.emacswiki.org/emacs/TrampMode#h5o-33
 ;; https://nixos.wiki/wiki/Emacs#Cannot_find_all_binaries_on_a_remote_system_with_TRAMP
 (after! tramp-sh
+  ;; not sure if this does what I think it does (treating localhost not any differently?)
+  ;; well, for now just remember tramp does something to optimize localhost connection
+  ;; (defun tramp-local-host-p nil)
+
+  ;; (setq tramp-local-host-regexp nil)
+
+  ;; (setq tramp-verbose 10) ;; use for debugging
+  ;; (setq tramp-use-connection-share nil) ;; maybe for troubleshooting?
+
   ;; (setq tramp-histfile-override nil) ;; uncomment this to debug (I manually undo histfile from `../../zsh/zshrc` to exclude history from `dumb` ones but not the interactive ones)
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   (if (getenv "LSP_USE_PLISTS")

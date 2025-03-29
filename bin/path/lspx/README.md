@@ -6,4 +6,4 @@ See these files to see how I weave the environment to help the lsp binaries disc
 - `../../../emacs.d/doom.d/modules/tools/lsp-support`: to wrap with `emacs-lsp-booster`
 - `../../../emacs.d/doom.d/shell/source.zsh`: to let neovim's installed lsp's too be discovered
 - `../../../nix/home/programs/shells.nix`: to handle tramp access case
-- `../../../zsh/path/set-basic`: for local access from Emacs for both
+- `../../../zsh/path/set-special`: for local access from Emacs for both

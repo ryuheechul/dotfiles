@@ -124,7 +124,7 @@ ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 _tag asdf
 
 # to make sure my custom paths supersedes default ones like /bin /usr/bin /usr/local/bin again
-float_nix_path=1 source "${my_zsh_d}/path/set-basic"
+float_nix_path=1 source "${my_zsh_d}/path/set"
 
 _tag my_paths_supersedes
 

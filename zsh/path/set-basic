@@ -62,12 +62,3 @@ is-darwin && add-to-path "${my_dot_d}/bin/path/darwin"
 is-ssh && add-to-path "${my_dot_d}/bin/path/ssh"
 
 is-nixos && add-to-path "${my_dot_d}/bin/path/nixos"
-
-if test -n "${INSIDE_DOOM_EMACS}"; then
-  # for local command to pick up the path
-  # originally thought to have this at ../../emacs.d/doom.d/modules/compat/neovim/
-  # but it belongs here
-  if ! echo "${PATH}" | grep 'nvim/mason/bin' >/dev/null; then
-    add-to-path "${XDG_DATA_HOME}/nvim/mason/bin"
-  fi
-fi

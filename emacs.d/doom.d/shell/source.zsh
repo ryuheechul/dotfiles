@@ -21,14 +21,6 @@ else
   >&2 echo "Some error are expected. Make sure `emacs-vterm-zsh.[z]sh` is discoverable"
 fi
 
-# see also `../../../zsh/path/set-basic` and `../../../nix/home/programs/shells.nix`
-if test -n "${INSIDE_EMACS}"; then
-  if ! echo "${PATH}" | grep 'nvim/mason/bin' >/dev/null; then
-    export PATH="${XDG_DATA_HOME}/nvim/mason/bin:${PATH}"
-  fi
-  export PATH="${my_dot_d}/bin/path/lspx:${PATH}"
-fi
-
 # fix cursor shape in the shell inside vterm - https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
 echo '\e[2 q'
 

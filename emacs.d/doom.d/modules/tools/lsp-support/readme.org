@@ -30,6 +30,96 @@
       - tried mosh but it had many issues for me enough that I stopped trying
   - hopefully Emacs with Tramp can rock the remote coding for me but we will see!
 
+* Mental model of "complex" chains of LSP servers
+
+There maybe many layers involving even with one actual language server and I'm here to depict it so I can avoid looking at the code to just remind myself about this piping.
+
+** tramp
+- in case of remote access
+- see [[file:~/dotfiles/emacs.d/doom.d/modules/tools/tramp-support/][tools/tramp-support]] and [[file:/ssh:sp8:~/dotfiles/zsh/path/set-special][zsh/path/set-special]]
+
+** [[https://github.com/blahgeek/emacs-lsp-booster][emacs-lsp-booster]] (via [[https://github.com/jdtsmith/eglot-booster][eglot-booster]])
+- this will always be wrapping the actual LSP command if =emacs-lsp=booster= is installed regardless of local or remote
+- do not need a special care for the setting up the path and it's installed via [[file:~/dotfiles/nix/pkgs/lang/support.nix][nix/pkgs/lang/support.nix]]
+- optionally translate JSON to Elisp bytecode (should be beneficial especially prior to emacs 30)
+
+** LSP servers installed via [[https://github.com/williamboman/mason.nvim][Neovim Mason]]
+- this is not actually a layer but a cheap lazy way to piggy-back what's already installed via my other editor
+- installing it via Mason is a breeze and why not reuse it if it's already there?
+- see [[file:config.el][config.el]] and [[file:/ssh:sp8:~/dotfiles/zsh/path/set-special][zsh/path/set-special]] for how this is configured
+*** Project Specifics
+**** perhaps the best way to make sure using the right LSP servers that is actually tied to a project (with correct version) is to use the project specific ones
+***** in case with devenv.sh
+#+begin_src nix
+# devenv.nix
+
+enterShell = ''
+  export PATH="$(echo ./node_modules/.bin | xargs realpath):$PATH"
+'';
+# now any lang servers at ./node_modules/.bin will be executable
+# but make sure that your emacs is configured with direnv
+#+end_src
+****** see [[file:/ssh:sp8:~/dotfiles/emacs.d/doom.d/modules/tools/tramp-support/][tools/tramp-support]] for envrc related part
+
+** [[https://github.com/thefrontside/lspx][lspx]]
+- this is another a layer that multiplex multiple lang servers into a one
+  - e.g. =astro-ls= and =tailwindcss-language-server= into one
+  - which [[https://github.com/joaotavora/eglot/discussions/1429][overcomes the limitation of eglot]]
+- see [[file:config.el][config.el]] and [[file:/ssh:sp8:~/dotfiles/zsh/path/set-special][zsh/path/set-special]] for how this is configured
+
+** [[file:/ssh:sp8:~/dotfiles/bin/path/default/teebug][teebug]]
+*** LSP especially when it's running as stdio is simply the JSON-RPC dumps
+- server process receives the request as =/dev/stdin= and responses with =/dev/stdout= and may logs information with =/dev/stderr=
+- since JSON-RPC is human readable, we can just tap its stream and inspect what's going on and this is what exactly the [[file:/ssh:sp8:~/dotfiles/bin/path/default/teebug][teebug]] does!
+*** this is what I came up to deal with debugging LSP related issues
+**** if you are new to setting up LSP features for Emacs for the first time like me
+  - (and happen to be greedy as well to maximize the feature sets, and not giving up on tramp, and keep the performance (latency) under tolerable range!)
+  - there can be a lot could go wrong and you wouldn't know what exactly the issue until things start working perfectly!!
+  - and it's really nice to be able to "see through" stdin/stdout/stderr of a running process
+**** basically run any process with prepending =teebug= e.g. =echo hi | teebug cowsay=
+***** or wrap the command to "inject" ~teebug~ without having to meddle with any other things, so it transparently works
+#+begin_src bash
+#!/usr/bin/env bash
+# assuming this is a file named "any-ls" and it's path is discoverable earlier than other paths via $PATH
+
+teebug /path/to/the/real/any-ls "${@}"
+#+end_src
+**** teebug is quite great but there are also other tools
+***** before even investigating on tramp side, which could be quite cumbersome... consider wrapping a command that executes via ssh
+#+begin_src bash
+#!/usr/bin/env bash
+# assuming this is a file named "any-ls" and it's path is discoverable earlier than other paths via $PATH
+
+ssh host [/path/to/the/real/]any-ls "${@}"
+# now this will help you debug SSH related issue without actually going through tramp
+# further more you can inject teebug either before ssh or the remote "any-ls" or both!
+#+end_src
+***** there are eglot buffers that print stderr
+***** you could let tramp be verbose about its log
+***** if LSP connects initially but timeout subsequently, it might be the crash on the LSP server side
+- wait, why is that?
+  - placing more layers in between makes some things like crash invisible (e.g. actual LS is crashed but =lspx= still running but not able to respond)
+***** divided and conquer
+- focus on problematic layer instead of the whole layered setup
+- remove all additional layer and start with just a bare bone server
+  - and add more layers one by one until the problem arise
+  - if everything is the same but the difference of remote (tramp) or local, see if different env vars or path is causing different behaviors
+    - remote in this case should be =localhost= so that almost everything is identical
+
+
+** Examples
+denoting /any-ls/ as any language server whether it's coming from "regular" path or Mason's or project specific
+
+- =emacs= - [tramp (=ssh= on client and =/bin/sh= remote)] - /any-ls/
+  - tramp layer is depicted with =[]= meaning, it's optional
+  - from here and below, I will simplify as [tramp]
+- =emacs= - [tramp] - =emacs-lsp-booster= - /any-ls/
+- =emacs= - [tramp] - [emacs-lsp-booster] - =lspx= - /any-ls/
+- =emacs= - [tramp] - [emacs-lsp-booster] - =lspx= - =astro-ls,tailwindcss-language-server,etc=
+  - you can wrap =lspx= (with multiple servers) with the same name as your main one (e.g. =astro-ls=) so that it just works transparently
+
+and ~teebug~ can be before =emacs-lsp-booster= or =lspx= or /any-ls/
+
 
 * Links regarding =lsp-mode=
 - https://emacs-lsp.github.io/lsp-mode/

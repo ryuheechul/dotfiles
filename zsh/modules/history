@@ -1,5 +1,8 @@
 # -*- mode: sh; -*- vim: set ft=zsh:
 
+# NOTE: skip for dumb terminal
+test "${TERM}" = "dumb" && return
+
 # optimize and enhance history management
 # - https://www.soberkoder.com/better-zsh-history/
 # - https://ryantoddgarza.medium.com/a-better-zsh-history-pt-2-dde323e0c9ca

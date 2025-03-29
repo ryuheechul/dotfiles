@@ -1,0 +1,7 @@
+# -*- mode: sh; -*- vim: set ft=zsh:
+
+# for the better PATH!
+source "${my_zsh_d}/path/set-basic"
+source "${my_zsh_d}/path/set-special"
+
+export PATH_SET_FROM_MY_ZSH=1

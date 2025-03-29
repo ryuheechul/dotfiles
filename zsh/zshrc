@@ -1,5 +1,10 @@
 # -*- mode: sh; -*- vim: set ft=zsh:
 
+if test "${TERM}" = "dumb"; then
+  >&2 echo "[my zsh] dumb terminal detected and skipping adding more goodies"
+  return
+fi
+
 # escape hatches for editors (that can be opened via/and inside shell) that has has its own terminal emulator that runs will run this shell
 test -z "${IGNORE_UNSET_MY_BASIC_ZSH_STUFF_LOADED}" && test -n "${UNSET_MY_BASIC_ZSH_STUFF_LOADED}" && unset MY_BASIC_ZSH_STUFF_LOADED && unset UNSET_MY_BASIC_ZSH_STUFF_LOADED
 test -z "${IGNORE_UNSET_ALL_MY_ZSH_STUFF_LOADED}"   && test -n "${UNSET_ALL_MY_ZSH_STUFF_LOADED}"   && unset ALL_MY_ZSH_STUFF_LOADED   && unset UNSET_ALL_MY_ZSH_STUFF_LOADED
@@ -12,7 +17,7 @@ unset IGNORE_UNSET_HOST_ALWAYS_USE_TMUX
 ## basics
 
 # to make sure my custom path supersedes default ones like /bin /usr/bin /usr/local/bin
-float_nix_path=1 source "${my_zsh_d}/path/set-basic"
+float_nix_path=1 source "${my_zsh_d}/path/set"
 
 # helper function to give feedback about configurations
 function _echo() {
@@ -42,7 +47,7 @@ setopt auto_cd
 
 # source the minimum in cases desired
 if test -n "${fast_shell_in_editor}"; then
-  float_nix_path=1 source "${my_zsh_d}/path/set-basic"
+  float_nix_path=1 source "${my_zsh_d}/path/set"
   source "${my_zsh_d}/integration/editors"
   unset fast_shell_in_editor
   return
@@ -96,8 +101,7 @@ function _tag_zshrc {
 _tag_zshrc addon-starts-here
 # source from seperate files to organize better
 ADDON_D="${my_zsh_d}/my_addons"
-for source_file in zinit aliases shell_ext options
-do
+for source_file in zinit aliases shell_ext options; do
   test -f $ADDON_D/$source_file && source $ADDON_D/$source_file
   _tag_zshrc $source_file
 done

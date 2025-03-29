@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# this is intended to be a wrapper for the most simple (and useless) cases
+# for example, ./nixd symlinks to this one
+
+>&2 echo -n '[original command] '
+>&2 echo -n "${0} "
+>&2 echo "${@}"
+
+>&2 echo -n '[ENV] '
+>&2 echo -n '$my_dot_d:' "${my_dot_d}, "
+>&2 echo -n '$SSH_TTY:' "${SSH_TTY}, "
+>&2 echo -n '$SHELL:' "${SHELL}, "
+>&2 echo -n '$TERM:' "${TERM}, "
+>&2 echo -n '$INSIDE_EMACS:' "${INSIDE_EMACS}, "
+>&2 echo -n '$INSIDE_DOOM_EMACS:' "${INSIDE_DOOM_EMACS}, "
+>&2 echo '$XDG_DATA_HOME:' "${XDG_DATA_HOME}"
+
+cmd="$(echo "${0}" | xargs basename)"
+realorig="$(which -a "${cmd}" | grep -v "${0}" | head -n1)"
+
+if test -n "${realorig}"; then
+  >&2 echo "${realorig} is found"
+else
+  >&2 echo "couldn't find any executables for ${cmd}"
+  >&2 which -a "${cmd}"
+  >&2 echo "here is the \$PATH: ${PATH}"
+fi
+
+construct_param() {
+  test -n "${2}" && echo "--lsp '${1} ${2}'" || echo "--lsp '${1}'"
+}
+
+# add `-r` after run to refresh
+lspxcmd="deno run -E --allow-run jsr:@frontside/lspx"
+lspargorig="$(test -n "${realorig}" && construct_param "${realorig}" "${@}")"
+
+finalcmd="${lspxcmd} ${lspargorig}"
+
+>&2 echo 'going to run: ' "${finalcmd}"
+exec bash -c "${finalcmd}"
+# teebug exec bash -c "${finalcmd}" # if to debug with teebug

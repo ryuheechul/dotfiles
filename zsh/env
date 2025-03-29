@@ -17,8 +17,7 @@ source "${my_zsh_d}/fn/system"
 # basically helper utils for zsh
 source "${my_zsh_d}/fn/zsh"
 
-# skip sourcing path on interactive shell as this will be sourced via ./zshrc
-is-zsh-interactive || source "${my_zsh_d}/path/set-basic"
+source "${my_zsh_d}/path/set"
 
 # `light` and `dark` - helper function to change theme
 source "${my_zsh_d}/fn/theme"

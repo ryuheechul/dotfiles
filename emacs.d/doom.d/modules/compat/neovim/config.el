@@ -5,7 +5,7 @@
 ;; when this module is more concerned in a bigger system layer
 
 ;;;; turns out this is not necessary here as the shell will take care of it
-;;;; now it's taken care of from =../../../../../zsh/path/set-basic=
+;;;; now it's taken care of from =../../../../../zsh/path/set-special=
 ;; piggyback installed executable by Neovim!
 ;; mostly to support smoother experience for lsp - see =../../tools/lsp-support/= for more
 ;; (let ((mason-path (concat (getenv "XDG_DATA_HOME") "/nvim/mason/bin"))
