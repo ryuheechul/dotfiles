@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+### turns out this was a over engineering!
+# @DEFAULT_SINK@ or @DEFAULT_AUDIO_SINK@ can be used instead https://wiki.archlinux.org/title/WirePlumber
+# https://gitlab.freedesktop.org/search?search=%40default_sink%40&nav_source=navbar&project_id=2941&group_id=10138&search_code=true&repository_ref=master
+
 # help discover commands and find the audio sink and select volume
 
 command -v gum >/dev/null || { echo 'you need gum to proceed' exit 1; }
