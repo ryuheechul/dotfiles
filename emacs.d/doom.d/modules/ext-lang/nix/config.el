@@ -4,7 +4,7 @@
   :defer
   :mode "\\.nix\\'"
   :init
-  (when (modulep! +lsp)
+  (when (and (modulep! :tools lsp)(modulep! +lsp))
     ;; without this lsp doesn't kick off
     (add-hook 'nix-ts-mode-hook #'lsp! 'append)))
 

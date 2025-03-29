@@ -32,7 +32,11 @@
         ;; NOTE lspx is not related to Neovim at all, this should be separarted one day?
         (lspx-path (concat (getenv "my_dot_d") "/bin/path/lspx")))
     (dolist (path (list mason-path lspx-path))
-      (add-to-list 'exec-path path)))
+      ;; this seems to be necessary for local access (without tramp)
+      (add-to-list 'exec-path path)
+      ;; this one however didn't seem to be necessary at first as some servers (e.g. =nixd=) gets picked up without it
+      ;; but even in the same project, some (=svelteserver=) didn't get picked up without it (it's weird but oh well...)
+      (setenv "PATH" (concat path ":" (getenv "PATH")))))
   ;;;;
 
   ;; look at buffers like =*EGLOT ([dir]/[xyz-mode])) events*= (via stderr) if booster is used or not

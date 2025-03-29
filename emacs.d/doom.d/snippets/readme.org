@@ -1,0 +1,8 @@
+#+title: Readme
+
+keep this directory to prevent the error below
+
+#+begin_quote
+[yas] Check your `yas-snippet-dirs': /home/heechul/.config/doom/snippets/ is not a directory
+[yas] Prepared just-in-time loading of snippets with some errors.  Check *Messages*.
+#+end_quote

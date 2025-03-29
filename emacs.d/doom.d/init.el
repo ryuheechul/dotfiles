@@ -179,6 +179,7 @@
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
+       (svelte +lsp)     ; ./modules/lang/svelte/config.el
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
        ;;web               ; the tubes
@@ -219,6 +220,17 @@
 
 ;; set it early here instead of ./config.el to avoid seeing frame changes on start up
 (add-to-list 'default-frame-alist '(fullscreen . fullboth))
+
+;; for the time being - https://www.reddit.com/r/emacs/comments/oza47b/doom_emacs_i_get_the_vanilla_emacs_splash_screen/
+;; this makes the period of "flash of unstyled emacs" shorter but still there
+(setq inhibit-x-resources t)
+(setq-default inhibit-redisplay t)
+(add-hook 'window-setup-hook
+          (lambda ()
+            (setq-default inhibit-redisplay nil)
+            (redisplay))
+          100)
+;; end of for the time being
 
 ;;;; this is essentially for when =doom env=/=doom sync= running
 ;; this section is for cli usages https://github.com/doomemacs/doomemacs/issues/2434#issuecomment-629572501

@@ -4,17 +4,6 @@
 ;; There is also =../../my-custom/morevil/= that is more concerned on muscle memory (via keybindings);
 ;; when this module is more concerned in a bigger system layer
 
-;;;; turns out this is not necessary here as the shell will take care of it
-;;;; now it's taken care of from =../../../../../zsh/path/set-special=
-;; piggyback installed executable by Neovim!
-;; mostly to support smoother experience for lsp - see =../../tools/lsp-support/= for more
-;; (let ((mason-path (concat (getenv "XDG_DATA_HOME") "/nvim/mason/bin"))
-;;       (lspx-path (concat (getenv "my_dot_d") "/bin/path/lspx")))
-;;   (dolist (path (list mason-path lspx-path))
-;;     (add-to-list 'exec-path path)))
-;; see also =../../../shell/source.zsh= and =../../../../../nix/home/programs/shells.nix==
-;;;;
-
 ;; fuzzy match completions!!!
 (after! orderless ;; orderless is cool and all but I'm used to fuzzy matching more ...
   (defun hotfuzz-setup ()
