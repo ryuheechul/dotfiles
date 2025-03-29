@@ -40,6 +40,10 @@
 (define-key evil-normal-state-map (kbd "C-j") #'evil-window-down)
 (define-key evil-normal-state-map (kbd "C-k") #'evil-window-up)
 (define-key evil-normal-state-map (kbd "C-l") #'evil-window-right)
+;; howver these bindings above doesn't seem to work in TUI;
+;; not that it's not bound but the keys themselves seem to be not recognized;
+;; maybe related to this? https://www.reddit.com/r/emacs/comments/17afhxu/getting_all_keybindings_working_in_the_tui/
+;; there is a `C-w' (or `SPC' `w') prefix to workaround
 
 ;; split window
 (map! :leader
@@ -63,6 +67,12 @@
       "t"
       #'treemacs)
 
+(map! :leader
+      :prefix "t"
+      :g
+      "f"
+      #'treemacs)
+
 ;; clear highlight by search (/)
 (map! :leader
       :prefix "s"
@@ -76,3 +86,21 @@
 (map! :n "go" #'xref-go-back)
 ;; to give the illusion of putting the editor in the background (in case as if emacs was terminal)
 (map! :n "\\s" #'vterm/full-w/toggle)
+
+(map! (:after info :map Info-mode-map
+       :leader :prefix "m" :n "ee"     #'eval-last-sexp)
+      (:after info :map Info-mode-map
+       ;; even shorter way to eval in info mode
+       :n "ge"      #'eval-last-sexp
+       ;; swapping the defaults
+       :n "gt"      #'Info-toc
+       :n "gT"      #'Info-top-node
+       ;; don't forget the history!
+       :n "gh"      #'Info-history
+       ;; easy scrolling
+       ;; :n "u"       #'Info-scroll-down
+       ;; :n "d"       #'Info-scroll-up
+       :n "u"       #'evil-scroll-up
+       :n "d"       #'evil-scroll-down
+       :n "b"       #'Info-scroll-down
+       :n "f"       #'Info-scroll-up))

@@ -8,6 +8,7 @@
 (after! orderless ;; orderless is cool and all but I'm used to fuzzy matching more ...
   (defun hotfuzz-setup ()
     "Set up `hotfuzz'."
+    (setq completion-ignore-case t)
     (unless (memq 'hotfuzz completion-styles)
       (push 'hotfuzz completion-styles)))
 
