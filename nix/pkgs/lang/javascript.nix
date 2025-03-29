@@ -26,8 +26,6 @@ let
       # Language Server Protocol (LSP) implementation for TypeScript using tsserver
       typescript-language-server
       # vscode-langservers-extracted # moved to ./node2nix
-      # A language server for Svelte
-      svelte-language-server
     ]) ++ (import ./node2nix { pkgs = pkgs; nodejs = nodejs; })
   );
 in

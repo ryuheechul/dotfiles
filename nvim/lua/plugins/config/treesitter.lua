@@ -88,6 +88,7 @@ return function()
       'toml',
       'tsx',
       'typescript',
+      'unison',
       'vim',
       'vimdoc',
       'vue',

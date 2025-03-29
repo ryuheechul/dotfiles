@@ -34,6 +34,7 @@ return {
             'bashls',
             'tailwindcss',
             'cssls',
+            'svelte',
           },
         },
       },

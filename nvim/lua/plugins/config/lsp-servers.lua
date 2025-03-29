@@ -155,6 +155,9 @@ return function(setup_default, node_root)
   setup_jsonls.capabilities.textDocument.completion.completionItem.snippetSupport = true
 
   local setup_ruff = merge(setup_default, {})
+  -- requires ucm to be running already, in case it runs after the editor (after LSP failed)
+  -- run it again by `:LspStart`
+  local setup_unison = merge(setup_default, {})
 
   -- determine if it's with container or localhost
   -- read more on that at ../../../remote-container.md
@@ -274,6 +277,7 @@ return function(setup_default, node_root)
     ruby_lsp = setup_ruby_lsp,
     efm = setup_efm,
     ruff = setup_ruff,
+    unison = setup_unison,
     bashls = setup_bashls,
   }
 end
