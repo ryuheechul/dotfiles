@@ -64,6 +64,16 @@ username:
       # ./recipes/displaylink.nix
       # ./recipes/syncthing.nix - should not be used to favor ../home/services/syncthing.nix except for testing
     ]
+    # an example usage for `./containers/meta/ollama-amd.nix`
+    # ++ (
+    #   let
+    #     tailnetName = "my-ts-net-name"; # excluding "ts.net" at the end
+    #   in
+    #   [
+    #     (import ./containers/meta/ollama-amd.nix { tailnetName = tailnetName; })
+    #   ]
+    # )
+    #
     # usage examples for `./recipes/meta` (you will need to replace values accordingly):
     # ++ (
     #   let
