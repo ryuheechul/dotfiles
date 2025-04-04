@@ -1,7 +1,7 @@
 # vim: set ft=toml:
 # although it's not toml syntax, it helps with highlighting
 
-# doc: 
+# doc:
 # - https://ghostty.org/docs/config
 # - https://ghostty.org/docs/config/reference
 
@@ -9,6 +9,20 @@ fullscreen = true
 window-decoration = false
 initial-command = "zsh -c 'source ~/.base16_theme; exec-tmux-attach ghostty'"
 font-size = 15
-# font-family = "FiraMono Nerd Font Mono" # somehow this is not working on my system
+# # somehow this was not working on my system:
+# # it was due to the corruption in my system and was fixed by `fc-cache -r`;
+# # but I still keep it uncommented to try out the default font from ghostty;
+# # which is mentioned at https://ghostty.org/docs/config#zero-configuration-philosophy
+# font-family = "FiraMono Nerd Font Mono"
+
 clipboard-read = allow
 app-notifications = no-clipboard-copy
+
+# thanks to https://github.com/ghostty-org/ghostty/discussions/2811
+# for linux (Gnome)
+keybind = performable:shift+insert=paste_from_clipboard # now the paste from clipboard finally works as expected
+# keybind = performable:ctrl+insert=paste_from_clipboard # uncomment when I actually have a use case for this
+
+# for macOS - perhaps? uncomment when I actually test with macOS
+# keybind = performable:ctrl+v=paste_from_clipboard
+# keybind = performable:ctrl+c=copy_to_clipboard
