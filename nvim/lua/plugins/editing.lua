@@ -68,7 +68,18 @@ return {
   { -- remove trailing whitespace when save
     'mcauley-penney/tidy.nvim',
     event = 'BufWritePre',
-    config = true,
+    -- WARN: would not work if EditorConfig is being used and no trim is mentioned there;
+    -- https://github.com/mcauley-penney/tidy.nvim/issues/17
+    opts = {
+      -- but thanks to this it could work, https://github.com/mcauley-penney/tidy.nvim/pull/18
+      provide_undefined_editorconfig_behavior = true,
+      -- although now I just added options below to `../../../.editorconfig`,
+      -- ```
+      -- trim_trailing_whitespace = true
+      -- insert_final_newline = true
+      -- ```
+      -- some new child `.editorconfig` might miss that option, hence add this to still make it work
+    },
   },
   { -- show preview when `gd`
     'rmagatti/goto-preview',
