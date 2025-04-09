@@ -20,8 +20,11 @@ app-notifications = no-clipboard-copy
 
 # thanks to https://github.com/ghostty-org/ghostty/discussions/2811
 # for linux (Gnome)
-keybind = performable:shift+insert=paste_from_clipboard # now the paste from clipboard finally works as expected
-# keybind = performable:ctrl+insert=paste_from_clipboard # uncomment when I actually have a use case for this
+keybind = performable:shift+insert=paste_from_clipboard
+# with above, now the paste from clipboard finally works as expected
+
+# uncomment below when I actually have a use case for this
+# keybind = performable:ctrl+insert=paste_from_clipboard
 
 # for macOS - perhaps? uncomment when I actually test with macOS
 # keybind = performable:ctrl+v=paste_from_clipboard
