@@ -155,6 +155,13 @@ else
   end
 end
 
+vim.diagnostic.config {
+  -- available since Neovim v0.11
+  virtual_lines = {
+    current_line = true,
+  },
+}
+
 -- to assist ../shell/source.zsh
 vim.env.NVIM_LISTEN_ADDRESS = vim.v.servername
 
