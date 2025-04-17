@@ -7,7 +7,8 @@ return {
   },
   { -- `:Trouble` to show current troubles in the buffer
     'folke/trouble.nvim',
-    pin = true, -- as `v3.*` is not very usable for me yet
+    -- since `v3.*` is not very usable for me yet
+    commit = 'a8264a65a0b894832ea642844f5b7c30112c458f',
     -- these are actually optional but I require to get benefits of them
     dependencies = {
       'nvim-tree/nvim-web-devicons',

@@ -11,6 +11,17 @@ local close_telescope_in_mind = function()
   end
 end
 
+local close_trouble = function()
+  vim.cmd [[ TroubleClose ]]
+  -- vim.cmd [[ Trouble diagnostics close ]] -- for v3+
+end
+
+local close_nvim = function()
+  -- workaround until the issue is resolved, https://github.com/folke/trouble.nvim/issues/378
+  close_trouble()
+  vim.cmd [[ q ]]
+end
+
 -- extend vim.api.nvim_list_wins
 local list_wins = function()
   local wins = vim.api.nvim_list_wins()
@@ -31,7 +42,7 @@ local quit_unlisted = function()
 
   if is_there_only_one_window then
     -- quit when it's the last window
-    vim.cmd [[ q ]]
+    close_nvim()
   else
     -- just close the window when there are still multiple windows
     -- so a buffer like help can simply close instead of quitting neovim
@@ -54,7 +65,7 @@ local try_bufdel = function()
 
   -- this helps to close "support" windows e.g. the ones from `vim.lsp.buf.references`
   if not is_curr_buf_modifiable then
-    vim.cmd [[ q ]]
+    close_nvim()
   else
     local ok = pcall(vim.cmd, 'BufDel')
     -- when it fails, it's assumed that it's something like Luapad that doesn't work very well with BufDel
@@ -82,19 +93,16 @@ local quit_listed = function()
     if vim.bo.filetype == 'qf' then -- to accommodate 'kevinhwang91/nvim-bqf'
       try_bufdelete()
     else
-      vim.cmd [[ q ]]
+      close_nvim()
     end
   end
 end
 
 -- call it via `:lua require('utils.my-smart-quit')()`
 return function()
-  -- workaround until the issue is resolved, https://github.com/folke/trouble.nvim/issues/378
-  vim.cmd [[ TroubleClose ]]
-
   -- don't try to be too smart on 'nofile' `buftype`
   if vim.bo.buftype == 'nofile' then
-    vim.cmd [[ q ]]
+    close_nvim()
     return
   end
 
