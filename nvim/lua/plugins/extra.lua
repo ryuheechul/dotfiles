@@ -523,4 +523,40 @@ return {
     event = 'LspAttach',
     opts = {},
   },
+  { -- Simple UI for https://github.com/tpope/vim-dadbod
+    'kristijanhusak/vim-dadbod-ui',
+    dependencies = {
+      { 'tpope/vim-dadbod', lazy = true },
+      { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true }, -- Optional
+    },
+    cmd = {
+      'DBUI',
+      'DBUIToggle',
+      'DBUIAddConnection',
+      'DBUIFindBuffer',
+    },
+    init = function()
+      -- Your DBUI configuration
+      vim.g.db_ui_use_nerd_fonts = 1
+
+      -- https://github.com/kristijanhusak/vim-dadbod-completion?tab=readme-ov-file#install
+      local dadbodCmpGrp = vim.api.nvim_create_augroup('DadbodCmpGrp', { clear = true })
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = { 'sql', 'mysql', 'plsql' },
+        callback = function()
+          require('cmp').setup.buffer { sources = { { name = 'vim-dadbod-completion' } } }
+        end,
+        group = dadbodCmpGrp,
+      })
+    end,
+  },
+  -- -- currently no sqlite support
+  -- { -- A SQL IDE and UI for NeoVim written in Lua. Inspired by vim-dadbod vim-dadbod-ui.
+  --   'xemptuous/sqlua.nvim',
+  --   lazy = true,
+  --   cmd = 'SQLua',
+  --   config = function()
+  --     require('sqlua').setup()
+  --   end,
+  -- },
 }

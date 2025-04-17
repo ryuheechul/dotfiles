@@ -68,7 +68,7 @@ return function()
       'ocaml',
       'python',
       'ql',
-      'query', -- Treesitter query language
+      'query', -- Tree-sitter query language
       'r',
       'regex',
       'rego',
@@ -82,6 +82,7 @@ return function()
       'ssh_config',
       'svelte',
       -- 'swift',
+      'sql',
       'terraform',
       'tmux',
       'todotxt',
