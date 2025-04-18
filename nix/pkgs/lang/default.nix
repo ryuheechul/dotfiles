@@ -11,6 +11,7 @@ let
   wasm = import ./wasm.nix { pkgs = pkgs; };
   java = import ./java.nix { pkgs = pkgs; };
   janet = import ./janet.nix { pkgs = pkgs; };
+  swift = import ./swift.nix { pkgs = pkgs; };
   erlang = import ./erlang.nix { pkgs = pkgs; };
   python = import ./python.nix { pkgs = pkgs; };
   shells = import ./shells.nix { pkgs = pkgs; };
@@ -37,5 +38,6 @@ defaults
 ++ ifEnv "MY_NIX_EXTRA_LANG_WASM" wasm
 ++ ifEnv "MY_NIX_EXTRA_LANG_JAVA" java
 ++ ifEnv "MY_NIX_EXTRA_LANG_JANET" janet
+++ ifEnv "MY_NIX_EXTRA_LANG_SWIFT" swift
 ++ ifEnv "MY_NIX_EXTRA_LANG_ERLANG" erlang
 ++ ifEnv "MY_NIX_EXTRA_LANG_GRAALVM" graalvm

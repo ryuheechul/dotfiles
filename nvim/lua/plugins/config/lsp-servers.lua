@@ -143,6 +143,15 @@ return function(setup_default, node_root)
     },
   })
 
+  local setup_sourcekit = merge(setup_default, {
+    capabilities = {
+      workspace = {
+        didChangeWatchedFiles = {
+          dynamicRegistration = true,
+        },
+      },
+    },
+  })
   local setup_sqlls = merge(setup_default, {
     on_attach = function(client, bufnr)
       require('sqls').on_attach(client, bufnr)
@@ -265,6 +274,7 @@ return function(setup_default, node_root)
     nixd = setup_nixd,
     eslint = setup_eslint,
     sqlls = setup_sqlls,
+    sourcekit = setup_sourcekit,
     jsonls = setup_jsonls,
     nimls = setup_nimls,
     gopls = setup_gopls,

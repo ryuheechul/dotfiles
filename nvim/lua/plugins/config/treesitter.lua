@@ -81,7 +81,7 @@ return function()
       'solidity',
       'ssh_config',
       'svelte',
-      -- 'swift',
+      'swift',
       'sql',
       'terraform',
       'tmux',
