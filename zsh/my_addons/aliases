@@ -461,6 +461,13 @@ alias executable='chmod +x'
 alias lf='UNSET_ALL_MY_ZSH_STUFF_LOADED=1 lf'
 alias quickvenv='python3 -m venv "${MY_QUICK_VENV_PATH:-.venv}" && source "${MY_QUICK_VENV_PATH:-.venv}/bin/activate"'
 alias quickserve='nix-shell -p caddy --run "caddy file-server --browse -l :9090"'
+quickreverseproxy ()
+{
+  port="${1}"; host="${2}"
+  test -z "${port}" && echo "usage: \`${0} ${listenport} [host]\`" && return 1
+  test -z "${host}" && echo "usage: \`${0} [listenport] [host]\`" && return 1
+  echo "'caddy reverse-proxy --from :${port} --to ${host}'" | xargs nix-shell -p caddy --run
+}
 alias su='sudo su' # `sudo -i` or `sudo --login` can do the similar thing in a simple case - https://www.redhat.com/en/blog/difference-between-sudo-su
 
 alias nis='npm install --save'
