@@ -26,7 +26,8 @@
 
   environment.systemPackages = with pkgs; [
     nvtopPackages.amd
-    amdgpu_top
+    amdgpu_top # preferred over `radeontop`
+    btop-rocm
   ];
 
   services.fprintd.enable = true;
