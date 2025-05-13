@@ -41,7 +41,7 @@ in
 
   # this shadows the original desktop file that should have been at ~/.nix-profile/share/applications/kitty.desktop
   # debug via `cat ~/.nix-profile/share/applications/kitty.desktop` both for before and after (by commenting this block below if it's for before)
-  xdg.desktopEntries.kitty = {
+  xdg.desktopEntries.kitty = pkgs.lib.mkIf pkgs.stdenv.isLinux {
     name = "kitty";
     genericName = "Terminal emulator";
     exec = "kitty --start-as=fullscreen"; # this is the main fix and the rest is to conform with original
@@ -70,7 +70,7 @@ in
   # ```
 
   # referencing https://github.com/ghostty-org/ghostty/blob/main/dist/linux/app.desktop
-  xdg.desktopEntries.ghostty = {
+  xdg.desktopEntries.ghostty = pkgs.lib.mkIf pkgs.stdenv.isLinux {
     name = "Ghostty";
     exec = "ghostty"; # this is the main fix and the rest is to conform with original
     icon = "com.mitchellh.ghostty";

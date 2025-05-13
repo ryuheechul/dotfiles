@@ -1,7 +1,14 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  ...
+}:
 
 let
-  shells = import ./shells.nix { config = config; pkgs = pkgs; };
+  shells = import ./shells.nix {
+    config = config;
+    pkgs = pkgs;
+  };
   terminals = import ./terminals.nix { pkgs = pkgs; };
 in
 {

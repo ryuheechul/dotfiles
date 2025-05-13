@@ -3,7 +3,7 @@
 default="nixpkgs=nixos:nixos-hardware"
 src="${1:-${default}}"
 
-pushd "$(dirname "$0")" > /dev/null
+pushd "$(dirname "$0")" > /dev/null || exit
 
 function item()
 {
@@ -21,7 +21,7 @@ function construct()
   echo "["
   for chunk in $(echo "${src}" | tr ':' '\n')
   do
-    item $chunk
+    item "${chunk}"
   done
   echo "]"
 }

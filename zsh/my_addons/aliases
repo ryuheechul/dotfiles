@@ -425,7 +425,7 @@ is-nixos && alias nix-collect-garbage='nix-collect-garbage --delete-older-than 3
 export NIX_BUILD_CORES="$(getconf _NPROCESSORS_ONLN | xargs -I _ expr _ / 2)"
 
 # `fc-cache -rf` until this is resolved https://github.com/NixOS/nixpkgs/issues/57780
-alias switch-home='home-manager switch |& nom && evalcache-clear >/dev/null && bat cache --build; fc-cache -rf'
+alias switch-home='home-manager switch |& nom && evalcache-clear >/dev/null && bat cache --build; is-linux && fc-cache -rf'
 
 # unifying interface of applying updated nix expressions for different systems
 alias switch-nix='switch-home' # this is default for a simple system that only uses home-manager
