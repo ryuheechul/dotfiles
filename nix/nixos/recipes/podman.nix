@@ -11,6 +11,8 @@
   environment.systemPackages = with pkgs; [
     podman-tui # Podman Terminal UI - requires running `systemctl --user start podman.socket` (once) to work
     podman-compose # An implementation of docker-compose with podman backend
+    docker-compose # Docker CLI plugin to define and run multi-container applications with Docker
+    # https://www.redhat.com/en/blog/podman-compose-docker-compose
   ];
 
   # run `systemctl --user start podman.socket` in case providing the socket API that expect $DOCKER_HOST socket to be listening
