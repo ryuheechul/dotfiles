@@ -78,6 +78,11 @@ with pkgs;
     bat-riffle # A proof-of-concept for a pager-as-a-library. Mainly designed for bat, and not ready for general use.
   ]
 )
+++ ifEnv "MY_NIX_EXTRA_AI" [
+  aider-chat # Linux virtual machines (on macOS, in most cases)
+  jan # Jan is an open source alternative to ChatGPT that runs 100% offline on your computer
+  lmstudio # LM Studio is an easy to use desktop app for experimenting with local and open-source Large Language Models (LLMs)
+]
 ++ ifEnv "MY_NIX_EXTRA_LIMA" [
   lima # Linux virtual machines (on macOS, in most cases)
 ]
