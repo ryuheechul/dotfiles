@@ -74,6 +74,7 @@ with lib.hm.gvariant;
 
     "org/gnome/settings-daemon/plugins/media-keys" = {
       screensaver = [ "<Control><Alt>q" ];
+      search = [ "<Alt>space" ]; # for a compatibility with macOS spotlight like experience (even though Alt alone does the same already)
     };
 
     # gnome shell
