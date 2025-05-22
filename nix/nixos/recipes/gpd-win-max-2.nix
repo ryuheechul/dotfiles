@@ -4,6 +4,21 @@
 
 # WARN: https://github.com/AdnanHodzic/auto-cpufreq/issues/796#issuecomment-2573083773
 
+# WARN: you may want to add the snippet like this to /etc/nixos/hardware-configuration.nix if experiencing an issue like below:
+# - https://discourse.nixos.org/t/boot-partition-is-too-small-and-becoming-full/32194
+# ```
+# # - https://nixos.wiki/wiki/Bootloader
+# # - https://nixos.wiki/wiki/Bootloader#Keeping_kernels.2Finitrd_on_the_main_partition
+# fileSystems."/boot/efi" = {
+#   device = "/dev/disk/by-uuid/BA12-B420"; # probably uniquely different to each device
+#   fsType = "vfat";
+#   options = [
+#     "fmask=0022"
+#     "dmask=0022"
+#   ];
+# };
+# ```
+
 # INFO: Regarding the fan noise
 # It's best to rely on manual "silent" fan mode via "Fn + Left Shift";
 # which is explained at the QnA PDF at https://www.gpd.hk/gpdwinmax2firmwareanddriver;

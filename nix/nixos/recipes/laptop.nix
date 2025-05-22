@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 
 # may work more efficiently with laptop/tablet devices
 # https://nixos.wiki/wiki/Laptop
@@ -32,6 +32,7 @@
   environment.systemPackages = [
     # for a debugging (e.g. `cpupower frequency-info`)
     config.boot.kernelPackages.cpupower
+    pkgs.brightnessctl
   ];
 
   ##### "keep it alive as long as it's connected to power supply" #####
