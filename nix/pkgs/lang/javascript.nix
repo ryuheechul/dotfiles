@@ -5,7 +5,7 @@
 with pkgs;
 let
   bundle-deno = [ deno ];
-  nodejs = nodejs-18_x;
+  nodejs = nodejs_24;
   bundle-nodejs-with-pkgs = (
     # node essentials
     [
@@ -14,9 +14,8 @@ let
       # Fast, reliable, and secure dependency management for javascript
       yarn
       # npm packages via nodePackages
-    ] ++ (with nodePackages; [
-      # Generate Nix expressions to build NPM packages
-      node2nix
+    ]
+    ++ (with nodePackages; [
       # Fast, disk space efficient package manager
       pnpm
       # Work with npm/yarn packages locally like a boss.
@@ -25,8 +24,7 @@ let
       typescript
       # Language Server Protocol (LSP) implementation for TypeScript using tsserver
       typescript-language-server
-      # vscode-langservers-extracted # moved to ./node2nix
-    ]) ++ (import ./node2nix { pkgs = pkgs; nodejs = nodejs; })
+    ])
   );
 in
 bundle-nodejs-with-pkgs ++ bundle-deno
