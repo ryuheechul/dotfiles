@@ -468,6 +468,7 @@ quickreverseproxy ()
   test -z "${host}" && echo "usage: \`${0} [listenport] [host]\`" && return 1
   echo "'caddy reverse-proxy --from :${port} --to ${host}'" | xargs nix-shell -p caddy --run
 }
+alias quickwebsockettest='nix-shell -p websocat --run "websocat wss://echo.websocket.org"'
 alias su='sudo su' # `sudo -i` or `sudo --login` can do the similar thing in a simple case - https://www.redhat.com/en/blog/difference-between-sudo-su
 
 alias nis='npm install --save'
