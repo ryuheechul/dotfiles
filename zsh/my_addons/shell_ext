@@ -188,7 +188,7 @@ if test -z "${DOCKER_HOST}" && test -S "${XDG_RUNTIME_DIR}/podman/podman.sock" &
   export DOCKER_HOST="unix://${XDG_RUNTIME_DIR}/podman/podman.sock"
   if test -S /run/docker.sock; then
     echo "[INFO] \$DOCKER_HOST is set to '${DOCKER_HOST}'"
-    echo "[WARN] \`/run/docker.sock\` still exists" 
+    echo "[WARN] \`/run/docker.sock\` still exists"
     if readlink -f /run/docker.sock | egrep 'podman.sock$' >/dev/null; then
       echo "[WARN] and it points to $(readlink -f /run/docker.sock)"
     fi
@@ -215,6 +215,10 @@ _tag mux_which_key
 
 source "${my_zsh_d}/integration/zvm" # `../integration/zvm`
 _tag customize_zvm
+
+# rancher desktop
+test -x "${HOME}/.rd/bin/kubectl" && { echo 'rancher desktop discovered'; export PATH="${HOME}/.rd/bin:$PATH"; export DOCKER_HOST=unix://${HOME}/.rd/docker.sock }
+_tag rancher_desktop
 
 # although home-manager might enable this,
 # it's also ignored by ../../nix/home/programs/shells.nix
