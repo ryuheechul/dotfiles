@@ -45,7 +45,7 @@
     btop-rocm
   ];
 
-  services.fprintd.enable = true;
+  # services.fprintd.enable = true; # until https://github.com/NixOS/nixpkgs/issues/389620
   # how to enroll: `sudo fprintd-enroll [username]`
   # how to verify: `fprintd-verify`
   # check from gnome setting: "Settings > Users"

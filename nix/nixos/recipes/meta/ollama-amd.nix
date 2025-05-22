@@ -42,4 +42,7 @@
   services.open-webui = {
     enable = true;
   };
+
+  # for open-webui
+  nixpkgs.config.allowUnfree = true;
 }

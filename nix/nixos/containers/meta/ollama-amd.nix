@@ -68,7 +68,6 @@
       { config, ... }:
       {
         imports = [
-          # ./ollama.nix
           (import ../../recipes/meta/ollama-amd.nix { })
           (
             let
