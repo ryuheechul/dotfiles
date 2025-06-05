@@ -5,6 +5,7 @@ vim.filetype.add {
     kdl = 'kdl',
     hurl = 'hurl',
     astro = 'astro',
+    alloy = 'alloy',
   },
   filename = {
     Earthfile = 'Earthfile',

@@ -7,6 +7,14 @@ return {
     'tpope/vim-scriptease',
     event = 'VeryLazy',
   },
+  {
+    -- Make sure to set this up properly if you have lazy=true
+    'MeanderingProgrammer/render-markdown.nvim',
+    opts = {
+      file_types = { 'markdown' },
+    },
+    ft = { 'markdown' },
+  },
   { -- highlights headlines for markdown like files
     'lukas-reineke/headlines.nvim',
     ft = { 'markdown', 'org' },
