@@ -21,6 +21,7 @@ username:
       # ./recipes/podman-rootful-docker.nix
       ./recipes/podman.nix
       ./recipes/libvirt.nix
+      ./recipes/quickemu.nix
       ./recipes/incus.nix
       ./recipes/waydroid.nix
       # ./recipes/laptop.nix - this usually gets included via others like surface-pro... and gpd-win-max-2

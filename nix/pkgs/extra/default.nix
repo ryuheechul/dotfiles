@@ -14,6 +14,7 @@ let
   bat-riffle = import ../custom/bat-riffle { pkgs = pkgs; };
   alacritty-nightly = import ../custom/alacritty-nightly.nix;
   wsl = import ./wsl.nix { pkgs = pkgs; };
+  rusty-fam = import ./rusty-fam.nix { pkgs = pkgs; };
   rsop = import ../custom/rsop.nix { pkgs = pkgs; };
   # no longer necessary as there is official package now
   # ghostty = import ../custom/ghostty.nix { pkgs = pkgs; };
@@ -80,6 +81,8 @@ with pkgs;
 )
 ++ ifEnv "MY_NIX_EXTRA_AI" [
   aider-chat # Linux virtual machines (on macOS, in most cases)
+  plandex # AI driven development in your terminal. Designed for large, real-world tasks. The sli part
+  goose-cli # Open-source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM
   jan # Jan is an open source alternative to ChatGPT that runs 100% offline on your computer
   lmstudio # LM Studio is an easy to use desktop app for experimenting with local and open-source Large Language Models (LLMs)
 ]
@@ -128,6 +131,7 @@ with pkgs;
   # `mcookie | xargs xauth add :0 .`
 ]
 ++ ifEnv "WSL_DISTRO_NAME" wsl
+++ ifEnv "MY_NIX_EXTRA_RUSTY_FAM" rusty-fam
 # add any package to try out (locally more permanent way than `nix-shell -p [package]`
 ++ lib.optionals (builtins.pathExists ./local-only.nix) (import ./local-only.nix { pkgs = pkgs; })
 # # this is actually not working great at least on ubuntu
