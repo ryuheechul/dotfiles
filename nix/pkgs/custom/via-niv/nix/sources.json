@@ -23,6 +23,18 @@
         "url": "https://github.com/ghostty-org/ghostty/archive/ff9414d9ea7b16a375d41cde8f6f193de7e5db72.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "nix-flatpak": {
+        "branch": "latest",
+        "description": "Install flatpaks declaratively",
+        "homepage": "",
+        "owner": "gmodena",
+        "repo": "nix-flatpak",
+        "rev": "5e54c3ca05a7c7d968ae1ddeabe01d2a9bc1e177",
+        "sha256": "0s3mpb28rcmma29vv884fi3as926bfszhn7v8n74bpnp5qg5a1c8",
+        "type": "tarball",
+        "url": "https://github.com/gmodena/nix-flatpak/archive/5e54c3ca05a7c7d968ae1ddeabe01d2a9bc1e177.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "nix-index-database": {
         "branch": "main",
         "description": "Weekly updated nix-index database [maintainer=@Mic92]",
