@@ -1,5 +1,11 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
+# https://wiki.nixos.org/wiki/Category:Desktop_environment
+# https://wiki.nixos.org/wiki/GNOME
+
+let
+  isSddmEnabled = config.services.displayManager.sddm.enable;
+in
 {
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -8,8 +14,22 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.displayManager.gdm.enable = pkgs.lib.mkForce (
+    if isSddmEnabled then false else true
+  );
   services.xserver.desktopManager.gnome.enable = true;
+
+  # https://wiki.nixos.org/wiki/KDE_Connect
+  programs.kdeconnect = {
+    enable = true;
+    package = pkgs.lib.mkForce (
+      if isSddmEnabled then
+        pkgs.kdePackages.kdeconnect-kde
+      else
+        # https://www.reddit.com/r/gnome/comments/1798vk2/what_happened_to_gsconnect/
+        pkgs.valent # Implementation of the KDE Connect protocol, built on GNOME platform libraries
+    );
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {

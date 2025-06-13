@@ -7,6 +7,9 @@
   ...
 }:
 
+# https://discourse.nixos.org/t/the-myth-of-stable-unstable/55516/2
+# https://www.dgt.is/blog/2025-01-10-nix-death-by-a-thousand-cuts/
+
 let
   system-pkgs = import ./system-pkgs.nix { pkgs = pkgs; };
   shell-init = ''
