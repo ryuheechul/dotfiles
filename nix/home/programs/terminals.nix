@@ -3,7 +3,11 @@
 let
   startup_session_file = pkgs.writeTextFile {
     name = "kitty_startup_session";
+    # https://sw.kovidgoyal.net/kitty/overview/#startup-sessions
+    # (originally I didn't know about `os_window_state` at https://github.com/kovidgoyal/kitty/issues/856)
     text = ''
+      # `maximized` provides better experience than `fullscreen` on linux
+      os_window_state maximized
       launch zsh -c 'source ~/.base16_theme; exec-tmux-attach kitty'
     '';
   };
@@ -27,10 +31,6 @@ in
     settings = {
       hide_window_decorations = true;
       startup_session = startup_session_path;
-      # unfortunately I couldn't find a way to set full screen startup in the configuration - https://github.com/kovidgoyal/kitty/issues/856
-      # in the meantime there are two workarounds:
-      # - a. run it with `kitty --start-as=fullscreen` from other terminal
-      # - b. modify kitty.desktop file
     };
 
     # https://sw.kovidgoyal.net/kitty/actions/#action-paste
@@ -44,7 +44,7 @@ in
   xdg.desktopEntries.kitty = pkgs.lib.mkIf pkgs.stdenv.isLinux {
     name = "kitty";
     genericName = "Terminal emulator";
-    exec = "kitty --start-as=fullscreen"; # this is the main fix and the rest is to conform with original
+    exec = "kitty"; # this is the main fix and the rest is to conform with original
     icon = "kitty";
     comment = "Fast, feature-rich, GPU based terminal";
     categories = [

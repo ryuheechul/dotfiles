@@ -5,7 +5,8 @@
 # - https://ghostty.org/docs/config
 # - https://ghostty.org/docs/config/reference
 
-fullscreen = true
+# favor over `fullscreen = true` at least on Linux
+maximize = true
 window-decoration = false
 initial-command = "zsh -c 'source ~/.base16_theme; exec-tmux-attach ghostty'"
 font-size = 15
