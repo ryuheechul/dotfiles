@@ -66,6 +66,7 @@ return function()
       'markdown',
       'markdown_inline',
       'nix',
+      'nu',
       'ocaml',
       'python',
       'ql',

@@ -1,4 +1,4 @@
-{ config, ... }:
+{ pkgs, config, ... }:
 
 let
   env-vars = config.home.sessionVariables;
@@ -145,8 +145,31 @@ in
     };
   };
 
+  # https://www.nushell.sh/book/configuration.html
   programs.nushell = {
     # simply enable for now since investing in this shell would take a lot of time
+    enable = true;
+    shellAliases = {
+      # need to override since the difference on https://www.nushell.sh/book/environment.html
+      printpath = pkgs.lib.mkForce "echo $env.PATH";
+      j = "zi"; # zoxide to fit my muscle memory with fasd+fzf
+    };
+  };
+
+  ### now other tools that enhance shell experience
+
+  # Minimal, blazing fast, and extremely customizable prompt for any shell
+  programs.starship = {
+    enable = true;
+  };
+
+  # Multi-shell multi-command argument completer
+  programs.carapace = {
+    enable = true;
+  };
+
+  # Fast cd command that learns your habits
+  programs.zoxide = {
     enable = true;
   };
 }

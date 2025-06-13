@@ -21,8 +21,8 @@ zinit light romkatv/zsh-defer
 
 # git aliases like grt
 zinit snippet OMZP::git
-# j to jump around directory
-zinit snippet OMZP::fasd
+# Initializes zoxide, a smarter cd command for your terminal.
+ZOXIDE_CMD_OVERRIDE=j zinit snippet OMZP::zoxide # use j instead z to avoid conflict with zinit's `zi`
 # to persist history and make sure to override options from OMZ via my own
 zinit snippet OMZL::history.zsh; source "${my_zsh_d}/modules/history"
 # this seems to be not in effect because other similar plugins so disabling for now

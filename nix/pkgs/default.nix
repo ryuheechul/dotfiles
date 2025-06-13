@@ -53,11 +53,11 @@ with pkgs;
     fontconfig # A library for font customization and configuration
   ]
 ++
-  # shell
+  # shell - also see ../home/programs/shells.nix
   [
-    bashInteractive # use latest bash
-    zsh # my favorite shell interface
-    starship # cross-shell prompt
+    # bashInteractive # use latest bash
+    # zsh # my favorite shell interface
+    # starship # cross-shell prompt
     tmux # terminal multiplexer
     zellij # A terminal workspace with batteries included
   ]
@@ -126,7 +126,7 @@ with pkgs;
     silver-searcher # A code-searching tool similar to ack, but faster
     amber # A code search-and-replace tool - use it with `ambs` and `ambr`
     codespelunker # A command code search tool - use with `cs [term]` which works kinda like `rg [term] | fzf`
-    fasd # Command-line productivity booster, offers quick access to files and directories
+    # fasd # Command-line productivity booster, offers quick access to files and directories
     sad # search and replace | Space Age seD - ex) `fd . | sad find replace`
     fd # A simple, fast and user-friendly alternative to find
   ]

@@ -1,16 +1,24 @@
 # https://starship.rs/config
 
+# https://starship.rs/config/#shell
+[shell]
+disabled = false
+
+# https://starship.rs/config/#shlvl
 [shlvl]
 disabled = false
 threshold = 3
 
+# https://starship.rs/config/#battery-display
 [[battery.display]]
 threshold = 80
 style = "yellow"
 
+# https://starship.rs/config/#git-branch
 [git_branch]
 symbol = "🌱 "
 
+# https://starship.rs/config/#git-status
 [git_status]
 conflicted = "🏳"
 ahead = "🏎💨${count}"
@@ -23,14 +31,18 @@ staged = '[++\(${count}\)](green)'
 renamed = "👅"
 deleted = "🗑"
 
+# https://starship.rs/config/#kubernetes
 [kubernetes]
 symbol = "⛴  "
 style = "dimmed green"
 disabled = false
 
+# https://starship.rs/config/#terraform
 [terraform]
 
+# https://starship.rs/config/#nix-shell
 [nix_shell]
 
+# https://starship.rs/config/#aws
 [aws]
 symbol = '🅰 '
