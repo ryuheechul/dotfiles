@@ -41,6 +41,7 @@ username:
       ./recipes/mtu-probing.nix
       # desktop
       ./recipes/desktop-gnome.nix
+      ./recipes/desktop-cosmic.nix
       # ./recipes/desktop-kde.nix
       ./recipes/rdp-server.nix
       ./recipes/sunshine.nix
