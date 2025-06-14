@@ -17,7 +17,18 @@ in
   services.xserver.displayManager.gdm.enable = pkgs.lib.mkForce (
     if isSddmEnabled then false else true
   );
-  services.xserver.desktopManager.gnome.enable = true;
+  services.xserver.desktopManager.gnome = {
+    enable = true;
+    # (for org.gnome.mutter):
+    # - what's the difference between this one and the user level one at `../../home/dconf.nix`?
+    #   - self guessing for above and confirmed with personal experiments: impact before the user session (e.g. gdm)
+    # - see all flags at https://github.com/GNOME/mutter/blob/main/data/org.gnome.mutter.gschema.xml.in
+    # - debug with `sudo gsettings get org.gnome.mutter experimental-features`
+    extraGSettingsOverrides = ''
+      [org.gnome.mutter]
+      experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate']
+    '';
+  };
 
   # https://wiki.nixos.org/wiki/KDE_Connect
   programs.kdeconnect = {

@@ -22,6 +22,21 @@ with lib.hm.gvariant;
       word-commit = false;
     };
 
+    # what's the difference between this one and the system level ones at `../nixos/recipes/desktop-gnome.nix`?
+    # self guessing for above and confirmed with personal experiments: impact on the user session
+    "org/gnome/mutter" = {
+      # https://github.com/GNOME/mutter/blob/main/data/org.gnome.mutter.gschema.xml.in
+      experimental-features = [
+        # scaling being handled in the screen/monitor level instead of individual apps:
+        # - https://www.reddit.com/r/gnome/comments/11ekj8o/what_is_the_state_of_fractional_scaling_on_gnome/
+        "scale-monitor-framebuffer" # can resolve X11 apps text not following the scaling issue but blurring can happen
+        # turn below on for crisp but potentially wrong scale and turn it off if the right scaling is worth dealing with blurriness
+        # "xwayland-native-scaling" # enabling this prevent blurring but it will "ignore" the scaling (small texts!!)
+        "variable-refresh-rate"
+      ];
+      # debug with `gsettings get org.gnome.mutter experimental-features`
+    };
+
     # this also relies on ibus configuration above
     "org/gnome/desktop/input-sources" = {
       sources = [
