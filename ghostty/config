@@ -7,7 +7,10 @@
 
 # favor over `fullscreen = true` at least on Linux
 maximize = true
-window-decoration = false
+# enable the line below for macOS as the maximize would do nothing there
+# fullscreen = true
+window-decoration = auto
+quit-after-last-window-closed = true
 initial-command = "zsh -c 'source ~/.base16_theme; exec-tmux-attach ghostty'"
 font-size = 15
 # # somehow this was not working on my system:

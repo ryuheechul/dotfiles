@@ -14,6 +14,10 @@ alt_hm="$("${get_path_for}" home-manager)"
 channel_for_darwin=""
 uname | xargs test "Darwin" = && channel_for_darwin="-I nixpkgs-stable-darwin=${alt_nixpkgs_stable_darwin}"
 
+# making sure NIX_CONFIG exist especially for there are some flakes being used down the load with the command continued
+printenv NIX_CONFIG | grep flakes >/dev/null ||
+  export NIX_CONFIG="extra-experimental-features = nix-command flakes"
+
 "${HOME}/.nix-profile/bin/home-manager" \
   -I "home-manager=${alt_hm}" \
   -I "nixpkgs=${alt_nixpkgs}" \

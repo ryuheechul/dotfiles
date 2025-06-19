@@ -26,18 +26,29 @@ brew services start opener
 
 # mas let you install Mac App Store app with CLI
 brew install mas
-mas install 869223134 # KakaoTalk
+mas install 869223134  # KakaoTalk
 mas install 1480933944 # Vimari
 mas install 1142151959 # Just Focus
-mas install 803453959 # Slack
+mas install 803453959  # Slack
 mas install 1475387142 # Tailscale
 mas install 1480933944 # Vimari
 mas install 1284863847 # Unsplash Wallpapers
+mas install 441258766  # magnet
 
 ######### Brew Cask #########
 
-_install_cask () {
-  brew list --cask $1 || brew install --no-quarantine --cask --appdir="${HOME}/Applications" $1
+_is_admin() {
+  groups | tr '[:space:]' '\n' | grep '^admin$' >/dev/null
+}
+
+_install_cask() {
+  brew list --cask $1 || {
+    if is_admin; then
+      brew install --no-quarantine --cask $1
+    else
+      brew install --no-quarantine --cask --appdir="${HOME}/Applications" $1
+    fi
+  }
 }
 
 # iterm2
@@ -54,17 +65,21 @@ sleep 3
 _install_cask alfred
 _install_cask alacritty
 _install_cask vanilla
-_install_cask 1password
+_is_admin && _install_cask 1password # since it won't work if it's installed a location other than /Applications
 _install_cask amethyst
 _install_cask google-chrome
+_install_cask zen
 _install_cask notion
 _install_cask utm
 _install_cask logseq
-_install_cask sublime-text; ./sublime/.link.sh
+_install_cask sublime-text
+./sublime/.link.sh
 _install_cask secretive
 _install_cask visual-studio-code
-_install_cask karabiner-elements; ./karabiner/.link.sh
+_install_cask karabiner-elements
+./karabiner/.link.sh
 _install_cask raycast
+_install_cask ghostty
 
 echo "run ./karabiner-uk/.link.sh instead if the hardware keyboard layout is British"
 
@@ -104,6 +119,7 @@ echo "- Open Amethyst to have tiling start working"
 echo "- System Preference > Display > change the dominant display if you use multi screen setup"
 echo "- Install Keytty from ~/Downloads/Keytty.x.x.x.dmg"
 echo "- Open Just Focus to start using Pomodoro technic"
+echo '- run `brew services ls` to see if any services you want to run (e.g. syncthing)'
 
 sleep 2
 
