@@ -12,11 +12,11 @@ is-remote-display-via-x11-forward() {
 }
 
 is-mac-os-local-connection() {
-  test -x /usr/bin/pbpaste && ! is-remote-display-via-x11-forward
+  test -x /usr/bin/pbcopy && ! is-remote-display-via-x11-forward
 }
 
 if is-mac-os-local-connection; then
-  /usr/bin/pbpaste "$@"
+  /usr/bin/pbcopy "$@"
 elif should-use-osc; then
   osc copy
 elif is-remote-display-via-x11-forward; then
