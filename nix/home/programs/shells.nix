@@ -152,8 +152,12 @@ in
     shellAliases = {
       # need to override since the difference on https://www.nushell.sh/book/environment.html
       printpath = pkgs.lib.mkForce "echo $env.PATH";
-      j = "zi"; # zoxide to fit my muscle memory with fasd+fzf
+      # find the rest at ../../../nushell/config.nu
     };
+    extraConfig = ''
+      const native_config_file = "${env-vars.my_dot_d}/nushell/config.nu"
+      source $native_config_file
+    '';
   };
 
   ### now other tools that enhance shell experience
