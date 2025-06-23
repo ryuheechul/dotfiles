@@ -1,0 +1,8 @@
+#!/usr/bin/env nu
+
+# adaptation of ../default/battery for darwin
+
+use ../../../nushell/modules/parse-battery-darwin.nu battery-status
+
+battery-status | get capacity | $in * 100
+

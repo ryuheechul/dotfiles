@@ -1,0 +1,18 @@
+#!/usr/bin/env nu
+
+# adaptation of ../default/battery-status for darwin
+
+use ../../../nushell/modules/parse-battery-darwin.nu battery-status
+
+let is_charging = battery-status | get charging
+let percent = battery-status | get capacity | $in * 100
+
+if $is_charging {
+  "Charging"
+} else {
+  if $percent == 100 {
+    "Full"
+  } else {
+    "Not charging"
+  }
+}
