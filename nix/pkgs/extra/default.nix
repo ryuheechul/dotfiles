@@ -16,6 +16,7 @@ let
   wsl = import ./wsl.nix { pkgs = pkgs; };
   rusty-fam = import ./rusty-fam.nix { pkgs = pkgs; };
   rsop = import ../custom/rsop.nix { pkgs = pkgs; };
+  gemini = import ../custom/gemini.nix { pkgs = pkgs; };
   # no longer necessary as there is official package now
   # ghostty = import ../custom/ghostty.nix { pkgs = pkgs; };
 in
@@ -80,6 +81,7 @@ with pkgs;
   ]
 )
 ++ ifEnv "MY_NIX_EXTRA_AI" [
+  gemini # AI agent that brings the power of Gemini directly into your terminal
   aider-chat # Linux virtual machines (on macOS, in most cases)
   plandex # AI driven development in your terminal. Designed for large, real-world tasks. The sli part
   goose-cli # Open-source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM
@@ -107,6 +109,7 @@ with pkgs;
   minikube # A tool that makes it easy to run Kubernetes locally
   kind # Kubernetes IN Docker - local clusters for testing Kubernetes
   colima # Container runtimes with minimal setup powered by lima
+  diffoci # Diff for Docker and OCI container images
   # minikube with podman - https://github.com/containers/podman/issues/12713#issuecomment-1002567777
   # an example podman machine works for minikube - `podman machine init --rootful --cpus 4 --memory 4096 --disk-size 30`
 ]
