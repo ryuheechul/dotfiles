@@ -78,10 +78,7 @@ return {
     'Olical/conjure',
     ft = { 'fennel', 'clojure', 'racket', 'lua', 'python', 'rust' },
     init = function()
-      -- how do i write this in lua?
-      vim.cmd [[
-        let g:conjure#mapping#prefix = "<leader>rc"
-      ]]
+      vim.g['conjure#mapping#prefix'] = '<leader>rc'
     end,
   },
   { -- A Fennel REPL that runs in Neovim
