@@ -2,7 +2,9 @@
 
 # see reference at https://nixos.org/manual/nix/stable/command-ref/conf-file.html
 
-export NIX_CONFIG='extra-experimental-features = nix-command flakes'
+# making sure NIX_CONFIG exist especially `nix eval requires nix-command feature`
+printenv NIX_CONFIG | grep nix-command >/dev/null ||
+  export NIX_CONFIG='extra-experimental-features = nix-command flakes'
 # also run `nix show-config` to see interpreted values
 
 # if test "$(uname -s)" = "Darwin"; then

@@ -3,9 +3,14 @@
 # and obviously this is for Linux only not for Darwin
 { lib, ... }:
 
+let
+  checkEnv = import ../utils/checkEnv.nix;
+  ifEnv = envName: checkEnv envName;
+  dconfShouldBeEnabled = !(ifEnv "HINT_FOR_HM_NO_DCONF");
+in
 with lib.hm.gvariant;
 {
-  dconf.settings = {
+  dconf.settings = lib.mkIf dconfShouldBeEnabled {
     # relies on below from ../nixos/recipes/desktop-gnome.nix
     # ```
     # i18n.inputMethod = {

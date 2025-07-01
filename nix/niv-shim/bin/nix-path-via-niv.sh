@@ -28,4 +28,6 @@ function construct()
 
 params="$(construct | tr '\n' ' ')"
 
+source ../../bin/source/config.sh
+
 nix eval --impure --expr "import ./nix-path-for-paths.nix ${params}" | xargs

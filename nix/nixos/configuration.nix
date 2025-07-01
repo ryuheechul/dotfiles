@@ -3,6 +3,8 @@
 # manual is at https://nixos.org/manual/nixos/stable/#sec-modularity
 # use `nixos-option` to debug
 {
+  lib,
+  config,
   pkgs,
   ...
 }:
@@ -40,6 +42,12 @@ in
     ];
   };
 
+  # to deal with home-manager not able to know if there's dconf running or not:
+  # - https://github.com/nix-community/home-manager/issues/3113
+  # - ../home/dconf.nix
+  environment.variables = lib.mkIf (!config.programs.dconf.enable) {
+    HINT_FOR_HM_NO_DCONF = 1;
+  };
   environment.systemPackages = system-pkgs;
   programs.zsh = {
     enable = true;

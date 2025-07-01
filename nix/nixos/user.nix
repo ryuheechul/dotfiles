@@ -25,7 +25,6 @@ let
     in
     with pkgs.lib;
     {
-      isNormalUser = mkForce true;
       description = mkForce "user is ${username}";
       # NOTE regarding groups:
       # - changes on groups can be seen right away with `cat /etc/group` but not with `groups`

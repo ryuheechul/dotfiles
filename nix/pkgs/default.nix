@@ -5,6 +5,7 @@
 let
   emacs = import ./custom/emacs.nix { pkgs = pkgs; };
   urlview = import ./custom/urlview.nix { pkgs = pkgs; };
+  isLinux = with pkgs; lib.optionals stdenv.isLinux;
 in
 with pkgs;
 # just for fun/testing
@@ -64,7 +65,7 @@ with pkgs;
 ++
   # editor - mostly for neovim
   [
-    emacs # coming from my customization at ./custom/emacs.nix
+    # emacs - see the next section for why it's commented here
     # ispell for emacs
     ispell # Interactive spell-checking program for Unix
     neovim # my favorite editor
@@ -73,6 +74,12 @@ with pkgs;
     # clang-tools # Standalone command line tools for C++ development
     rust-analyzer # An experimental modular compiler frontend for the Rust language
     stylua # An opinionated Lua code formatter
+  ]
+++
+
+  # temporarily due to the issue mentioned at https://discourse.nixos.org/t/is-it-currently-possible-to-use-emacs-on-aarch64-darwin/31571
+  isLinux [
+    emacs # coming from my customization at ./custom/emacs.nix
   ]
 ++
 
