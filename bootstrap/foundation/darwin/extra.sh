@@ -62,8 +62,8 @@ echo "Go to Profiles > Command > Command and set '~/.config/dfs-rhc/bin/tmux-att
 
 sleep 3
 
-_install_cask alfred
 _install_cask alacritty
+_install_cask warp
 _install_cask vanilla
 _is_admin && _install_cask 1password # since it won't work if it's installed a location other than /Applications
 _install_cask amethyst
@@ -71,15 +71,22 @@ _install_cask google-chrome
 _install_cask zen
 _install_cask notion
 _install_cask utm
+_install_cask orbstack
 _install_cask logseq
-_install_cask sublime-text
+# _install_cask sublime-text
+_install_cask zed
 ./sublime/.link.sh
 _install_cask secretive
 _install_cask visual-studio-code
 _install_cask karabiner-elements
+_install_cask moonlight
 ./karabiner/.link.sh
+# _install_cask alfred
 _install_cask raycast
 _install_cask ghostty
+_install_cask lm-studio
+_install_cask claude
+_install_cask cursor
 
 echo "run ./karabiner-uk/.link.sh instead if the hardware keyboard layout is British"
 

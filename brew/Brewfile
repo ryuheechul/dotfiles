@@ -15,7 +15,10 @@ brew "htop" # resource monitoring
 brew "gpg" # GnuPG
 brew "wget" # useful for downloading files
 brew "iproute2mac" # ip command
-brew "emacs" # due to the issue mentioned at https://discourse.nixos.org/t/is-it-currently-possible-to-use-emacs-on-aarch64-darwin/31571
+# cask "emacs" # due to the issue mentioned at https://discourse.nixos.org/t/is-it-currently-possible-to-use-emacs-on-aarch64-darwin/31571
+
+tap "d12frosted/emacs-plus"
+brew "emacs-plus" # cask "emacs" should do but "emacs-plus" seems to do more
 brew "syncthing" # Open Source Continuous File Synchronization
 
 # viewer

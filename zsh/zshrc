@@ -5,6 +5,11 @@ if test "${TERM}" = "dumb"; then
   return
 fi
 
+# TODO: move this to warp's, similar to how ../alacritty/win.toml does
+if printenv __CFBundleIdentifier | grep dev.warp >/dev/null; then
+  export UNSET_HOST_ALWAYS_USE_TMUX=1
+fi
+
 # escape hatches for editors (that can be opened via/and inside shell) that has has its own terminal emulator that runs will run this shell
 test -z "${IGNORE_UNSET_MY_BASIC_ZSH_STUFF_LOADED}" && test -n "${UNSET_MY_BASIC_ZSH_STUFF_LOADED}" && unset MY_BASIC_ZSH_STUFF_LOADED && unset UNSET_MY_BASIC_ZSH_STUFF_LOADED
 test -z "${IGNORE_UNSET_ALL_MY_ZSH_STUFF_LOADED}"   && test -n "${UNSET_ALL_MY_ZSH_STUFF_LOADED}"   && unset ALL_MY_ZSH_STUFF_LOADED   && unset UNSET_ALL_MY_ZSH_STUFF_LOADED

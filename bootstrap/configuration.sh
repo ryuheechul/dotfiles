@@ -176,14 +176,14 @@ if [ -z "${SKIP_INSTALL_VIM_PLUGINS}" ]; then
   nvim --headless -c 'UpdateRemotePlugins' -c q || true
 fi
 
-# SpaceVim - this still may be used for vim but not with nvim
-spacevim_ver="v1.6.0"
-git clone https://github.com/SpaceVim/SpaceVim "${HOME}/.SpaceVim" || bash -c 'cd "${HOME}/.SpaceVim" && git checkout master && git pull' &&
-  cd "${HOME}/.SpaceVim" &&
-  git checkout ${spacevim_ver}
-ln -sf "${dfs_rhc}/SpaceVim.d" "${HOME}/.SpaceVim.d"
-# shim vimrc
-ln -sf "${HOME}/.SpaceVim" "${HOME}/.vim"
+# # SpaceVim - this still may be used for vim but not with nvim
+# spacevim_ver="v1.6.0"
+# git clone https://github.com/SpaceVim/SpaceVim "${HOME}/.SpaceVim" || bash -c 'cd "${HOME}/.SpaceVim" && git checkout master && git pull' &&
+#   cd "${HOME}/.SpaceVim" &&
+#   git checkout ${spacevim_ver}
+# ln -sf "${dfs_rhc}/SpaceVim.d" "${HOME}/.SpaceVim.d"
+# # shim vimrc
+# ln -sf "${HOME}/.SpaceVim" "${HOME}/.vim"
 
 # wudo in case of WSL
 test -n "${WSL_DISTRO_NAME}" && git clone https://github.com/Chronial/wsl-sudo.git "${HOME}/.wsl-sudo"

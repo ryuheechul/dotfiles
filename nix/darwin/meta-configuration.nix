@@ -15,6 +15,14 @@ in
   # https://nix-darwin.github.io/nix-darwin/manual/#opt-system.stateVersion
   system.stateVersion = 6;
 
+  # also read this, https://gist.github.com/ryuheechul/9515381570a0cea994e62647d92a864f
+  services.openssh = {
+    enable = true;
+    extraConfig = ''
+      PasswordAuthentication no
+    '';
+  };
+
   # `defaults read "Apple Global Domain"`
   system.defaults.NSGlobalDomain = {
     AppleInterfaceStyleSwitchesAutomatically = true;
@@ -24,6 +32,7 @@ in
     NSAutomaticDashSubstitutionEnabled = false;
     NSAutomaticPeriodSubstitutionEnabled = false;
     NSAutomaticQuoteSubstitutionEnabled = false;
+    ApplePressAndHoldEnabled = false;
   };
 
   # `defaults read com.apple.universalaccess`
@@ -44,8 +53,8 @@ in
   # Trackpad - `defaults read com.apple.AppleMultitouchTrackpad`
   system.defaults.trackpad = {
     Clicking = true;
+    Dragging = true;
     TrackpadRightClick = true;
-    TrackpadThreeFingerDrag = true;
   };
 
   # Requirement for networking.dns

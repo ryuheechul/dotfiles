@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# WARN: now this is no longer necessary thanks to ../../../nix/home/services/tmux-watch-theme-change.nix
+
 # call this from An app/process that runs on start up - https://stackoverflow.com/a/6445525/1570165
 # by copying the command below
 # ~/.config/dfs-rhc/bin/darwin/watch-appearance-changes.sh
@@ -9,7 +11,6 @@
 # Which is a undesired behavior with `single-daemon`
 # therefore use timeout to have a side effect of having separate process group id
 # This method was discovered at https://unix.stackexchange.com/a/403193/396504
-
 
 exec zsh -c '
 timeout 5s single-daemon base16-shell-to-follow-system-appearance || true

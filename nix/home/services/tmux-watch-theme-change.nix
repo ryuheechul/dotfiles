@@ -11,10 +11,8 @@ let
   ];
 in
 {
-
-  # config = {
+  # for Linux
   systemd.user.services = {
-    # twtc = {
     tmux-watch-theme-change = {
       Unit = {
         Description = "It watches theme changes and trigger repaint on tmux";
@@ -39,5 +37,47 @@ in
       };
     };
   };
-  # };
+
+  # for Darwin and this replaces ../../../bin/path/darwin/react-to-appearance-changes
+  # debug with `tail -f /private/var/log/com.apple.xpc.launchd/launchd.log`
+  launchd.agents = {
+    # this will update the ~/.base16_theme.updated-time
+    # debug with `launchctl print gui/$(id -u)/org.nix-community.home.base16-shell-to-follow-system-appearance|less`
+    base16-shell-to-follow-system-appearance =
+      let
+        args = [
+          "${config.programs.zsh.package}/bin/zsh"
+          "-c"
+          "base16-shell-to-follow-system-appearance"
+        ];
+      in
+      {
+        enable = true;
+        config = {
+          ProgramArguments = args;
+          KeepAlive = {
+            Crashed = true;
+            SuccessfulExit = false;
+          };
+          RunAtLoad = true;
+          ProcessType = "Background";
+        };
+      };
+
+    # this will react to the ~/.base16_theme.updated-time
+    # debug with `launchctl print gui/$(id -u)/org.nix-community.home.tmux-watch-theme-change|less`
+    tmux-watch-theme-change = {
+      enable = true;
+      config = {
+        ProgramArguments = args;
+
+        KeepAlive = {
+          Crashed = true;
+          SuccessfulExit = false;
+        };
+        RunAtLoad = true;
+        ProcessType = "Background";
+      };
+    };
+  };
 }

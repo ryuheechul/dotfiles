@@ -23,4 +23,8 @@ SHELL=$(which zsh)
 session_name="${1:-default}"
 
 # recommended via https://stackoverflow.com/a/49134974/1570165
-exec tmux new-session -A -s "${session_name}"
+exec tmux -u new-session -A -s "${session_name}"
+# adding `-u` for:
+# - Write UTF-8 output to the terminal even if the first environment variable of LC_ALL, LC_CTYPE, or LANG that is set does not contain "UTF-8" or "UTF8".
+#   - useful when something like Nerd Fonts are not rendering properly over SSH + (remote)TMUX
+# - in case the mismatch between the client and server
