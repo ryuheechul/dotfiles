@@ -61,6 +61,11 @@ ln -sf "${dfs_rhc}/.editorconfig" "${HOME}/.editorconfig"
 mkdir -p "${XDG_CONFIG_HOME}/gh"
 ln -sf "${dfs_rhc}/gh/config.yml" "${XDG_CONFIG_HOME}/gh/config.yml"
 
+# symlink to gemini-cli
+mkdir -p "${HOME}/.gemini"
+ln -sf "${dfs_rhc}/gemini/settings.json" "${HOME}/.gemini/settings.json"
+ln -sf "${dfs_rhc}/gemini/AGENTS.md" "${HOME}/.gemini/AGENTS.md"
+
 # symlink batconfig
 ln -sf "${dfs_rhc}/bat" "${XDG_CONFIG_HOME}/bat"
 bat cache --build || true

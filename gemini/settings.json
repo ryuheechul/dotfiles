@@ -1,0 +1,23 @@
+{
+  "model": "gemini-2.5-flash",
+  "theme": "Atom One",
+  "selectedAuthType": "oauth-personal",
+  "contextFileName": [
+    "AGENTS.md",
+    "AGENT.md",
+    "GEMINI.md"
+  ],
+  "preferredEditor": "neovim",
+  "mcpServers": {
+    "serena": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server"
+      ],
+      "trust": false
+    }
+  }
+}
