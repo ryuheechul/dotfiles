@@ -4,5 +4,5 @@
 
 use ../../../nushell/modules/parse-battery-darwin.nu battery-status
 
-battery-status | get capacity | $in * 100
+battery-status | get capacity | $in * 100 | math floor
 
