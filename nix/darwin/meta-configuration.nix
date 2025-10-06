@@ -9,6 +9,7 @@ let
 in
 {
   system.primaryUser = username;
+  environment.systemPackages = with pkgs; [ iproute2mac ];
 
   ## System Settings
 
@@ -20,6 +21,7 @@ in
     enable = true;
     extraConfig = ''
       PasswordAuthentication no
+      AllowAgentForwarding yes
     '';
   };
 
@@ -81,4 +83,11 @@ in
   # This fixes Touch ID for sudo not working inside tmux and screen.
   # This allows programs like tmux and screen that run in the background to survive across user sessions to work with PAM services that are tied to the bootstrap session.
   security.pam.services.sudo_local.reattach = true;
+
+  # for devenv to use cachix cache
+  nix.settings = {
+    trusted-users = [
+      username
+    ];
+  };
 }
