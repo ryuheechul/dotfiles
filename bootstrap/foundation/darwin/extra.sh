@@ -62,6 +62,7 @@ echo "Go to Profiles > Command > Command and set '~/.config/dfs-rhc/bin/tmux-att
 
 sleep 3
 
+_install_cask stats
 _install_cask alacritty
 _install_cask warp
 _install_cask vanilla
@@ -79,6 +80,7 @@ _install_cask zed
 _install_cask secretive
 _install_cask visual-studio-code
 _install_cask karabiner-elements
+_install_cask pearcleaner
 _install_cask moonlight
 ./karabiner/.link.sh
 # _install_cask alfred

@@ -48,7 +48,7 @@ brew "gh" # official Github CLI
 brew "pueue" # long running task manager
 
 # misc
-brew "neofetch"
+brew "fastfetch"
 brew "yarn"
 
 # not core tap
