@@ -15,6 +15,14 @@ return {
     },
     ft = { 'markdown' },
   },
+  { -- show image (e.g. for markdown editing)
+    '3rd/image.nvim',
+    build = false, -- so that it doesn't build the rock https://github.com/3rd/image.nvim/issues/91#issuecomment-2453430239
+    opts = {
+      processor = 'magick_cli', -- requires imagemagick - see ../../../nix/pkgs/lang/markdown.nix
+    },
+    cond = vim.env.my_nvim_show_image_on_markdown ~= nil,
+  },
   { -- highlights headlines for markdown like files
     'lukas-reineke/headlines.nvim',
     ft = { 'markdown', 'org' },

@@ -17,6 +17,7 @@ let
   shells = import ./shells.nix { pkgs = pkgs; };
   support = import ./support.nix { pkgs = pkgs; };
   graalvm = import ./graalvm.nix { pkgs = pkgs; };
+  markdown = import ./markdown.nix { pkgs = pkgs; };
   javascript = import ./javascript.nix { pkgs = pkgs; };
   checkEnv = import ../../utils/checkEnv.nix;
   ifEnv = envName: pkgs.lib.optionals (checkEnv envName);
@@ -27,6 +28,7 @@ let
     ++ python
     ++ shells
     ++ support # this is not for a language itself but to support the language related things
+    ++ markdown
     ++ javascript
   );
 in

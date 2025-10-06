@@ -74,6 +74,7 @@ export my_nvim_enable_drop=1
 # export my_nvim_syntax_tree_surfer=1
 # export my_nvim_forget_line_number=1
 # export my_nvim_no_cursor_pinpoint=1
+# export my_nvim_show_image_on_markdown=1
 # export my_nvim_plugins_default_to_lazy=1
 
 # export my_zsh_plugin_zsh_autocomplete=1

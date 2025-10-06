@@ -48,6 +48,7 @@ in
   home.shellAliases = {
     q = "exit";
     printpath = ''echo ''${PATH} | tr ":" "\n"'';
+    vi = "nvim";
   };
 
   programs.bash = {
