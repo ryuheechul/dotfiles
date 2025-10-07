@@ -7,3 +7,5 @@
 - If there are staged or unstaged Git changes at startup, attempt to infer the ongoing work to avoid redundant explanations from the user.
 - Show me the diff (not necessarily `git diff`) after each successful improvements if applicable
 - Do not use Serena MCP if it's already activated in some other session
+- When a file (within the project) is referenced in a markdown file, link it with markdown syntax too
+  - If pointing to a directory that contains README.md, try to link to the directory itself instead of pointing to the README.md directly whenever possible
