@@ -35,6 +35,7 @@ return {
             'tailwindcss',
             'cssls',
             'svelte',
+            'eslint',
           },
         },
       },
