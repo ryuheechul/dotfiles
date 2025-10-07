@@ -67,6 +67,15 @@ if is-connected-via-mosh;then
   # https://gist.github.com/yudai/95b20e3da66df1b066531997f982b57b
 fi
 
+exec-zellij () {
+  SSH_TTY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec "${my_dot_d}/bin/zellij-attach-or-new.sh" ssh
+}
+
+exec-tmux () {
+  SSH_TTY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec "${my_dot_d}/bin/tmux-attach-or-new.sh" ssh
+}
+
+
 if should-use-zellij; then
   # prevent infinite session opening with the same name, 'ssh'
   zellij list-sessions \
@@ -80,10 +89,10 @@ if should-use-zellij; then
       sleep 3
     } || {
       echo 'Attempting to attach to zellij session and this might fail as zellij might be not stable'
-      SSH_TTY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec "${my_dot_d}/bin/zellij-attach-or-new.sh" ssh
+      exec-zellij
     }
 elif can-use-tmux; then
-  SSH_TTY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec "${my_dot_d}/bin/tmux-attach-or-new.sh" ssh
+  exec-tmux
 elif is-in-tmux; then
   tmux set status-position bottom
 

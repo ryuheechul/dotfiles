@@ -217,7 +217,12 @@ source "${my_zsh_d}/integration/zvm" # `../integration/zvm`
 _tag customize_zvm
 
 # rancher desktop
-test -x "${HOME}/.rd/bin/kubectl" && { echo 'rancher desktop discovered'; export PATH="${HOME}/.rd/bin:$PATH"; export DOCKER_HOST=unix://${HOME}/.rd/docker.sock }
+test -x "${HOME}/.rd/bin/kubectl" && {
+  echo 'rancher desktop discovered'
+  export PATH="${HOME}/.rd/bin:$PATH"
+  test -S ${HOME}/.rd/docker.sock &&
+    export DOCKER_HOST=unix://${HOME}/.rd/docker.sock
+  }
 _tag rancher_desktop
 
 # although home-manager might enable this,

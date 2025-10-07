@@ -283,6 +283,7 @@ fi
 
 # this overwrites existing gap which is for git apply
 alias gap='git add -p'
+alias gap.='gap .'
 
 # git fix remote to ssh from https
 alias gfssh="ambr --no-parent-ignore 'https://' 'ssh://git@' .git/config"
