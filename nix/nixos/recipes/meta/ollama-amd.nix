@@ -22,7 +22,6 @@
   # https://ollama.com/ - which is responsible for managing and running models
   services.ollama = {
     enable = true;
-    acceleration = "rocm";
     rocmOverrideGfx = rocmOverrideGfx;
     # WARN: Why is it not using VRAM? Answered at https://github.com/ollama/ollama/issues/5471#issuecomment-2633000039
     environmentVariables = {

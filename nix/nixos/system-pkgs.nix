@@ -40,7 +40,7 @@ let
     libva-utils # for vainfo
     pciutils # for `lspci`
     # https://www.reddit.com/r/linux_gaming/comments/ynue9u/comment/ivat383
-    glxinfo # Test utilities for OpenGL - `glxinfo -B`
+    mesa-demos # Test utilities for OpenGL - `glxinfo -B`
     bindfs # A FUSE filesystem for mounting a directory to another location
     powertop # Analyze power consumption on Intel-based laptops
     resources # Monitor your system resources and processes

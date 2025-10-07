@@ -14,10 +14,8 @@ in
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = pkgs.lib.mkForce (
-    if isSddmEnabled then false else true
-  );
-  services.xserver.desktopManager.gnome = {
+  services.displayManager.gdm.enable = pkgs.lib.mkForce (if isSddmEnabled then false else true);
+  services.desktopManager.gnome = {
     enable = true;
     # (for org.gnome.mutter):
     # - what's the difference between this one and the user level one at `../../home/dconf.nix`?

@@ -15,6 +15,11 @@
   # works only for intel
   services.thermald.enable = true;
 
+  hardware.microsoft-surface.kernelVersion = "stable";
+
+  # Temporarily to bypass rust failure
+  boot.kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_latest;
+
   # improve pen experience
   services.iptsd.config.Touchscreen = {
     DisableOnPalm = true;

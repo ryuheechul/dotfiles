@@ -50,6 +50,7 @@ let
   );
   natives = [
     ruff # An extremely fast Python linter and a Language Server Protocol implementation for Ruff
+    uv # Extremely fast Python package installer and resolver, written in Rust
   ];
 in
 [ python-with-pkgs ] ++ via-npm ++ natives

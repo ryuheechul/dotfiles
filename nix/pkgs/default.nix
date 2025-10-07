@@ -103,9 +103,10 @@ with pkgs;
     # not sure if sqlite is "modern" but keep it here so I can avoid having to build sqlite by an arbitrary npm package which happened quite often
     sqlite # A self-contained, serverless, zero-configuration, transactional SQL database engine
     earthly # Build automation for the container era
-    dogdns # Command-line DNS client - as a replacement of dig
     sops # Simple and flexible tool for managing secrets
     age # Modern encryption tool with small explicit keys
+    sshs # Terminal user interface for SSH
+    lazyssh # Terminal-based SSH manager
   ]
 ++
   # viewer
@@ -119,7 +120,7 @@ with pkgs;
     glow # markdown render on cli
     lf # terminal file manager
     fx # json viewer
-    du-dust # du + rust = dust. Like du but more intuitive - use with `dust`
+    dust # du + rust = dust. Like du but more intuitive - use with `dust`
     duf # Disk Usage/Free Utility
     gping # ping with graph
     fpp # for tmux-fpp

@@ -50,7 +50,7 @@ with pkgs;
   ipcalc # Simple IP network calculator
   socat # Utility for bidirectional data transfer between two independent data channels
   tcpdump # Network sniffer
-  ngrep # Network packet analyzer
+  # ngrep # Network packet analyzer
   tcpflow # TCP stream extractor
   termshark # A terminal user-interface for tshark, inspired by Wireshark.
   whois # Intelligent WHOIS client from Debian
@@ -78,7 +78,7 @@ with pkgs;
     batdiff
     batwatch
     prettybat
-    bat-riffle # A proof-of-concept for a pager-as-a-library. Mainly designed for bat, and not ready for general use.
+    # bat-riffle # A proof-of-concept for a pager-as-a-library. Mainly designed for bat, and not ready for general use.
   ]
 )
 ++ ifEnv "MY_NIX_EXTRA_AI_CLIENT" [

@@ -60,15 +60,15 @@
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nur": {
-        "branch": "master",
-        "description": "Nix User Repository: User contributed nix packages [maintainer=@Mic92]",
+        "branch": "main",
+        "description": "Nix User Repository: User contributed nix packages [maintainer=@Pandapip1]",
         "homepage": "https://nur.nix-community.org/",
         "owner": "nix-community",
-        "repo": "nur",
-        "rev": "367e68920e3f1dfb183c651378433661fd6b5426",
-        "sha256": "05fi00km21rr5xrv2jknjq8qm1rnivvdsi5j1qvynr8id06wgizn",
+        "repo": "NUR",
+        "rev": "039a09a6b2a19666c346952909d4c2e714bc949f",
+        "sha256": "1vvsmbgcqs176ii6ail7lmg7kqaaqvm8alla0aklxffvsl46qxn9",
         "type": "tarball",
-        "url": "https://github.com/nix-community/nur/archive/367e68920e3f1dfb183c651378433661fd6b5426.tar.gz",
+        "url": "https://github.com/nix-community/NUR/archive/039a09a6b2a19666c346952909d4c2e714bc949f.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
