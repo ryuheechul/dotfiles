@@ -48,17 +48,25 @@ in
     variant = "";
   };
 
+  # If using a minimal Window Manager (like Hyprland, Sway), you might need:
+  # services.xserver.desktopManager.runXdgAutostartIfNone = true;
+
   # this is necessary for sections below at ../../home/dconf.nix
   # - "org/freedesktop/ibus/engine/hangul"
   # - "org/gnome/desktop/input-sources"
   # because `services.xserver.desktopManager.gnome.extraGSettingsOverrides` is for the system
   # but that will be disregarded by individual user's settings
   # hence do this via ../../home/dconf.nix
+
   i18n.inputMethod = {
     type = "ibus";
     enable = true;
     ibus.engines = with pkgs.ibus-engines; [ hangul ];
   };
+
+  # This seems to fix the issue that I have been having for a long time which is many bugs on Korean input (hangul) - https://github.com/NixOS/nixpkgs/issues/300597
+  environment.variables.GTK_IM_MODULE = pkgs.lib.mkForce "";
+
   # if were to choose alternative to ibus (and ibus-hangul), I might consider https://github.com/Riey/kime
   # possibly via https://nix-community.github.io/home-manager/options.html#opt-i18n.inputMethod.kime.config
 
