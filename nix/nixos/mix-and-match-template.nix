@@ -52,6 +52,8 @@ username:
       ./recipes/flatpak.nix
       ./recipes/openssh.nix
       ./recipes/pam-sshagent.nix
+      ./recipes/ydotool.nix
+      ./recipes/mlg.nix
       # ./recipes/no-tty-tickets.nix
       ./recipes/mdns.nix
       ./recipes/airplay.nix

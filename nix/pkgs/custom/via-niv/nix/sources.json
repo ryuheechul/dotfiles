@@ -23,6 +23,18 @@
         "url": "https://github.com/ghostty-org/ghostty/archive/ff9414d9ea7b16a375d41cde8f6f193de7e5db72.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "mlg": {
+        "branch": "main",
+        "description": "A Python app detecting libinput pinch gestures to execute commands, with the motivation of mimicking macOS trackpad gesture of pinching 4 fingers in to open Launchpad on Linux",
+        "homepage": null,
+        "owner": "ryuheechul",
+        "repo": "mimic-launchpad-gesture",
+        "rev": "689dfd7f92ad66daa30492d0ce5e39cdd19e45f5",
+        "sha256": "0i0b91fr69c70x3k5cz29wpg482wycyx37fz5g84pblmmhf3iy0l",
+        "type": "tarball",
+        "url": "https://github.com/ryuheechul/mimic-launchpad-gesture/archive/689dfd7f92ad66daa30492d0ce5e39cdd19e45f5.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "nix-flatpak": {
         "branch": "latest",
         "description": "Install flatpaks declaratively",

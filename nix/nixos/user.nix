@@ -15,6 +15,11 @@ let
         ++ pkgs.lib.optionals config.virtualisation.docker.enable [ "docker" ]
         ++ pkgs.lib.optionals is-rootful-podman-used-in-place-of-docker [ "podman" ]
         ++ pkgs.lib.optionals config.services.syncthing.enable [ "syncthing" ]
+        # uncomment below when debugging only since unless user need to run `ydotool` all that much
+        # ++ pkgs.lib.optionals config.programs.ydotool.enable [
+        #   config.programs.ydotool.group
+        # ]
+        # ./recipes/mlg.nix is a good example of using ydotool only via a service
         ++ pkgs.lib.optionals config.virtualisation.libvirtd.enable [
           "libvirtd"
           "qemu-libvirtd"
@@ -48,8 +53,7 @@ let
         let
           authorized_keys = builtins.toPath "/home/${username}/.ssh/authorized_keys";
           authorizedKeyFiles =
-            [ ]
-            ++ pkgs.lib.optionals (builtins.pathExists authorized_keys) [ authorized_keys ];
+            [ ] ++ pkgs.lib.optionals (builtins.pathExists authorized_keys) [ authorized_keys ];
         in
         authorizedKeyFiles;
     };
