@@ -36,6 +36,7 @@ let
         # - more on sshfs, https://www.redhat.com/sysadmin/sshfs
         # - there is also sshocker, see that at ./extra/default.nix
         bluetuith # TUI-based bluetooth connection manager
+        sysz # Fzf terminal UI for systemctl
       ]
 
       ++ ifX86 [

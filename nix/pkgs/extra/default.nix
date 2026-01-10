@@ -5,6 +5,7 @@
 let
   checkEnv = import ../../utils/checkEnv.nix;
   ifEnv = envName: pkgs.lib.optionals (checkEnv envName);
+  exp = (import ./exp.nix { pkgs = pkgs; });
   tag = import ../custom/tag { pkgs = pkgs; };
   hired = import ../custom/hired.nix { pkgs = pkgs; };
   cfn-lint = pkgs.python3.pkgs.cfn-lint;
@@ -102,6 +103,7 @@ with pkgs;
   # alias docker=podman # or just alias it
   # ```
   docker-client # to shim the absence of docker command for podman in case podman is to replace to docker and act like one
+  dive # Tool for exploring each layer in a docker image
   kubectl # Kubernetes CLI
   kubectx # Fast way to switch between clusters and namespaces in kubectl!
   k9s # Kubernetes CLI To Manage Your Clusters In Style
@@ -137,6 +139,7 @@ with pkgs;
 ]
 ++ ifEnv "WSL_DISTRO_NAME" wsl
 ++ ifEnv "MY_NIX_EXTRA_RUSTY_FAM" rusty-fam
+++ ifEnv "MY_NIX_EXTRA_EXPERIMENT" exp
 # add any package to try out (locally more permanent way than `nix-shell -p [package]`
 ++ lib.optionals (builtins.pathExists ./local-only.nix) (import ./local-only.nix { pkgs = pkgs; })
 # # this is actually not working great at least on ubuntu
