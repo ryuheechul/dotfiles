@@ -105,9 +105,9 @@ function M.lspconfig()
 
   -- delegate server specific setup to lsp-servers
   local servers = require 'plugins.config.lsp-servers'(setup_default, node_root)
-  local lspconfig = require 'lspconfig'
   for server, setup in pairs(servers) do
-    lspconfig[server].setup(setup)
+    vim.lsp.config(server, setup)
+    vim.lsp.enable(server)
   end
   -- this will allow more complicated lsp capabilities when I want
   -- require('navigator').setup { lsp = servers }
