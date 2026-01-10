@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 filename="$(basename "$1")"
 
 EXT="${filename##*.}"
@@ -12,15 +11,14 @@ ext="${EXT,,}"
 lf_d="${XDG_CONFIG_HOME}/lf"
 glow_sh="${lf_d}/glow.sh"
 
-title ()
-{
+title() {
   echo '_'"${1}"'_ via **'"${2}"'**: `'"${3}"'`
 
 ---' | ${glow_sh}
 }
 
-markdown-via-glow () {
-  function with-glow () {
+markdown-via-glow() {
+  function with-glow() {
     title Markdown glow "${1}"
     ${glow_sh} "$1"
   }
@@ -28,8 +26,8 @@ markdown-via-glow () {
   with-glow $1
 }
 
-zip-via-unzip () {
-  function with-unzip () {
+zip-via-unzip() {
+  function with-unzip() {
     title Zip unzip "${1}"
     unzip -l "${1}"
   }
@@ -37,9 +35,8 @@ zip-via-unzip () {
   with-unzip "${1}"
 }
 
-image-via-viu () {
-  with-viu ()
-  {
+image-via-viu() {
+  with-viu() {
     title Image viu "${1}"
     viu "${1}"
   }
@@ -48,13 +45,13 @@ image-via-viu () {
 }
 
 # via tree alias from my zsh
-directory-via-tree () {
+directory-via-tree() {
   echo "@ $(realpath "${1}")"
   title Directory "tree" "${1}"
   zsh -c "tree '${1}'"
 }
 
-file-via-bat () {
+file-via-bat() {
   paging_flag=''
   # if test -n "${LF_PV_WITH_PAGER}"; then
   #   # use bat-riffle if exist
@@ -74,20 +71,20 @@ file-via-bat () {
 }
 
 case "${ext}" in
-  md)
-    markdown-via-glow "${1}"
-    ;;
-  jpg|jpeg|png|gif|bmp)
-    image-via-viu "${1}"
-    ;;
-  zip)
-    zip-via-unzip "${1}"
-    ;;
-  *)
-    if test -d "${1}"; then
-      directory-via-tree "${1}"
-    else
-      file-via-bat "${@}"
-    fi
-    ;;
+md)
+  markdown-via-glow "${1}"
+  ;;
+jpg | jpeg | png | gif | bmp)
+  image-via-viu "${1}"
+  ;;
+zip)
+  zip-via-unzip "${1}"
+  ;;
+*)
+  if test -d "${1}"; then
+    directory-via-tree "${1}"
+  else
+    file-via-bat "${@}"
+  fi
+  ;;
 esac
