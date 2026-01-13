@@ -104,6 +104,8 @@ with pkgs;
     sqlite # A self-contained, serverless, zero-configuration, transactional SQL database engine
     earthly # Build automation for the container era
     dogdns # Command-line DNS client - as a replacement of dig
+    sops # Simple and flexible tool for managing secrets
+    age # Modern encryption tool with small explicit keys
   ]
 ++
   # viewer
