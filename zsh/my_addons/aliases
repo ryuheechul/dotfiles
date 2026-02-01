@@ -488,6 +488,8 @@ alias e='fzf | xargs ${EDITOR}'
 alias jqstringify='jq ". | tostring"'
 alias jqfromjson='jq "fromjson"'
 # more on it at https://www.cyberciti.biz/faq/unix-linux-check-if-port-is-in-use-command/
+# quick way to see what resources are in the long yaml
+alias yqk8s='yq ".metadata.name + \"[\" + .kind + \".\" + .apiVersion + \"]\" + \"@\" + .metadata.namespace"'
 alias listopenports='lsof -i -P -n | grep LISTEN'
 
 ## quick ways to grep from espanso

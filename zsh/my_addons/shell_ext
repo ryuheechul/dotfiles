@@ -225,6 +225,13 @@ test -x "${HOME}/.rd/bin/kubectl" && {
   }
 _tag rancher_desktop
 
+# distrobox adaptation
+if test -n "${DISTROBOX_ENTER_PATH}" && test -n "${USE_PYTHON_FROM_DISTROBOX}"; then
+  test -x "${my_dot_d}/bin/distrobox/python/python" &&
+    add-to-path "${my_dot_d}/bin/distrobox/python"
+fi
+_tag distrobox
+
 # although home-manager might enable this,
 # it's also ignored by ../../nix/home/programs/shells.nix
 # hence relying on bash's one instead
