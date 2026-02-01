@@ -8,6 +8,7 @@ let
   exp = (import ./exp.nix { pkgs = pkgs; });
   tag = import ../custom/tag { pkgs = pkgs; };
   hired = import ../custom/hired.nix { pkgs = pkgs; };
+  ssh-agent-switcher = import ../custom/ssh-agent-switcher { pkgs = pkgs; };
   cfn-lint = pkgs.python3.pkgs.cfn-lint;
   hexto256 = import ../custom/hexto256.nix;
   termimagenator = import ../custom/termimagenator.nix;
@@ -136,6 +137,7 @@ with pkgs;
   # debug xauth - https://www.linuxquestions.org/questions/linux-newbie-8/warning-no-xauth-data-although-i%27m-using-%60ssh-y%60-4175525755/#post5272443
   # `xauth list`
   # `mcookie | xargs xauth add :0 .`
+  ssh-agent-switcher # SSH agent proxy for tmux - see ../../../zsh/integration/interactive-ssh
 ]
 ++ ifEnv "WSL_DISTRO_NAME" wsl
 ++ ifEnv "MY_NIX_EXTRA_RUSTY_FAM" rusty-fam

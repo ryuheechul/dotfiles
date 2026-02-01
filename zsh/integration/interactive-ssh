@@ -75,6 +75,19 @@ exec-tmux () {
   SSH_TTY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec "${my_dot_d}/bin/tmux-attach-or-new.sh" ssh
 }
 
+if test -n "${SSH_AUTH_SOCK}"; then
+  if command -v ssh-agent-switcher >/dev/null; then
+    # https://github.com/jmmv/ssh-agent-switcher/
+    proxy_auth_sock="/tmp/ssh-agent.${USER}"
+    # just in case the sock was deleted while the daemon was running
+    if ! test -S "${proxy_auth_sock}"; then
+      pkill -f ssh-agent-switcher || true
+    fi
+    ssh-agent-switcher --daemon 2>/dev/null || true
+    export SSH_AUTH_SOCK="${proxy_auth_sock}"
+  fi
+fi
+
 
 if should-use-zellij; then
   # prevent infinite session opening with the same name, 'ssh'
