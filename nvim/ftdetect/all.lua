@@ -11,6 +11,12 @@ vim.filetype.add {
     Earthfile = 'Earthfile',
     ['.envrc'] = 'bash',
   },
+  -- Detect and apply filetypes based on certain patterns of the filenames
+  pattern = {
+    -- INFO: Match filenames like - ".env.example", ".env.local" and so on
+    ['%.env%.[%w_.-]+'] = 'dotenv',
+    -- https://neovim.discourse.group/t/how-to-add-custom-filetype-detection-to-various-env-files/4272/3
+  },
 }
 
 -- above replaces the old way like below
