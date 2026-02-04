@@ -27,6 +27,7 @@ return {
           ensure_installed = {
             'lua_ls', -- now this works with NixOS thanks to ../../../nix/nixos/recipes/compat.nix (make sure it's enabled since it's optional for now)
             'jsonls',
+            'ts_ls',
             'astro',
             'yamlls',
             'dockerls',

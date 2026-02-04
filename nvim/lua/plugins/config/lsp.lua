@@ -17,13 +17,13 @@ function M.setup_lsp_format()
     },
     typescript = {
       exclude = {
-        'tsserver',
+        'ts_ls',
         'eslint', -- this is being handled via autocmd - search EslintFixAll at ./lsp-servers.lua
       },
     },
     typescriptreact = {
       exclude = {
-        'tsserver',
+        'ts_ls',
         'eslint', -- this is being handled via autocmd - search EslintFixAll at ./lsp-servers.lua
       },
     },
@@ -97,16 +97,51 @@ function M.lspconfig()
   local setup_default = {
     on_attach = on_attach,
     capabilities = capabilities,
-    flags = {
-      -- This will be the default in neovim 0.7+
-      debounce_text_changes = 150,
-    },
   }
 
+  --- Helper shim to safely load Neovim 0.11+ configs while avoiding legacy bugs.
+  ---
+  --- This acts as a "Defensive Shim" during the Neovim 0.11/0.12 transition.
+  ---
+  --- WHY THIS EXISTS:
+  --- 1. Path Priority: Force Neovim to look in the new 'lsp/' directory (safe data)
+  ---    before 'lua/lspconfig/configs/' (legacy code). This prevents type-error crashes
+  ---    in servers like harper_ls.
+  --- 2. Manual Merge: Ensures 'cmd' and other defaults from nvim-lspconfig are
+  ---    present even if Neovim's auto-discovery isn't fully active yet.
+  --- 3. Stability: Decouples your config from the plugin's "framework" logic which
+  ---    is slated for removal in v3.0.0.
+  local function get_server_config_shim(name, custom_setup)
+    local server_data = nil
+
+    -- 1. Try NEW optimized path (lsp/<server>.lua).
+    -- These are data-only and designed for vim.lsp.config()
+    local lsp_path = vim.api.nvim_get_runtime_file('lsp/' .. name .. '.lua', false)[1]
+    if lsp_path then
+      local loader = loadfile(lsp_path)
+      if loader then
+        server_data = loader()
+      end
+    end
+
+    -- 2. Fallback to LEGACY path if new path is missing.
+    -- We use pcall to avoid crashing if a server is completely missing.
+    if not server_data then
+      local ok, old_data = pcall(require, 'lspconfig.configs.' .. name)
+      if ok and old_data then
+        server_data = old_data.default_config
+      end
+    end
+
+    -- 3. Explicit Merge: custom_setup takes precedence over database defaults.
+    return vim.tbl_deep_extend('force', server_data or {}, custom_setup or {})
+  end
+
   -- delegate server specific setup to lsp-servers
-  local servers = require 'plugins.config.lsp-servers'(setup_default, node_root)
+  local servers = require 'plugins.config.lsp-servers'(setup_default)
+
   for server, setup in pairs(servers) do
-    vim.lsp.config(server, setup)
+    vim.lsp.config(server, get_server_config_shim(server, setup))
     vim.lsp.enable(server)
   end
   -- this will allow more complicated lsp capabilities when I want

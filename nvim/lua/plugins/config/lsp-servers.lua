@@ -1,6 +1,6 @@
 -- LSP settings
 
-return function(setup_default, node_root)
+return function(setup_default)
   local merge = require('utils.table').merge
 
   -- why additional `--tsserver-path`?
@@ -33,38 +33,29 @@ return function(setup_default, node_root)
   Make runtime files discoverable to the server
   ]]
 
-  local lspconfig = require 'lspconfig'
+  -- Use native vim.fs for root pattern matching to avoid require('lspconfig') warning
+  local root_pattern = function(...)
+    local patterns = { ... }
+    return function(path)
+      return vim.fs.root(path, patterns)
+    end
+  end
 
-  local node_root_dir, is_node_repo = node_root()
-
-  local setup_ts_ls = merge(setup_default, {
-    root_dir = node_root_dir,
-    autostart = is_node_repo and true or false,
-  })
+  local setup_ts_ls = merge(setup_default, {})
 
   local setup_eslint = merge(setup_default, {
-    -- thanks to https://neovim.discourse.group/t/is-it-possible-to-disable-lsp-in-node-modules-directory-file/444/5
-    root_dir = function(filename)
-      if string.find(filename, 'node_modules/') then
-        return nil
-      end
-      return require('lspconfig.configs.eslint').default_config.root_dir(filename)
-    end,
-    -- run `EslintFixAll` on save via autocmd, so exclude 'eslint' from lsp-format from ./lsp.lua
+    -- run `LspEslintFixAll` on save via autocmd
     on_attach = function(client, bufnr)
       setup_default.on_attach(client, bufnr)
       vim.api.nvim_create_autocmd('BufWritePre', {
         buffer = bufnr,
-        command = 'EslintFixAll',
+        command = 'LspEslintFixAll',
       })
     end,
-    -- or use `:EslintFixAll` to fix all manually - doesn't kick off automatically with format (on save)
+    -- or use `:LspEslintFixAll` to fix all manually - doesn't kick off automatically with format (on save)
   })
 
-  local setup_denols = merge(setup_default, {
-    root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc', 'deno.lock'),
-    autostart = not is_node_repo and true or false,
-  })
+  local setup_denols = merge(setup_default, {})
 
   local setup_lua_ls = merge(setup_default, {
     single_file_support = true,
@@ -225,7 +216,7 @@ return function(setup_default, node_root)
       end,
 
       cmd = cmd,
-      root_dir = require('lspconfig/util').root_pattern('.git', vim.fn.getcwd()),
+      root_dir = root_pattern('.git', vim.fn.getcwd()),
     })
   end
 
