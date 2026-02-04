@@ -250,7 +250,7 @@ return {
     -- they call it "clairvoyant" ability!
     -- my favorite used to be `f<enter>` to go to the end of the line with lightspeed.nvim
     -- and this is not the case anymore with leap as `f<enter>` would work as a repeat of the last search with flit.nvim
-    'ggandor/leap.nvim',
+    url = 'https://codeberg.org/andyg/leap.nvim',
     event = 'VeryLazy',
     dependencies = {
       {

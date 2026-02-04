@@ -59,7 +59,7 @@ return {
   },
   { -- Good enough syntax highlight for MDX in Neovim using Treesitter
     'davidmh/mdx.nvim',
-    config = true,
+    config = function() end,
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
   },
   -- nvim-treesitter/playground has been replaced by Neovim itself (deprecation notice and the guide in the repo)
