@@ -43,17 +43,7 @@ return function(setup_default)
 
   local setup_ts_ls = merge(setup_default, {})
 
-  local setup_eslint = merge(setup_default, {
-    -- run `LspEslintFixAll` on save via autocmd
-    on_attach = function(client, bufnr)
-      setup_default.on_attach(client, bufnr)
-      vim.api.nvim_create_autocmd('BufWritePre', {
-        buffer = bufnr,
-        command = 'LspEslintFixAll',
-      })
-    end,
-    -- or use `:LspEslintFixAll` to fix all manually - doesn't kick off automatically with format (on save)
-  })
+  local setup_eslint = merge(setup_default, {})
 
   local setup_denols = merge(setup_default, {})
 

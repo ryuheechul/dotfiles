@@ -18,13 +18,11 @@ function M.setup_lsp_format()
     typescript = {
       exclude = {
         'ts_ls',
-        'eslint', -- this is being handled via autocmd - search EslintFixAll at ./lsp-servers.lua
       },
     },
     typescriptreact = {
       exclude = {
         'ts_ls',
-        'eslint', -- this is being handled via autocmd - search EslintFixAll at ./lsp-servers.lua
       },
     },
   }
