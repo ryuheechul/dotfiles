@@ -1,27 +1,87 @@
 #!/usr/bin/env bash
 
-# usages
-# - zoom in: tmux-zoom
-# - zoom out: tmux-zoom out
+# originally copied from https://superuser.com/a/1110035/1174289
 
-# copied from https://superuser.com/a/1110035/1174289
+# usages
+# - zoom in: tmux-zoom in
+# - zoom out: tmux-zoom out
+# - zoom toggle: tmux-zoom [toggle]
+
+_refresh() {
+  focus_script="${TMUX_PLUGIN_MANAGER_PATH}/tmux-pane-focus/scripts/focus.sh"
+
+  if test -z "${TMUX_PLUGIN_MANAGER_PATH}"; then
+    echo "ERR: TMUX_PLUGIN_MANAGER_PATH is not defined"
+    return
+  fi
+
+  if ! test -f "${focus_script}"; then
+    echo "ERR: ${focus_script} is not found"
+    return
+  fi
+
+  if ! test -x "${focus_script}"; then
+    echo "ERR: ${focus_script} is not executable"
+    return
+  fi
+
+  percent="$1"
+  # set desired percent for forcused pane
+  tmux set-option -w @pane-focus-size "${percent}"
+  # without this will not really refresh
+  tmux select-layout -E
+  # simulate focus change to resize
+  ${focus_script}
+}
+
+_using_tmux_pane_focus() {
+  tmux show-option -wv @pane-focus-size >/dev/null
+}
+
+_is_zoomed() {
+  if _using_tmux_pane_focus; then
+    tmux show-option -wv @pane-focus-size | xargs test 90 -eq
+  else
+    tmux list-panes -F '#F' | grep -q Z
+  fi
+}
 
 function zoom-in() {
-  # Zoom in the current pane ONLY if it is not currently zoomed.
-  # Requires tmux version >= 1.8
+  if _is_zoomed; then
+    return
+  fi
 
-  tmux list-panes -F '#F' | grep -q Z || tmux resize-pane -Z
+  if _using_tmux_pane_focus; then
+    _refresh 90
+  else
+    # Requires tmux version >= 1.8
+    tmux resize-pane -Z
+  fi
 }
 
 function zoom-out() {
-  # Zoom out the current pane ONLY if it is not currently zoomed.
-  # Requires tmux version >= 1.8
+  if ! _is_zoomed; then
+    return
+  fi
 
-  tmux list-panes -F '#F' | grep -q Z && tmux resize-pane -Z
+  if _using_tmux_pane_focus; then
+    _refresh 50
+  else
+    # Requires tmux version >= 1.8
+    tmux resize-pane -Z
+  fi
 }
 
-if test "${1}" == "out"; then
-  zoom-out
-else
-  zoom-in
-fi
+function toggle() {
+  if _is_zoomed; then
+    zoom-out
+  else
+    zoom-in
+  fi
+}
+
+case "$1" in
+out) zoom-out ;;
+in) zoom-in ;;
+*) toggle ;;
+esac

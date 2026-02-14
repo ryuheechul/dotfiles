@@ -1,31 +1,42 @@
 #!/usr/bin/env bash
 
-#!/usr/bin/env bash
+# originally copied from https://superuser.com/a/1110035/1174289
 
 # usages
 # - zoom in: mux-zoom
 # - zoom out: mux-zoom out
+# - zoom toggle: mux-zoom [toggle]
 
-# copied from https://superuser.com/a/1110035/1174289
+_is_zellij() {
+  test -n "${ZELLIJ_SESSION_NAME}"
+}
 
 function zoom-in() {
-  if test -n "${ZELLIJ_SESSION_NAME}"; then
+  if _is_zellij; then
     zellij action toggle-fullscreen # WARN: this is actually not zooming in but I couldn't find a way to force that
   else
-    tmux-zoom
+    tmux-zoom in
   fi
 }
 
 function zoom-out() {
-  if test -n "${ZELLIJ_SESSION_NAME}"; then
+  if _is_zellij; then
     zellij action toggle-fullscreen # WARN: this is actually not zooming out but I couldn't find a way to force that
   else
     tmux-zoom out
   fi
 }
 
-if test "${1}" == "out"; then
-  zoom-out
-else
-  zoom-in
-fi
+function toggle() {
+  if _is_zellij; then
+    zellij action toggle-fullscreen
+  else
+    tmux-zoom
+  fi
+}
+
+case "$1" in
+out) zoom-out ;;
+in) zoom-in ;;
+*) toggle ;;
+esac

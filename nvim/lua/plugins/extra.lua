@@ -105,7 +105,7 @@ return {
       local windowsGrp = vim.api.nvim_create_augroup('MyWindowsAG', { clear = true })
       vim.api.nvim_create_autocmd('WinEnter', {
         callback = require('throttle-debounce').throttle_leading(function()
-          vim.cmd [[silent exec "!mux-zoom"]]
+          vim.cmd [[silent exec "!mux-zoom in"]]
         end, 500),
         group = windowsGrp,
       })

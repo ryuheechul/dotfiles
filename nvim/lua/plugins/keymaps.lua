@@ -250,8 +250,13 @@ local config = function()
     { '<Space>wh', cmdify 'WindowsMaximizeHorizontally', desc = 'maximize/minimize window horizontally' },
     { '<Space>wv', cmdify 'WindowsMaximizeVertically', desc = 'maximize/minimize window vertically' },
     {
+      '<Space>wz',
+      cmdify 'silent exec "!mux-zoom"',
+      desc = 'toggle mux',
+    },
+    {
       '<Space>wm',
-      cmdify 'silent exec "!mux-zoom"' .. cmdify 'WindowsMaximize',
+      cmdify 'silent exec "!mux-zoom in"' .. cmdify 'WindowsMaximize',
       desc = 'maximize/minimize window',
     },
     {
