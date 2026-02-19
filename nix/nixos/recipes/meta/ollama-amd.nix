@@ -6,7 +6,7 @@
 # although the file name implies it could be generic to any AMD GPU
 # but it's actually quite specific to a one device at the moment (6800U/680m)
 
-# originally to be used for ../../containers/meta/ollama-gpu.nix
+# originally to be used for ../../containers/meta/ollama-amd.nix
 # ./caddy-over-tailscale.nix can be used to expose the service (open-webui) via tailscale
 {
   environment.systemPackages = with pkgs; [
@@ -22,11 +22,14 @@
   # https://ollama.com/ - which is responsible for managing and running models
   services.ollama = {
     enable = true;
+    package = pkgs.ollama-rocm;
     rocmOverrideGfx = rocmOverrideGfx;
     # WARN: Why is it not using VRAM? Answered at https://github.com/ollama/ollama/issues/5471#issuecomment-2633000039
     environmentVariables = {
-      # thanks to https://github.com/ollama/ollama/pull/6282#issuecomment-2357934042
-      HIP_VISIBLE_DEVICES = "1"; # NOTE: very important for the performance; basically force using the iGPU side of the APU and ignore "0" which is CPU
+      # WARN: Flash Attention is disabled because it currently causes a GGML_ASSERT failure
+      # (max_blocks_per_sm > 0) on RDNA2 iGPUs like the 680M/780M.
+      # This prioritizes stability over the speed gains of Flash Attention.
+      OLLAMA_FLASH_ATTENTION = "0";
       # test the difference between having this env var and not by running the command below
       # `echo 'why is the sky blue?' | ollama run tinyllama --verbose`
       # `amdgpu_top` to monitor GPU during the run

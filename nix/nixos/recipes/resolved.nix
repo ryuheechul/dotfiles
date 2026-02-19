@@ -7,11 +7,13 @@
   # this basically put a stop on the fight over `/etc/resolv.conf`
   services.resolved.enable = true;
   services.resolved.llmnr = "false";
-  services.resolved.extraConfig =
-    # maybe I should disable MulticastDNS regardless of using avahi or not?
-    lib.optionalString config.services.avahi.enable ''
-      MulticastDNS=false
-    ''; # anyhow now host/dig/nslookup will stop resolving .local when ping does - https://serverfault.com/a/579996/633069
+  services.resolved.settings = {
+    Resolve = lib.mkIf config.services.avahi.enable {
+      # maybe I should disable MulticastDNS regardless of using avahi or not?
+      MulticastDNS = "false";
+      # anyhow now host/dig/nslookup will stop resolving .local when ping does - https://serverfault.com/a/579996/633069
+    };
+  };
 
   # debug with:
   # - `cat /etc/resolv.conf`
