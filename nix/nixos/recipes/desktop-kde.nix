@@ -11,7 +11,7 @@
 # also see ./desktop-gnome.nix
 # read this when you go back to gnome - https://discourse.nixos.org/t/gnome-broke-after-trying-plasma/16019/3
 let
-  isGnomeEnabled = config.services.xserver.desktopManager.gnome.enable;
+  isGnomeEnabled = config.services.desktopManager.gnome.enable;
 in
 {
   # https://github.com/NixOS/nixpkgs/issues/75867#issuecomment-974084634

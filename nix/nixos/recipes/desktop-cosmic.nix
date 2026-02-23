@@ -7,7 +7,7 @@
 
 # https://wiki.nixos.org/wiki/COSMIC
 let
-  isGnomeEnabled = config.services.xserver.desktopManager.gnome.enable;
+  isGnomeEnabled = config.services.desktopManager.gnome.enable;
 in
 {
   # this is original for ./desktop-kde.nix - https://github.com/NixOS/nixpkgs/issues/75867#issuecomment-974084634

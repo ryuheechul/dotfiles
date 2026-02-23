@@ -30,6 +30,7 @@ let
     in
     with pkgs.lib;
     {
+      uid = mkDefault 1000; # set explicit value rather than taking it for a chance although most likely it's 1000
       description = mkForce "user is ${username}";
       # NOTE regarding groups:
       # - changes on groups can be seen right away with `cat /etc/group` but not with `groups`

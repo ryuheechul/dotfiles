@@ -61,6 +61,7 @@ username:
       ./recipes/rosetta.nix
       ./recipes/captive-browser.nix
       ./recipes/tailscale.nix
+      (import ./recipes/meta/taildrive.nix username)
       ./recipes/cloudflare-warp.nix
       ./recipes/1password.nix
       ./recipes/dropbox.nix
