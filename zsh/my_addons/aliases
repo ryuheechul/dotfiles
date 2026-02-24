@@ -76,55 +76,6 @@ alias j='ji' # now use zoxide to mimic what fasd + fzf did
 # see ./zinit for how zoxide is initialized
 
 if is-darwin; then
-  function _notify_visually() {
-    expr $? = 0 > /dev/null && _status="success" || _status="fail"
-
-    cmd_that_ran="\`${1}\`"
-    osascript -e 'on run {msg}' \
-      -e "display notification msg with title \"zsh notify: ${_status}\"" \
-      -e 'end run' -- "${cmd_that_ran}"
-  }
-
-  function _sound_for_return() {
-    expr $? = 0 > /dev/null && afplay /System/Library/Sounds/Funk.aiff || afplay /System/Library/Sounds/Purr.aiff
-  }
-
-
-  # getting notified on a job that takes some time (usually with `make`) turns out to be very helpful
-  function notify() {
-    function _trim_cmd() {
-      cmd="${1}"
-      max_length=30
-
-      # Truncate the string if it is longer than max_length
-      if [ ${#cmd} -gt $max_length ]; then
-        trimmed_cmd="${cmd:0:$max_length} ..."
-      else
-        trimmed_cmd="${cmd}"
-      fi
-
-      echo "${trimmed_cmd}"
-    }
-
-    cmd_to_show="$(_trim_cmd "$*")"
-
-    start_time="$(date +%s)"
-    env time -p "$@"
-    ret=$?
-
-    # skip making sound for under 2 seconds
-    test $(expr $(date +%s) - ${start_time}) -gt 2 && {
-      expr ${ret} = 0 > /dev/null ; _notify_visually "${cmd_to_show}"
-      expr ${ret} = 0 > /dev/null ; _sound_for_return
-    }
-
-    # print the date just before exit
-    date
-
-    # return the original result
-    return ${ret}
-  }
-
   # able to hook up completions for arbitrary command arguments
   # thanks to great hints from https://www.dolthub.com/blog/2021-11-15-zsh-completions-with-subcommands/
   # but this does not work well with subcommands of the commands at the moment.
@@ -147,6 +98,7 @@ if is-darwin; then
   # since compdef on regular sourcing doesn't seem to work
   zsh-defer compdef _notify notify
 
+  # notify is at ../../bin/path/darwin/notify
   alias make='notify make'
 
   # shorthand for other commands other than make - eg. `nt true` and `nt false`

@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+# Usage: notify [other command and its args]
+# It will use sound and visual notification to notify when the command has finished running
+
+_notify_visually() {
+  local status=$1
+  local cmd=$2
+  local label="success"
+  test "$status" -ne 0 && label="fail"
+
+  local cmd_that_ran="\`${cmd}\`"
+  local title="notify: ${label}"
+
+  MESSAGE="${cmd_that_ran}" TITLE="${title}" \
+    osascript -e 'display notification (system attribute "MESSAGE") with title (system attribute "TITLE")'
+}
+
+_sound_for_return() {
+  local status=$1
+  if test "$status" -eq 0; then
+    afplay /System/Library/Sounds/Funk.aiff
+  else
+    afplay /System/Library/Sounds/Purr.aiff
+  fi
+}
+
+_trim_cmd() {
+  local cmd="${1}"
+  local max_length=30
+
+  # Truncate the string if it is longer than max_length
+  if test "${#cmd}" -gt "$max_length"; then
+    echo "${cmd:0:$max_length} ..."
+  else
+    echo "${cmd}"
+  fi
+}
+
+# getting notified on a job that takes some time (usually with `make`) turns out to be very helpful
+notify() {
+  local cmd_to_show
+  cmd_to_show="$(_trim_cmd "$*")"
+
+  local start_time
+  start_time=$(date +%s)
+
+  # Use 'env time' to ensure we use the binary version of time, not the shell builtin
+  env time -p "$@"
+  local ret=$?
+
+  local end_time
+  end_time=$(date +%s)
+
+  # skip making sound/notification for jobs under 2 seconds
+  if (((end_time - start_time) > 2)); then
+    _notify_visually "${ret}" "${cmd_to_show}"
+    _sound_for_return "${ret}"
+  fi
+
+  # print the date just before exit
+  date
+
+  # return the original result
+  return "${ret}"
+}
+
+notify "$@"
