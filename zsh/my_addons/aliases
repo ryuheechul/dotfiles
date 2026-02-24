@@ -76,19 +76,45 @@ alias j='ji' # now use zoxide to mimic what fasd + fzf did
 # see ./zinit for how zoxide is initialized
 
 if is-darwin; then
+  function _notify_visually() {
+    expr $? = 0 > /dev/null && _status="success" || _status="fail"
+
+    cmd_that_ran="\`${1}\`"
+    osascript -e 'on run {msg}' \
+      -e "display notification msg with title \"zsh notify: ${_status}\"" \
+      -e 'end run' -- "${cmd_that_ran}"
+  }
+
   function _sound_for_return() {
     expr $? = 0 > /dev/null && afplay /System/Library/Sounds/Funk.aiff || afplay /System/Library/Sounds/Purr.aiff
   }
 
+
   # getting notified on a job that takes some time (usually with `make`) turns out to be very helpful
   function notify() {
-    start_time=$(date +%s)
+    function _trim_cmd() {
+      cmd="${1}"
+      max_length=30
 
+      # Truncate the string if it is longer than max_length
+      if [ ${#cmd} -gt $max_length ]; then
+        trimmed_cmd="${cmd:0:$max_length} ..."
+      else
+        trimmed_cmd="${cmd}"
+      fi
+
+      echo "${trimmed_cmd}"
+    }
+
+    cmd_to_show="$(_trim_cmd "$*")"
+
+    start_time="$(date +%s)"
     env time -p "$@"
     ret=$?
 
     # skip making sound for under 2 seconds
     test $(expr $(date +%s) - ${start_time}) -gt 2 && {
+      expr ${ret} = 0 > /dev/null ; _notify_visually "${cmd_to_show}"
       expr ${ret} = 0 > /dev/null ; _sound_for_return
     }
 
@@ -395,7 +421,7 @@ alias delta='delta --detect-dark-light=never'
 # enhanced the above alias using the function below to apply what's mentioned at https://github.com/BurntSushi/ripgrep/issues/86#issuecomment-1469717706
 rg ()
 {
-  env rg -i --json "$@" | delta
+  env rg --hidden --glob="!.git" --glob="!package-lock.json" -i --json "$@" | delta
 }
 alias rgc='rg -C' # with context
 alias rgc5='rgc 5' # with context value that is 5
@@ -466,7 +492,7 @@ alias shebang='_shebang | pbcopy ; _shebang'
 alias executable='chmod +x'
 alias lf='UNSET_ALL_MY_ZSH_STUFF_LOADED=1 lf'
 alias quickvenv='python3 -m venv "${MY_QUICK_VENV_PATH:-.venv}" && source "${MY_QUICK_VENV_PATH:-.venv}/bin/activate"'
-alias quickserve='nix-shell -p caddy --run "caddy file-server --browse -l :9090"'
+alias quickserve='nix-shell -p caddy --run "caddy file-server --browse -l :9009"'
 quickreverseproxy ()
 {
   port="${1}"; host="${2}"
