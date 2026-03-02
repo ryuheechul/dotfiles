@@ -124,21 +124,23 @@ vim.opt.clipboard = 'unnamedplus'
 local shouldOsc52pasteBeAvailable = vim.env.ZELLIJ_SESSION_NAME == nil and vim.env.INSIDE_EMACS == nil
 
 if shouldOsc52pasteBeAvailable then
+  local osc52 = require 'vim.ui.clipboard.osc52'
+
   -- without this, it will rely on X11 `$DISPLAY` env var via xsel or similar instead of OSC 52 way
   vim.g.clipboard = {
     name = 'OSC 52',
     copy = {
-      ['+'] = require('vim.ui.clipboard.osc52').copy '+',
-      ['*'] = require('vim.ui.clipboard.osc52').copy '*',
+      ['+'] = osc52.copy '+',
+      ['*'] = osc52.copy '*',
     },
     paste = {
-      ['+'] = require('vim.ui.clipboard.osc52').paste '+',
-      ['*'] = require('vim.ui.clipboard.osc52').paste '*',
+      ['+'] = osc52.paste '+',
+      ['*'] = osc52.paste '*',
     },
   }
 else
-  -- Since `osc` command (that is being invoked via `../../../bin/path/default/pb[copy|paste]`) is wasn't able to handle `/dev/tty` when it's not connected to SSH (`$SSH_TTY` is being used in this case)
-  if vim.env.SSH_TTY ~= nil then
+  -- Fallback to external command
+  if vim.env.SSH_CONNECTION ~= nil then
     vim.g.clipboard = {
       name = 'pbcopy/pbpaste',
       copy = {

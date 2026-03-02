@@ -6,6 +6,7 @@ let
   emacs = import ./custom/emacs.nix { pkgs = pkgs; };
   urlview = import ./custom/urlview.nix { pkgs = pkgs; };
   isLinux = with pkgs; lib.optionals stdenv.isLinux;
+  tmux-next = import ./custom/tmux-next-3.7.nix { pkgs = pkgs; };
 in
 with pkgs;
 # just for fun/testing
@@ -59,7 +60,8 @@ with pkgs;
     # bashInteractive # use latest bash
     # zsh # my favorite shell interface
     # starship # cross-shell prompt
-    tmux # terminal multiplexer
+    # tmux # terminal multiplexer
+    tmux-next # until there is official release for 3.7
     zellij # A terminal workspace with batteries included
   ]
 ++

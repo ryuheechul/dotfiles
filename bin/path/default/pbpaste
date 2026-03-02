@@ -7,7 +7,7 @@ should-use-osc() {
 }
 
 is-remote-display-via-x11-forward() {
-  test -n "${DISPLAY}" && test -n "${SSH_TTY}"
+  test -n "${DISPLAY}" && test -n "${SSH_CONNECTION}"
 }
 
 is-mac-os-local-connection() {
