@@ -129,6 +129,7 @@ with pkgs;
     urlview # for tmux-urlview
     extract_url # for tmux-urlview
     viu # A command-line application to view images from the terminal written in Rust
+    libsixel # SIXEL library for console graphics, and converter programs; this provides img2sixel
     grc # A generic text colouriser
   ]
 ++

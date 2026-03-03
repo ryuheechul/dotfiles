@@ -232,6 +232,26 @@ if test -n "${DISTROBOX_ENTER_PATH}" && test -n "${USE_PYTHON_FROM_DISTROBOX}"; 
 fi
 _tag distrobox
 
+detect-sixel-via-tmux() {
+  if [[ -n $TMUX ]]; then
+    # Check current client's termfeatures for 'sixel'
+    if tmux display -p '#{client_termfeatures}' 2>/dev/null | grep -q sixel; then
+      export TERMINAL_SUPPORTS_SIXEL=1
+      return 0
+    fi
+    export TERMINAL_SUPPORTS_SIXEL=0
+    return 1
+  else
+    # Non-tmux: no detection available here without tmux for now
+    export TERMINAL_SUPPORTS_SIXEL=0
+    return 1
+  fi
+}
+
+detect-sixel-via-tmux || true
+
+_tag detect_sixel_via_tmux
+
 # although home-manager might enable this,
 # it's also ignored by ../../nix/home/programs/shells.nix
 # hence relying on bash's one instead

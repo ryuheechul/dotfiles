@@ -38,10 +38,34 @@ zip-via-unzip() {
 image-via-viu() {
   with-viu() {
     title Image viu "${1}"
-    viu "${1}"
+    viu -b "${1}"
   }
 
   with-viu "${1}"
+}
+
+image-via-libsixel() {
+  with-libsixel() {
+    title Image img2sixel "${1}"
+    img2sixel "${1}"
+  }
+
+  with-libsixel "${1}"
+}
+
+# Function to check for Sixel support
+has_sixel() {
+  # rely on TERMINAL_SUPPORTS_SIXEL env var from ../zsh/my_addons/shell_ext
+  test "${TERMINAL_SUPPORTS_SIXEL}" == "1" && command -v img2sixel >/dev/null && return 0
+  return 1
+}
+
+show-image() {
+  if has_sixel; then
+    image-via-libsixel "${1}"
+  else
+    image-via-viu "${1}"
+  fi
 }
 
 # via tree alias from my zsh
@@ -75,7 +99,7 @@ md)
   markdown-via-glow "${1}"
   ;;
 jpg | jpeg | png | gif | bmp)
-  image-via-viu "${1}"
+  show-image "${1}"
   ;;
 zip)
   zip-via-unzip "${1}"
