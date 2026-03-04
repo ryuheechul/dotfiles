@@ -1,6 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 let
+  env-vars = config.home.sessionVariables;
   startup_session_file = pkgs.writeTextFile {
     name = "kitty_startup_session";
     # https://sw.kovidgoyal.net/kitty/overview/#startup-sessions
@@ -19,6 +20,14 @@ let
   startup_session_path = "${startup_session_file}";
 in
 {
+  programs.wezterm = {
+    # https://nix-community.github.io/home-manager/options.html#opt-programs.wezterm.enable
+    enable = true;
+    extraConfig = ''
+      return dofile("${env-vars.my_dot_d}/wezterm/wezterm.lua")
+    '';
+  };
+
   programs.kitty = {
     # https://nix-community.github.io/home-manager/options.html#opt-programs.kitty.enable
     enable = true;

@@ -232,8 +232,8 @@ if test -n "${DISTROBOX_ENTER_PATH}" && test -n "${USE_PYTHON_FROM_DISTROBOX}"; 
 fi
 _tag distrobox
 
-detect-sixel-via-tmux() {
-  if [[ -n $TMUX ]]; then
+detect-sixel() {
+  if test -n "${TMUX}"; then
     # Check current client's termfeatures for 'sixel'
     if tmux display -p '#{client_termfeatures}' 2>/dev/null | grep -q sixel; then
       export TERMINAL_SUPPORTS_SIXEL=1
@@ -242,15 +242,28 @@ detect-sixel-via-tmux() {
     export TERMINAL_SUPPORTS_SIXEL=0
     return 1
   else
-    # Non-tmux: no detection available here without tmux for now
+    # Non-tmux: check known terminals via environment variables (fast)
+    # Note: although some terminals have their own protocols, they often support Sixel too.
+    # Sources: https://tmuxai.dev/terminal-compatibility/ and others
+    if test "${TERM_PROGRAM}" = "WezTerm" || \
+       test "${TERM_PROGRAM}" = "iTerm.app" || \
+       test "${TERM_PROGRAM}" = "konsole" || \
+       test "${TERM}" = "foot" || \
+       test "${TERM}" = "mlterm" || \
+       test -n "${XTERM_VERSION}" || \
+       test -n "${WT_SESSION}" ; then
+      export TERMINAL_SUPPORTS_SIXEL=1
+      return 0
+    fi
+
     export TERMINAL_SUPPORTS_SIXEL=0
     return 1
   fi
 }
 
-detect-sixel-via-tmux || true
+detect-sixel || true
 
-_tag detect_sixel_via_tmux
+_tag detect_sixel
 
 # although home-manager might enable this,
 # it's also ignored by ../../nix/home/programs/shells.nix
