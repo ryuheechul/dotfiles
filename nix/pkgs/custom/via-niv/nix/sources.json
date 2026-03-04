@@ -70,5 +70,17 @@
         "type": "tarball",
         "url": "https://github.com/nix-community/NUR/archive/039a09a6b2a19666c346952909d4c2e714bc949f.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "worktrunk": {
+        "branch": "main",
+        "description": "Worktrunk is a CLI for Git worktree management, designed for parallel AI agent workflows",
+        "homepage": "https://worktrunk.dev",
+        "owner": "max-sixty",
+        "repo": "worktrunk",
+        "rev": "24e25aa36e9a20a42f9a9ca3eb7a2f5ff31ae83d",
+        "sha256": "0j05azyc7yf2gmbnnjhrpmb9whrn619ivnxwch94lxg6k4zrknvy",
+        "type": "tarball",
+        "url": "https://github.com/max-sixty/worktrunk/archive/24e25aa36e9a20a42f9a9ca3eb7a2f5ff31ae83d.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }

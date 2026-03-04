@@ -21,6 +21,12 @@ zinit light romkatv/zsh-defer
 
 # git aliases like grt
 zinit snippet OMZP::git
+
+# override the one from OMZP::git
+if fastcommandcheck wt; then
+  alias gwt='env wt'
+fi
+
 # Initializes zoxide, a smarter cd command for your terminal.
 ZOXIDE_CMD_OVERRIDE=j zinit snippet OMZP::zoxide # use j instead z to avoid conflict with zinit's `zi`
 # to persist history and make sure to override options from OMZ via my own
