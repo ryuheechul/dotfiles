@@ -30,7 +30,16 @@ let
     in
     with pkgs.lib;
     {
-      uid = mkDefault 1000; # set explicit value rather than taking it for a chance although most likely it's 1000
+      # explicitly set to `true` with `mkDefault` in case this becomes a problem
+      isNormalUser =
+        let
+          user = config.users.users.${username};
+          # to filter out the case when there is mostly likely `isSystemUser` set but reading it directly here would cause infinite recursion, so check `uid` instead with the value that is mostly goes with `isSystemUser` being true
+          shouldBeSystemUser = (user.uid != null) && (user.uid < 1000);
+          shouldBeNormalUser = !shouldBeSystemUser;
+        in
+        mkIf shouldBeNormalUser true;
+      uid = mkDefault 1000; # set explicit default value rather than taking it for a chance although most likely it's 1000
       description = mkForce "user is ${username}";
       # NOTE regarding groups:
       # - changes on groups can be seen right away with `cat /etc/group` but not with `groups`
