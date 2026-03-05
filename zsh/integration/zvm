@@ -53,5 +53,11 @@ zvm_after_lazy_keybindings() {
 
   zvm_bindkey vicmd  'q' my_zvm_kill_line # `p` to bring back the killed line
   zvm_bindkey vicmd '/' my-fzf-history-widget # aka ctrl+r
+  zvm_bindkey vicmd ',' my-fzf-history-widget # aka ctrl+r
   zvm_bindkey vicmd  't' my-fzf-file-widget   # aka ctrl+t
+}
+
+# just a helper to quickly show it through bound keys for vicmd
+search-zvm-vicmd-keys() {
+  bindkey -M vicmd | $(__fzfcmd)
 }

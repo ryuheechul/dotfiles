@@ -276,7 +276,7 @@ local config = function()
       cmdify(
         'silent exec '
           .. '"!'
-          .. (vim.env.ZELLIJ_SESSION_NAME and 'zellij action launch-plugin -f sessionpicker' or 'tmux choose-tree')
+          .. (vim.env.ZELLIJ_SESSION_NAME and 'zellij action launch-plugin -f sessionpicker' or 'tmux-switch')
           .. '"'
       ),
       desc = 'choose (t)mux tree',

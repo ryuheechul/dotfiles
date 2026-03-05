@@ -232,6 +232,10 @@ if test -n "${DISTROBOX_ENTER_PATH}" && test -n "${USE_PYTHON_FROM_DISTROBOX}"; 
 fi
 _tag distrobox
 
+fastcommandcheck wt && _evalcache wt config shell init zsh
+
+_tag worktrunk
+
 detect-sixel() {
   if test -n "${TMUX}"; then
     # Check current client's termfeatures for 'sixel'

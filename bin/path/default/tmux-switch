@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+echo window session | tr ' ' '\n' |
+  fzf-tmux "${FZF_TMUX_OPTS:--d${FZF_TMUX_HEIGHT:-40%}}" \
+    --bind 'focus:transform-header:echo "Switch tmux {}"' |
+  xargs -I _ env tmux-switch-_ &&
+  tmux-focus-pane

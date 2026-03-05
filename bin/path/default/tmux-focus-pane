@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# to trigger the pane to readjust
+focus_script="${TMUX_PLUGIN_MANAGER_PATH}/tmux-pane-focus/scripts/focus.sh"
+"${focus_script}"

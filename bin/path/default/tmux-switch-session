@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# might need to run `tv update-channels` first
+
+tmux display-popup -E -w 80% -h 60% -d '#{pane_current_path}' -T 'Sesh' 'tv sesh' &&
+  tmux-focus-pane

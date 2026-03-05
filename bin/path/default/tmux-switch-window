@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# 1. Get the current session to pre-select it in the list
+current_session="$(tmux display-message -p '#S')"
+
+# 2. List all panes across all sessions (-a)
+# Format: [session]:[window].[pane_index] - [window_name] [[pane_id]]
+# We keep the pane_id (%0, %1, etc.) at the end to use as a precise target
+target="$(tmux list-panes -a -F '#S:#I.#P - #W [#D]' |
+  fzf-tmux "${FZF_TMUX_OPTS:--d${FZF_TMUX_HEIGHT:-40%}}" \
+    --query="${current_session}" \
+    --reverse \
+    --header 'Switch Pane (Session:Win.Pane)' \
+    --preview 'tmux capture-pane -pt {1}' |
+  grep -o '\[%[0-9]*\]' | tr -d '[]')"
+
+# 3. Only run tmux commands if $target is not empty
+if test -n "${target}"; then
+  tmux switch-client -t "$target" && tmux-focus-pane
+else
+  exit 1
+fi

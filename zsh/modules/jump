@@ -1,0 +1,108 @@
+# -*- mode: sh; -*- vim: set ft=zsh:
+
+# "jump" function that allow me to switch things quickly
+
+function j(){
+  local chosen="$(echo directory tmux-window tmux-session branch worktrunk worktrunk-native |
+    tr -s '[:space:]' '\n' |
+    $(__fzfcmd) --print-query --bind 'focus:transform-header:echo "Jump with {}"'
+  )"
+
+  local query=$(echo "$chosen" | sed -n '1p')
+  local selection=$(echo "$chosen" | sed -n '2p')
+
+  local choice="${selection:-$query}"
+
+  test -z "${choice}" && return 1
+
+  case "${choice}" in
+    directory) zxi
+      ;;
+    tmux-window) tmux-switch-window
+      ;;
+    tmux-session) tmux-switch-session
+      ;;
+    branch) j_brs
+      ;;
+    worktrunk) j_wts
+      ;;
+    worktrunk-native) j_wtsn
+      ;;
+    *) echo "'${choice}' is not supported"
+      ;;
+  esac
+}
+
+function j_choose_branch() {
+  # Pick a branch or type a new name to create it
+  local branch_info=$(git branch --format="%(refname:short)" | fzf --print-query --header "Choose branch for ${1}")
+  # fzf outputs: line 1 = query, line 2 = selection
+  local query=$(echo "$branch_info" | sed -n '1p')
+  local selection=$(echo "$branch_info" | sed -n '2p')
+
+  local chosen="${selection:-$query}"
+
+  test -z "${chosen}" && return 1
+
+  echo "${chosen}"
+}
+
+function j_guard_non_git() {
+  git rev-parse --is-inside-work-tree > /dev/null 2>&1
+}
+
+function j_brs() {
+  fastcommandcheck git || { echo 'git necessary to continue' return 1 }
+
+  j_guard_non_git || {
+    echo "Not a git repository"; return 1
+  }
+
+  local _branch="$(j_choose_branch branch)"
+
+  test -z "${_branch}" && {
+    return 1
+  }
+
+  if j_check_branch "${_branch}"; then
+    git switch "${_branch}"
+  else
+    gum confirm "[git switch] '${_branch}' doesn't exist, create?" &&
+      git switch --create "${_branch}"
+  fi
+}
+
+function j_check_branch() {
+  git rev-parse --verify "${1}" > /dev/null 2>&1
+}
+
+function j_wtsn() {
+  fastcommandcheck wt || { echo 'wt necessary to continue' return 1 }
+
+  j_guard_non_git || {
+    echo "Not a git repository"; return 1
+  }
+
+  wt switch
+}
+
+function j_wts() {
+  fastcommandcheck wt || { echo 'wt necessary to continue' return 1 }
+
+  j_guard_non_git || {
+    echo "Not a git repository"; return 1
+  }
+
+  local _branch="$(j_choose_branch worktree)"
+
+  test -z "${_branch}" && {
+    return 1
+  }
+
+  if j_check_branch "${_branch}"; then
+    wt switch "${_branch}"
+  else
+    gum confirm "[worktrunk] '${_branch}' doesn't exist, create?" &&
+      wt switch --create "${_branch}"
+  fi
+}

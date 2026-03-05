@@ -72,7 +72,8 @@ function help () {
 #     local dir
 #     dir="$(fasd -Rdl "$1" | fzf -1 -0 --no-sort +m)" && cd "${dir}" || return 1
 # }
-alias j='ji' # now use zoxide to mimic what fasd + fzf did
+# alias j='ji' # now use zoxide to mimic what fasd + fzf did
+source "${my_zsh_d}/modules/jump" # now j is defined here to be more than just zoxide
 # see ./zinit for how zoxide is initialized
 
 if is-darwin; then
@@ -246,20 +247,21 @@ _nclr () { local j; for ((j = 0; j <= "${1:-1}"; j++ )); do tput cuu1; done; tpu
 # quick way to navigate tmux windows - see also ../../nvim/lua/plugins/keymaps.lua
 
 if test -n "${TMUX_PANE}"; then
-  alias wz='tmux-zoom; _nclr 2'
-  alias wt='tmux choose-tree; _nclr 2'
-  alias wn='tmux new-window; _nclr 2'
-  alias wp='tmux split-window -h; _nclr 2'
-  alias w/='tmux split-window -h; _nclr 2'
-  alias w-='tmux split-window -v; _nclr 2'
+  alias mst='tmux-switch-session; _nclr 2'
+  alias mwz='tmux-zoom; _nclr 2'
+  alias mwt='tmux-switch-window; _nclr 2'
+  alias mwn='tmux new-window; _nclr 2'
+  alias mwp='tmux split-window -h; _nclr 2'
+  alias mw/='tmux split-window -h; _nclr 2'
+  alias mw-='tmux split-window -v; _nclr 2'
 fi
 if test -n "${ZELLIJ_SESSION_NAME}"; then
-  alias wz='zellij action toggle-fullscreen; _nclr 2'
-  alias wt='zellij action launch-or-focus-plugin -f sessionpicker; _nclr 2'
-  alias wn='zellij action new-tab; _nclr 2'
-  alias wp='zellij action new-pane; _nclr 2'
-  alias w/='zellij action new-pane -d "right"; _nclr 2'
-  alias w-='zellij action new-pane -d "down"; _nclr 2'
+  alias mwz='zellij action toggle-fullscreen; _nclr 2'
+  alias mwt='zellij action launch-or-focus-plugin -f sessionpicker; _nclr 2'
+  alias mwn='zellij action new-tab; _nclr 2'
+  alias mwp='zellij action new-pane; _nclr 2'
+  alias mw/='zellij action new-pane -d "right"; _nclr 2'
+  alias mw-='zellij action new-pane -d "down"; _nclr 2'
 fi
 
 # this overwrites existing gap which is for git apply

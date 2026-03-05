@@ -63,6 +63,7 @@ with pkgs;
     # tmux # terminal multiplexer
     tmux-next # until there is official release for 3.7
     zellij # A terminal workspace with batteries included
+    sesh # Smart session manager for the terminal
   ]
 ++
   # editor - mostly for neovim
@@ -89,6 +90,7 @@ with pkgs;
   [
     fzf # A command-line fuzzy finder
     skim # Command-line fuzzy finder written in Rust
+    television # Blazingly fast general purpose fuzzy finder TUI
     # gotop # terminal based graphical activity monitor
     bottom # bottom instead of top
     yq-go # yaml processor and it's not a jq wrapper
