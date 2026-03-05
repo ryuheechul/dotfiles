@@ -59,7 +59,7 @@ in
   };
 
   # prevent going buck wild
-  nix.settings.max-jobs = 4;
+  nix.settings.max-jobs = lib.mkDefault 4;
   boot.loader.systemd-boot.configurationLimit = 15;
 
   # don't include anything here that is not common for all devices
