@@ -7,4 +7,4 @@ let
   flake = sources.worktrunk.url;
   result = builtins.getFlake flake;
 in
-result.packages.${pkgs.system}.default
+result.packages.${pkgs.stdenv.hostPlatform.system}.default

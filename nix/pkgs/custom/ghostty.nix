@@ -6,4 +6,4 @@ let
   flake = sources.ghostty.url;
   result = builtins.getFlake flake;
 in
-result.packages.${pkgs.system}.ghostty
+result.packages.${pkgs.stdenv.hostPlatform.system}.ghostty
