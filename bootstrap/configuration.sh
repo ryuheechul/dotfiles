@@ -61,6 +61,10 @@ ln -sf "${dfs_rhc}/.editorconfig" "${HOME}/.editorconfig"
 mkdir -p "${XDG_CONFIG_HOME}/gh"
 ln -sf "${dfs_rhc}/gh/config.yml" "${XDG_CONFIG_HOME}/gh/config.yml"
 
+# symlink gh-dash config
+mkdir -p "${XDG_CONFIG_HOME}/gh-dash"
+ln -sf "${dfs_rhc}/gh/dash/config.yml" "${XDG_CONFIG_HOME}/gh-dash/config.yml"
+
 # symlink to gemini-cli
 mkdir -p "${HOME}/.gemini"
 ln -sf "${dfs_rhc}/gemini/settings.json" "${HOME}/.gemini/settings.json"
