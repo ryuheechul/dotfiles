@@ -3,7 +3,7 @@
 # "jump" function that allow me to switch things quickly
 
 function j(){
-  local chosen="$(echo directory tmux-window tmux-session branch worktrunk worktrunk-native |
+  local chosen="$(echo directory tmux-window tmux-session branch worktrunk worktrunk-native ssh |
     tr -s '[:space:]' '\n' |
     $(__fzfcmd) --print-query --bind 'focus:transform-header:echo "Jump with {}"'
   )"
@@ -27,6 +27,8 @@ function j(){
     worktrunk) j_wts
       ;;
     worktrunk-native) j_wtsn
+      ;;
+    ssh) j_ssh
       ;;
     *) echo "'${choice}' is not supported"
       ;;
@@ -104,5 +106,13 @@ function j_wts() {
   else
     gum confirm "[worktrunk] '${_branch}' doesn't exist, create?" &&
       wt switch --create "${_branch}"
+  fi
+}
+
+function j_ssh() {
+  if test -n "${SSH_CONNECTION}"; then
+    gum confirm "You are already in ssh connection, continue?" && sshs
+  else
+    sshs
   fi
 }
