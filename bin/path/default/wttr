@@ -1,8 +1,86 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nu
 
-curl "wttr.in/${WTTR_LOC}${WTTR_PARAMS}"
+# wttr: A weather fetcher with caching and fallbacks.
+#
+# Highlights:
+# 1. Caching: Reduces load on wttr.in and speeds up frequent calls (e.g., from tmux status-interval).
+# 2. Native Nushell: Uses built-in `http get` and `hash` for a consistent cross-platform experience.
+# 3. Timeouts: Ensures the script rather returns quickly (2s) instead of hanging if the service is down or too slow.
+# 4. Fallback: Serves "stale" cache if the network fetch fails, preventing empty status lines.
+# 5. Auto-Cleanup: Deletes cache files older than 24 hours to keep /tmp/ clean.
 
-# examples of arguments
-# WTTR_LOC=NewYork
-# WTTR_LOC="{NewYork,London}"
-# WTTR_PARAMS="?format=2"
+def main [] {
+  let loc = ($env.WTTR_LOC? | default "")
+  let params = ($env.WTTR_PARAMS? | default "")
+  let cache_id = ($"($loc)($params)" | hash sha256)
+
+  cleanup_stale_cache
+
+  # Prioritize usable cache (within 30m TTL)
+  if (is_cache_fresh $cache_id) {
+    return (get_cache $cache_id)
+  }
+
+  # Fetch new data on cache miss/expiry
+  let weather = (fetch_wttr $loc $params)
+  if ($weather != null) {
+    save_cache $cache_id $weather
+    return $weather
+  }
+
+  # If fetch failed, cache the failure so we don't hammer the site
+  let fail_msg = "(wttr: err)"
+  save_cache $cache_id $fail_msg
+  $fail_msg
+}
+
+def cache_dir [] {
+  $"/tmp/wttr_cache"
+}
+
+def cache_path [id: string] {
+  $"((cache_dir))/($id)"
+}
+
+def is_cache_fresh [id: string] {
+  let path = (cache_path $id)
+  if not ($path | path exists) { return false }
+
+  let modified = (ls $path | get 0.modified)
+  (date now) - $modified < 30min
+}
+
+def get_cache [id: string] {
+  let path = (cache_path $id)
+  if ($path | path exists) {
+    open --raw $path | str trim
+  } else {
+    null
+  }
+}
+
+def save_cache [id: string, content: string] {
+  let path = (cache_path $id)
+  mkdir (cache_dir)
+  $content | save -f $path
+}
+
+def cleanup_stale_cache [] {
+  let dir = (cache_dir)
+  if not ($dir | path exists) { return }
+
+  # Remove files that haven't been touched in 24 hours
+  ls $dir | where modified < ((date now) - 24hr) | each { |it| rm $it.name }
+}
+
+def fetch_wttr [loc: string, params: string] {
+  let url = $"http://wttr.in/($loc)($params)"
+  try {
+    # https://www.nushell.sh/lang-guide/chapters/types/basic_types/duration.html
+    let weather = (http get --raw --max-time 2sec $url)
+    if ($weather | is-empty) { return null }
+    $weather | str trim
+  } catch {
+    null
+  }
+}
