@@ -46,3 +46,19 @@ disabled = false
 # https://starship.rs/config/#aws
 [aws]
 symbol = '🅰 '
+
+# Show the tmux session name if the $TMUX environment variable is set
+[custom.tmux]
+# Targets the specific pane to avoid "ghosting" via TMUX_PANE
+command = """
+tmux display-message -t "$TMUX_PANE" -p '#S:#{session_windows}:#I:#{window_panes}:#P' | awk -F: '{
+  session=$1; win_count=$2; win_idx=$3; pane_count=$4; pane_idx=$5;
+
+  printf session;
+  if (win_count > 1 || pane_count > 1) printf ":" win_idx;
+  if (pane_count > 1) printf "." pane_idx;
+}'
+"""
+when = 'test -n "$TMUX" && test -n "$TMUX_PANE"'
+format = 'at [ $output]($style) '
+style = 'bold blue'
