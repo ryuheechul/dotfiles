@@ -466,7 +466,10 @@ alias verify-zellij='zellij setup --check'
 # firstly fallback to `fg` when there is a background job is running
 # secondly exit virtualenv if the shell is inside one
 # lastly `exit` the shell when there no other conditions above are met
-alias q='jobs | wc -l | xargs test 0 -eq && { test -n "${VIRTUAL_ENV}" && type deactivate && deactivate || exit } || fg'
+# alias q='jobs | wc -l | xargs test 0 -eq && { test -n "${VIRTUAL_ENV}" && type deactivate && deactivate || exit } || fg'
+# now the above is taken care of by below
+source "${my_zsh_d}/modules/quit" # ../modules/quit
+
 alias e='fzf | xargs ${EDITOR}'
 alias jqstringify='jq ". | tostring"'
 alias jqfromjson='jq "fromjson"'

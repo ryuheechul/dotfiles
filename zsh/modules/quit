@@ -1,0 +1,58 @@
+# -*- mode: sh; -*- vim: set ft=zsh:
+
+# q: a "smart" quit function
+q() {
+  local environment="terminal"
+  if test -n "${SSH_CONNECTION}"; then
+    environment="SSH session"
+  fi
+
+  # 1. fallback to `fg` when there is a background job is running
+  if ! jobs | wc -l | xargs test 0 -eq; then
+    fg
+    return
+  fi
+
+  # 3. branch between tmux and non-tmux for exit behavior
+  if test -n "${VIRTUAL_ENV}" && type deactivate >/dev/null; then
+    deactivate
+    return
+  fi
+
+  # 3. branch between tmux and non-tmux for exit behavior
+  if test -z "${TMUX}"; then
+    gum confirm "Want to close ${environment}?" && exit
+    return
+  fi
+
+  # Inside TMUX
+  local session_count=$(tmux list-sessions 2>/dev/null | wc -l)
+  local window_count=$(tmux list-windows 2>/dev/null | wc -l)
+  local pane_count=$(tmux list-panes 2>/dev/null | wc -l)
+
+  if test $session_count -eq 1 && test $window_count -eq 1 && test $pane_count -eq 1 ; then
+    gum confirm "This is the last session, want to close ${environment}?" || return
+  elif test $window_count -eq 1 && test $pane_count -eq 1; then
+    echo "This is the last pane of this session."
+
+    choice_switch_session="close shell and switch to \"previous\" session"
+    choice_exit="close ${environment}"
+    choice_cancel="cancel"
+
+    # `local choice=...` will not preserve exit code, so split in two
+    local choice; choice="$(gum choose "${choice_switch_session}" "${choice_exit}" "${choice_cancel}")"
+    exit_code="${?}"
+
+    # if cancelled (ESC/^C)
+    test ${exit_code} -eq 130 && return
+    # if cancelled via choice
+    test "${choice}" = "${choice_cancel}" && return
+
+    if test "${choice}" = "${choice_switch_session}"; then
+      tmux switch-client -p>/dev/null
+    fi
+  fi
+
+  # exit the shell (async with delay)
+  (sleep 0.2; kill -HUP $$) &!
+}
