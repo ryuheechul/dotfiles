@@ -254,6 +254,8 @@ if test -n "${TMUX_PANE}"; then
   alias mwp='tmux split-window -h; _nclr 2'
   alias mw/='tmux split-window -h; _nclr 2'
   alias mw-='tmux split-window -v; _nclr 2'
+  alias mwc='tmux new-window'
+  alias mwl='tmux ls'
 fi
 if test -n "${ZELLIJ_SESSION_NAME}"; then
   alias mwz='zellij action toggle-fullscreen; _nclr 2'
@@ -382,9 +384,10 @@ alias rgc5='rgc 5' # with context value that is 5
 
 alias glow='glow -p -s "$(theme-tone)"'
 
-alias fzfp='fzf --height 100% --preview "preview {}"'
+alias fzfp='env fzf --height 100% --preview "preview {}"'
 alias fzfpp='fzfp|fpp'
 alias fpp='wrapped-fpp'
+alias fzf=fzfp
 
 # diff with bat
 function bdiff () { diff -u "$@" | bat;} # use `vimdiff` for editing
@@ -404,11 +407,6 @@ alias ddgr='ddgr -n 3'
 # https://nixos.wiki/wiki/Storage_optimization
 alias nix-collect-garbage='nix-collect-garbage --delete-older-than 30d'
 is-nixos && alias nix-collect-garbage='nix-collect-garbage --delete-older-than 30d; sudo nix-collect-garbage --delete-older-than 30d'
-# set half of the available core to be default
-# to prevent OOM during paralleled compilations
-# to be kind for low memory environments
-# https://nixos.org/manual/nix/stable/advanced-topics/cores-vs-jobs.html
-export NIX_BUILD_CORES="$(getconf _NPROCESSORS_ONLN | xargs -I _ expr _ / 2)"
 
 # `fc-cache -rf` until this is resolved https://github.com/NixOS/nixpkgs/issues/57780
 alias switch-home='home-manager switch |& nom && evalcache-clear >/dev/null && bat cache --build; is-linux && fc-cache -rf'

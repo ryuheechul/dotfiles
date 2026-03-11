@@ -1,0 +1,8 @@
+# -*- mode: sh; -*- vim: set ft=zsh:
+
+# This is similar to ./fzf but for skim.
+# Find usages from:
+# - `man sk`
+# - `tldr sk`
+
+export SKIM_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
