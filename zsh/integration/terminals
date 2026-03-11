@@ -1,0 +1,15 @@
+# -*- mode: sh; -*- vim: set ft=zsh:
+
+# other terminals who can fix this issue directly are done there:
+# - ../../wezterm
+# - ../../ghostty
+# - ../../alacritty
+# - ../../nix/home/terminals
+# - ../../bin/terminal/ghostty
+
+# but for those which can not fix themselves have a chance to set it here
+if printenv __CFBundleIdentifier | grep dev.warp >/dev/null; then
+  export UNSET_HOST_ALWAYS_USE_TMUX=1
+elif test "${CMUX_BUNDLE_ID}" = com.cmuxterm.app; then
+  export UNSET_HOST_ALWAYS_USE_TMUX=1
+fi

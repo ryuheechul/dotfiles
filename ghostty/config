@@ -11,7 +11,7 @@ maximize = true
 # fullscreen = true
 window-decoration = auto
 quit-after-last-window-closed = true
-initial-command = "zsh -c 'source ~/.base16_theme; exec-tmux-attach ghostty'"
+initial-command = "~/.config/dfs-rhc/bin/terminal/ghostty"
 font-size = 15
 # # somehow this was not working on my system:
 # # it was due to the corruption in my system and was fixed by `fc-cache -r`;

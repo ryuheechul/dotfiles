@@ -68,11 +68,11 @@ if is-connected-via-mosh;then
 fi
 
 exec-zellij () {
-  SSH_TTY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec "${my_dot_d}/bin/zellij-attach-or-new.sh" ssh
+  SSH_TTY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec "${my_dot_d}/bin/terminal/zellij-attach-or-new.sh" ssh
 }
 
 exec-tmux () {
-  SSH_TTY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec "${my_dot_d}/bin/tmux-attach-or-new.sh" ssh
+  SSH_TTY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 exec "${my_dot_d}/bin/terminal/tmux-attach-or-new.sh" ssh
 }
 
 if test -n "${SSH_AUTH_SOCK}"; then

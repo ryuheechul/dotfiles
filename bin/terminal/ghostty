@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+
+if test "${CMUX_BUNDLE_ID}" = com.cmuxterm.app; then
+  zsh
+else
+  source ~/.base16_theme
+  exec-tmux-attach ghostty
+fi

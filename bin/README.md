@@ -7,6 +7,7 @@ bin/                # scripts for any platform
 │   ├── default/    # for every system
 │   ├── wsl/        # only for WSL
 │   └── darwin/     # only for Darwin
+├── terminal/       # terminal init commands
 ├── darwin/         # masOS specific scripts
 └── wsl/            # WSL specific scripts
 ```
