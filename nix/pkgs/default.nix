@@ -104,6 +104,7 @@ with pkgs;
     sq # Swiss army knife for data (jq like experience for SQL database)
     jq # json processor
     jqp # a TUI playground for exploring jq
+    htmlq # Like jq, but for HTML - or this `open [xml-file] | from xml | to xml -i 2` can just do the same
     # not sure if sqlite is "modern" but keep it here so I can avoid having to build sqlite by an arbitrary npm package which happened quite often
     sqlite # A self-contained, serverless, zero-configuration, transactional SQL database engine
     earthly # Build automation for the container era
@@ -111,6 +112,7 @@ with pkgs;
     age # Modern encryption tool with small explicit keys
     sshs # Terminal user interface for SSH
     lazyssh # Terminal-based SSH manager
+    snitch # friendlier ss / netstat for humans
   ]
 ++
   # viewer

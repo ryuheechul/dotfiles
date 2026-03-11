@@ -19,6 +19,7 @@ let
   rusty-fam = import ./rusty-fam.nix { pkgs = pkgs; };
   rsop = import ../custom/rsop.nix { pkgs = pkgs; };
   gemini = import ../custom/gemini.nix { pkgs = pkgs; };
+  backlog = import ../custom/backlog.nix { pkgs = pkgs; };
   # no longer necessary as there is official package now
   # ghostty = import ../custom/ghostty.nix { pkgs = pkgs; };
 in
@@ -27,6 +28,7 @@ with pkgs;
   # anything "extra" but without optional flag goes here
   hexto256
   termimagenator
+  backlog # Markdown‑native Task Manager & Kanban visualizer for any Git repository
 ]
 ++ ifEnv "MY_NIX_EXTRA_NIGHTLY_ALACRITTY" [
   alacritty-nightly
@@ -115,6 +117,8 @@ with pkgs;
   kind # Kubernetes IN Docker - local clusters for testing Kubernetes
   colima # Container runtimes with minimal setup powered by lima
   diffoci # Diff for Docker and OCI container images
+  crane # Tools for interacting with remote images and registries including crane and gcrane
+  skopeo # Command line utility for various operations on container images and image repositories
   # minikube with podman - https://github.com/containers/podman/issues/12713#issuecomment-1002567777
   # an example podman machine works for minikube - `podman machine init --rootful --cpus 4 --memory 4096 --disk-size 30`
 ]
