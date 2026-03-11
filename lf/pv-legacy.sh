@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# https://github.com/gokcehan/lf/wiki/Previews
+
 filename="$(basename "$1")"
 
 EXT="${filename##*.}"

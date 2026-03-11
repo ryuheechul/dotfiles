@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# https://github.com/gokcehan/lf/wiki/Previews
+
 lf_d="${XDG_CONFIG_HOME}/lf"
 less_sh="${lf_d}/less.sh"
 

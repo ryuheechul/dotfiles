@@ -4,7 +4,8 @@ set hidden
 # show icons
 set icons
 
-# set previewer using bat
+# https://github.com/gokcehan/lf/wiki/Previews
+# set previewer using a custom viewer
 set previewer ~/.config/lf/pv.sh
 map i $~/.config/lf/pv+pager.sh "$f"
 
