@@ -30,7 +30,6 @@ mas install 869223134  # KakaoTalk
 mas install 1480933944 # Vimari
 mas install 1142151959 # Just Focus
 mas install 803453959  # Slack
-mas install 1475387142 # Tailscale
 mas install 1480933944 # Vimari
 mas install 1284863847 # Unsplash Wallpapers
 mas install 441258766  # magnet
@@ -77,6 +76,10 @@ _install_cask logseq
 # _install_cask sublime-text
 _install_cask zed
 ./sublime/.link.sh
+_install_cask tailscale
+_install_cask grandperspective
+_install_cask onyx
+_install_cask glide-browser
 _install_cask secretive
 _install_cask visual-studio-code
 _install_cask karabiner-elements

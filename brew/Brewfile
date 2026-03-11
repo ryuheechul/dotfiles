@@ -13,6 +13,7 @@ brew "starship" # cross-shell prompt
 brew "fzf" # A command-line fuzzy finder
 brew "direnv" # auto loading env per dir
 brew "htop" # resource monitoring
+brew "mactop" # Apple Silicon Monitor Top
 brew "gpg" # GnuPG
 brew "wget" # useful for downloading files
 brew "iproute2mac" # ip command

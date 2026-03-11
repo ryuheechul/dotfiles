@@ -70,6 +70,9 @@ mkdir -p "${HOME}/.gemini"
 ln -sf "${dfs_rhc}/gemini/settings.json" "${HOME}/.gemini/settings.json"
 ln -sf "${dfs_rhc}/gemini/AGENTS.md" "${HOME}/.gemini/AGENTS.md"
 
+# glide browser
+ln -sf "${dfs_rhc}/glide" "${XDG_CONFIG_HOME}/glide"
+
 # symlink batconfig
 ln -sf "${dfs_rhc}/bat" "${XDG_CONFIG_HOME}/bat"
 bat cache --build || true
