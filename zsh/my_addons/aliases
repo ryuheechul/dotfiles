@@ -76,6 +76,9 @@ function help () {
 source "${my_zsh_d}/modules/jump" # now j is defined here to be more than just zoxide
 # see ./zinit for how zoxide is initialized
 
+# use s to show useful context
+source "${my_zsh_d}/modules/show"
+
 if is-darwin; then
   # able to hook up completions for arbitrary command arguments
   # thanks to great hints from https://www.dolthub.com/blog/2021-11-15-zsh-completions-with-subcommands/

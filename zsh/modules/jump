@@ -2,9 +2,46 @@
 
 # "jump" function that allow me to switch things quickly
 
+function _j_recent_items() {
+  # 1. Directories (zoxide)
+  fastcommandcheck zoxide && {
+    zoxide query -l | head -n 3 | sed 's|^|🗂️ [dir] |'
+  }
+
+  # 2. Tmux Windows
+  test -n "${TMUX}" && {
+    session_name="$(tmux list-panes -F '#{session_name}')"
+    tmux list-panes -a -f "#{m:${session_name},#{session_name}}" \
+      -O activity \
+      -F '#S:#I.#P - #W [%D]' |
+      sed 's|^|🏞️ [win] |'
+  }
+
+  # 3. Tmux Sessions
+  test -n "${TMUX}" && {
+    tmux list-sessions -O activity -F "#S" | head -n 3 | sed 's|^|🎯 [sess] |'
+  }
+
+  # 4. Branches (if in git)
+  j_guard_non_git && {
+    git branch --sort=-committerdate --format="%(refname:short)" | head -n 3 | sed 's|^|🌿 [br] |'
+  }
+
+  # 5. Worktrees via worktrunk (if in git and wt exists)
+  fastcommandcheck wt && j_guard_non_git && {
+    # git worktree list | head -n 2 | awk '{print $1}' | sed 's|^|wt: |'
+    git worktree list | head -n 3 | awk '{print $3}' | tr -d '[]' | sed 's|^|🪵 [wt] |'
+  }
+
+  # 6. SSH
+  [ -f ~/.ssh/config ] && {
+    grep -i '^Host ' ~/.ssh/config | awk '{print $2}' | grep -v '*' | head -n 3 | sed 's|^|📡 [ssh] |'
+  }
+}
+
 function j(){
-  local chosen="$(echo directory tmux-window tmux-session branch worktrunk worktrunk-native ssh |
-    tr -s '[:space:]' '\n' |
+  local categories="directory tmux-window tmux-session branch worktrunk worktrunk-native ssh"
+  local chosen="$( ( _j_recent_items; echo $categories | tr ' ' '\n' ) |
     $(__fzfcmd) --print-query --bind 'focus:transform-header:echo "Jump with {}"'
   )"
 
@@ -15,7 +52,36 @@ function j(){
 
   test -z "${choice}" && return 1
 
+  strip_with_prefix() {
+    content="${1}"
+    prefix="${2}"
+
+    echo "${content}" | sed 's/.*\['"${prefix}"'\] //'
+  }
+
   case "${choice}" in
+    *"[dir] "*) cd "$(strip_with_prefix "${choice}" dir)"
+      ;;
+    *"[win] "*)
+      local target=$(echo "${choice}" | awk '{print $3}')
+      test -n "${target}" && tmux switch-client -t "${target}" && tmux-focus-pane
+      ;;
+    *"[sess] "*)
+      strip_with_prefix "${choice}" sess |
+        xargs tmux switch-client -t &&
+        tmux-focus-pane
+      ;;
+    *"[br] "*)
+      strip_with_prefix "${choice}" br | xargs git switch
+      ;;
+    *"[wt] "*)
+      # can't do xargs here in order to make the shell integration work
+      wt switch "$(strip_with_prefix "${choice}" wt)"
+      ;;
+    *"[ssh] "*)
+      # can't do xargs here as ssh don't like stdin being piped
+      ssh "$(strip_with_prefix "${choice}" ssh)"
+      ;;
     directory) zxi
       ;;
     tmux-window) tmux-switch-window
@@ -37,7 +103,7 @@ function j(){
 
 function j_choose_branch() {
   # Pick a branch or type a new name to create it
-  local branch_info=$(git branch --format="%(refname:short)" | fzf --print-query --header "Choose branch for ${1}")
+  local branch_info=$(git branch --format="%(refname:short)" | $(__fzfcmd) --print-query --header "Choose branch for ${1}")
   # fzf outputs: line 1 = query, line 2 = selection
   local query=$(echo "$branch_info" | sed -n '1p')
   local selection=$(echo "$branch_info" | sed -n '2p')

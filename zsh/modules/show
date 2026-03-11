@@ -1,0 +1,18 @@
+# -*- mode: sh; -*- vim: set ft=zsh:
+
+# "show" function that shows useful context
+
+function s(){
+  echo '[🏠 hostname]'
+  hostname
+  echo
+  echo '[🗂️ directories]'
+  d
+  echo
+
+  test -n "${TMUX}" && {
+    echo '[🎯 tmux ls]'
+    tmux ls
+  }
+}
+
