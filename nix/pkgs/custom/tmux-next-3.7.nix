@@ -5,8 +5,9 @@ pkgs.tmux.overrideAttrs (old: {
   src = pkgs.fetchFromGitHub {
     owner = "tmux";
     repo = "tmux";
-    # for next-3.7 on March 2026
-    rev = "bbbfa8f3603177e41fd1369d09de201ee8fff814";
-    sha256 = "sha256-mak1x2jglpdiW73CAL0kPMXiz/+OiR1TijaRYIxczx8=";
+    rev = "04b4952f0e761818c8fb75c1267e85f688c17498";
+    sha256 = "sha256-KuP16gv9qaXpFtm4hwZls/7FZDC6fmPezryhPyHGNM4=";
   };
+  # on March 2026
+  version = "next-3.7";
 })

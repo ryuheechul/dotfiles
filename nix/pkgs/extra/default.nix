@@ -86,7 +86,7 @@ with pkgs;
 )
 ++ ifEnv "MY_NIX_EXTRA_AI_CLIENT" [
   gemini # AI agent that brings the power of Gemini directly into your terminal
-  aider-chat # AI pair programming in your terminal
+  # aider-chat # AI pair programming in your terminal
   goose-cli # Open-source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM
 ]
 ++ ifEnv "MY_NIX_EXTRA_AI_PROVIDER" [

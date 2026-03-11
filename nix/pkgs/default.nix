@@ -53,6 +53,7 @@ with pkgs;
     # - tset, to initialize the terminal
     ncurses
     fontconfig # A library for font customization and configuration
+    uutils-hostname # Rust reimplementation of the hostname project
   ]
 ++
   # shell - also see ../home/programs/shells.nix

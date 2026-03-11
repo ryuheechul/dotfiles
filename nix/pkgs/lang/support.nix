@@ -5,6 +5,8 @@ let
   ifEnv = envName: pkgs.lib.optionals (checkEnv envName);
   gitwatch = import ../custom/gitwatch.nix { pkgs = pkgs; };
   worktrunk = import ../custom/worktrunk.nix { pkgs = pkgs; };
+  # pull devenv v1 from nixos source from niv-shim as v2 is currently problematic
+  devenv = import ../custom/devenv-1.nix { pkgs = pkgs; };
 in
 with pkgs;
 [
