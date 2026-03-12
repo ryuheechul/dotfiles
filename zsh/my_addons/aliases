@@ -380,6 +380,11 @@ alias delta='delta --detect-dark-light=never'
 # enhanced the above alias using the function below to apply what's mentioned at https://github.com/BurntSushi/ripgrep/issues/86#issuecomment-1469717706
 rg ()
 {
+  # guard non-git directory for accidental search (usually home directory)
+  if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    gum confirm "Not a git repo, proceed?" || return
+  fi
+
   env rg --hidden --glob="!.git" --glob="!package-lock.json" -i --json "$@" | delta
 }
 alias rgc='rg -C' # with context

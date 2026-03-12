@@ -226,13 +226,9 @@ _tag mux_which_key
 source "${my_zsh_d}/integration/zvm" # `../integration/zvm`
 _tag customize_zvm
 
-# rancher desktop
-test -x "${HOME}/.rd/bin/kubectl" && {
-  echo 'rancher desktop discovered'
-  export PATH="${HOME}/.rd/bin:$PATH"
-  test -S ${HOME}/.rd/docker.sock &&
-    export DOCKER_HOST=unix://${HOME}/.rd/docker.sock
-  }
+source "${my_zsh_d}/integration/rancher" # `../integration/rancher`
+QUITE_ON_FAIL=1 use_rancher_env
+
 _tag rancher_desktop
 
 # distrobox adaptation

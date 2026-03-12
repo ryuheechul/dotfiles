@@ -3,9 +3,10 @@
 # "jump" function that allow me to switch things quickly
 
 function _j_recent_items() {
-  # 1. Directories (zoxide)
-  fastcommandcheck zoxide && {
-    zoxide query -l | head -n 3 | sed 's|^|🗂️ [dir] |'
+  # 1. Tmux Sessions
+  test -n "${TMUX}" && {
+    local current_session=$(tmux display-message -p '#S' 2>/dev/null)
+    tmux list-sessions -O activity -F "#S" | grep -vx "${current_session}" | sed 's|^|🎯 [sess] |'
   }
 
   # 2. Tmux Windows
@@ -17,9 +18,9 @@ function _j_recent_items() {
       sed 's|^|🏞️ [win] |'
   }
 
-  # 3. Tmux Sessions
-  test -n "${TMUX}" && {
-    tmux list-sessions -O activity -F "#S" | head -n 3 | sed 's|^|🎯 [sess] |'
+  # 3. Directories (zoxide)
+  fastcommandcheck zoxide && {
+    zoxide query -l | head -n 3 | sed 's|^|🗂️ [dir] |'
   }
 
   # 4. Branches (if in git)

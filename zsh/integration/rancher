@@ -1,0 +1,34 @@
+# -*- mode: sh; -*- vim: set ft=zsh:
+
+# Rancher desktop support and it's being loaded via ../my_addons/shell_ext
+use_rancher_env () {
+  local rancher_bin_path="${HOME}/.rd/bin"
+  local rancher_sock="${HOME}/.rd/docker.sock"
+  local rancher_bin_available="$(test -x "${rancher_bin_path}/kubectl" && echo 1)"
+  local rancher_socket_available="$(test -S "${rancher_sock}" && echo 1)"
+
+  if test -n "${rancher_bin_available}" && test -n "${rancher_socket_available}"; then
+    echo 'rancher desktop discovered'
+    add-to-path "${rancher_bin_path}"
+    export DOCKER_HOST="unix://${rancher_sock}"
+  else
+    test -n "${QUITE_ON_FAIL}" && return
+    if test -n "${rancher_bin_available}"; then
+      echo "rancher desktop discovered partly but socket not found: ${rancher_sock}"
+    fi
+    if test -n "${rancher_socket_available}"; then
+      echo "rancher desktop discovered partly but bin path not found: ${rancher_bin_path}"
+    fi
+  fi
+}
+
+# a quick and dirty way to undo use_rancher_env
+clear_rancher_env () {
+  local rancher_bin_path="${HOME}/.rd/bin"
+  # remove rancher_bin_path from the path array if it exists
+  path=(${path:#${rancher_bin_path}})
+
+  local rancher_sock="${HOME}/.rd/docker.sock"
+  # unset only if it's for rancher sock
+  test "${DOCKER_HOST}" = "unix://${rancher_sock}" && unset DOCKER_HOST
+}
