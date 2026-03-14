@@ -47,6 +47,7 @@ username:
       ./recipes/sunshine.nix
       # services
       ./recipes/resolved.nix
+      ./recipes/networkd.nix
       ./recipes/keyd-host-windows.nix
       ./recipes/keyd-guest.nix
       ./recipes/flatpak.nix

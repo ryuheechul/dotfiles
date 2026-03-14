@@ -9,6 +9,10 @@
   ...
 }:
 
+let
+  # let's see if networkd actually makes this service unnecessary
+  useService = true || useResolved && !config.systemd.network.enable;
+in
 {
   imports =
     [ ]
@@ -26,7 +30,7 @@
       };
     }
     # fulfill the wish of ./bin/zerotier-dns-client.sh with automation in case of using systemd-resolved
-    (lib.mkIf useResolved {
+    (lib.mkIf useService {
       systemd.services.zerotier-dns-resolved = {
         wantedBy = [ "multi-user.target" ];
         after = [ "zerotierone.service" ];
