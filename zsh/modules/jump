@@ -31,7 +31,7 @@ function _j_recent_items() {
   # 5. Worktrees via worktrunk (if in git and wt exists)
   fastcommandcheck wt && j_guard_non_git && {
     # git worktree list | head -n 2 | awk '{print $1}' | sed 's|^|wt: |'
-    git worktree list | head -n 3 | awk '{print $3}' | tr -d '[]' | sed 's|^|🪵 [wt] |'
+    wt list --format=json| jq -r '.[:3].[].branch' | sed 's|^|🪵 [wt] |'
   }
 
   # 6. SSH
@@ -39,6 +39,9 @@ function _j_recent_items() {
     grep -i '^Host ' ~/.ssh/config | awk '{print $2}' | grep -v '*' | head -n 3 | sed 's|^|📡 [ssh] |'
   }
 }
+
+# yesterday's `j(ump)` became `z` since `j` now does more than directory
+alias z=zxi
 
 function j(){
   local categories="directory tmux-window tmux-session branch worktrunk worktrunk-native ssh"

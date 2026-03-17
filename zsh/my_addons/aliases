@@ -261,6 +261,8 @@ if test -n "${TMUX_PANE}"; then
   alias mw-='tmux split-window -v; _nclr 2'
   alias mwc='tmux new-window'
   alias mwl='tmux ls'
+  # "mux word jump": jump to letter (same as `tmux prefix + j` from `../../tmux.conf`)
+  alias mwj="${TMUX_PLUGIN_MANAGER_PATH}/tmux-easymotion/mode-s.sh; _nclr 2"
 fi
 if test -n "${ZELLIJ_SESSION_NAME}"; then
   alias mwz='zellij action toggle-fullscreen; _nclr 2'
