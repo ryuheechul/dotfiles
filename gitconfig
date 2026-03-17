@@ -50,6 +50,8 @@
   cmd = difft "$LOCAL" "$REMOTE"
 
 [core]
+  ; pager = diffnav ; not using diffnav here, as it is fragile (e.g. conflict in diff completely breaks the UI);
+  ; use `gdn` or `gd | diffnav` instead
   pager = delta --detect-dark-light=never
   ; speeds up git status
   fsmonitor = true

@@ -156,6 +156,7 @@ with pkgs;
     git-filter-repo # quickly rewrite git repository history - read https://stackoverflow.com/a/69947947/1570165 for usage
     delta # syntax-highlighting pager for git
     difftastic # A syntax-aware diff
+    diffnav # Git diff pager based on delta but with a file tree, à la GitHub
     gh # official Github CLI
     act # Run your GitHub Actions locally
   ]
