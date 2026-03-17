@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Usage: notify-gui message [title]
+
+export MESSAGE="${1}"
+
+if test -z "${MESSAGE}"; then
+  exit 1
+fi
+
+export TITLE="${2:-notify-gui}"
+
+osascript -e 'display notification (system attribute "MESSAGE") with title (system attribute "TITLE")'

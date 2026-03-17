@@ -12,8 +12,7 @@ _notify_visually() {
   local cmd_that_ran="\`${cmd}\`"
   local title="notify: ${label}"
 
-  MESSAGE="${cmd_that_ran}" TITLE="${title}" \
-    osascript -e 'display notification (system attribute "MESSAGE") with title (system attribute "TITLE")'
+  notify-gui "${cmd_that_ran}" "${title}"
 }
 
 _sound_for_return() {
