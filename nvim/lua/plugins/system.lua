@@ -80,6 +80,8 @@ return {
         pickers = {
           find_files = {
             theme = 'ivy',
+            -- to be consistent with `FZF_DEFAULT_COMMAND` from `../../../zsh/integration/fzf`
+            find_command = { 'fd', '--type', 'f', '--hidden', '--exclude', '.git' },
           },
           spell_suggest = {
             theme = 'cursor',

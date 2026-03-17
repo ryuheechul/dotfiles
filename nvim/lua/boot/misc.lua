@@ -121,9 +121,16 @@ vim.opt.pumblend = 20
 vim.opt.clipboard = 'unnamedplus'
 -- For the option above to work across SSH connection, `ForwardX11 yes` (and `ForwardX11Trusted yes` if `ForwardX11` wasn't enough) options would be required. Otherwise the OSC 52 would make it trivial to copy and paste, however not all layers support it, notably Zellij currently doesn't support pasting
 
-local shouldOsc52pasteBeAvailable = vim.env.ZELLIJ_SESSION_NAME == nil and vim.env.INSIDE_EMACS == nil
+local is_ssh = vim.env.SSH_CONNECTION ~= nil
+local is_zellij = vim.env.ZELLIJ_SESSION_NAME ~= nil
+local is_emacs = vim.env.INSIDE_EMACS ~= nil
 
-if shouldOsc52pasteBeAvailable then
+-- Use internal OSC 52 provider only for SSH sessions without additional layers.
+-- This avoids the race conditions experienced with 'unnamedplus' when an immediate
+-- native provider (like pbcopy or xclip) is available.
+local shouldUseInternalOsc52 = is_ssh and not is_zellij and not is_emacs
+
+if shouldUseInternalOsc52 then
   local osc52 = require 'vim.ui.clipboard.osc52'
 
   -- without this, it will rely on X11 `$DISPLAY` env var via xsel or similar instead of OSC 52 way
@@ -139,21 +146,23 @@ if shouldOsc52pasteBeAvailable then
     },
   }
 else
-  -- Fallback to external command
-  if vim.env.SSH_CONNECTION ~= nil then
+  if is_ssh then
+    -- Fallback to the 'pbcopy/pbpaste' wrapper for SSH + Zellij/Emacs.
     vim.g.clipboard = {
-      name = 'pbcopy/pbpaste',
+      name = 'pbcopy/pbpaste wrapper',
       copy = {
+        -- `../../../bin/path/default/pbcopy`
         ['+'] = 'pbcopy',
         ['*'] = 'pbcopy',
       },
       paste = {
+        -- `../../../bin/path/default/pbpaste`
         ['+'] = 'pbpaste',
         ['*'] = 'pbpaste',
       },
     }
-  else
-    -- Let nvim to figure out what to do for a local terminal (without native osc 52) by doing nothing (after setting `vim.opt.clipboard = 'unnamedplus'` above for all cases)
+  else -- Local session (macOS or Linux)
+    -- do nothing to let Neovim auto-detect.
   end
 end
 
