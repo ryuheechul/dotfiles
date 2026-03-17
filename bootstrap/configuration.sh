@@ -139,13 +139,13 @@ tmux start-server &&
 # avoid using `/usr/local/bin` as a global path for yarn
 yarn config set prefix "${HOME}/.yarn"
 
-# install asdf
-ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
-ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
-PATH="${ASDF_DIR}/bin:${ASDF_DATA_DIR}/shims:${PATH}"
-ln -sf "${dfs_rhc}/asdf/tool-versions" "${HOME}/.tool-versions"
-
-git clone https://github.com/asdf-vm/asdf.git "${ASDF_DIR}" --branch v0.8.0 || true
+# # install asdf
+# ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
+# ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
+# PATH="${ASDF_DIR}/bin:${ASDF_DATA_DIR}/shims:${PATH}"
+# ln -sf "${dfs_rhc}/asdf/tool-versions" "${HOME}/.tool-versions"
+#
+# git clone https://github.com/asdf-vm/asdf.git "${ASDF_DIR}" --branch v0.8.0 || true
 
 ## installing packages with asdf has been replaced with Nix - look at ../nix/pkgs.nix
 
