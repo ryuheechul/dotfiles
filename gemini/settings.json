@@ -1,13 +1,56 @@
 {
-  "model": "gemini-2.5-flash",
-  "theme": "Atom One",
-  "selectedAuthType": "oauth-personal",
-  "contextFileName": [
-    "AGENTS.md",
-    "AGENT.md",
-    "GEMINI.md"
-  ],
-  "preferredEditor": "neovim",
-  "mcpServers": {
+  "context": {
+    "fileName": [
+      "AGENTS.md",
+      "AGENT.md",
+      "GEMINI.md"
+    ]
+  },
+ "mcpServers": {
+    "context-mode": {
+      "command": "context-mode"
+    }
+  },
+  "general": {
+    "checkpointing": {
+      "enabled": true
+    },
+    "preferredEditor": "neovim",
+    "previewFeatures": true,
+    "defaultApprovalMode": "plan",
+    "enableAutoUpdate": false,
+    "enablePromptCompletion": true,
+    "sessionRetention": {
+      "enabled": true,
+      "maxAge": "30d",
+      "warningAcknowledged": true
+    }
+  },
+  "security": {
+    "auth": {
+      "selectedType": "oauth-personal"
+    },
+    "enablePermanentToolApproval": true,
+    "environmentVariableRedaction": {
+      "enabled": true
+    }
+  },
+  "ui": {
+    "theme": "Atom One",
+    "showMemoryUsage": true,
+    "useAlternateBuffer": true
+  },
+  "tools": {
+    "shell": {
+      "showColor": true
+    }
+  },
+  "experimental": {
+    "useOSC52Paste": true,
+    "plan": true,
+    "enableAgents": true
+  },
+  "model": {
+    "name": "gemini-3-pro-preview"
   }
 }

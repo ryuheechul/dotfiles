@@ -19,6 +19,7 @@ let
   rusty-fam = import ./rusty-fam.nix { pkgs = pkgs; };
   rsop = import ../custom/rsop.nix { pkgs = pkgs; };
   gemini = import ../custom/gemini.nix { pkgs = pkgs; };
+  context-mode = import ../custom/context-mode.nix { pkgs = pkgs; };
   backlog = import ../custom/backlog.nix { pkgs = pkgs; };
   # no longer necessary as there is official package now
   # ghostty = import ../custom/ghostty.nix { pkgs = pkgs; };
@@ -88,6 +89,9 @@ with pkgs;
   gemini # AI agent that brings the power of Gemini directly into your terminal
   # aider-chat # AI pair programming in your terminal
   goose-cli # Open-source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM
+
+  # these below are not harness itself but supportive systems
+  context-mode
 ]
 ++ ifEnv "MY_NIX_EXTRA_AI_PROVIDER" [
   plandex # AI driven development in your terminal. Designed for large, real-world tasks. The sli part

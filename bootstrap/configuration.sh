@@ -70,6 +70,24 @@ mkdir -p "${HOME}/.gemini"
 ln -sf "${dfs_rhc}/gemini/settings.json" "${HOME}/.gemini/settings.json"
 ln -sf "${dfs_rhc}/gemini/AGENTS.md" "${HOME}/.gemini/AGENTS.md"
 
+# symlink to claude code
+mkdir -p "${HOME}/.claude"
+ln -sf "${dfs_rhc}/claude/settings.json" "${HOME}/.claude/settings.json"
+ln -sf "${dfs_rhc}/claude/CLAUDE.md" "${HOME}/.claude/CLAUDE.md"
+
+# symlink to opencode
+mkdir -p "${XDG_CONFIG_HOME}/opencode/plugins"
+ln -sf "${dfs_rhc}/opencode/opencode.jsonc" "${XDG_CONFIG_HOME}/opencode/opencode.jsonc"
+ln -sf "${dfs_rhc}/opencode/AGENTS.md" "${XDG_CONFIG_HOME}/opencode/AGENTS.md"
+
+# symlink each plugin individually to allow local plugins to coexist;
+# but new ones after this script run will need to be manually symlinked
+for plugin in "${dfs_rhc}/opencode/plugins"/*; do
+  if test -e "$plugin"; then
+    ln -sf "$plugin" "${XDG_CONFIG_HOME}/opencode/plugins/$(basename "$plugin")"
+  fi
+done
+
 # glide browser
 ln -sf "${dfs_rhc}/glide" "${XDG_CONFIG_HOME}/glide"
 
