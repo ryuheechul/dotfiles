@@ -13,13 +13,18 @@ q() {
     return
   fi
 
-  # 3. branch between tmux and non-tmux for exit behavior
+  # 2. exit virtualenv if inside
   if test -n "${VIRTUAL_ENV}" && type deactivate >/dev/null; then
     deactivate
     return
   fi
 
-  # 3. branch between tmux and non-tmux for exit behavior
+  # 3. exit distrobox if inside
+  if test -n "${DISTROBOX_ENTER_PATH}"; then
+    exit
+  fi
+
+  # 4. branch between tmux and non-tmux for exit behavior
   if test -z "${TMUX}"; then
     gum confirm "Want to close ${environment}?" && exit
     return

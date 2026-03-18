@@ -29,6 +29,9 @@ zinit snippet OMZL::history.zsh; source "${my_zsh_d}/modules/history"
 # this seems to be not in effect because other similar plugins so disabling for now
 # zinit light Aloxaf/fzf-tab
 
+# to deal with compaudit warning for distrobox environment
+test -n "${DISTROBOX_ENTER_PATH}" && autoload -U compinit && compinit -u
+
 # things that migrated to znap would load first
 CURR_DIR="${XDG_CONFIG_HOME}/dfs-rhc/zsh/my_addons"
 zinit snippet "${CURR_DIR}/znap"

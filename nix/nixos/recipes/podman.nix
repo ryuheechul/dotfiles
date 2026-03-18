@@ -15,6 +15,17 @@
     # https://www.redhat.com/en/blog/podman-compose-docker-compose
   ];
 
+  virtualisation.containers.containersConf.settings = {
+    engine = {
+      # for podman machine
+      helper_binaries_dir = with pkgs;[
+        "${podman}/libexec/podman"
+        "${gvproxy}/bin"
+        "${virtiofsd}/bin"
+      ];
+    };
+  };
+
   # run `systemctl --user start podman.socket` in case providing the socket API that expect $DOCKER_HOST socket to be listening
   # run `man podman-system-service` and see ./docker.nix to learn more
 }
