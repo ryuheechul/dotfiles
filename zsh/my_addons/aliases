@@ -240,8 +240,8 @@ alias gdtcp="gdtc ${exclude_for_pure}"
 # and just to help with typo
 alias gd.='gd .'
 alias gdc.='gdc .'
-gdn() { gd "$@" | diffnav }
-gdcn() { gdc "$@" | diffnav }
+gdn() { git diff "$@" | diffnav }
+gdcn() { git diff --cached "$@" | diffnav }
 
 # do this again although this is done by ../aliases already since this get overwritten by something along the way (probably OMZ)
 alias l="ls -lah -g --git"
