@@ -135,6 +135,9 @@ uname | xargs test "Darwin" = &&
 # viddy
 ln -sf "${dfs_rhc}/viddy.toml" "${XDG_CONFIG_HOME}/viddy.toml"
 
+# sesh
+ln -sf "${dfs_rhc}/sesh" "${XDG_CONFIG_HOME}/sesh"
+
 # tig
 ln -sf "${dfs_rhc}/vim.tigrc" "${HOME}/.tigrc"
 

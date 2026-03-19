@@ -37,6 +37,7 @@ return {
             'cssls',
             'svelte',
             'eslint',
+            'taplo', -- for TOML
           },
         },
       },

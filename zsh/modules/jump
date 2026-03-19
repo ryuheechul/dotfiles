@@ -6,7 +6,7 @@ function _j_recent_items() {
   # 1. Tmux Sessions
   test -n "${TMUX}" && {
     local current_session=$(tmux display-message -p '#S' 2>/dev/null)
-    tmux list-sessions -O activity -F "#S" | grep -vx "${current_session}" | sed 's|^|🎯 [sess] |'
+    sesh list -c --tmux | grep -vx "${current_session}" | sed 's|^|🎯 [sess] |'
   }
 
   # 2. Tmux Windows
@@ -71,9 +71,13 @@ function j(){
       test -n "${target}" && tmux switch-client -t "${target}" && tmux-focus-pane
       ;;
     *"[sess] "*)
-      strip_with_prefix "${choice}" sess |
-        xargs tmux switch-client -t &&
-        tmux-focus-pane
+      local chosen_session=$(strip_with_prefix "${choice}" sess)
+
+      # create one if not existing already
+      tmux list-sessions -O activity -F "#S" | grep "${chosen_session}" >/dev/null ||
+        tmux new-session -d -s "${chosen_session}"
+
+      tmux switch-client -t "${chosen_session}" && tmux-focus-pane
       ;;
     *"[br] "*)
       strip_with_prefix "${choice}" br | xargs git switch

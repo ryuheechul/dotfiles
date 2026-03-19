@@ -1,0 +1,5 @@
+#:schema https://github.com/joshmedeski/sesh/raw/main/sesh.schema.json
+
+cache = true
+
+# add sessions below
