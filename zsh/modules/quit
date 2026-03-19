@@ -50,8 +50,12 @@ q() {
 
     # if cancelled (ESC/^C)
     test ${exit_code} -eq 130 && return
+
     # if cancelled via choice
     test "${choice}" = "${choice_cancel}" && return
+
+    # if choice is empty
+    test -z "${choice}" && return
 
     if test "${choice}" = "${choice_switch_session}"; then
       tmux switch-client -p>/dev/null
