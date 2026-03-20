@@ -18,6 +18,7 @@ Linux)
       echo "switch-app: no graphical session detected (DISPLAY and WAYLAND_DISPLAY are unset)" >&2
       exit 1
     elif pgrep -a gnome-shell &>/dev/null; then
+      # see https://github.com/ryuheechul/mimic-launchpad-gesture/blob/main/Makefile for context
       ydotool key 56:1 56:0
     else
       echo "switch-app: no supported desktop found on Linux (tried: GNOME via pgrep gnome-shell)" >&2
