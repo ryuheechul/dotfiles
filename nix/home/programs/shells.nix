@@ -171,6 +171,9 @@ in
   # Multi-shell multi-command argument completer
   programs.carapace = {
     enable = true;
+
+    # Since I do it manually via `../../../zsh/my_addons/znap`
+    enableZshIntegration = false;
   };
 
   # Fast cd command that learns your habits
