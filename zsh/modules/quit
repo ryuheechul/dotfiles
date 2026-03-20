@@ -44,8 +44,21 @@ q() {
     choice_exit="close ${environment}"
     choice_cancel="cancel"
 
+    local first_choice
+    local second_choice
+
+    first_choice="${choice_switch_session}"
+    second_choice="${choice_exit}"
+
+    if test -n "${SSH_CONNECTION}"; then
+      # this makes more sense for SSH
+      first_choice="${choice_exit}"
+      second_choice="${choice_switch_session}"
+    fi
+
     # `local choice=...` will not preserve exit code, so split in two
-    local choice; choice="$(gum choose "${choice_switch_session}" "${choice_exit}" "${choice_cancel}")"
+    local choice; choice="$(gum choose "${first_choice}" "${second_choice}" "${choice_cancel}")"
+
     exit_code="${?}"
 
     # if cancelled (ESC/^C)
