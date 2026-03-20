@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+platform=$(uname)
+
+case "$platform" in
+Darwin)
+  if open -Ra Raycast 2>/dev/null; then
+    open "raycast://extensions/raycast/navigation/switch-windows" ||
+      open -a Raycast
+  else
+    echo "switch-app: no app switcher found on macOS (tried: Raycast)" >&2
+    exit 1
+  fi
+  ;;
+Linux)
+  if [[ -n "$YDOTOOL_SOCKET" ]] && command -v ydotool &>/dev/null; then
+    if [[ -z "$DISPLAY" && -z "$WAYLAND_DISPLAY" ]]; then
+      echo "switch-app: no graphical session detected (DISPLAY and WAYLAND_DISPLAY are unset)" >&2
+      exit 1
+    elif pgrep -a gnome-shell &>/dev/null; then
+      ydotool key 56:1 56:0
+    else
+      echo "switch-app: no supported desktop found on Linux (tried: GNOME via pgrep gnome-shell)" >&2
+      exit 1
+    fi
+  else
+    echo "switch-app: no app switcher found on Linux (tried: ydotool; set YDOTOOL_SOCKET and ensure ydotool is installed)" >&2
+    exit 1
+  fi
+  ;;
+*)
+  echo "switch-app: unsupported platform: $platform" >&2
+  exit 1
+  ;;
+esac

@@ -6,7 +6,7 @@ function _j_recent_items() {
   # 1. Tmux Sessions
   test -n "${TMUX}" && {
     local current_session=$(tmux display-message -p '#S' 2>/dev/null)
-    sesh list -c --tmux | grep -vx "${current_session}" | sed 's|^|🎯 [sess] |'
+    sesh list -c --tmux | awk '!a[$0]++' | grep -vx "${current_session}" | sed 's|^|🎯 [sess] |'
   }
 
   # 2. Tmux Windows
@@ -44,7 +44,7 @@ function _j_recent_items() {
 alias z=zxi
 
 function j(){
-  local categories="directory tmux-window tmux-session branch worktrunk worktrunk-native ssh"
+  local categories="directory tmux-window tmux-session branch worktrunk worktrunk-native ssh app"
   local chosen="$( ( _j_recent_items; echo $categories | tr ' ' '\n' ) |
     $(__fzfcmd) --print-query --bind 'focus:transform-header:echo "Jump with {}"'
   )"
@@ -103,6 +103,8 @@ function j(){
     worktrunk-native) j_wtsn
       ;;
     ssh) j_ssh
+      ;;
+    app) switch-app # via ../../bin/path/default/switch-app
       ;;
     *) echo "'${choice}' is not supported"
       ;;
