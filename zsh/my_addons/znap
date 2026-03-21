@@ -43,7 +43,14 @@ test -f ${XDG_DATA_HOME:-~/.local/share}/zsh/site-functions/_gh || znap fpath _g
 # compctl -K    _pyenv pyenv
 
 # completion with carapace
-fastcommandcheck carapace && source <(carapace _carapace)
+fastcommandcheck carapace && {
+  source <(carapace _carapace)
+  # to enable case insensitive match:
+  # - https://carapace-sh.github.io/carapace-bin/setup/environment.html#carapace_match
+  export CARAPACE_MATCH=1
+  # for above to work, zsh still need to enable on its own too
+  # and that's enabled at `./zinit` with `OMZL::completion.zsh`
+}
 
 # only way to preperly load this file again is to remove from zinit and open a new shell
 alias znap-reset="yes | zinit delete ${HOME:1}--.config--dfs-rhc--zsh--my_addons/znap"
