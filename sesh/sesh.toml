@@ -2,4 +2,6 @@
 
 cache = true
 
-# add sessions below
+[[session]]
+name = "dotfiles"
+path = "~/dotfiles"

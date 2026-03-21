@@ -71,13 +71,7 @@ function j(){
       test -n "${target}" && tmux switch-client -t "${target}" && tmux-focus-pane
       ;;
     *"[sess] "*)
-      local chosen_session=$(strip_with_prefix "${choice}" sess)
-
-      # create one if not existing already
-      tmux list-sessions -O activity -F "#S" | grep "${chosen_session}" >/dev/null ||
-        tmux new-session -d -s "${chosen_session}"
-
-      tmux switch-client -t "${chosen_session}" && tmux-focus-pane
+      strip_with_prefix "${choice}" sess | xargs sesh connect
       ;;
     *"[br] "*)
       strip_with_prefix "${choice}" br | xargs git switch
