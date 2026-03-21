@@ -51,7 +51,6 @@ brew "pueue" # long running task manager
 
 # misc
 brew "fastfetch"
-brew "yarn"
 
 # not core tap
 brew "kdabir/tap/has"

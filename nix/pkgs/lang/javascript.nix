@@ -11,8 +11,6 @@ let
     [
       # Event-driven I/O framework for the V8 JavaScript engine
       nodejs
-      # Fast, reliable, and secure dependency management for javascript
-      yarn
       # npm packages via nodePackages
     ]
     ++ (with nodePackages; [

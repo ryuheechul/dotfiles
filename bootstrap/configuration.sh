@@ -54,8 +54,8 @@ cat <<EOF >>"${HOME}/.gitconfig"
   path = "${dfs_rhc}/gitconfig"
 EOF
 
-# symlink .editorconfig
-ln -sf "${dfs_rhc}/.editorconfig" "${HOME}/.editorconfig"
+# tig
+ln -sf "${dfs_rhc}/vim.tigrc" "${HOME}/.tigrc"
 
 # symlink gh config
 mkdir -p "${XDG_CONFIG_HOME}/gh"
@@ -65,51 +65,12 @@ ln -sf "${dfs_rhc}/gh/config.yml" "${XDG_CONFIG_HOME}/gh/config.yml"
 mkdir -p "${XDG_CONFIG_HOME}/gh-dash"
 ln -sf "${dfs_rhc}/gh/dash/config.yml" "${XDG_CONFIG_HOME}/gh-dash/config.yml"
 
-# symlink to gemini-cli
-mkdir -p "${HOME}/.gemini"
-ln -sf "${dfs_rhc}/gemini/settings.json" "${HOME}/.gemini/settings.json"
-ln -sf "${dfs_rhc}/gemini/AGENTS.md" "${HOME}/.gemini/AGENTS.md"
-
-# symlink to claude code
-mkdir -p "${HOME}/.claude"
-ln -sf "${dfs_rhc}/claude/settings.json" "${HOME}/.claude/settings.json"
-ln -sf "${dfs_rhc}/claude/CLAUDE.md" "${HOME}/.claude/CLAUDE.md"
-
-# symlink to opencode
-mkdir -p "${XDG_CONFIG_HOME}/opencode/plugins"
-ln -sf "${dfs_rhc}/opencode/opencode.jsonc" "${XDG_CONFIG_HOME}/opencode/opencode.jsonc"
-ln -sf "${dfs_rhc}/opencode/AGENTS.md" "${XDG_CONFIG_HOME}/opencode/AGENTS.md"
-
-# symlink each plugin individually to allow local plugins to coexist;
-# but new ones after this script run will need to be manually symlinked
-for plugin in "${dfs_rhc}/opencode/plugins"/*; do
-  if test -e "$plugin"; then
-    ln -sf "$plugin" "${XDG_CONFIG_HOME}/opencode/plugins/$(basename "$plugin")"
-  fi
-done
-
-# glide browser
-ln -sf "${dfs_rhc}/glide" "${XDG_CONFIG_HOME}/glide"
-
 # symlink batconfig
 ln -sf "${dfs_rhc}/bat" "${XDG_CONFIG_HOME}/bat"
 bat cache --build || true
 
-# ghostty terminal
-rm -rf "${XDG_CONFIG_HOME}/ghostty" &&
-  ln -sf "${dfs_rhc}/ghostty" "${XDG_CONFIG_HOME}/ghostty"
-
-# alacritty
-ln -sf "${dfs_rhc}/alacritty/unix.toml" "${HOME}/.alacritty.toml"
-
-# starship
-ln -sf "${dfs_rhc}/starship.toml" "${XDG_CONFIG_HOME}/starship.toml"
-
-# base16
-git clone https://github.com/chriskempson/base16-shell.git "${XDG_CONFIG_HOME}/base16-shell"
-
-# prevent this file missing to satisfy `doom doctor` due to my own configuration
-touch "${HOME}/.base16_theme.updated-time"
+# glide browser
+ln -sf "${dfs_rhc}/glide" "${XDG_CONFIG_HOME}/glide"
 
 # lf
 ln -sf "${dfs_rhc}/lf" "${XDG_CONFIG_HOME}/lf"
@@ -146,11 +107,21 @@ uname | xargs test "Darwin" = &&
 mkdir -p "${XDG_CONFIG_HOME}/mise"
 ln -sf "${dfs_rhc}/mise/config@home.toml" "${XDG_CONFIG_HOME}/mise/config.toml"
 
-# sesh
-ln -sf "${dfs_rhc}/sesh" "${XDG_CONFIG_HOME}/sesh"
+# ghostty terminal
+rm -rf "${XDG_CONFIG_HOME}/ghostty" &&
+  ln -sf "${dfs_rhc}/ghostty" "${XDG_CONFIG_HOME}/ghostty"
 
-# tig
-ln -sf "${dfs_rhc}/vim.tigrc" "${HOME}/.tigrc"
+# alacritty
+ln -sf "${dfs_rhc}/alacritty/unix.toml" "${HOME}/.alacritty.toml"
+
+# starship
+ln -sf "${dfs_rhc}/starship.toml" "${XDG_CONFIG_HOME}/starship.toml"
+
+# base16
+git clone https://github.com/chriskempson/base16-shell.git "${XDG_CONFIG_HOME}/base16-shell"
+
+# prevent this file missing to satisfy `doom doctor` due to my own configuration
+touch "${HOME}/.base16_theme.updated-time"
 
 # gitmux
 ln -sf "${dfs_rhc}/gitmux.conf" "${HOME}/.gitmux.conf"
@@ -168,31 +139,11 @@ tmux start-server &&
   sleep 1 &&
   { tmux kill-server || true; }
 
-# avoid using `/usr/local/bin` as a global path for yarn
-yarn config set prefix "${HOME}/.yarn"
+# sesh
+ln -sf "${dfs_rhc}/sesh" "${XDG_CONFIG_HOME}/sesh"
 
-# # install asdf
-# ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
-# ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
-# PATH="${ASDF_DIR}/bin:${ASDF_DATA_DIR}/shims:${PATH}"
-# ln -sf "${dfs_rhc}/asdf/tool-versions" "${HOME}/.tool-versions"
-#
-# git clone https://github.com/asdf-vm/asdf.git "${ASDF_DIR}" --branch v0.8.0 || true
-
-## installing packages with asdf has been replaced with Nix - look at ../nix/pkgs.nix
-
-## zsh
-
-## "linking" these are now done via ../nix/home/programs/shells.nix
-# # source dotfiles' env
-# echo "source '${dfs_rhc}/zsh/env'" >> "${HOME}/.zshenv"
-# # source dotfiles' zlogin
-# echo "source '${dfs_rhc}/zsh/zlogin'" >> "${HOME}/.zlogin"
-# # source dotfiles' zshrc
-# echo "source '${dfs_rhc}/zsh/zshrc'" >> "${HOME}/.zshrc"
-
-# source zinit now to avoid installing zsh plugins at initial usage
-zsh -c "source '${dfs_rhc}/zsh/my_addons/zinit'"
+# symlink .editorconfig
+ln -sf "${dfs_rhc}/.editorconfig" "${HOME}/.editorconfig"
 
 ## emacs
 
@@ -229,8 +180,44 @@ fi
 # # shim vimrc
 # ln -sf "${HOME}/.SpaceVim" "${HOME}/.vim"
 
+# symlink to gemini-cli
+mkdir -p "${HOME}/.gemini"
+ln -sf "${dfs_rhc}/gemini/settings.json" "${HOME}/.gemini/settings.json"
+ln -sf "${dfs_rhc}/gemini/AGENTS.md" "${HOME}/.gemini/AGENTS.md"
+
+# symlink to claude code
+mkdir -p "${HOME}/.claude"
+ln -sf "${dfs_rhc}/claude/settings.json" "${HOME}/.claude/settings.json"
+ln -sf "${dfs_rhc}/claude/CLAUDE.md" "${HOME}/.claude/CLAUDE.md"
+
+# symlink to opencode
+mkdir -p "${XDG_CONFIG_HOME}/opencode/plugins"
+ln -sf "${dfs_rhc}/opencode/opencode.jsonc" "${XDG_CONFIG_HOME}/opencode/opencode.jsonc"
+ln -sf "${dfs_rhc}/opencode/AGENTS.md" "${XDG_CONFIG_HOME}/opencode/AGENTS.md"
+
+# symlink each plugin individually to allow local plugins to coexist;
+# but new ones after this script run will need to be manually symlinked
+for plugin in "${dfs_rhc}/opencode/plugins"/*; do
+  if test -e "$plugin"; then
+    ln -sf "$plugin" "${XDG_CONFIG_HOME}/opencode/plugins/$(basename "$plugin")"
+  fi
+done
+
 # wudo in case of WSL
 test -n "${WSL_DISTRO_NAME}" && git clone https://github.com/Chronial/wsl-sudo.git "${HOME}/.wsl-sudo"
+
+## zsh
+
+## "linking" these are now done via ../nix/home/programs/shells.nix
+# # source dotfiles' env
+# echo "source '${dfs_rhc}/zsh/env'" >> "${HOME}/.zshenv"
+# # source dotfiles' zlogin
+# echo "source '${dfs_rhc}/zsh/zlogin'" >> "${HOME}/.zlogin"
+# # source dotfiles' zshrc
+# echo "source '${dfs_rhc}/zsh/zshrc'" >> "${HOME}/.zshrc"
+
+# source zinit now to avoid installing zsh plugins at initial usage
+zsh -c "source '${dfs_rhc}/zsh/my_addons/zinit'"
 
 cat "${dfs_rhc}/bootstrap/local.zshrc.template" >>"${HOME}/.local.zshrc"
 
