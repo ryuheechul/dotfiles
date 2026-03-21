@@ -144,6 +144,11 @@ fastcommandcheck direnv && _evalcache direnv hook zsh
 
 _tag direnv
 
+# use mise
+fastcommandcheck mise && _evalcache mise activate zsh
+
+_tag mise
+
 # for https://github.com/aykamko/tag
 if fastcommandcheck tag; then
   export TAG_SEARCH_PROG=ag

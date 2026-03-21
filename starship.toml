@@ -9,6 +9,14 @@ disabled = false
 disabled = false
 threshold = 3
 
+# https://starship.rs/config/#mise
+[mise]
+disabled = false
+
+# https://starship.rs/config/#direnv
+[direnv]
+disabled = false
+
 # https://starship.rs/config/#battery-display
 [[battery.display]]
 threshold = 80

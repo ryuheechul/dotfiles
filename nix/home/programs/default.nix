@@ -20,6 +20,7 @@ in
     ./home-manager.nix
     shells
     terminals
+    ./mise.nix
     ./direnv.nix
     ./navi.nix
   ];

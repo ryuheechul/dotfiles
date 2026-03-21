@@ -142,6 +142,10 @@ uname | xargs test "Darwin" = &&
   rm -rf "${viddy_config_for_darwin}" &&
   ln -sf "${viddy_config}" "${viddy_config_for_darwin}"
 
+# mise
+mkdir -p "${XDG_CONFIG_HOME}/mise"
+ln -sf "${dfs_rhc}/mise/config@home.toml" "${XDG_CONFIG_HOME}/mise/config.toml"
+
 # sesh
 ln -sf "${dfs_rhc}/sesh" "${XDG_CONFIG_HOME}/sesh"
 
