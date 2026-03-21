@@ -202,6 +202,7 @@ alias distrobox='STARTSHIP_SESSION_KEY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 distrobo
 alias gh='GLAMOUR_STYLE=$(theme-tone) gh'
 # equip auxww by default for convenience: basically show all process with full command
 alias ps='grc ps auxww'
+alias watch='viddy -d'
 # better than bare info but still not the best
 alias info='info --vi-keys'
 # ignore case on searching with keyword

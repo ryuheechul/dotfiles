@@ -133,7 +133,14 @@ uname | xargs test "Darwin" = &&
   ln -sf "${espanso_config}" "${espanso_config_for_darwin}"
 
 # viddy
-ln -sf "${dfs_rhc}/viddy.toml" "${XDG_CONFIG_HOME}/viddy.toml"
+viddy_config="${XDG_CONFIG_HOME}/viddy.toml" &&
+  ln -sf "${dfs_rhc}/viddy.toml" "${viddy_config}"
+
+# viddy for darwin
+uname | xargs test "Darwin" = &&
+  viddy_config_for_darwin="${HOME}/Library/Application Support/viddy.toml" &&
+  rm -rf "${viddy_config_for_darwin}" &&
+  ln -sf "${viddy_config}" "${viddy_config_for_darwin}"
 
 # sesh
 ln -sf "${dfs_rhc}/sesh" "${XDG_CONFIG_HOME}/sesh"

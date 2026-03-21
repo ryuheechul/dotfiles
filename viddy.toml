@@ -1,2 +1,5 @@
-[general]
-differences = true
+# https://github.com/sachaos/viddy?tab=readme-ov-file#configuration
+
+[keymap]
+scroll_top_of_page = "g g"
+toggle_timemachine = "t"
