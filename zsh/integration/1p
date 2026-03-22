@@ -6,4 +6,16 @@
 # - `../../nix/nixos/recipes/1password.nix`
 # - `../../nix/nixos/recipes/pam-sshagent.nix`
 
-test -S ~/.1password/agent.sock && export SSH_AUTH_SOCK=~/.1password/agent.sock
+# should not override SSH_AUTH_SOCK on ssh connection
+is-ssh && return
+
+first_sock="${HOME}/.1password/agent.sock";
+second_sock="${HOME}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+
+for sock in "${first_sock}" "${second_sock}"; do
+  test -S "${sock}" && {
+    export SSH_AUTH_SOCK="${sock}"
+    # stop the loop at the first export
+    return
+  }
+done

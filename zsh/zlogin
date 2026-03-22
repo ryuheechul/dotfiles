@@ -8,7 +8,7 @@ if is-zsh-interactive && test "${TERM}" != 'dumb'; then
     source "${my_dot_d}/zsh/integration/interactive-ssh"
   else # when not SSH
     # to mimic secretive experience at macOS on NixOS
-    is-nixos && source "${my_dot_d}/zsh/integration/1p"
+    is-nixos || is-darwin && source "${my_dot_d}/zsh/integration/1p"
     # to mimic secretive experience at macOS on WSL
     is-wsl && source "${my_dot_d}/zsh/integration/agent-bridge-via-1p"
 
