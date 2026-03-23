@@ -48,6 +48,9 @@ dfs_rhc="${XDG_CONFIG_HOME}/dfs-rhc"
 # - one discovered usage is that `current-base16` is being used in ../nvim/lua/plugins/theme.lua
 export PATH="${dfs_rhc}/bin/path/default:${PATH}"
 
+# carapace
+ln -sf "${dfs_rhc}/carapace" "${XDG_CONFIG_HOME}/carapace"
+
 # source my gitconfig
 cat <<EOF >>"${HOME}/.gitconfig"
 [include]

@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+
+# `notify` (../../bin/path/darwin/notify) is a wrapper like `env`.
+# and this makes it work with completions from other commands (e.g. `notify make`, `notify git`)
+
+name: notify
+description: notification wrapper
+# treat everything after `notify` as raw positional args — don't try to parse flags
+# (otherwise carapace would confuse `git`'s flags like `--version` as notify's own flags)
+parsing: disabled
+completion:
+  positional:
+    # position 1: complete the subcommand name with all known executables
+    - ["$carapace.shell.Executables"]
+  # position 2+: dynamically delegate to the carapace completer for the subcommand
+  # CarapaceBin() with no args uses c.Args (the words before the cursor, e.g. ["make"])
+  # as the command prefix — effectively running carapace's `make` (or `git`, etc.) completer
+  positionalany: ["$carapace.bridge.CarapaceBin()"]

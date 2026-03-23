@@ -80,29 +80,8 @@ source "${my_zsh_d}/modules/jump" # now j is defined here to be more than just z
 source "${my_zsh_d}/modules/show"
 
 if is-darwin; then
-  # able to hook up completions for arbitrary command arguments
-  # thanks to great hints from https://www.dolthub.com/blog/2021-11-15-zsh-completions-with-subcommands/
-  # but this does not work well with subcommands of the commands at the moment.
-  # but since `make` has no more depth it's OK for now.
-  _notify() {
-    local line state
-
-    _arguments -C "1: :->cmds" "*::arg:->args"
-
-    case "$state" in
-      cmds)
-        _exec # borrowing `_exec` completion function to list all commands
-        ;;
-      args)
-        _${line[1]} # assume the command has its own completion function like `_make` defined
-        ;;
-    esac
-  }
-
-  # since compdef on regular sourcing doesn't seem to work
-  zsh-defer compdef _notify notify
-
-  # notify is at ../../bin/path/darwin/notify
+  # notify is at `../../bin/path/darwin/notify`
+  # completions handled by `../../carapace/specs/notify.yaml`
   alias make='notify make'
 
   # shorthand for other commands other than make - eg. `nt true` and `nt false`
