@@ -379,7 +379,6 @@ alias glow='glow -p -s "$(theme-tone)"'
 alias fzfp='env fzf --height 100% --preview "preview {}"'
 alias fzfpp='fzfp|fpp'
 alias fpp='wrapped-fpp'
-alias fzf=fzfp
 
 # diff with bat
 function bdiff () { diff -u "$@" | bat;} # use `vimdiff` for editing

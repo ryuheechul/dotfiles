@@ -46,7 +46,7 @@ alias z=zxi
 function j(){
   local categories="directory tmux-window tmux-session branch worktrunk worktrunk-native ssh app"
   local chosen="$( ( _j_recent_items; echo $categories | tr ' ' '\n' ) |
-    $(__fzfcmd) --print-query --bind 'focus:transform-header:echo "Jump with {}"'
+    $(__fzfcmd) --print-query --bind 'focus:bg-transform-header:echo "Jump with {}"'
   )"
 
   local query=$(echo "$chosen" | sed -n '1p')
