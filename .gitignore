@@ -4,3 +4,4 @@ Brewfile.lock.json
 .DS_Store
 .perf.log
 *.zwc
+carapace/bridge

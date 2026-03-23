@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+
+# due to man doesn't seem to work with carapace on my system
+
+name:  man
+description: an interface to the system reference manuals
+parsing: disabled
+completion:
+  positionalany: ["$carapace.bridge.Zsh([man])"]

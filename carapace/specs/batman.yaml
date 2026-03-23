@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+
+# use man's completion
+
+name:  batman
+description: man with bat
+parsing: disabled
+completion:
+  positionalany: ["$carapace.bridge.Zsh([man])"]
