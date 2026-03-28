@@ -1,5 +1,38 @@
 -- luasnip settings
 
+-- These two functions are to handle conflicts with tabby's suggestion: https://tabby.tabbyml.com/docs/extensions/installation/vim/#known-conflicts
+
+local function any_tabby_suggestion()
+  local has_ghost_text = false
+
+  -- Check for Neovim extmarks (ghost text)
+  if vim.fn.has 'nvim' == 1 then
+    local namespace = vim.api.nvim_create_namespace 'TabbyCompletion'
+    local extmarks = vim.api.nvim_buf_get_extmarks(0, namespace, 0, -1, { details = true })
+    has_ghost_text = #extmarks > 0
+  else
+    -- For Vim, check text properties on current line
+    local current_line = vim.fn.line '.'
+    -- Correct syntax for prop_list in Lua
+    local props = vim.fn.prop_list(current_line, { ['type'] = 'TabbyCompletion' })
+    has_ghost_text = #props > 0
+  end
+  return has_ghost_text
+end
+
+local function accept_tabby_suggestion()
+  local keystrokes = vim.fn['tabby#inline_completion#service#Accept']()
+
+  -- Check if we got valid keystrokes (not "\x16" which means Ignore)
+  if keystrokes ~= '\x16' and keystrokes ~= '' then
+    -- Feed the keystrokes back to Vim's input system
+    vim.api.nvim_feedkeys(keystrokes, 'n', false)
+    return true
+  else
+    return false
+  end
+end
+
 return function()
   -- Set completeopt to have a better completion experience
   vim.o.completeopt = 'menuone,noselect'
@@ -24,7 +57,6 @@ return function()
     nvim_lsp = '[LSP]',
     nvim_lua = '[lua]',
     gh_issues = '[issues]',
-    cmp_tabnine = '[TabNine]',
     cmdline_history = '[history]',
   }
 
@@ -64,7 +96,9 @@ return function()
         select = true,
       },
       ['<Tab>'] = cmp.mapping(function(fallback)
-        if cmp.visible() then
+        if any_tabby_suggestion() then
+          accept_tabby_suggestion()
+        elseif cmp.visible() then
           cmp.select_next_item()
         elseif luasnip.expand_or_jumpable() then
           luasnip.expand_or_jump()
@@ -102,7 +136,6 @@ return function()
           end,
         },
       },
-      { name = 'cmp_tabnine', keyword_length = 4 },
       { name = 'copilot' },
     },
     formatting = {

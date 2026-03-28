@@ -18,12 +18,16 @@ return {
       'rafamadriz/friendly-snippets', -- Set of preconfigured snippets for different languages
       'lukas-reineke/cmp-under-comparator', -- nvim-cmp comparator function for completion items that start with one or more underlines
       'hrsh7th/cmp-nvim-lsp-signature-help', -- source for displaying function signatures with the current parameter emphasized
-      { -- AI helper to type quicker
-        'tzachar/cmp-tabnine',
-        build = './install.sh',
-        dependencies = 'hrsh7th/nvim-cmp',
-        cond = function()
-          return vim.env.my_nvim_tabnine ~= nil
+      { -- Tabby plugin
+        'TabbyML/vim-tabby',
+        lazy = false,
+        dependencies = {
+          'neovim/nvim-lspconfig',
+        },
+        init = function()
+          -- run the server with `tabby serve --device metal --model StarCoder-1B`
+          vim.g.tabby_agent_start_command = { 'npx', 'tabby-agent', '--lsp', '--stdio' }
+          vim.g.tabby_inline_completion_trigger = 'auto'
         end,
       },
       { -- to turn github copilot into a cmp source

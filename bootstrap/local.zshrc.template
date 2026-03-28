@@ -64,7 +64,6 @@ export MY_EMACS_FONT_SIZE=17 # edit this to fit each device
 
 # export my_nvim_ghost=1
 # export my_nvim_use_sg=1
-export my_nvim_tabnine=1
 # export my_nvim_copilot=1
 # export my_nvim_jira_url=1
 export my_nvim_enable_drop=1
