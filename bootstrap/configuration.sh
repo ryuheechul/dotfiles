@@ -187,15 +187,18 @@ fi
 mkdir -p "${HOME}/.gemini"
 ln -sf "${dfs_rhc}/gemini/settings.json" "${HOME}/.gemini/settings.json"
 ln -sf "${dfs_rhc}/gemini/AGENTS.md" "${HOME}/.gemini/AGENTS.md"
+ln -sf "${dfs_rhc}/gemini/keybindings.json" "${HOME}/.gemini/keybindings.json"
 
 # symlink to claude code
 mkdir -p "${HOME}/.claude"
 ln -sf "${dfs_rhc}/claude/settings.json" "${HOME}/.claude/settings.json"
 ln -sf "${dfs_rhc}/claude/CLAUDE.md" "${HOME}/.claude/CLAUDE.md"
+ln -sf "${dfs_rhc}/claude/keybindings.json" "${HOME}/.claude/keybindings.json"
 
 # symlink to opencode
 mkdir -p "${XDG_CONFIG_HOME}/opencode/plugins"
 ln -sf "${dfs_rhc}/opencode/opencode.jsonc" "${XDG_CONFIG_HOME}/opencode/opencode.jsonc"
+ln -sf "${dfs_rhc}/opencode/tui.jsonc" "${XDG_CONFIG_HOME}/opencode/tui.jsonc"
 ln -sf "${dfs_rhc}/opencode/AGENTS.md" "${XDG_CONFIG_HOME}/opencode/AGENTS.md"
 
 # symlink each plugin individually to allow local plugins to coexist;

@@ -1,0 +1,14 @@
+[
+  {
+    "command": "-cursor.end",
+    "key": "ctrl+e"
+  },
+  {
+    "command": "input.openExternalEditor",
+    "key": "ctrl+e"
+  },
+  {
+    "command": "-input.openExternalEditor",
+    "key": "ctrl+x"
+  }
+]

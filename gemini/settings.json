@@ -51,6 +51,6 @@
     "enableAgents": true
   },
   "model": {
-    "name": "gemini-3-pro-preview"
+    "name": "gemini-3-flash-preview"
   }
 }

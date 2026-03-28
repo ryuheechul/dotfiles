@@ -1,0 +1,6 @@
+{
+  "$schema": "https://opencode.ai/tui.json",
+  "keybinds": {
+    "editor_open": "ctrl+e" // this will supersede `input_line_end`
+  }
+}
