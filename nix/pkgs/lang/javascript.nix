@@ -4,25 +4,24 @@
 
 with pkgs;
 let
-  bundle-deno = [ deno ];
   nodejs = nodejs_24;
   bundle-nodejs-with-pkgs = (
-    # node essentials
     [
-      # Event-driven I/O framework for the V8 JavaScript engine
-      nodejs
-      # npm packages via nodePackages
+      nodejs # Event-driven I/O framework for the V8 JavaScript engine
     ]
+    # npm packages via nodePackages
     ++ (with nodePackages; [
-      # Fast, disk space efficient package manager
-      pnpm
-      # Work with npm/yarn packages locally like a boss.
-      yalc
-      # TypeScript is a language for application scale JavaScript development
-      typescript
-      # Language Server Protocol (LSP) implementation for TypeScript using tsserver
-      typescript-language-server
+      pnpm # Fast, disk space efficient package manager
+      yalc # Work with npm/yarn packages locally like a boss.
+      typescript # TypeScript is a language for application scale JavaScript development
+      typescript-language-server # Language Server Protocol (LSP) implementation for TypeScript using tsserver
     ])
   );
+  bundle-deno = [
+    deno # Secure runtime for JavaScript and TypeScript
+  ];
+  bundle-bun = [
+    bun # Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one
+  ];
 in
-bundle-nodejs-with-pkgs ++ bundle-deno
+bundle-nodejs-with-pkgs ++ bundle-deno ++ bundle-bun
