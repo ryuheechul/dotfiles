@@ -133,6 +133,7 @@ local config = function()
     { '<Space>b', group = 'Buffers' },
     { '<Space>bb', cmdify 'Telescope buffers', desc = 'search buffer' },
     { '<Space>bd', cmdify 'bd', desc = 'close buffer' },
+    { '<Space>bt', cmdify '%s/\\s\\+$//e', desc = 'trim whitespace on buffer' },
   }
 
   wk.add {

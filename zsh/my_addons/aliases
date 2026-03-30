@@ -209,6 +209,8 @@ exclude_for_pure="-- ':(exclude,top)package-lock.json' ':(exclude,top)**/package
 alias tig='TERM=xterm-256color tig'
 alias gs='pwd; ls; git status'
 alias tgs='tig status'
+alias gu='git restore --staged' # I used to use git reset for this
+alias gr='git restore' # I used to use git checkout for this
 alias gd='git diff'
 alias gdc='gd --cached'
 alias gdt='git difftool'
