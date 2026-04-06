@@ -398,8 +398,8 @@ alias googler='googler -n 3'
 alias ddgr='ddgr -n 3'
 
 # https://nixos.wiki/wiki/Storage_optimization
-alias nix-collect-garbage='nix-collect-garbage --delete-older-than 30d'
-is-nixos && alias nix-collect-garbage='nix-collect-garbage --delete-older-than 30d; sudo nix-collect-garbage --delete-older-than 30d'
+alias nix-collect-garbage='nix-collect-garbage --delete-older-than 30d && time nix-store --optimise'
+is-nixos && alias nix-collect-garbage='nix-collect-garbage --delete-older-than 30d; sudo nix-collect-garbage --delete-older-than 30d && time nix-store --optimise'
 
 # `fc-cache -rf` until this is resolved https://github.com/NixOS/nixpkgs/issues/57780
 alias switch-home='home-manager switch |& nom && evalcache-clear >/dev/null && bat cache --build; is-linux && fc-cache -rf'
