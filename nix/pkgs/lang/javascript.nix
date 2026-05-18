@@ -10,12 +10,12 @@ let
       nodejs # Event-driven I/O framework for the V8 JavaScript engine
     ]
     # npm packages via nodePackages
-    ++ (with nodePackages; [
+    ++ [
       pnpm # Fast, disk space efficient package manager
       yalc # Work with npm/yarn packages locally like a boss.
       typescript # TypeScript is a language for application scale JavaScript development
       typescript-language-server # Language Server Protocol (LSP) implementation for TypeScript using tsserver
-    ])
+    ]
   );
   bundle-deno = [
     deno # Secure runtime for JavaScript and TypeScript

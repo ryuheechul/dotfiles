@@ -20,10 +20,11 @@ with pkgs;
   libiconv
   # openssl is also mentioned at https://github.com/psycopg/psycopg2/issues/1200#issuecomment-776159466
   openssl # A cryptographic library that implements the SSL and TLS protocols
-] ++
-  # darwin specifics
-lib.optionals stdenv.isDarwin [
-  # this probably prevent many build issues to appear
-  # for any other frameworks, go to - https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/darwin/apple-sdk/frameworks.nix
-  darwin.apple_sdk.frameworks.CoreServices
 ]
+# ++
+#   # darwin specifics - no longer needed - https://nixos.org/manual/nixpkgs/stable/#sec-darwin-legacy-frameworks
+# lib.optionals stdenv.isDarwin [
+#   # this probably prevent many build issues to appear
+#   # for any other frameworks, go to - https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/darwin/apple-sdk/frameworks.nix
+#   darwin.apple_sdk.frameworks.CoreServices
+# ]

@@ -64,7 +64,6 @@ with pkgs;
 ]
 ++ ifEnv "MY_NIX_EXTRA_TERRAFORM" [
   terraform
-  nodePackages.cdktf-cli
   tf-helper
 ]
 ++ ifEnv "MY_NIX_EXTRA_NOTCURSES" [
@@ -140,8 +139,10 @@ with pkgs;
   #   - `ls /tmp/mnt/sshfs` should list files of client's pwd as it's mounted with reverse       `sshfs`
   #   - now at client side, `curl localhost:7070` should forward traffic to remote host's 8080 port (if you specified)
   #   - `exit` from connection should unmount and stop forwarding just like docker container experience!
-  xorg.xorgserver
-  xorg.xauth
+]
+++ ifEnv "MY_NIX_EXTRA_SSH_XORG" [
+  # xorg.xorgserver
+  # xorg.xauth
   # debug xauth - https://www.linuxquestions.org/questions/linux-newbie-8/warning-no-xauth-data-although-i%27m-using-%60ssh-y%60-4175525755/#post5272443
   # `xauth list`
   # `mcookie | xargs xauth add :0 .`

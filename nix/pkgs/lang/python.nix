@@ -42,7 +42,6 @@ let
     ]
   );
   via-npm = (
-    with nodePackages;
     [
       # lsp server for python
       pyright
