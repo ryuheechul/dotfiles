@@ -1,4 +1,21 @@
 {
-  "lastChangelogVersion": "0.70.2",
-  "theme": "light"
+  "lastChangelogVersion": "0.74.0",
+  "theme": "light",
+  "npmCommand": [
+    "mise",
+    "exec",
+    "node@24",
+    "--",
+    "npm"
+  ],
+  "defaultProvider": "omlx",
+  "defaultModel": "gemma-4-26B-A4B-it-MLX-4bit",
+  "packages": [
+    "npm:context-mode",
+    "npm:pi-searxng",
+    "npm:@gotgenes/pi-permission-system",
+    "npm:pi-chucknorris"
+  ],
+  "hideThinkingBlock": false,
+  "defaultThinkingLevel": "medium"
 }

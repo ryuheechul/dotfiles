@@ -10,6 +10,39 @@
           "name": "Gemma 4 26b a4b via LM Studio"
         }
       ]
+    },
+    "omlx": {
+      "baseUrl": "http://127.0.0.1:8000/v1",
+      "api": "openai-completions",
+      "apiKey": "OMLX_API_KEY",
+      "authHeader": true,
+      "models": [
+        {
+          "id": "gemma-4-26B-A4B-it-MLX-4bit",
+          "name": "gemma-4-26B-A4B-it-MLX-4bit",
+          "reasoning": true,
+          "thinkingLevelMap": {
+            "off": null,
+            "minimal": "MINIMAL",
+            "low": "MINIMAL",
+            "medium": "HIGH",
+            "high": "HIGH",
+            "xhigh": "HIGH"
+          },
+          "input": [
+            "text",
+            "image"
+          ],
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          },
+          "contextWindow": 32768,
+          "maxTokens": 32768
+        }
+      ]
     }
   }
 }

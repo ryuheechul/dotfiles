@@ -211,8 +211,10 @@ done
 
 # symlink to pi coding agent
 mkdir -p "${HOME}/.pi/agent"
+ln -sf "${dfs_rhc}/pi/agent/keybindings.json" "${HOME}/.pi/agent/keybindings.json"
 ln -sf "${dfs_rhc}/pi/agent/settings.json" "${HOME}/.pi/agent/settings.json"
 ln -sf "${dfs_rhc}/pi/agent/models.json" "${HOME}/.pi/agent/models.json"
+ln -sf "${dfs_rhc}/pi/agent/extensions" "${HOME}/.pi/agent/extensions"
 
 # wudo in case of WSL
 test -n "${WSL_DISTRO_NAME}" && git clone https://github.com/Chronial/wsl-sudo.git "${HOME}/.wsl-sudo"
