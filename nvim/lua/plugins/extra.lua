@@ -511,7 +511,7 @@ return {
     dependencies = { -- optional packages
       'ray-x/guihua.lua',
       'neovim/nvim-lspconfig',
-      'romus204/tree-sitter-manager.nvim',
+      'arborist-ts/arborist.nvim',
     },
     event = 'CmdlineEnter',
     ft = { 'go', 'gomod' },

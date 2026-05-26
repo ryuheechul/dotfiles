@@ -13,18 +13,16 @@ return {
   --   end,
   -- },
   -- Highlight, edit, and navigate code using a fast incremental parsing library
-  { -- Lightweight Treesitter parser manager for Neovim 0.12+
-    -- use `:TSManager` to manage (install, update, uninstall) parsers (replaces :TSInstall, :TSUpdate)
-    'romus204/tree-sitter-manager.nvim',
+  { -- "Fire-and-forget" Treesitter parser manager for Neovim 0.12+
+    -- Bundles queries for ~330 languages and installs parsers on-demand (WASM-first)
+    'arborist-ts/arborist.nvim',
     config = require 'plugins.config.treesitter',
-    -- if `ensure_installed` are not kicked off, chances are the whole chunk is not being loaded for some reason
-    -- try clean install (by commenting out this whole chunk for lazy.nvim to detect and delete and uncomment)
   },
   { -- Highlight arguments' definitions and usages, using Treesitter
     'm-demare/hlargs.nvim',
     event = 'VeryLazy',
     dependencies = {
-      'romus204/tree-sitter-manager.nvim',
+      'arborist-ts/arborist.nvim',
     },
     config = true,
   },
@@ -41,7 +39,7 @@ return {
   { -- Good enough syntax highlight for MDX in Neovim using Treesitter
     'davidmh/mdx.nvim',
     config = function() end,
-    dependencies = { 'romus204/tree-sitter-manager.nvim' },
+    dependencies = { 'arborist-ts/arborist.nvim' },
   },
   -- nvim-treesitter/playground has been replaced by Neovim itself (deprecation notice and the guide in the repo)
   -- use these in place of :TSPlaygroundToggle

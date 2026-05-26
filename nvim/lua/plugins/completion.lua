@@ -59,7 +59,7 @@ return {
     -- follow only stable versions
     version = '*',
     dependencies = {
-      'romus204/tree-sitter-manager.nvim',
+      'arborist-ts/arborist.nvim',
       'L3MON4D3/LuaSnip',
     },
     init = function()

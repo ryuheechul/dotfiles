@@ -16,7 +16,7 @@ return function()
     vim.treesitter.language.register(fallback_pair[1], fallback_pair[2])
   end
 
-  require('tree-sitter-manager').setup {
+  require('arborist').setup {
     -- List of parsers to install automatically on startup
     ensure_installed = {
       'astro',
@@ -54,7 +54,6 @@ return function()
       'jsdoc',
       'json',
       'json5',
-      'jsonc',
       'julia',
       'kdl',
       'kotlin',
@@ -97,14 +96,11 @@ return function()
       'yaml',
     },
 
-    -- Automatically install missing parsers when opening a new filetype
-    auto_install = true,
+    -- Attempts to use WASM parsers before native compilation
+    prefer_wasm = true,
 
-    -- Enable Tree-sitter highlighting (enabled by default)
-    highlight = true,
-
-    -- UI configuration for the :TSManager window
-    border = 'rounded',
+    -- Automatically install popular language parsers at startup
+    install_popular = true,
   }
 
   -- Use native Neovim indentation

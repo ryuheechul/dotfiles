@@ -91,7 +91,7 @@ return {
     dependencies = {
       'nvim-lua/plenary.nvim',
       'antoinemadec/FixCursorHold.nvim',
-      'romus204/tree-sitter-manager.nvim',
+      'arborist-ts/arborist.nvim',
       'nvim-neotest/neotest-python',
     },
     config = function()
