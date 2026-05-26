@@ -176,7 +176,7 @@ return {
       -- let the code be folded by default
       -- useful with 'anuvyklack/pretty-fold.nvim'
       vim.o.foldmethod = 'expr'
-      vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
+      vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
       vim.o.foldminlines = 5
       vim.o.foldlevelstart = 2
     end,
@@ -511,7 +511,7 @@ return {
     dependencies = { -- optional packages
       'ray-x/guihua.lua',
       'neovim/nvim-lspconfig',
-      'nvim-treesitter/nvim-treesitter',
+      'romus204/tree-sitter-manager.nvim',
     },
     event = 'CmdlineEnter',
     ft = { 'go', 'gomod' },

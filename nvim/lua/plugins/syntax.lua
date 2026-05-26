@@ -13,14 +13,9 @@ return {
   --   end,
   -- },
   -- Highlight, edit, and navigate code using a fast incremental parsing library
-  { -- Nvim Treesitter configurations and abstraction layer
-    'nvim-treesitter/nvim-treesitter',
-    dependencies = {
-      'RRethy/nvim-treesitter-textsubjects',
-      'nvim-treesitter/nvim-treesitter-textobjects', -- Additional textobjects for treesitter
-    },
-    -- Parsers must be installed manually via :TSInstall
-    build = ':TSUpdate',
+  { -- Lightweight Treesitter parser manager for Neovim 0.12+
+    -- use `:TSManager` to manage (install, update, uninstall) parsers (replaces :TSInstall, :TSUpdate)
+    'romus204/tree-sitter-manager.nvim',
     config = require 'plugins.config.treesitter',
     -- if `ensure_installed` are not kicked off, chances are the whole chunk is not being loaded for some reason
     -- try clean install (by commenting out this whole chunk for lazy.nvim to detect and delete and uncomment)
@@ -29,7 +24,7 @@ return {
     'm-demare/hlargs.nvim',
     event = 'VeryLazy',
     dependencies = {
-      'nvim-treesitter/nvim-treesitter',
+      'romus204/tree-sitter-manager.nvim',
     },
     config = true,
   },
@@ -43,24 +38,10 @@ return {
   -- },
   -- turn off due to occasional lags
   -- 'haringsrob/nvim_context_vt', -- show context via virtual text
-  { -- Show code context
-    'nvim-treesitter/nvim-treesitter-context',
-    event = 'VimEnter',
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter',
-    },
-    opts = {
-      -- improves performance a lot (on slower state of the machine)
-      -- by removing the needs on calculating on cursor gliding through
-      -- different lines when top line is the same
-      mode = 'topline',
-      min_window_height = 10,
-    },
-  },
   { -- Good enough syntax highlight for MDX in Neovim using Treesitter
     'davidmh/mdx.nvim',
     config = function() end,
-    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    dependencies = { 'romus204/tree-sitter-manager.nvim' },
   },
   -- nvim-treesitter/playground has been replaced by Neovim itself (deprecation notice and the guide in the repo)
   -- use these in place of :TSPlaygroundToggle

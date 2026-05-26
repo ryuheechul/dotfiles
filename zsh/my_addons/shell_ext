@@ -37,6 +37,10 @@ function _evalable_brew_prefix {
   _evalable brew --prefix
 }
 
+function _evalable_bun_global_path {
+  _evalable bun pm bin -g
+}
+
 function _evalable_yarn_global_path {
   _evalable yarn global bin
 }
@@ -116,6 +120,14 @@ if fastcommandcheck go; then
 fi
 
 _tag go
+
+# bun
+if fastcommandcheck bun; then
+  # because yarn global bin is slow
+  add-to-path "$(_evalcache _evalable_bun_global_path)"
+fi
+
+_tag bun
 
 # yarn
 if fastcommandcheck yarn; then

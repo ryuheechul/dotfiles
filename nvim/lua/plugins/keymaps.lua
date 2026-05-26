@@ -105,7 +105,7 @@ local config = function()
     { '<leader>n', group = 'Neotest' },
     { '<leader>nr', cmdify 'Neotest run', desc = 'Neotest run' },
     { '<leader>t', group = 'Treesitter' },
-    { '<leader>tt', cmdify 'TSPlaygroundToggle', desc = 'TSPlaygroundToggle' },
+    { '<leader>tt', cmdify 'InspectTree', desc = 'InspectTree (TSPlayground)' },
     { '<leader>s', cmdify 'suspend', desc = ':suspend - go to background - `fg` to comeback' },
   }
 

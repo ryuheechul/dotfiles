@@ -245,6 +245,7 @@ if test -n "${TMUX_PANE}"; then
   alias mwl='tmux ls'
   # "mux word jump": jump to letter (same as `tmux prefix + j` from `../../tmux.conf`)
   alias mwj="${TMUX_PLUGIN_MANAGER_PATH}/tmux-easymotion/mode-s.sh; _nclr 2"
+  alias mwo="${TMUX_PLUGIN_MANAGER_PATH}/opensessions/integrations/tmux-plugin/scripts/toggle.sh; _nclr 2"
 fi
 if test -n "${ZELLIJ_SESSION_NAME}"; then
   alias mwz='zellij action toggle-fullscreen; _nclr 2'
@@ -256,8 +257,14 @@ if test -n "${ZELLIJ_SESSION_NAME}"; then
 fi
 
 # this overwrites existing gap which is for git apply
-alias gap='git add -p'
+alias gap='git add --patch'
 alias gap.='gap .'
+# interactively discard hunks
+alias grp='git checkout --patch'
+alias grp.='grp .'
+# interactively unstage hunks
+alias gup='git reset --patch'
+alias gup.='gup .'
 
 # git fix remote to ssh from https
 alias gfssh="ambr --no-parent-ignore 'https://' 'ssh://git@' .git/config"

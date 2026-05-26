@@ -11,7 +11,7 @@ return {
     -- <space>s - split (slow just because of <space>s is a prefix for other keys)
     -- and just use <space>ts - toggle
     dependencies = {
-      'nvim-treesitter/nvim-treesitter',
+      'romus204/tree-sitter-manager.nvim',
     },
     event = 'VeryLazy',
     opts = { use_default_keymaps = false },
@@ -167,7 +167,7 @@ return {
     event = 'VeryLazy',
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'nvim-treesitter/nvim-treesitter',
+      'romus204/tree-sitter-manager.nvim',
     },
     opts = {},
   },
