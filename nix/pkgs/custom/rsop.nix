@@ -8,17 +8,17 @@
 with pkgs;
 rustPlatform.buildRustPackage rec {
   pname = "rsop";
-  version = "1.4.2";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = pname;
     rev = "${version}";
 
-    sha256 = "sha256-DbAtCExLcH6CxVmfiY0komGDvtLbDJsGCVfKeoSrOfo=";
+    sha256 = "sha256-EIZtjjxLx7kJeyLhYWU1K+9CY7G7Ab5JCKgoWQBXDg8=";
   };
 
-  cargoHash = "sha256-WmgW5E0LyE7G0Jb3f1vJqMFcjgQSfsPfZdMTugdv+Rk=";
+  cargoHash = "sha256-vmrBpxmTlStEevLJ4L5h9Tnmaey1yE/Yr3DahZQ1O3o=";
 
   postInstall = ''
     ln -rs "$out"/bin/rs{op,o}

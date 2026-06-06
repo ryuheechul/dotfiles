@@ -13,7 +13,6 @@ let
       # essentials
       setuptools
       pip
-      pipx
 
       ## comment yq out to favor yq-go
       # yq # jq for yaml

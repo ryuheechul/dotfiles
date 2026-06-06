@@ -9,6 +9,8 @@
   virtualisation.podman.enable = true;
 
   environment.systemPackages = with pkgs; [
+    # need this one for podman machine - not any more after libexec takes care of that
+    # virtiofsd # vhost-user virtio-fs device backend written in Rust
     podman-tui # Podman Terminal UI - requires running `systemctl --user start podman.socket` (once) to work
     podman-compose # An implementation of docker-compose with podman backend
     docker-compose # Docker CLI plugin to define and run multi-container applications with Docker

@@ -41,7 +41,7 @@ with pkgs;
   hired # A modern take on 'ed'
 ]
 ++ ifEnv "MY_NIX_EXTRA_AWS" [
-  # also consider installing `pipx install aws-shell`
+  # also consider installing `uv tool install aws-shell`
   awscli2 # aws cli
   ssm-session-manager-plugin # AWS SSM Plugin
   amazon-ecs-cli # aws ecs cli

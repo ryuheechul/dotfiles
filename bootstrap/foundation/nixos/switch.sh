@@ -21,3 +21,5 @@ nix_d="../../../nix"
 # home-manager init and switch ("idempotent")
 "${nix_d}/bin/init-hm.sh"
 "${nix_d}/bin/hm.sh" switch
+
+echo 'run nixos-diff to see diffs'

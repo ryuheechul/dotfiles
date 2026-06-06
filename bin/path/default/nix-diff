@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# mostly duplicate of ../nixos/nixos-diff
+
+set -e
+
+print-links() {
+  ls -vd ~/.local/state/nix/profiles/home-manager-*-link
+}
+
+nix-diff-latest() {
+  local latest_gen
+  local before_gen
+  local prev_gen
+  local curr_gen
+
+  latest_gen="$(print-links | tail -n 1)"
+  before_gen="$(print-links | tail -n 2 | head -n 1)"
+
+  prev_gen="$(print-links | gum filter \
+    --header="[latest gen: ${latest_gen}]" \
+    --value="${before_gen}" \
+    --prompt "Select previous generation: ")"
+
+  curr_gen="$(print-links | gum filter \
+    --header="[prev gen: ${prev_gen}]" \
+    --value="${latest_gen}" \
+    --prompt "Select next gen: ")"
+
+  # Run nvd diff using nix-shell so you don't need nvd permanently installed
+  echo "Comparing $prev_gen -> $curr_gen"
+
+  set -x
+  nix-shell -p nvd --run "nvd diff $prev_gen $curr_gen"
+  set +x
+}
+
+nix-diff-latest

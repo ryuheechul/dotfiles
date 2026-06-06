@@ -141,7 +141,6 @@ with pkgs;
   # search
   [
     ripgrep # modern grep
-    silver-searcher # A code-searching tool similar to ack, but faster
     amber # A code search-and-replace tool - use it with `ambs` and `ambr`
     codespelunker # A command code search tool - use with `cs [term]` which works kinda like `rg [term] | fzf`
     # fasd # Command-line productivity booster, offers quick access to files and directories

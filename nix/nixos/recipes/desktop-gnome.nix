@@ -24,7 +24,8 @@ in
     # - debug with `sudo gsettings get org.gnome.mutter experimental-features`
     extraGSettingsOverrides = ''
       [org.gnome.mutter]
-      experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate']
+      # comment out since no longer necessary for gnome 50
+      # experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate']
     '';
   };
 

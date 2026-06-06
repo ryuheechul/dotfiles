@@ -10,20 +10,13 @@ with pkgs;
 rustPlatform.buildRustPackage rec {
   # https://github.com/jmmv/ssh-agent-switcher/
   pname = "ssh-agent-switcher";
-  version = "ssh-agent-switcher-1.0.0";
+  version = "ssh-agent-switcher-1.0.2";
   src = fetchFromGitHub {
     owner = "jmmv";
     repo = pname;
     rev = version;
 
-    hash = "sha256:02w90cwlip0545p0pf2pnxvbwlm7r599lbb2d9727vrkkn1agia2";
+    hash = "sha256-XAIupGVU8D4tmZXZ3/5lKiHbvBlxgNQXL0T9Htp7Zmo=";
   };
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
-
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-dbeUye20E2nQcJPyUCpZT68T95dopgoIlBm8rOoaZ6Y=";
 }

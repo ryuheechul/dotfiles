@@ -409,7 +409,7 @@ alias nix-collect-garbage='nix-collect-garbage --delete-older-than 30d && time n
 is-nixos && alias nix-collect-garbage='nix-collect-garbage --delete-older-than 30d; sudo nix-collect-garbage --delete-older-than 30d && time nix-store --optimise'
 
 # `fc-cache -rf` until this is resolved https://github.com/NixOS/nixpkgs/issues/57780
-alias switch-home='home-manager switch |& nom && evalcache-clear >/dev/null && bat cache --build; is-linux && fc-cache -rf'
+alias switch-home='{ home-manager switch && evalcache-clear >/dev/null && bat cache --build; is-linux && fc-cache -rf } |& nom'
 
 # unifying interface of applying updated nix expressions for different systems
 alias switch-nix='switch-home' # this is default for a simple system that only uses home-manager
