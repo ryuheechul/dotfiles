@@ -23,6 +23,7 @@ let
   backlog = import ../custom/backlog.nix { pkgs = pkgs; };
   # no longer necessary as there is official package now
   # ghostty = import ../custom/ghostty.nix { pkgs = pkgs; };
+  ghostty = with pkgs; if stdenv.isDarwin then ghostty-bin else ghostty;
 in
 with pkgs;
 [
@@ -139,6 +140,7 @@ with pkgs;
   #   - `ls /tmp/mnt/sshfs` should list files of client's pwd as it's mounted with reverse       `sshfs`
   #   - now at client side, `curl localhost:7070` should forward traffic to remote host's 8080 port (if you specified)
   #   - `exit` from connection should unmount and stop forwarding just like docker container experience!
+  boring # SSH tunnel manager
 ]
 ++ ifEnv "MY_NIX_EXTRA_SSH_XORG" [
   # xorg.xorgserver

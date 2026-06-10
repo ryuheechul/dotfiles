@@ -63,6 +63,7 @@ sleep 3
 
 _install_cask stats
 _install_cask alacritty
+_install_cask betterdisplay
 _install_cask warp
 _install_cask vanilla
 _is_admin && _install_cask 1password # since it won't work if it's installed a location other than /Applications
