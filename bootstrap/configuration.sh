@@ -109,6 +109,8 @@ uname | xargs test "Darwin" = &&
 # mise
 mkdir -p "${XDG_CONFIG_HOME}/mise"
 ln -sf "${dfs_rhc}/mise/config@home.toml" "${XDG_CONFIG_HOME}/mise/config.toml"
+# install all global tools declared in mise/config@home.toml
+mise install || true
 
 # ghostty terminal
 rm -rf "${XDG_CONFIG_HOME}/ghostty" &&

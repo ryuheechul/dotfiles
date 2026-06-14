@@ -1,2 +1,5 @@
 [settings]
 experimental = true
+
+[tools]
+"go:github.com/liamg/grace" = { version = "latest", os = ["linux"] }

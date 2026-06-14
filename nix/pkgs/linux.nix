@@ -4,7 +4,6 @@ let
   checkEnv = import ../utils/checkEnv.nix;
   ifEnv = envName: pkgs.lib.optionals (checkEnv envName);
   ifX86 = pkgs.lib.optionals pkgs.stdenv.isx86_64;
-  grace = import ./custom/grace.nix { pkgs = pkgs; };
   isLinux = with pkgs; lib.optionals stdenv.isLinux;
   for-linux =
     with pkgs;
@@ -41,7 +40,6 @@ let
 
       ++ ifX86 [
         usbimager # A very minimal GUI app that can write compressed disk images to USB drives
-        grace # 🪛 It's strace, with colours.
       ]
 
       ++ ifEnv "MY_NIX_EXTRA_LINUX_HOTSPOT" [

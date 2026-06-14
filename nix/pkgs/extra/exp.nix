@@ -11,7 +11,6 @@ let
   checkEnv = import ../utils/checkEnv.nix;
   ifEnv = envName: pkgs.lib.optionals (checkEnv envName);
   ifX86 = pkgs.lib.optionals pkgs.stdenv.isx86_64;
-  grace = import ./custom/grace.nix { pkgs = pkgs; };
   isLinux = with pkgs; lib.optionals stdenv.isLinux;
   for-linux = with pkgs; ([
     kmon # Linux Kernel Manager and Activity Monitor
