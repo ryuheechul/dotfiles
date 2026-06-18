@@ -175,7 +175,7 @@ function j_wts() {
     wt switch "${_branch}"
   else
     gum confirm "[worktrunk] '${_branch}' doesn't exist, create?" &&
-      wt switch --create "${_branch}"
+      wt switch -b HEAD --create "${_branch}"
   fi
 }
 
