@@ -1,0 +1,4 @@
+skip-shell-integration-prompt = true
+
+[remove]
+delete-branch = false # leave the branch alone and just delete the worktree

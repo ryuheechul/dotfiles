@@ -57,6 +57,9 @@ cat <<EOF >>"${HOME}/.gitconfig"
   path = "${dfs_rhc}/gitconfig"
 EOF
 
+# worktrunk
+ln -sf "${dfs_rhc}/worktrunk" "${XDG_CONFIG_HOME}/worktrunk"
+
 # tig
 ln -sf "${dfs_rhc}/vim.tigrc" "${HOME}/.tigrc"
 
