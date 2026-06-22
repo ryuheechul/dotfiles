@@ -114,6 +114,7 @@ with pkgs;
     sshs # Terminal user interface for SSH
     lazyssh # Terminal-based SSH manager
     snitch # friendlier ss / netstat for humans
+    witr # Command-line tool to find out why processes are running
   ]
 ++
   # viewer

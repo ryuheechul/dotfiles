@@ -2,4 +2,7 @@
 experimental = true
 
 [tools]
+bun = "latest"
 "go:github.com/liamg/grace" = { version = "latest", os = ["linux"] }
+"npm:@earendil-works/pi-coding-agent" = "latest"
+"npm:hunkdiff" = "latest"
