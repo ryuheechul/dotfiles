@@ -63,6 +63,9 @@ ln -sf "${dfs_rhc}/worktrunk" "${XDG_CONFIG_HOME}/worktrunk"
 # tig
 ln -sf "${dfs_rhc}/vim.tigrc" "${HOME}/.tigrc"
 
+# hunk
+ln -sf "${dfs_rhc}/hunk" "${XDG_CONFIG_HOME}/hunk"
+
 # symlink gh config
 mkdir -p "${XDG_CONFIG_HOME}/gh"
 ln -sf "${dfs_rhc}/gh/config.yml" "${XDG_CONFIG_HOME}/gh/config.yml"

@@ -1,0 +1,4 @@
+mode = "auto"        # auto, split, stack
+watch = true
+wrap_lines = true
+agent_notes = true
