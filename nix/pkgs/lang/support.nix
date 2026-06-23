@@ -4,7 +4,7 @@ let
   checkEnv = import ../../utils/checkEnv.nix;
   ifEnv = envName: pkgs.lib.optionals (checkEnv envName);
   gitwatch = import ../custom/gitwatch.nix { pkgs = pkgs; };
-  worktrunk = import ../custom/worktrunk.nix { pkgs = pkgs; };
+  # worktrunk = import ../custom/worktrunk.nix { pkgs = pkgs; };
   # # pull devenv v1 from nixos source from niv-shim as v2 is currently problematic
   # devenv = import ../custom/devenv-1.nix { pkgs = pkgs; };
 in
@@ -17,7 +17,8 @@ with pkgs;
   git-lfs # git extention for large file storage
   pre-commit # for managing multi-language pre-commit hooks
   gitwatch # Watch a file or folder and automatically commit changes to a git repo easily.
-  worktrunk # git worktree management, designed for running AI agents in parallel
+  # worktrunk is now installed via ../../../mise/config@home.toml
+  # worktrunk # git worktree management, designed for running AI agents in parallel
   # these below are technically not directly related to git - so maybe one day I will make its own category
   src-cli # Sourcegraph CLI
   # comby # Tool for searching and changing code structure

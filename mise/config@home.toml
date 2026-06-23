@@ -1,8 +1,10 @@
 [settings]
 experimental = true
 
+# install tools with `mise use --global [toolname]`. e.g. `mise use --global worktrunk`
 [tools]
 bun = "latest"
 "go:github.com/liamg/grace" = { version = "latest", os = ["linux"] }
 "npm:@earendil-works/pi-coding-agent" = "latest"
 "npm:hunkdiff" = "latest"
+worktrunk = "latest"
