@@ -1,11 +1,12 @@
 [settings]
 experimental = true
+disable_backends = ["asdf"]
 
 # install tools with `mise use --global [toolname]`. e.g. `mise use --global worktrunk`
 [tools]
 bun = "latest"
 claude-code = "latest"
-"go:github.com/liamg/grace" = { version = "latest", os = ["linux"] }
+"github:liamg/grace" = { version = "latest", os = ["linux/x86_64"] }
 "npm:@earendil-works/pi-coding-agent" = "latest"
 "npm:hunkdiff" = "latest"
 worktrunk = "latest"
