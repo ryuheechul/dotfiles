@@ -41,9 +41,6 @@ function _evalable_bun_global_path {
   _evalable bun pm bin -g
 }
 
-function _evalable_yarn_global_path {
-  _evalable yarn global bin
-}
 
 function _evalable_vivid_generate_solarized_light {
   _evalable vivid generate solarized-light
@@ -123,32 +120,16 @@ _tag go
 
 # bun
 if fastcommandcheck bun; then
-  # because yarn global bin is slow
   add-to-path "$(_evalcache _evalable_bun_global_path)"
 fi
 
 _tag bun
 
-# yarn
-if fastcommandcheck yarn; then
-  # because yarn global bin is slow
-  add-to-path "$(_evalcache _evalable_yarn_global_path)"
-fi
-
-_tag yarn
-
-# # asdf
-# ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
-# # https://github.com/asdf-vm/asdf - version manager
-# [ -f "${ASDF_DIR}/asdf.sh" ] && source "${ASDF_DIR}/asdf.sh"
-#
-# _tag asdf
 
 # to make sure my custom paths supersedes default ones like /bin /usr/bin /usr/local/bin again
 float_nix_path=1 source "${my_zsh_d}/path/set"
 
 _tag my_paths_supersedes
-
 
 # use direnv
 fastcommandcheck direnv && _evalcache direnv hook zsh

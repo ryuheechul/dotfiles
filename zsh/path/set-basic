@@ -34,9 +34,6 @@ test -z "${path_helper_manually_called}" &&
 # assuming path for nix is already set from ../env
 test -n "${float_nix_path}" && add-to-path $(printpath | grep 'nix-profile')
 
-# this should be just after nix and before others
-source "${my_dot_d}/zsh/path/tea"
-
 # discover user specific binaries and scripts
 add-to-path "${HOME}/.local/bin"
 
