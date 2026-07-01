@@ -1,9 +1,10 @@
 # [bootstrap.macos.*] - macOS user defaults, migrated from
-# nix/darwin/meta-configuration.nix's system.defaults.* (an optional
-# nix-darwin path, not always active - see bootstrap/foundation/darwin/extra.sh
-# for the "you may want to adopt nix-darwin" note) and the one `defaults
-# write` line in extra.sh. This applies on every `mise bootstrap` run
-# instead of requiring nix-darwin activation.
+# ../../../nix/darwin/meta-configuration.nix's system.defaults.* (an optional
+# nix-darwin path, not always active - see
+# ../../../bootstrap/foundation/darwin/extra.sh for the "you may want to
+# adopt nix-darwin" note) and the one `defaults write` line in extra.sh.
+# This applies on every `mise bootstrap` run instead of requiring
+# nix-darwin activation.
 #
 # Everything else in those two files is outside what [bootstrap.macos] can
 # do and stays where it is: mas/brew/cask installs, networking.dns,

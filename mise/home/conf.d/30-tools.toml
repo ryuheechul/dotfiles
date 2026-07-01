@@ -1,4 +1,9 @@
 # install tools with `mise use --global [toolname]`. e.g. `mise use --global worktrunk`
+#
+# before adding one here: nix first, mise only when nix's channel lag
+# actually bites (a tool that releases often enough that staying current
+# matters more than nix's whole-channel atomicity) - see "Priority when
+# adding a new tool" in ../../README.md
 [tools]
 bun = "latest"
 claude-code = "latest"

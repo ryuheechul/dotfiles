@@ -10,8 +10,8 @@
 # state. Keep it that way: guard any one-off/imperative step (existence
 # checks, etc.) instead of adding unconditional appends or unconditional
 # destructive recreates. `mise bootstrap` already handles this for anything
-# declared in mise/conf.d/*.toml - only what can't live there (see comments
-# below) needs its own guard here.
+# declared in ../mise/home/conf.d/*.toml - only what can't live there (see
+# comments below) needs its own guard here.
 
 set -e
 set -x
@@ -58,17 +58,18 @@ dfs_rhc="${XDG_CONFIG_HOME}/dfs-rhc"
 # - one discovered usage is that `current-base16` is being used in ../nvim/lua/plugins/theme.lua
 export PATH="${dfs_rhc}/bin/path/default:${PATH}"
 
-# mise - deploy config first so `mise bootstrap` below can see it
-# -n on both: same self-referential-symlink risk as dfs-rhc above once these
-# already point at their target directory/file from a prior run
-mkdir -p "${XDG_CONFIG_HOME}/mise"
-ln -sfn "${dfs_rhc}/mise/config@home.toml" "${XDG_CONFIG_HOME}/mise/config.toml"
-# mise's conf.d auto-load only looks next to the config file itself, not
-# through the symlink to its target's directory - so this needs its own link
-ln -sfn "${dfs_rhc}/mise/conf.d" "${XDG_CONFIG_HOME}/mise/conf.d"
+# mise - deploy config first so `mise bootstrap` below can see it; see
+# ../mise/README.md for why ../mise/home/ is a single unit symlinked as a
+# whole rather than symlinking config.toml and conf.d/ separately.
+# clear a real (non-symlink) ~/.config/mise first - -n on ln only guards
+# against re-pointing an existing symlink, not a real leftover directory
+if test -e "${XDG_CONFIG_HOME}/mise" && test ! -L "${XDG_CONFIG_HOME}/mise"; then
+  rm -rf "${XDG_CONFIG_HOME}/mise"
+fi
+ln -sfn "${dfs_rhc}/mise/home" "${XDG_CONFIG_HOME}/mise"
 
 # clones [bootstrap.repos], applies [dotfiles], installs [tools], then runs
-# the `bootstrap` task - see mise/conf.d/*.toml for what this covers
+# the `bootstrap` task - see ../mise/home/conf.d/*.toml for what this covers
 mise bootstrap --yes || true
 
 ## zsh

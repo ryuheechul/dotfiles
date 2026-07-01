@@ -17,7 +17,7 @@ with pkgs;
   git-lfs # git extention for large file storage
   pre-commit # for managing multi-language pre-commit hooks
   gitwatch # Watch a file or folder and automatically commit changes to a git repo easily.
-  # worktrunk is now installed via ../../../mise/config@home.toml
+  # worktrunk is now installed via ../../../mise/home/conf.d/30-tools.toml
   # worktrunk # git worktree management, designed for running AI agents in parallel
   # these below are technically not directly related to git - so maybe one day I will make its own category
   src-cli # Sourcegraph CLI

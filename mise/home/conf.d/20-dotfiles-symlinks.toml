@@ -1,8 +1,8 @@
 # [dotfiles] whole-file/whole-dir symlink (+ symlink-each) entries.
 # All sources are anchored at the dfs-rhc self-discovery symlink (created by
-# bootstrap/configuration.sh before `mise bootstrap` runs), so this file
-# never bakes in a literal repo-clone path - matches this repo's existing
-# convention of resolving everything off that symlink.
+# ../../../bootstrap/configuration.sh before `mise bootstrap` runs), so this
+# file never bakes in a literal repo-clone path - matches this repo's
+# existing convention of resolving everything off that symlink.
 #
 # NOTE: both sides of every entry below hardcode ~/.config/dfs-rhc/... instead
 # of $my_dot_d, the env var this repo uses everywhere else to refer to this

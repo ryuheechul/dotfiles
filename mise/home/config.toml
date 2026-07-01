@@ -1,0 +1,15 @@
+# see ./README.md for what this is, useful commands, and how this global
+# config merges with a project's own mise.toml
+#
+# this file can be named config.toml (rather than needing a distinct name
+# like the old config@home.toml) because it's nested under mise/home/ - see
+# ../README.md for why that nesting exists and what it avoids
+
+# fail loudly instead of silently misbehaving on a mise too old for [dotfiles]/[bootstrap.*]
+min_version = { hard = "2026.6.14" }
+
+[settings]
+experimental = true
+disable_backends = ["asdf"]
+
+# the rest of the config lives in ./conf.d/*.toml, loaded in alphabetical order

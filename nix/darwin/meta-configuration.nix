@@ -26,8 +26,8 @@ in
   };
 
   # NSGlobalDomain, dock, spaces, and trackpad user defaults moved to
-  # mise/conf.d/50-macos-defaults.toml - `mise bootstrap` applies them on
-  # every run instead of requiring nix-darwin activation
+  # ../../mise/home/conf.d/50-macos-defaults.toml - `mise bootstrap` applies
+  # them on every run instead of requiring nix-darwin activation
 
   # `defaults read com.apple.universalaccess`
   system.defaults.universalaccess = {
