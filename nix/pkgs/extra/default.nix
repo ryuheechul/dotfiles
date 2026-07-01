@@ -18,7 +18,6 @@ let
   wsl = import ./wsl.nix { pkgs = pkgs; };
   rusty-fam = import ./rusty-fam.nix { pkgs = pkgs; };
   rsop = import ../custom/rsop.nix { pkgs = pkgs; };
-  gemini = import ../custom/gemini.nix { pkgs = pkgs; };
   context-mode = import ../custom/context-mode.nix { pkgs = pkgs; };
   backlog = import ../custom/backlog.nix { pkgs = pkgs; };
   # no longer necessary as there is official package now
@@ -86,7 +85,6 @@ with pkgs;
   ]
 )
 ++ ifEnv "MY_NIX_EXTRA_AI_CLIENT" [
-  gemini # AI agent that brings the power of Gemini directly into your terminal
   # aider-chat # AI pair programming in your terminal
   goose-cli # Open-source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM
 

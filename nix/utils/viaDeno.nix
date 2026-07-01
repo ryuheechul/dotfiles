@@ -14,5 +14,3 @@
 pkgs.writeShellScriptBin pkg-name ''
   ${pkgs.deno}/bin/deno run --allow-all ${deno-pkg-name} "$@"
 ''
-
-# see the usage at ../pkgs/custom/gemini.nix
