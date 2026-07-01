@@ -38,7 +38,7 @@ fi
 # home-manager init and switch ("idempotent")
 ./nix/bin/nix-shell.sh -p coreutils --run ./nix/bin/init-hm.sh
 
-if [ -x "$(command -v nix)" ]; then
+if command -v nix >/dev/null 2>&1; then
   SKIP_BREW_BUNDLE=1
   ./nix/bin/hm.sh switch
 fi

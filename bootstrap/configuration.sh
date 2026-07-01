@@ -25,14 +25,14 @@ set +e
 source ./nix/bin/source/nix.sh
 set -e
 
-if [ -z "$(command -v nix)" ]; then
+if ! command -v nix >/dev/null 2>&1; then
   echo 'Warning: `nix` is still not found but trying to run the rest of this script anyway'
 fi
 
 # get repo path
-if [ -x "$(command -v greadlink)" ]; then
+if command -v greadlink >/dev/null 2>&1; then
   this_repo_path="$(greadlink -f "$(pwd)")"
-elif [ -x "$(command -v readlink)" ]; then
+elif command -v readlink >/dev/null 2>&1; then
   this_repo_path="$(readlink -f "$(pwd)")"
 else
   echo "readlink binary is required to continue"
