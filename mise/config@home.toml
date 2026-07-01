@@ -1,12 +1,13 @@
+# named config@home.toml (not config.toml) so mise's local-project-config
+# discovery doesn't also pick this up as a project config whenever `mise` is
+# invoked with a cwd inside this repo - it's deployed as config.toml only at
+# the symlink target (bootstrap/configuration.sh), never under this name.
+
+# fail loudly instead of silently misbehaving on a mise too old for [dotfiles]/[bootstrap.*]
+min_version = { hard = "2026.6.14" }
+
 [settings]
 experimental = true
 disable_backends = ["asdf"]
 
-# install tools with `mise use --global [toolname]`. e.g. `mise use --global worktrunk`
-[tools]
-bun = "latest"
-claude-code = "latest"
-"github:liamg/grace" = { version = "latest", os = ["linux/x86_64"] }
-"npm:@earendil-works/pi-coding-agent" = "latest"
-"npm:hunkdiff" = "latest"
-worktrunk = "latest"
+# the rest of the config lives in ./conf.d/*.toml, loaded in alphabetical order

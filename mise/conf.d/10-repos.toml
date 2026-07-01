@@ -1,0 +1,26 @@
+# [bootstrap.repos] - cloned before [dotfiles] is applied.
+# ref is pinned explicitly to each repo's actual default branch so mise
+# converges (pulls) to the branch tip on every `mise bootstrap` run,
+# matching this repo's previous `git clone || (cd X && git pull)` behavior.
+
+[bootstrap.repos]
+"~/.config/base16-shell" = { url = "https://github.com/chriskempson/base16-shell.git", ref = "master" }
+"~/.tmux/plugins/tpm" = { url = "https://github.com/tmux-plugins/tpm.git", ref = "master" }
+"~/.emacs.d" = { url = "https://github.com/plexus/chemacs2.git", ref = "main" }
+"~/.spacemacs.d" = { url = "https://github.com/syl20bnr/spacemacs.git", ref = "develop" }
+"~/.doom-emacs.d" = { url = "https://github.com/hlissner/doom-emacs.git", ref = "master" }
+
+[bootstrap.hooks.pre-repos]
+# zsh compiles sourced scripts into *.zwc byte-code caches as a side effect of
+# normal shell startup; `repos apply`'s dirty-check treats those as untracked
+# local changes and refuses to proceed, so clear them before it runs
+run = "rm -f ~/.config/base16-shell/*.zwc"
+
+[bootstrap.hooks.post-repos]
+# wsl-sudo clone is WSL-only - [bootstrap.repos] has no os-conditional field
+# (unlike [tools]), so this stays as a guarded hook instead
+run = '''
+test -n "$WSL_DISTRO_NAME" || exit 0
+[ -d "$HOME/.wsl-sudo" ] && exit 0
+git clone https://github.com/Chronial/wsl-sudo.git "$HOME/.wsl-sudo"
+'''

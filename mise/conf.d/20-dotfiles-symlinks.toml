@@ -1,0 +1,110 @@
+# [dotfiles] whole-file/whole-dir symlink (+ symlink-each) entries.
+# All sources are anchored at the dfs-rhc self-discovery symlink (created by
+# bootstrap/configuration.sh before `mise bootstrap` runs), so this file
+# never bakes in a literal repo-clone path - matches this repo's existing
+# convention of resolving everything off that symlink.
+#
+# NOTE: both sides of every entry below hardcode ~/.config/dfs-rhc/... instead
+# of $my_dot_d, the env var this repo uses everywhere else to refer to this
+# same path (defined once in nix/home/programs/shells.nix as
+# ${env-vars.XDG_CONFIG_HOME}/dfs-rhc, consumed as $my_dot_d throughout
+# zsh/env, zsh/aliases, zsh/my_addons/aliases, wezterm, WSL scripts, etc).
+# This is forced, not an oversight: mise's [dotfiles] only expands `~` to
+# $HOME in target/source strings, nothing else - a literal $my_dot_d or
+# $XDG_CONFIG_HOME is rejected outright ("target must be absolute or start
+# with ~/"). A machine with a customized $XDG_CONFIG_HOME needs to symlink
+# ~/.config to it manually before running `mise bootstrap`.
+#
+[bootstrap.hooks.pre-dotfiles]
+# rsop/espanso/ghostty auto-vivify a real (non-symlink) config directory on
+# first run if none exists yet - [dotfiles] refuses to overwrite real data
+# without --force, so clear only that case here; an already-correct symlink
+# is left alone since mise re-points symlinks freely on its own
+run = '''
+for target in "$HOME/.config/rsop" "$HOME/.config/espanso" "$HOME/.config/ghostty"; do
+  # exists (real file/dir or symlink) AND is not already a symlink
+  # -> a real leftover blocking [dotfiles], so clear it
+  if test -e "$target" && test ! -L "$target"; then
+    rm -rf "$target"
+  fi
+done
+'''
+
+[dotfiles]
+# carapace
+"~/.config/carapace" = "~/.config/dfs-rhc/carapace"
+# worktrunk
+"~/.config/worktrunk" = "~/.config/dfs-rhc/worktrunk"
+# tig
+"~/.tigrc" = "~/.config/dfs-rhc/vim.tigrc"
+# hunk
+"~/.config/hunk" = "~/.config/dfs-rhc/hunk"
+# gh
+"~/.config/gh/config.yml" = "~/.config/dfs-rhc/gh/config.yml"
+# gh-dash
+"~/.config/gh-dash/config.yml" = "~/.config/dfs-rhc/gh/dash/config.yml"
+# bat
+"~/.config/bat" = "~/.config/dfs-rhc/bat"
+# glide
+"~/.config/glide" = "~/.config/dfs-rhc/glide"
+# lf
+"~/.config/lf" = "~/.config/dfs-rhc/lf"
+# rsop
+"~/.config/rsop" = "~/.config/dfs-rhc/rsop"
+# urlscan
+"~/.config/urlscan" = "~/.config/dfs-rhc/urlscan"
+# espanso
+"~/.config/espanso" = "~/.config/dfs-rhc/espanso"
+# viddy
+"~/.config/viddy.toml" = "~/.config/dfs-rhc/viddy.toml"
+# ghostty
+"~/.config/ghostty" = "~/.config/dfs-rhc/ghostty"
+# alacritty
+"~/.alacritty.toml" = "~/.config/dfs-rhc/alacritty/unix.toml"
+# starship
+"~/.config/starship.toml" = "~/.config/dfs-rhc/starship.toml"
+# gitmux
+"~/.gitmux.conf" = "~/.config/dfs-rhc/gitmux.conf"
+# zellij
+"~/.config/zellij" = "~/.config/dfs-rhc/zellij"
+# tmux
+"~/.tmux.conf" = "~/.config/dfs-rhc/tmux.conf"
+# sesh
+"~/.config/sesh" = "~/.config/dfs-rhc/sesh"
+# editorconfig
+"~/.editorconfig" = "~/.config/dfs-rhc/.editorconfig"
+# emacs (chemacs2/spacemacs/doom)
+"~/.emacs-profiles.el" = "~/.config/dfs-rhc/emacs.d/emacs-profiles.el"
+"~/.spacemacs" = "~/.config/dfs-rhc/emacs.d/spacemacs"
+"~/.config/doom" = "~/.config/dfs-rhc/emacs.d/doom.d"
+# nvim
+"~/.config/nvim" = "~/.config/dfs-rhc/nvim"
+# claude
+"~/.claude/settings.json" = "~/.config/dfs-rhc/claude/settings.json"
+"~/.claude/CLAUDE.md" = "~/.config/dfs-rhc/claude/CLAUDE.md"
+"~/.claude/keybindings.json" = "~/.config/dfs-rhc/claude/keybindings.json"
+# opencode
+"~/.config/opencode/opencode.jsonc" = "~/.config/dfs-rhc/opencode/opencode.jsonc"
+"~/.config/opencode/tui.jsonc" = "~/.config/dfs-rhc/opencode/tui.jsonc"
+"~/.config/opencode/AGENTS.md" = "~/.config/dfs-rhc/opencode/AGENTS.md"
+"~/.config/opencode/plugins" = { source = "~/.config/dfs-rhc/opencode/plugins", mode = "symlink-each" }
+# pi coding agent
+"~/.pi/agent/keybindings.json" = "~/.config/dfs-rhc/pi/agent/keybindings.json"
+"~/.pi/agent/settings.json" = "~/.config/dfs-rhc/pi/agent/settings.json"
+"~/.pi/agent/models.json" = "~/.config/dfs-rhc/pi/agent/models.json"
+"~/.pi/agent/extensions" = "~/.config/dfs-rhc/pi/agent/extensions"
+
+[bootstrap.hooks.post-dotfiles]
+# darwin-only symlinks layered on top of the espanso/viddy entries above -
+# [dotfiles] has no os-conditional field (unlike [tools]), so these stay as
+# a guarded hook instead; runs after [dotfiles] since it targets the
+# ~/.config/espanso and ~/.config/viddy.toml symlinks applied above
+run = '''
+uname | xargs test "Darwin" = &&
+  rm -rf "$HOME/Library/Preferences/espanso" &&
+  ln -sf "$HOME/.config/espanso" "$HOME/Library/Preferences/espanso"
+
+uname | xargs test "Darwin" = &&
+  rm -rf "$HOME/Library/Application Support/viddy.toml" &&
+  ln -sf "$HOME/.config/viddy.toml" "$HOME/Library/Application Support/viddy.toml"
+'''

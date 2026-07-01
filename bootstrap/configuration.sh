@@ -5,6 +5,14 @@
 # Configuration.sh is platform agnostic and assumes dependant packages are installed via `./foundation/`
 # Also make sure to configure right $PATH for this script to work properly
 
+# This script is meant to be idempotent - safe to re-run anytime (e.g. after
+# `git pull` on an already-bootstrapped machine) to converge to the latest
+# state. Keep it that way: guard any one-off/imperative step (existence
+# checks, etc.) instead of adding unconditional appends or unconditional
+# destructive recreates. `mise bootstrap` already handles this for anything
+# declared in mise/conf.d/*.toml - only what can't live there (see comments
+# below) needs its own guard here.
+
 set -e
 set -x
 
@@ -40,7 +48,9 @@ mkdir -p "${XDG_CONFIG_HOME}"
 
 # symlink this repo so it's discoverable no matter where this is located at
 # dfs-rhc: shorthand for dotfiles-ryuheechul
-ln -sf "${this_repo_path}" "${XDG_CONFIG_HOME}/dfs-rhc"
+# -n so a re-run replaces the symlink itself instead of following it into the
+# directory it already points at and dropping a self-referential link inside
+ln -sfn "${this_repo_path}" "${XDG_CONFIG_HOME}/dfs-rhc"
 
 dfs_rhc="${XDG_CONFIG_HOME}/dfs-rhc"
 
@@ -48,184 +58,18 @@ dfs_rhc="${XDG_CONFIG_HOME}/dfs-rhc"
 # - one discovered usage is that `current-base16` is being used in ../nvim/lua/plugins/theme.lua
 export PATH="${dfs_rhc}/bin/path/default:${PATH}"
 
-# carapace
-ln -sf "${dfs_rhc}/carapace" "${XDG_CONFIG_HOME}/carapace"
-
-# source my gitconfig
-cat <<EOF >>"${HOME}/.gitconfig"
-[include]
-  path = "${dfs_rhc}/gitconfig"
-EOF
-
-# worktrunk
-ln -sf "${dfs_rhc}/worktrunk" "${XDG_CONFIG_HOME}/worktrunk"
-
-# tig
-ln -sf "${dfs_rhc}/vim.tigrc" "${HOME}/.tigrc"
-
-# hunk
-ln -sf "${dfs_rhc}/hunk" "${XDG_CONFIG_HOME}/hunk"
-
-# symlink gh config
-mkdir -p "${XDG_CONFIG_HOME}/gh"
-ln -sf "${dfs_rhc}/gh/config.yml" "${XDG_CONFIG_HOME}/gh/config.yml"
-
-# symlink gh-dash config
-mkdir -p "${XDG_CONFIG_HOME}/gh-dash"
-ln -sf "${dfs_rhc}/gh/dash/config.yml" "${XDG_CONFIG_HOME}/gh-dash/config.yml"
-
-# symlink batconfig
-ln -sf "${dfs_rhc}/bat" "${XDG_CONFIG_HOME}/bat"
-bat cache --build || true
-
-# glide browser
-ln -sf "${dfs_rhc}/glide" "${XDG_CONFIG_HOME}/glide"
-
-# lf
-ln -sf "${dfs_rhc}/lf" "${XDG_CONFIG_HOME}/lf"
-
-# rsop
-rm -rf "${XDG_CONFIG_HOME}/rsop" &&
-  ln -sf "${dfs_rhc}/rsop" "${XDG_CONFIG_HOME}/rsop"
-
-# urlscan
-ln -sf "${dfs_rhc}/urlscan" "${XDG_CONFIG_HOME}/urlscan"
-
-# espanso
-espanso_config="${XDG_CONFIG_HOME}/espanso" &&
-  rm -rf "${espanso_config}" &&
-  ln -sf "${dfs_rhc}/espanso" "${espanso_config}"
-
-# espanso for darwin
-uname | xargs test "Darwin" = &&
-  espanso_config_for_darwin="${HOME}/Library/Preferences/espanso" &&
-  rm -rf "${espanso_config_for_darwin}" &&
-  ln -sf "${espanso_config}" "${espanso_config_for_darwin}"
-
-# viddy
-viddy_config="${XDG_CONFIG_HOME}/viddy.toml" &&
-  ln -sf "${dfs_rhc}/viddy.toml" "${viddy_config}"
-
-# viddy for darwin
-uname | xargs test "Darwin" = &&
-  viddy_config_for_darwin="${HOME}/Library/Application Support/viddy.toml" &&
-  rm -rf "${viddy_config_for_darwin}" &&
-  ln -sf "${viddy_config}" "${viddy_config_for_darwin}"
-
-# mise
+# mise - deploy config first so `mise bootstrap` below can see it
+# -n on both: same self-referential-symlink risk as dfs-rhc above once these
+# already point at their target directory/file from a prior run
 mkdir -p "${XDG_CONFIG_HOME}/mise"
-ln -sf "${dfs_rhc}/mise/config@home.toml" "${XDG_CONFIG_HOME}/mise/config.toml"
-# install all global tools declared in mise/config@home.toml
-mise install || true
+ln -sfn "${dfs_rhc}/mise/config@home.toml" "${XDG_CONFIG_HOME}/mise/config.toml"
+# mise's conf.d auto-load only looks next to the config file itself, not
+# through the symlink to its target's directory - so this needs its own link
+ln -sfn "${dfs_rhc}/mise/conf.d" "${XDG_CONFIG_HOME}/mise/conf.d"
 
-# ghostty terminal
-rm -rf "${XDG_CONFIG_HOME}/ghostty" &&
-  ln -sf "${dfs_rhc}/ghostty" "${XDG_CONFIG_HOME}/ghostty"
-
-# alacritty
-ln -sf "${dfs_rhc}/alacritty/unix.toml" "${HOME}/.alacritty.toml"
-
-# starship
-ln -sf "${dfs_rhc}/starship.toml" "${XDG_CONFIG_HOME}/starship.toml"
-
-# base16
-git clone https://github.com/chriskempson/base16-shell.git "${XDG_CONFIG_HOME}/base16-shell"
-
-# prevent this file missing to satisfy `doom doctor` due to my own configuration
-touch "${HOME}/.base16_theme.updated-time"
-
-# gitmux
-ln -sf "${dfs_rhc}/gitmux.conf" "${HOME}/.gitmux.conf"
-
-# zellij
-ln -sf "${dfs_rhc}/zellij" "${XDG_CONFIG_HOME}/zellij"
-
-# tmux
-ln -sf "${dfs_rhc}/tmux.conf" "${HOME}/.tmux.conf"
-git clone https://github.com/tmux-plugins/tpm "${HOME}/.tmux/plugins/tpm" || bash -c 'cd "${HOME}/.tmux/plugins/tpm" && git pull'
-tmux start-server &&
-  tmux new-session -d &&
-  sleep 1 &&
-  "${HOME}/.tmux/plugins/tpm/bin/install_plugins" &&
-  sleep 1 &&
-  { tmux kill-server || true; }
-
-# sesh
-ln -sf "${dfs_rhc}/sesh" "${XDG_CONFIG_HOME}/sesh"
-
-# symlink .editorconfig
-ln -sf "${dfs_rhc}/.editorconfig" "${HOME}/.editorconfig"
-
-## emacs
-
-# chemecs to allow switching between configs like doom emacs and spacemacs
-git clone https://github.com/plexus/chemacs2.git "${HOME}/.emacs.d" || bash -c 'cd "${HOME}/.emacs.d" && git pull'
-ln -sf "${dfs_rhc}/emacs.d/emacs-profiles.el" "${HOME}/.emacs-profiles.el"
-
-# spacemacs
-git clone https://github.com/syl20bnr/spacemacs "${HOME}/.spacemacs.d" || bash -c 'cd "${HOME}/.spacemacs.d" && git pull'
-ln -sf "${dfs_rhc}/emacs.d/spacemacs" "${HOME}/.spacemacs"
-
-# doom emacs
-git clone https://github.com/hlissner/doom-emacs "${HOME}/.doom-emacs.d" || bash -c 'cd "${HOME}/.doom-emacs.d" && git pull'
-ln -sf "${dfs_rhc}/emacs.d/doom.d" "${XDG_CONFIG_HOME}/doom"
-yes | "${HOME}/.doom-emacs.d/bin/doom" install || true # let the failure of this command not to block the rest
-
-## (neo)vim
-# neovim - now this replace SpaceVim
-ln -sf "${dfs_rhc}/nvim" "${XDG_CONFIG_HOME}/nvim"
-
-# trigger neovim plugins install via command line
-if [ -z "${SKIP_INSTALL_VIM_PLUGINS}" ]; then
-  # since I'm not sure about this command to work very well and it's ok to fail for now anyway let it not cause disruption on failure
-  nvim --headless "+Lazy! sync" +qa
-  nvim --headless -c 'UpdateRemotePlugins' -c q || true
-fi
-
-# # SpaceVim - this still may be used for vim but not with nvim
-# spacevim_ver="v1.6.0"
-# git clone https://github.com/SpaceVim/SpaceVim "${HOME}/.SpaceVim" || bash -c 'cd "${HOME}/.SpaceVim" && git checkout master && git pull' &&
-#   cd "${HOME}/.SpaceVim" &&
-#   git checkout ${spacevim_ver}
-# ln -sf "${dfs_rhc}/SpaceVim.d" "${HOME}/.SpaceVim.d"
-# # shim vimrc
-# ln -sf "${HOME}/.SpaceVim" "${HOME}/.vim"
-
-# symlink to gemini-cli
-mkdir -p "${HOME}/.gemini"
-ln -sf "${dfs_rhc}/gemini/settings.json" "${HOME}/.gemini/settings.json"
-ln -sf "${dfs_rhc}/gemini/AGENTS.md" "${HOME}/.gemini/AGENTS.md"
-ln -sf "${dfs_rhc}/gemini/keybindings.json" "${HOME}/.gemini/keybindings.json"
-
-# symlink to claude code
-mkdir -p "${HOME}/.claude"
-ln -sf "${dfs_rhc}/claude/settings.json" "${HOME}/.claude/settings.json"
-ln -sf "${dfs_rhc}/claude/CLAUDE.md" "${HOME}/.claude/CLAUDE.md"
-ln -sf "${dfs_rhc}/claude/keybindings.json" "${HOME}/.claude/keybindings.json"
-
-# symlink to opencode
-mkdir -p "${XDG_CONFIG_HOME}/opencode/plugins"
-ln -sf "${dfs_rhc}/opencode/opencode.jsonc" "${XDG_CONFIG_HOME}/opencode/opencode.jsonc"
-ln -sf "${dfs_rhc}/opencode/tui.jsonc" "${XDG_CONFIG_HOME}/opencode/tui.jsonc"
-ln -sf "${dfs_rhc}/opencode/AGENTS.md" "${XDG_CONFIG_HOME}/opencode/AGENTS.md"
-
-# symlink each plugin individually to allow local plugins to coexist;
-# but new ones after this script run will need to be manually symlinked
-for plugin in "${dfs_rhc}/opencode/plugins"/*; do
-  if test -e "$plugin"; then
-    ln -sf "$plugin" "${XDG_CONFIG_HOME}/opencode/plugins/$(basename "$plugin")"
-  fi
-done
-
-# symlink to pi coding agent
-mkdir -p "${HOME}/.pi/agent"
-ln -sf "${dfs_rhc}/pi/agent/keybindings.json" "${HOME}/.pi/agent/keybindings.json"
-ln -sf "${dfs_rhc}/pi/agent/settings.json" "${HOME}/.pi/agent/settings.json"
-ln -sf "${dfs_rhc}/pi/agent/models.json" "${HOME}/.pi/agent/models.json"
-ln -sf "${dfs_rhc}/pi/agent/extensions" "${HOME}/.pi/agent/extensions"
-
-# wudo in case of WSL
-test -n "${WSL_DISTRO_NAME}" && git clone https://github.com/Chronial/wsl-sudo.git "${HOME}/.wsl-sudo"
+# clones [bootstrap.repos], applies [dotfiles], installs [tools], then runs
+# the `bootstrap` task - see mise/conf.d/*.toml for what this covers
+mise bootstrap --yes || true
 
 ## zsh
 
@@ -237,9 +81,8 @@ test -n "${WSL_DISTRO_NAME}" && git clone https://github.com/Chronial/wsl-sudo.g
 # # source dotfiles' zshrc
 # echo "source '${dfs_rhc}/zsh/zshrc'" >> "${HOME}/.zshrc"
 
-# source zinit now to avoid installing zsh plugins at initial usage
-zsh -c "source '${dfs_rhc}/zsh/my_addons/zinit'"
-
-cat "${dfs_rhc}/bootstrap/local.zshrc.template" >>"${HOME}/.local.zshrc"
+# seed ~/.local.zshrc once - it's meant to be hand-edited after install,
+# so this never touches it again once it exists
+[ -f "${HOME}/.local.zshrc" ] || cat "${dfs_rhc}/bootstrap/local.zshrc.template" >"${HOME}/.local.zshrc"
 
 echo "configuration.sh seemed to have run successfully!"

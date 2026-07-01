@@ -1,0 +1,38 @@
+# [tasks.bootstrap] - `mise bootstrap` runs a task named "bootstrap"
+# automatically, after [tools] are installed (and after [bootstrap.repos] /
+# [dotfiles] have run, so tpm/doom-emacs/nvim's config are all in place by
+# the time these commands run).
+
+[tasks.bootstrap]
+run = '''
+# bat
+bat cache --build || true
+
+# base16
+touch "$HOME/.base16_theme.updated-time"
+
+# tmux (tpm plugin install)
+tmux start-server &&
+  tmux new-session -d &&
+  sleep 1 &&
+  "$HOME/.tmux/plugins/tpm/bin/install_plugins" &&
+  sleep 1 &&
+  { tmux kill-server || true; }
+
+# doom emacs
+if command -v emacs >/dev/null 2>&1; then
+  yes | "$HOME/.doom-emacs.d/bin/doom" install || true
+else
+  echo "doom emacs: skipping install, emacs not found on PATH"
+fi
+
+# nvim
+if [ -z "$SKIP_INSTALL_VIM_PLUGINS" ]; then
+  nvim --headless "+Lazy! sync" +qa
+  nvim --headless -c 'UpdateRemotePlugins' -c q || true
+fi
+
+# zsh (zinit) - source it now to install missing zsh plugins during
+# bootstrap instead of on first interactive shell startup
+zsh -c "source '$HOME/.config/dfs-rhc/zsh/my_addons/zinit'"
+'''

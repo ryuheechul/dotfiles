@@ -1,0 +1,12 @@
+# [dotfiles] edit entries: own one piece of a file mise doesn't fully manage,
+# rather than the whole file. Content here is static and never hand-edited
+# after apply, which is what makes "block" mode's reconcile-every-run
+# semantics safe to use (contrast with bootstrap/local.zshrc.template, which
+# IS meant to be hand-edited after install and is deliberately NOT migrated
+# here - see bootstrap/configuration.sh for its idempotent-seed-once handling).
+
+[dotfiles]
+"~/.gitconfig/dfs-rhc-include" = { block = '''
+[include]
+  path = "~/.config/dfs-rhc/gitconfig"
+''' }

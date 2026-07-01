@@ -23,6 +23,18 @@
         "url": "https://github.com/ghostty-org/ghostty/archive/ff9414d9ea7b16a375d41cde8f6f193de7e5db72.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "mise": {
+        "branch": "main",
+        "description": "dev tools, env vars, task runner",
+        "homepage": "https://mise.en.dev",
+        "owner": "jdx",
+        "repo": "mise",
+        "rev": "v2026.6.14",
+        "sha256": "00q8fldgvc299p8bs2ppyprxdwqfnj68413xkhxzbpvkya2nq86f",
+        "type": "tarball",
+        "url": "https://github.com/jdx/mise/archive/v2026.6.14.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "mlg": {
         "branch": "main",
         "description": "A Python app detecting libinput pinch gestures to execute commands, with the motivation of mimicking macOS trackpad gesture of pinching 4 fingers in to open Launchpad on Linux",
