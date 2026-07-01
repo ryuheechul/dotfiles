@@ -100,11 +100,11 @@ done
 # a guarded hook instead; runs after [dotfiles] since it targets the
 # ~/.config/espanso and ~/.config/viddy.toml symlinks applied above
 run = '''
-uname | xargs test "Darwin" = &&
-  rm -rf "$HOME/Library/Preferences/espanso" &&
-  ln -sf "$HOME/.config/espanso" "$HOME/Library/Preferences/espanso"
+uname | xargs test "Darwin" = || exit 0
 
-uname | xargs test "Darwin" = &&
-  rm -rf "$HOME/Library/Application Support/viddy.toml" &&
-  ln -sf "$HOME/.config/viddy.toml" "$HOME/Library/Application Support/viddy.toml"
+rm -rf "$HOME/Library/Preferences/espanso"
+ln -sf "$HOME/.config/espanso" "$HOME/Library/Preferences/espanso"
+
+rm -rf "$HOME/Library/Application Support/viddy.toml"
+ln -sf "$HOME/.config/viddy.toml" "$HOME/Library/Application Support/viddy.toml"
 '''
