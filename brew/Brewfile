@@ -1,15 +1,23 @@
-# package installation via this file is being replaced by ../nix/pkgs.nix
-# this may be used as an fallback
+# Fallback only - NOT installed by default. Package installation normally
+# goes through ../nix/pkgs/default.nix instead; this only runs when nix
+# itself isn't available (e.g. FileVault on a non-T2/Intel Mac can prevent
+# nix from installing at all). See the `SKIP_BREW_BUNDLE` gating in
+# ../bootstrap/foundation/darwin/essential.sh for exactly when/how this
+# gets invoked.
 
 # essential
 brew "coreutils" # https://formulae.brew.sh/formula/coreutils
 brew "zsh" # my favorite shell interface
 brew "git" # to replace possible old git comes with OS
 brew "bash" # use latest bash
-# uncomment below in case to use tmux from brew instead of the version from ../nix/pkgs/default.nix
-# brew "tmux" # terminal multiplexer
+brew "mise" # needed for bootstrap/configuration.sh's `mise bootstrap` to run at all when nix isn't available
+brew "tmux" # terminal multiplexer
 brew "neovim" # my favorite editor
 brew "starship" # cross-shell prompt
+brew "carapace" # multi-shell completions - referenced in ../mise/home/conf.d/20-dotfiles-symlinks.toml
+brew "zellij" # terminal workspace/multiplexer, alternative to tmux
+brew "sesh" # smart tmux session manager
+brew "gitmux" # git status in tmux status bar
 brew "fzf" # A command-line fuzzy finder
 brew "direnv" # auto loading env per dir
 brew "htop" # resource monitoring
@@ -30,6 +38,7 @@ brew "glow" # markdown render on cli
 brew "lf" # terminal file manager
 brew "fx" # json viewer
 brew "hexyl" # binary viewer
+brew "viddy" # modern watch, aliased over the plain `watch` above in ../zsh/my_addons/aliases
 
 # search
 brew "rg" # modern grep
@@ -44,6 +53,7 @@ brew "entr" # Run arbitrary commands when files change
 brew "taskell" # CLI kanban
 brew "fpp" # for tmux-fpp
 brew "extract_url" # for tmux-urlview
+brew "urlscan" # view/select the URLs in a file - config symlinked in ../mise/home/conf.d/20-dotfiles-symlinks.toml
 brew "jq" # json processor
 brew "jsonnet" # templating with json
 brew "gh" # official Github CLI

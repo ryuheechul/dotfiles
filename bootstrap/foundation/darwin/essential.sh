@@ -45,24 +45,27 @@ fi
 
 ####### brew #######
 
-[ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+# arm64 (Apple Silicon) installs to /opt/homebrew; Intel installs to /usr/local
+if uname -m | xargs test "arm64" =; then
+  brew_prefix="/opt/homebrew"
+else
+  brew_prefix="/usr/local"
+fi
+
+# `brew shellenv` prints (doesn't itself apply) export statements for PATH,
+# MANPATH, INFOPATH, and HOMEBREW_* vars pointing at this prefix; `eval`ing
+# it applies them to this script's own shell, since a fresh install doesn't
+# put brew on PATH by itself
+test -x "${brew_prefix}/bin/brew" && eval "$("${brew_prefix}/bin/brew" shellenv)"
 
 # install homebrew
 if ! command -v brew &> /dev/null; then
     echo "brew not found so installing"
     sleep 1
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+    eval "$("${brew_prefix}/bin/brew" shellenv)"
 else
     echo "brew exist, so skipping installation"
-fi
-
-# in case of apple silicon because:
-# - nix currently only run with Rosetta 2
-# - at least terminal and shell should run natively
-# - to prevent being forced to run only Intel based apps as child processes of the shell and terminal
-if uname -m | xargs test "arm64" =; then
-  brew install zsh bash tmux
 fi
 
 ####### Brewfile #######

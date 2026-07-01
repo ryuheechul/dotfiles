@@ -11,7 +11,18 @@ cd ../../../ || exit
 
 . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 
-[ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+# arm64 (Apple Silicon) installs to /opt/homebrew; Intel installs to /usr/local
+if uname -m | xargs test "arm64" =; then
+  brew_prefix="/opt/homebrew"
+else
+  brew_prefix="/usr/local"
+fi
+
+# `brew shellenv` prints (doesn't itself apply) export statements for PATH,
+# MANPATH, INFOPATH, and HOMEBREW_* vars pointing at this prefix; `eval`ing
+# it applies them to this script's own shell, since a fresh install doesn't
+# put brew on PATH by itself
+test -x "${brew_prefix}/bin/brew" && eval "$("${brew_prefix}/bin/brew" shellenv)"
 
 # remote url local opener - https://github.com/superbrothers/opener
 brew install superbrothers/opener/opener
