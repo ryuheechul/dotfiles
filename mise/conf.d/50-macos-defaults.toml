@@ -1,0 +1,75 @@
+# [bootstrap.macos.*] - macOS user defaults, migrated from
+# nix/darwin/meta-configuration.nix's system.defaults.* (an optional
+# nix-darwin path, not always active - see bootstrap/foundation/darwin/extra.sh
+# for the "you may want to adopt nix-darwin" note) and the one `defaults
+# write` line in extra.sh. This applies on every `mise bootstrap` run
+# instead of requiring nix-darwin activation.
+#
+# Everything else in those two files is outside what [bootstrap.macos] can
+# do and stays where it is: mas/brew/cask installs, networking.dns,
+# security.pam.* (touch ID for sudo), services.openssh, nix.settings - none
+# of that is a user default, and mise's defaults are per-user/no-sudo only.
+#
+# screencapture's location default (extra.sh) also moved here, but as a
+# post-defaults hook rather than a declarative entry: its value is a real
+# path under $HOME, and [bootstrap.macos.defaults] values are static literals
+# with no `~`/env expansion - a hook is plain shell, so $HOME resolves
+# per-machine like it always did.
+
+[bootstrap.macos.dock]
+autohide = true
+
+[bootstrap.macos.keyboard]
+# lower is faster; unit is undocumented ticks, not ms - 2 is the fastest
+# selectable from System Settings' slider (minimum 1 is not exposed there)
+key_repeat = 2
+# delay before repeat starts, same tick unit as key_repeat; 15 is the
+# fastest selectable from System Settings
+initial_key_repeat = 15
+# false disables the press-and-hold accent picker popup so holding a key
+# repeats it instead - most useful for vim-style editing
+press_and_hold = false
+
+[bootstrap.macos.trackpad]
+# covers both the built-in and bluetooth trackpad domains - stricter than
+# the nix-darwin config, which only set the built-in one
+tap_to_click = true
+
+[bootstrap.macos.defaults."NSGlobalDomain"]
+# "Automatically adjust appearance" in System Settings > Appearance -
+# switches Light/Dark mode based on time of day
+AppleInterfaceStyleSwitchesAutomatically = true
+# the next 4 live in System Settings > Keyboard > Input Sources > Edit text
+# preferences, off since they all mangle typed code/commands
+
+# auto-capitalize the first letter after sentence-ending punctuation
+NSAutomaticCapitalizationEnabled = false
+# em-dash substitution for "--"
+NSAutomaticDashSubstitutionEnabled = false
+# period substitution for double-space
+NSAutomaticPeriodSubstitutionEnabled = false
+# curly ("smart") quote substitution for straight quotes
+NSAutomaticQuoteSubstitutionEnabled = false
+
+[bootstrap.macos.defaults."com.apple.spaces"]
+# inverted from its Mission Control label: false is "Displays have separate
+# Spaces" checked (the modern default) - tiling window managers like
+# Amethyst (see extra.sh) expect this
+"spans-displays" = false
+
+[bootstrap.macos.defaults."com.apple.AppleMultitouchTrackpad"]
+# "Tap to drag" equivalent for physical clicking - lets you drag by
+# click-and-hold without a separate three-finger-drag gesture
+Dragging = true
+# secondary click (right-click) via trackpad
+TrackpadRightClick = true
+
+[bootstrap.hooks.post-defaults]
+# hooks aren't OS-filtered like [bootstrap.macos.defaults] is, so this needs
+# its own guard even though the rest of this file is darwin-only
+run = '''
+uname | xargs test "Darwin" = || exit 0
+
+mkdir -p "$HOME/Screenshots"
+defaults write com.apple.screencapture location "$HOME/Screenshots"
+'''

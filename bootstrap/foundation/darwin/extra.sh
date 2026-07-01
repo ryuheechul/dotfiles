@@ -13,10 +13,6 @@ cd ../../../ || exit
 
 [ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
-######## Screenshots ########
-
-mkdir -p ~/Screenshots && defaults write com.apple.screencapture location ~/Screenshots
-
 # remote url local opener - https://github.com/superbrothers/opener
 brew install superbrothers/opener/opener
 brew services start opener
@@ -65,7 +61,7 @@ _install_cask stats
 _install_cask alacritty
 _install_cask betterdisplay
 _install_cask warp
-_install_cask vanilla
+_install_cask thaw
 _is_admin && _install_cask 1password # since it won't work if it's installed a location other than /Applications
 _install_cask amethyst
 _install_cask google-chrome
