@@ -11,13 +11,12 @@ bat cache --build || true
 # base16
 touch "$HOME/.base16_theme.updated-time"
 
-# tmux (tpm plugin install)
-tmux start-server &&
-  tmux new-session -d &&
-  sleep 1 &&
-  "$HOME/.tmux/plugins/tpm/bin/install_plugins" &&
-  sleep 1 &&
-  { tmux kill-server || true; }
+# tmux (tpm plugin install) - tpm reads ~/.tmux.conf straight off disk and
+# doesn't need a running server, so this never touches the tmux server at all
+# (starting/killing one here would hit the same default socket as a live
+# session already attached in the current terminal, killing it out from
+# under you)
+"$HOME/.tmux/plugins/tpm/bin/install_plugins" || true
 
 # doom emacs
 if command -v emacs >/dev/null 2>&1; then
