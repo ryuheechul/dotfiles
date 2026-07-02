@@ -1,5 +1,12 @@
 ;;; lang/astro/config.el -*- lexical-binding: t; -*-
 
+;; astro-ts-mode doesn't come with a bundled grammar, and it isn't part of
+;; `treesit-langs''s precompiled bundle (unlike most other languages in this
+;; config), so it must be registered and compiled locally.
+;; https://github.com/virchau13/tree-sitter-astro
+(add-to-list 'treesit-language-source-alist
+             '(astro "https://github.com/virchau13/tree-sitter-astro"))
+
 (when (and (modulep! :tools lsp +eglot)(modulep! +lsp))
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-server-programs
