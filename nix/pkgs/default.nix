@@ -72,6 +72,7 @@ with pkgs;
     emacs # Extensible, customizable GNU text editor
     # ispell for emacs
     ispell # Interactive spell-checking program for Unix
+    pandoc # Universal markup converter - doubles as doom-emacs's markdown-preview compiler
     neovim # my favorite editor
     neovim-remote # 👌 Support for --remote and friends.
     tree-sitter # An incremental parsing system for programming tools
