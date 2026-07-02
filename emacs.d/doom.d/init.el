@@ -248,5 +248,5 @@
                  (shell-command-to-string
                   (concat
                    "FOR_DOOM_SYNC_ENV=1 "
-                   doom-private-dir
+                   doom-user-dir
                    "shell/env-vars-to-exclude"))))))

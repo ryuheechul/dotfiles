@@ -18,9 +18,13 @@ touch "$HOME/.base16_theme.updated-time"
 # under you)
 "$HOME/.tmux/plugins/tpm/bin/install_plugins" || true
 
-# doom emacs
+# doom emacs - runs interactively (no `yes |`): straight.el's prompts aren't
+# all y/n (e.g. a numbered menu when a package's recipe points at a new git
+# remote), and blindly answering "y" to those just loops forever since "y"
+# never matches a valid choice - needs `mise bootstrap --raw`/`mise run
+# --raw` for these prompts to actually reach a real terminal
 if command -v emacs >/dev/null 2>&1; then
-  yes | "$HOME/.doom-emacs.d/bin/doom" install || true
+  "$HOME/.doom-emacs.d/bin/doom" install || true
 else
   echo "doom emacs: skipping install, emacs not found on PATH"
 fi

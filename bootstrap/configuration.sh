@@ -70,7 +70,17 @@ ln -sfn "${dfs_rhc}/mise/home" "${XDG_CONFIG_HOME}/mise"
 
 # clones [bootstrap.repos], applies [dotfiles], installs [tools], then runs
 # the `bootstrap` task - see ../mise/home/conf.d/*.toml for what this covers
-mise bootstrap --yes || true
+#
+# --yes and --raw answer two unrelated questions:
+# - --yes skips *mise's own* confirmation prompts (e.g. "repos: apply X, Y,
+#   Z?" before cloning/pulling, or the dotfiles/macos-defaults apply
+#   confirmations) - it has no effect on anything the bootstrap task itself
+#   prompts for, since those come from a child process mise just executes
+# - --raw connects the task's stdin/stdout/stderr straight to this terminal
+#   instead of mise's default line-buffered capture, so a task's own
+#   interactive prompts (e.g. `doom install`'s, see 40-tasks.toml for why
+#   that one needs to be real) actually reach you
+mise bootstrap --yes --raw || true
 
 ## zsh
 

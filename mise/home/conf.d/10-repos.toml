@@ -17,10 +17,17 @@
 run = "rm -f ~/.config/base16-shell/*.zwc"
 
 [bootstrap.hooks.post-repos]
+# doom-emacs.d's sources/doom+ is a git submodule - a plain clone/pull never
+# initializes it, leaving `doom doctor`/`doom sync` unable to find its
+# modules directory at all. runs unconditionally (all platforms), so it has
+# to come before the WSL-only early exit below
+#
 # wsl-sudo clone is WSL-only - [bootstrap.repos] has no os-conditional field
 # (unlike [tools]), so this stays as a guarded hook instead
 run = '''
+git -C "$HOME/.doom-emacs.d" submodule update --init --recursive
+
 test -n "$WSL_DISTRO_NAME" || exit 0
-[ -d "$HOME/.wsl-sudo" ] && exit 0
+test -d "$HOME/.wsl-sudo" && exit 0
 git clone https://github.com/Chronial/wsl-sudo.git "$HOME/.wsl-sudo"
 '''

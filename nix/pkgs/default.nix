@@ -69,7 +69,7 @@ with pkgs;
 ++
   # editor - mostly for neovim
   [
-    # emacs - see the next section for why it's commented here
+    emacs # Extensible, customizable GNU text editor
     # ispell for emacs
     ispell # Interactive spell-checking program for Unix
     neovim # my favorite editor
@@ -80,13 +80,6 @@ with pkgs;
     stylua # An opinionated Lua code formatter
   ]
 ++
-
-  # temporarily due to the issue mentioned at https://discourse.nixos.org/t/is-it-currently-possible-to-use-emacs-on-aarch64-darwin/31571
-  isLinux [
-    emacs # coming from my customization at ./custom/emacs.nix
-  ]
-++
-
   # modern tools - i.e. https://github.com/ibraheemdev/modern-unix
   [
     fzf # A command-line fuzzy finder
