@@ -163,6 +163,12 @@ EOF
 fi
 }
 
+function hunk {
+  # since there is no other way like env var
+  # to work with current theme without wrapping with function
+  current-base16 | xargs env hunk "$@" --theme
+}
+
 # to make this to surive through piping; let's see if this is a good idea
 alias grc='grc --colour=on'
 
