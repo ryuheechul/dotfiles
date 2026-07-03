@@ -238,29 +238,7 @@ alias l="ls -lah -g --git"
 _nclr () { local j; for ((j = 0; j <= "${1:-1}"; j++ )); do tput cuu1; done; tput ed; }
 
 # quick way to navigate tmux windows - see also ../../nvim/lua/plugins/keymaps.lua
-
-if test -n "${TMUX_PANE}"; then
-  alias mst='tmux-switch-session; _nclr 2'
-  alias mwz='tmux-zoom; _nclr 2'
-  alias mwt='tmux-switch-window; _nclr 2'
-  alias mwn='tmux new-window; _nclr 2'
-  alias mwp='tmux split-window -h; _nclr 2'
-  alias mw/='tmux split-window -h; _nclr 2'
-  alias mw-='tmux split-window -v; _nclr 2'
-  alias mwc='tmux new-window'
-  alias mwl='tmux ls'
-  # "mux word jump": jump to letter (same as `tmux prefix + j` from `../../tmux.conf`)
-  alias mwj="${TMUX_PLUGIN_MANAGER_PATH}/tmux-easymotion/mode-s.sh; _nclr 2"
-  alias mwo="${TMUX_PLUGIN_MANAGER_PATH}/opensessions/integrations/tmux-plugin/scripts/toggle.sh; _nclr 2"
-fi
-if test -n "${ZELLIJ_SESSION_NAME}"; then
-  alias mwz='zellij action toggle-fullscreen; _nclr 2'
-  alias mwt='zellij action launch-or-focus-plugin -f sessionpicker; _nclr 2'
-  alias mwn='zellij action new-tab; _nclr 2'
-  alias mwp='zellij action new-pane; _nclr 2'
-  alias mw/='zellij action new-pane -d "right"; _nclr 2'
-  alias mw-='zellij action new-pane -d "down"; _nclr 2'
-fi
+source "${my_zsh_d}/integration/multiplexers"
 
 # this overwrites existing gap which is for git apply
 alias gap='git add --patch'

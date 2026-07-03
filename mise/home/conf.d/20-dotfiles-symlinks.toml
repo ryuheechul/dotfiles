@@ -17,11 +17,12 @@
 #
 [bootstrap.hooks.pre-dotfiles]
 # rsop/espanso/ghostty auto-vivify a real (non-symlink) config directory on
-# first run if none exists yet - [dotfiles] refuses to overwrite real data
-# without --force, so clear only that case here; an already-correct symlink
-# is left alone since mise re-points symlinks freely on its own
+# first run if none exists yet (herdr does the same with its config.toml) -
+# [dotfiles] refuses to overwrite real data without --force, so clear only
+# that case here; an already-correct symlink is left alone since mise
+# re-points symlinks freely on its own
 run = '''
-for target in "$HOME/.config/rsop" "$HOME/.config/espanso" "$HOME/.config/ghostty"; do
+for target in "$HOME/.config/rsop" "$HOME/.config/espanso" "$HOME/.config/ghostty" "$HOME/.config/herdr/config.toml"; do
   # exists (real file/dir or symlink) AND is not already a symlink
   # -> a real leftover blocking [dotfiles], so clear it
   if test -e "$target" && test ! -L "$target"; then
@@ -39,6 +40,8 @@ done
 "~/.tigrc" = "~/.config/dfs-rhc/vim.tigrc"
 # hunk
 "~/.config/hunk" = "~/.config/dfs-rhc/hunk"
+# herdr (file, not dir - herdr writes logs into ~/.config/herdr/)
+"~/.config/herdr/config.toml" = "~/.config/dfs-rhc/herdr/config.toml"
 # gh
 "~/.config/gh/config.yml" = "~/.config/dfs-rhc/gh/config.yml"
 # gh-dash

@@ -1,5 +1,12 @@
 # -*- mode: sh; -*- vim: set ft=zsh:
 
+# exit the current shell asynchronously: the caller can still return
+# normally (prompt state settles) before the HUP lands 0.2s later; `&!`
+# backgrounds AND disowns the subshell so no job-control noise appears
+_q_exit_shell() {
+  (sleep 0.2; kill -HUP $$) &!
+}
+
 # q: a "smart" quit function
 q() {
   local environment="terminal"
@@ -24,7 +31,58 @@ q() {
     exit
   fi
 
-  # 4. branch between tmux and non-tmux for exit behavior
+  # 4. inside nested multiplexers, offer detaching (back to the outer mux,
+  # session kept alive) as the default instead of closing.
+  # $_MUX_NESTED / $_MUX_INNERMOST / the _mux_* helpers all come from
+  # ../integration/multiplexers - the docs live there; the `type` guard
+  # degrades gracefully when that file was never sourced
+  local nested="${_MUX_NESTED}"
+  # the startup breadcrumb can't see "tmux attached from inside another
+  # mux" (panes hang off the daemonized server, not the client) - ask live
+  if test -z "${nested}" && test -n "${TMUX}" && type _mux_above_tmux_client >/dev/null 2>&1; then
+    _mux_above_tmux_client && nested="tmux ${REPLY}"
+  fi
+  if test -n "${nested}"; then
+    # with more windows/panes still open, closing just moves focus to the
+    # next one - the ergonomic default, so no questions asked (this also
+    # covers herdr, which _mux_detach can't detach anyway)
+    if ! _mux_is_last_pane; then
+      _q_exit_shell
+      return
+    fi
+    case "${_MUX_INNERMOST}" in
+      tmux|zellij)
+        echo "Nested multiplexers detected (${nested})."
+
+        # first entry is gum's preselected default: plain <enter> detaches
+        local choice_detach="detach ${_MUX_INNERMOST} (back to the outer multiplexer)"
+        local choice_close="close instead (continue with the regular quit flow)"
+        local choice_cancel="cancel"
+
+        # `local choice=...` will not preserve exit code, so split in two
+        local choice; choice="$(gum choose "${choice_detach}" "${choice_close}" "${choice_cancel}")"
+
+        exit_code="${?}"
+
+        # if cancelled (ESC/^C)
+        test ${exit_code} -eq 130 && return
+
+        # if cancelled via choice
+        test "${choice}" = "${choice_cancel}" && return
+
+        # if choice is empty
+        test -z "${choice}" && return
+
+        if test "${choice}" = "${choice_detach}"; then
+          _mux_detach
+          return
+        fi
+        # ${choice_close} falls through to the regular flow below
+        ;;
+    esac
+  fi
+
+  # 5. branch between tmux and non-tmux for exit behavior
   if test -z "${TMUX}"; then
     gum confirm "Want to close ${environment}?" && exit
     return
@@ -75,6 +133,5 @@ q() {
     fi
   fi
 
-  # exit the shell (async with delay)
-  (sleep 0.2; kill -HUP $$) &!
+  _q_exit_shell
 }

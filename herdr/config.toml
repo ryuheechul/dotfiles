@@ -1,0 +1,25 @@
+# herdr - https://herdr.dev
+# symlinked to ~/.config/herdr/config.toml via ../mise/home/conf.d/20-dotfiles-symlinks.toml
+# (only this file, not the directory - herdr writes its logs next to it)
+
+onboarding = false
+
+[theme]
+name = "catppuccin-latte"
+
+[keys]
+prefix = "ctrl+a"
+
+# ctrl+hjkl pane navigation - same muscle memory as ../tmux.conf and zellij
+focus_pane_left = "ctrl+h"
+focus_pane_down = "ctrl+j"
+focus_pane_up = "ctrl+k"
+focus_pane_right = "ctrl+l"
+
+# prefix / and prefix - splits - same as ../tmux.conf (split_horizontal
+split_vertical = "prefix+/"
+# already defaults to prefix+minus, set explicitly for clarity)
+split_horizontal = "prefix+minus"
+
+[ui.toast]
+delivery = "system"

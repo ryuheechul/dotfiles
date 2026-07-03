@@ -1,0 +1,159 @@
+# -*- mode: sh; -*- vim: set ft=zsh:
+
+# it's currently expected to be imported only from ../my_addons/aliases
+# so alias or function only when possible
+
+# _mux_above <pid>: walk the process tree upward and leave the nearest
+# multiplexer found strictly ABOVE <pid> in $REPLY ("tmux"/"zellij"/
+# "herdr"; empty + return 1 when none). "strictly above" = <pid> itself
+# never matches, so a tmux CLIENT pid resolves to the mux displaying it,
+# not to the client's own "tmux" process name.
+#
+# ancestry is the one reliable signal here: a pane's shell descends from
+# the mux server that spawned it, while mux servers daemonize (reparent
+# to launchd/init) - so the first mux found walking up is the host, and
+# an outer mux never shows up in the chain at all.
+_mux_above() {
+  # $REPLY (not echo) spares callers a `$(...)` subshell fork
+  REPLY=""
+  # `ps -o ppid=,comm= -p 123` -> "  456 /opt/homebrew/bin/herdr" (`=`
+  # suppresses headers); overwriting $pid with the parent pid IS the
+  # walk-up step. zsh runs the last pipeline command in the current
+  # shell, so `| read` really sets these locals (unlike bash). `command`
+  # dodges the grc-colorizing `alias ps` from ../my_addons/aliases (zsh
+  # expands aliases at parse time; grc's ANSI codes once broke the math)
+  local pid=$1 comm
+  # hop to the parent before any name check ("strictly above"); $comm
+  # soaks up trailing fields - one-var `read` would take the whole line
+  command ps -o ppid= -p "${pid}" 2>/dev/null | read -r pid comm || return 1
+  while (( pid > 1 )); do
+    command ps -o ppid=,comm= -p "${pid}" 2>/dev/null | read -r pid comm || break
+    # $comm belongs to the pid just queried ($pid already moved on);
+    # ${comm:t} = basename: macOS ps reports a full path, linux a bare
+    # name; the .<name>-wrapped alternates cover nix wrapProgram renames
+    # (the zellij server really runs as ".zellij-wrapped")
+    case "${comm:t}" in
+      (tmux*|.tmux-wrapped) REPLY=tmux; return 0 ;;
+      (zellij*|.zellij-wrapped) REPLY=zellij; return 0 ;;
+      (herdr*|.herdr-wrapped) REPLY=herdr; return 0 ;;
+    esac
+  done
+  return 1
+}
+
+# _mux_above_tmux_client: which mux is the attached tmux CLIENT displayed
+# inside? pane env can never tell - panes hang off the daemonized tmux
+# server, whose env predates the client - but the client process itself
+# sits right inside the hosting mux's pane, so walk above its pid.
+# tmux only: zellij/herdr cannot report a client pid.
+_mux_above_tmux_client() {
+  REPLY=""
+  # `display-message -p` prints to stdout (instead of flashing the status
+  # line); #{client_pid} is empty for a detached session
+  local client_pid="$(tmux display-message -p '#{client_pid}' 2>/dev/null)"
+  test -n "${client_pid}" && _mux_above "${client_pid}"
+}
+
+# _mux_detach: detach the mux hosting this shell; fails for herdr, which
+# has no CLI detach (only its prefix+q keybinding)
+_mux_detach() {
+  case "${_MUX_INNERMOST}" in
+    (tmux) tmux detach ;;
+    (zellij) zellij action detach ;;
+    (*) return 1 ;;
+  esac
+}
+
+# _mux_is_last_pane: would exiting this shell close the last pane of the
+# mux session hosting it? only then is detach-vs-close worth asking about;
+# with more panes/tabs around, closing simply moves focus on. muxes we
+# can't count (herdr) report "not last" and get the no-ceremony close.
+_mux_is_last_pane() {
+  case "${_MUX_INNERMOST}" in
+    (tmux)
+      test "$(tmux list-windows 2>/dev/null | wc -l)" -eq 1 &&
+        test "$(tmux list-panes 2>/dev/null | wc -l)" -eq 1
+      ;;
+    (zellij)
+      # zellij runs one server per session, and every pane across all its
+      # tabs is a direct child of that server; this pane shell's parent IS
+      # the server, so last pane = we have no sibling children of $PPID.
+      # guard first: in a nested shell (zsh inside zsh, vim :terminal, ...)
+      # $PPID is not the server - report "not last" and just close
+      local comm
+      command ps -o comm= -p "${PPID}" 2>/dev/null | read -r comm
+      case "${comm:t}" in
+        (zellij*|.zellij-wrapped) ;;
+        (*) return 1 ;;
+      esac
+      command ps -axo ppid= | awk -v p="${PPID}" '$1 == p {n++} END {exit n != 1}'
+      ;;
+    (*) return 1 ;;
+  esac
+}
+
+# _mux_detect: set the breadcrumbs, once at shell startup (they stay set
+# for consumers like ../modules/quit):
+#   $_MUX_INNERMOST - the mux hosting this shell (also picks the alias set
+#                     below); empty when not in any mux
+#   $_MUX_NESTED    - space-joined guard list (e.g. "zellij herdr") when
+#                     more than one mux env guard is visible - env only
+#                     leaks downward, so that means this mux runs inside
+#                     another one; empty otherwise
+_mux_detect() {
+  # guard order matters: it is the fallback override order (see below)
+  local -a found
+  test -n "${TMUX_PANE}" && found+=(tmux)
+  test -n "${ZELLIJ_SESSION_NAME}" && found+=(zellij)
+  test -n "${HERDR_ENV}" && found+=(herdr)
+  # `typeset -g` assigns at the global scope from inside a function
+  typeset -g _MUX_NESTED=""
+  # 0/1 guards -> unambiguous; this fast path forks nothing, keeping
+  # normal shell startup cost untouched
+  if (( ${#found} <= 1 )); then
+    typeset -g _MUX_INNERMOST="${found[1]:-}"
+    return 0
+  fi
+  typeset -g _MUX_NESTED="${found[*]}"
+  # nested: guards can't say which mux is innermost - ancestry can; when
+  # the walk fails (no ps, reparented shell, ...) the last guard wins,
+  # matching the override order this file had as plain if blocks
+  _mux_above $$ || REPLY="${found[-1]}"
+  typeset -g _MUX_INNERMOST="${REPLY}"
+}
+
+_mux_detect
+case "${_MUX_INNERMOST}" in
+(tmux)
+  alias mst='tmux-switch-session; _nclr 2'
+  alias msd='tmux detach'
+  alias mwz='tmux-zoom; _nclr 2'
+  alias mwt='tmux-switch-window; _nclr 2'
+  alias mwn='tmux new-window; _nclr 2'
+  alias mw/='tmux split-window -h; _nclr 2'
+  alias mw-='tmux split-window -v; _nclr 2'
+  alias mwc='tmux new-window'
+  alias mwl='tmux ls'
+  # "mux word jump": jump to letter (same as `tmux prefix + j` from `../../tmux.conf`)
+  alias mwj="${TMUX_PLUGIN_MANAGER_PATH}/tmux-easymotion/mode-s.sh; _nclr 2"
+;;
+(zellij)
+  alias msd='zellij action detach'
+  alias mwz='zellij action toggle-fullscreen; _nclr 2'
+  alias mwt='zellij action launch-or-focus-plugin -f sessionpicker; _nclr 2'
+  alias mwn='zellij action new-tab; _nclr 2'
+  alias mw/='zellij action new-pane -d "right"; _nclr 2'
+  alias mw-='zellij action new-pane -d "down"; _nclr 2'
+  alias mwc='zellij action new-tab'
+  alias mwl='zellij ls'
+;;
+(herdr)
+  # no msd: herdr has no CLI detach (only the prefix+q keybinding)
+  alias mwz='herdr pane zoom --current --toggle >/dev/null; _nclr 2'
+  alias mwn='herdr tab create >/dev/null; _nclr 2'
+  alias mw/='herdr pane split --current --direction right >/dev/null; _nclr 2'
+  alias mw-='herdr pane split --current --direction down >/dev/null; _nclr 2'
+  alias mwc='herdr tab create >/dev/null'
+  alias mwl='herdr session list'
+;;
+esac

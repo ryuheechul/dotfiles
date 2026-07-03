@@ -13,3 +13,8 @@ if printenv __CFBundleIdentifier | grep dev.warp >/dev/null; then
 elif test "${CMUX_BUNDLE_ID}" = com.cmuxterm.app; then
   export UNSET_HOST_ALWAYS_USE_TMUX=1
 fi
+
+if test -n "${HERDR_ENV}"; then
+  unset HOST_ALWAYS_USE_TMUX
+  unset ALL_MY_ZSH_STUFF_LOADED
+fi
