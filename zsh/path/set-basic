@@ -8,19 +8,43 @@ typeset -U path
 # convinient way to print $PATH
 alias printpath='echo ${path} | tr " " "\n"'
 
-function _load_brew() {
-  # in case of linux
-  [ -x /home/linuxbrew/.linuxbrew/bin/brew ] &&
-    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+function _activate_brew() {
+  # brew is a non-essential, personal convenience here - when nix is
+  # available it covers everything essential (../brew/Brewfile is a
+  # fallback only for when nix itself can't install, e.g. FileVault on a
+  # non-T2 Intel Mac); brew is just for extra tools installed by hand.
+  # So: silently do nothing if it's not found, same as before.
+  #
+  # covers both mac architectures like ../../bootstrap/foundation/darwin/essential.sh
+  # does (arm64 -> /opt/homebrew, Intel -> /usr/local), plus linuxbrew.
+  # Checked via plain path existence (fast) rather than `uname -m` (that
+  # essential.sh does) - forking `uname`+`xargs` costs ~15ms here, same
+  # order of magnitude as the /home/ tax below, not worth paying twice.
+  # Order matters: on macOS, stat-ing anything under /home/ triggers the
+  # autofs automounter before failing (~15-20ms even for a nonexistent
+  # path), so check the fast, actually-relevant paths first and only fall
+  # back to /home/linuxbrew/... (fast on a real Linux box, where /home is a
+  # normal local directory) as a last resort.
+  local brew_bin=/opt/homebrew/bin/brew # apple silicon
+  test -x "${brew_bin}" || brew_bin=/usr/local/bin/brew # intel mac
+  test -x "${brew_bin}" || brew_bin="/home/linuxbrew/.linuxbrew/bin/brew" # linux
+  test -x "${brew_bin}" || return # none found - no brew installed
 
-  # in case of apple silicon
-  [ -x /opt/homebrew/bin/brew ] &&
-    eval $(/opt/homebrew/bin/brew shellenv)
-
-  # in case of intel mac, it should already be loaded
+  # `brew shellenv`'s output (HOMEBREW_PREFIX/CELLAR/REPOSITORY/FPATH) is
+  # static per install - only changes if brew itself gets reinstalled
+  # elsewhere, essentially never - so cache the raw text ourselves and skip
+  # re-spawning `brew` on every shell startup. `_evalcache` (the usual tool
+  # for this in ./shell_ext) isn't available this early - this file loads
+  # from .zshenv, well before zinit loads in .zshrc.
+  local cache_file="${HOME}/.zsh-evalcache/brew-shellenv.sh"
+  if test ! -s "${cache_file}"; then
+    mkdir -p "${cache_file:h}" # don't assume this pre-exists
+    "${brew_bin}" shellenv > "${cache_file}"
+  fi
+  source "${cache_file}"
 }
 
-_load_brew
+_activate_brew
 
 function add-to-path {
   test -n "${1}" && path=("${1}" ${path})

@@ -117,4 +117,3 @@ unfunction _tag_zshrc
 export ALL_MY_ZSH_STUFF_LOADED=1
 
 unfunction _echo
-unfunction _load_brew

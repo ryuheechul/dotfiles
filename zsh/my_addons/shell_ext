@@ -141,6 +141,12 @@ fastcommandcheck mise && _evalcache mise activate zsh
 
 _tag mise
 
+# reassert our own $PATH entries - see ../path/set-special's file-level
+# comment for the why (mise's cache above can clobber them)
+source "${my_zsh_d}/path/set-special"
+
+_tag set-special
+
 # for https://github.com/aykamko/tag
 if fastcommandcheck tag; then
   export TAG_SEARCH_PROG=ag

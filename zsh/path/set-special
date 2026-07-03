@@ -1,6 +1,21 @@
 # -*- mode: sh; -*- vim: set ft=zsh:
 
-# expected to be sourced after ./set-basic by ../env
+# expected to be sourced twice, in this order:
+#   1. after ./set-basic, via ../env -> ./set, unconditionally and very
+#      early (from .zshenv, before .zshrc/zinit/mise even load)
+#   2. again, standalone, from ../my_addons/shell_ext right after mise
+#      activation - mise's shell integration is cached there (a real
+#      subprocess call otherwise), and that cache sometimes freezes a
+#      stale, point-in-time snapshot of $PATH (mise's own re-activation
+#      cleanup logic - see jdx/mise src/hook_env.rs clear_old_env()) that
+#      would silently clobber anything this file adds, until the cache is
+#      manually cleared. Re-sourcing here unconditionally reasserts these
+#      entries regardless of what mise's cached output does to $PATH -
+#      cheap (no subprocess calls in the common case) and correct without
+#      needing to know anything about mise's current or future output
+#      format.
+# safe to source repeatedly: everything below is either idempotent
+# (`add-to-path` + `typeset -U path` dedupe) or explicitly guarded.
 
 # avoid $PATH polluted by duplicates - also new ones take precedence
 typeset -U path
