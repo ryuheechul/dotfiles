@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# mask tmux inside any Emacs terminal (ghostel or vterm): a multiplexer's own
+# prefix-key/pane/window bindings inherently conflict with Emacs's own (evil,
+# window management) - manage panes via Emacs windows/buffers instead.
+# remove this mask if that decision changes.
+
+if test -n "${INSIDE_EMACS}" && test -z "${TMUX_EVEN_IF_EMACS}"; then
+  >&2 echo '[masked] tmux inside Emacs terminals conflicts with Emacs/evil keybindings.'
+  >&2 echo '         manage panes via Emacs windows/buffers instead, or force with: TMUX_EVEN_IF_EMACS=1 tmux'
+  exit 1
+fi
+
+realorig="$(which -a tmux | grep -v 'bin/path/emacs' | head -n1)"
+
+if test -z "${realorig}"; then
+  >&2 echo "couldn't find the real tmux in \$PATH: ${PATH}"
+  exit 127
+fi
+
+exec "${realorig}" "${@}"

@@ -1,9 +1,9 @@
-;;; $DOOMDIR/modules/my-custom/vterm-enhance/theme.el -*- lexical-binding: t; -*-
+;;; $DOOMDIR/modules/my-custom/term-enhance/theme.el -*- lexical-binding: t; -*-
 
-;; not sure what above really does or working properly
-;; but leave it as is for now
-
-;; configs that makes vterm module even more usable in terms of aesthetics
+;; terminal-agnostic theme integration - the per-backend `switch-theme`
+;; eval-cmd registrations (and vterm's TERM override) live in ./ghostel.el /
+;; ./vterm.el since `ghostel-eval-cmds'/`vterm-eval-cmds' are backend-specific
+;; variables, but everything below applies regardless of which is active.
 
 ;; translate between base16-* and doom-*
 (defun base16-to-doom (theme)
@@ -59,7 +59,7 @@
   ;; ;; this makes lazy loading possible
   ;; ;; but the theme become not available right away
   ;; ;; so disable it for now
-  ;; :after-call vterm-mode-hook
+  ;; :after-call ghostel-mode-hook
   :config
   ;; this works the best with me when it runs with `-nw`
   ;; also if there is any issue with truecolor
@@ -70,15 +70,6 @@
   ;; by setting COLORTERM=truecolor
   ;; decide the tone based on ~/.base16_theme (by my `current-base16` command)
   (follow-theme-base16-shell))
-
-(after! vterm
-  ;; setting TERM=eterm-256color worked best with `lf`
-  ;; although some lines might look not properly aligned
-  (setq vterm-term-environment-variable "eterm-color")
-  ;; let `switch-theme` consumable from shell side
-  (add-to-list
-   'vterm-eval-cmds
-   '("switch-theme" (lambda (theme) (switch-doom-theme theme)))))
 
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/File-Notifications.html
 (require 'filenotify)

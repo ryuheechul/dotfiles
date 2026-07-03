@@ -35,11 +35,40 @@
       "<tab>"
       'switch-to-next-buffer)
 
-;; emulate `christoomey/vim-tmux-navigator`
-(define-key evil-normal-state-map (kbd "C-h") #'evil-window-left)
-(define-key evil-normal-state-map (kbd "C-j") #'evil-window-down)
-(define-key evil-normal-state-map (kbd "C-k") #'evil-window-up)
-(define-key evil-normal-state-map (kbd "C-l") #'evil-window-right)
+;; emulate `dynamotn/Navigator.nvim' (used in
+;; ../../../../../nvim/lua/plugins/system.lua in place of the older
+;; `christoomey/vim-tmux-navigator', which is commented out there), whose
+;; actual algorithm (Navigator.nvim/lua/Navigator/navigate.lua)
+;; is: record the current window, try moving within the editor's own
+;; splits, and if the window is unchanged afterward (i.e. hit the edge),
+;; hand off to the terminal multiplexer instead - here, that means shelling
+;; out to `tmux select-pane', mirroring Navigator.nvim's tmux backend
+;; (Navigator.nvim/lua/Navigator/mux/tmux.lua) exactly: parse the socket
+;; out of $TMUX and target the pane explicitly via $TMUX_PANE, rather than
+;; relying on ambient tmux-client context (matters when more than one tmux
+;; server is running). a no-op outside tmux ($TMUX unset).
+;;
+;; `evil-window-left' et al. signal a `user-error' ("No window left from
+;; selected window") at the edge instead of silently doing nothing -
+;; `ignore-errors' swallows that before checking whether the window moved
+(defun my/tmux-select-pane (dir)
+  "Ask the tmux server hosting this terminal to move to the pane in DIR
+\(one of \"L\"/\"D\"/\"U\"/\"R\"), if any."
+  (when-let* ((tmux-env (getenv "TMUX"))
+              (socket (car (split-string tmux-env ",")))
+              (pane (getenv "TMUX_PANE")))
+    (call-process "tmux" nil nil nil "-S" socket "select-pane" "-t" pane (concat "-" dir))))
+
+(defun my/window-move-or-tmux (evil-window-fn tmux-dir)
+  (let ((cur-win (selected-window)))
+    (ignore-errors (call-interactively evil-window-fn))
+    (when (eq cur-win (selected-window))
+      (my/tmux-select-pane tmux-dir))))
+
+(define-key evil-normal-state-map (kbd "C-h") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-left "L")))
+(define-key evil-normal-state-map (kbd "C-j") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-down "D")))
+(define-key evil-normal-state-map (kbd "C-k") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-up "U")))
+(define-key evil-normal-state-map (kbd "C-l") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-right "R")))
 ;; howver these bindings above doesn't seem to work in TUI;
 ;; not that it's not bound but the keys themselves seem to be not recognized;
 ;; maybe related to this? https://www.reddit.com/r/emacs/comments/17afhxu/getting_all_keybindings_working_in_the_tui/
@@ -85,7 +114,7 @@
 (map! :n "gx" #'browse-url-xdg-open)
 (map! :n "go" #'xref-go-back)
 ;; to give the illusion of putting the editor in the background (in case as if emacs was terminal)
-(map! :n "\\s" #'vterm/full-w/toggle)
+(map! :n "\\s" #'term-enhance/full-w-toggle)
 
 (map! (:after info :map Info-mode-map
        :leader :prefix "m" :n "ee"     #'eval-last-sexp)

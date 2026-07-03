@@ -39,6 +39,9 @@ if is_inside_emacs || is_likely_from_emacs_tramp; then
     add-to-path "${XDG_DATA_HOME}/nvim/mason/bin"
   fi
 
+  # command masks that should only apply to shells inside emacs (e.g. zellij)
+  add-to-path "${my_dot_d}/bin/path/emacs"
+
   add-to-path "${my_dot_d}/bin/path/lspx"
 fi
 

@@ -5,7 +5,7 @@
 
 # _mux_above <pid>: walk the process tree upward and leave the nearest
 # multiplexer found strictly ABOVE <pid> in $REPLY ("tmux"/"zellij"/
-# "herdr"; empty + return 1 when none). "strictly above" = <pid> itself
+# "herdr"/"emacs"; empty + return 1 when none). "strictly above" = <pid> itself
 # never matches, so a tmux CLIENT pid resolves to the mux displaying it,
 # not to the client's own "tmux" process name.
 #
@@ -36,6 +36,8 @@ _mux_above() {
       (tmux*|.tmux-wrapped) REPLY=tmux; return 0 ;;
       (zellij*|.zellij-wrapped) REPLY=zellij; return 0 ;;
       (herdr*|.herdr-wrapped) REPLY=herdr; return 0 ;;
+      # capital E: macOS Emacs.app reports .../Contents/MacOS/Emacs
+      (emacs*|Emacs*|.emacs-wrapped) REPLY=emacs; return 0 ;;
     esac
   done
   return 1
@@ -106,6 +108,11 @@ _mux_detect() {
   test -n "${TMUX_PANE}" && found+=(tmux)
   test -n "${ZELLIJ_SESSION_NAME}" && found+=(zellij)
   test -n "${HERDR_ENV}" && found+=(herdr)
+  # emacs counts as a mux under either terminal backend it ships a shell
+  # bridge for (ghostel_cmd/vterm_cmd - see _emacs_term_cmd below); %%,*
+  # strips tramp's ",tramp:..." suffix, same as
+  # ../../emacs.d/doom.d/shell/source.zsh
+  case "${INSIDE_EMACS%%,*}" in (ghostel | vterm) found+=(emacs) ;; esac
   # `typeset -g` assigns at the global scope from inside a function
   typeset -g _MUX_NESTED=""
   # 0/1 guards -> unambiguous; this fast path forks nothing, keeping
@@ -120,6 +127,18 @@ _mux_detect() {
   # matching the override order this file had as plain if blocks
   _mux_above $$ || REPLY="${found[-1]}"
   typeset -g _MUX_INNERMOST="${REPLY}"
+}
+
+# _emacs_term_cmd: call whichever backend's shell bridge is actually live -
+# ghostel_cmd or vterm_cmd. both eval a "mux/*" command registered on that
+# backend's own eval-cmds list by
+# ../../emacs.d/doom.d/modules/my-custom/term-enhance/{ghostel,vterm}.el, so
+# the (emacs) alias block below never has to know which one is active
+_emacs_term_cmd() {
+  case "${INSIDE_EMACS%%,*}" in
+    (ghostel) ghostel_cmd "${@}" ;;
+    (vterm) vterm_cmd "${@}" ;;
+  esac
 }
 
 _mux_detect
@@ -155,5 +174,31 @@ case "${_MUX_INNERMOST}" in
   alias mw-='herdr pane split --current --direction down >/dev/null; _nclr 2'
   alias mwc='herdr tab create >/dev/null'
   alias mwl='herdr session list'
+;;
+(emacs)
+  # inside a ghostel or vterm terminal, emacs windows/buffers ARE the panes
+  # (tmux and zellij are even masked there - see ../../bin/path/emacs).
+  # window ops go through _emacs_term_cmd (above), which picks whichever
+  # bridge always reaches the emacs hosting THIS terminal - emacsclient
+  # instead talks to whichever instance owns the default server socket
+  # (e.g. a bg-daemon with no terminal at all), which is how "void
+  # function: ghostel" happens.
+  # the mux/* commands are registered on {ghostel,vterm}-eval-cmds by
+  # ../../emacs.d/doom.d/modules/my-custom/term-enhance/{ghostel,vterm}.el;
+  # q(hide) and C-hjkl need nothing here - already covered by
+  # ../../emacs.d/doom.d/shell/source.zsh and term-enhance for both
+  # backends (ghostel.el/vterm.el each implement C-hjkl differently -
+  # ghostel keys off an alt-screen bit, vterm off `vterm--at-prompt-p' -
+  # see their own comments on `*/mux--nav').
+  # no mwl: the bridge is fire-and-forget, it cannot print back to the
+  # shell - emacs's own buffer switcher is the session list anyway.
+  alias mwz='_emacs_term_cmd mux/zoom; _nclr 2'
+  alias mw/='_emacs_term_cmd mux/new-shell right; _nclr 2'
+  alias mw-='_emacs_term_cmd mux/new-shell below; _nclr 2'
+  # masked: "new tab" has no sane emacs-terminal equivalent - mux/new-shell
+  # in the current window just replaces the calling terminal, which reads
+  # as a glitch; emacs buffers/workspaces are the tabs here
+  alias mwn='echo "no tabs inside emacs terminals - use emacs buffers/workspaces (SPC b b / SPC TAB)"'
+  alias mwc=mwn
 ;;
 esac

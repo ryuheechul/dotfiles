@@ -1,0 +1,62 @@
+;;; $DOOMDIR/modules/my-custom/term-enhance/integration.el -*- lexical-binding: t; -*-
+
+;; single place that decides which terminal backend (ghostel or vterm) the
+;; shared, user-facing keybindings below actually act through, so nothing
+;; else (this module's own files, ../morevil, ...) has to hardcode "ghostel
+;; wins". edit `term-enhance/backend-priority' to change the preference -
+;; nothing else needs to change, as long as ./ghostel.el and ./vterm.el keep
+;; providing the functions dispatched to below.
+
+(defvar term-enhance/backend-priority '(ghostel vterm)
+  "Preferred terminal backends, most-preferred first.
+Only backends actually enabled as doom modules (`:term ghostel'/`:term
+vterm' in init.el) are considered; the first available one wins.")
+
+(defun term-enhance/backend ()
+  "Return the terminal backend to dispatch to: `ghostel' or `vterm'.
+Uses `doom-module-active-p' (a plain function, unlike the `modulep!' macro)
+since the module to check is picked at runtime, not known at compile time."
+  (seq-find (lambda (b) (doom-module-active-p :term b)) term-enhance/backend-priority))
+
+(defun term-enhance/dispatch (fn-alist &rest args)
+  "Call the function in FN-ALIST keyed by the active backend, with ARGS."
+  (apply (alist-get (term-enhance/backend) fn-alist) args))
+
+(defun term-enhance/toggle ()
+  (interactive)
+  (term-enhance/dispatch '((ghostel . wrapped/ghostel/toggle)
+                            (vterm . wrapped/vterm/toggle))))
+
+(defun term-enhance/full-w-toggle ()
+  (interactive)
+  (term-enhance/dispatch '((ghostel . ghostel/full-w/toggle)
+                            (vterm . vterm/full-w/toggle))))
+
+(defun term-enhance/open-in-neovim ()
+  (interactive)
+  (term-enhance/dispatch '((ghostel . ghostel/open-in-neovim)
+                            (vterm . vterm/open-in-neovim))))
+
+;; emulate `akinsho/toggleterm.nvim`
+(map! :leader :g "'" #'term-enhance/toggle)
+;; reverse the default keybinding for `t' and `T'
+(map! :leader :prefix "o" :g "t" #'term-enhance/full-w-toggle)
+;; TODO: `T' can be better used for running Tmux probably
+(map! :leader :prefix "o" :g "T" #'term-enhance/toggle)
+(map! :leader :prefix "f" :n "n" #'term-enhance/open-in-neovim)
+
+;; which-key labels: Doom's own default `+evil-bindings.el' sets "Toggle
+;; vterm popup"/etc. on these same key sequences (guarded on `:term vterm'
+;; being enabled, which it is - vterm stays the fallback), and since `map!'
+;; ties its `:desc' to the KEY SEQUENCE (not the command), overriding the
+;; command above doesn't clear that stale text; it would always say
+;; "vterm" regardless of which backend `term-enhance/backend-priority'
+;; actually picked. `which-key-add-key-based-replacements' overrides it
+;; explicitly, computed from the real dispatch result rather than assuming
+;; ghostel like the rest of this repo's comments do.
+(let ((backend (symbol-name (term-enhance/backend))))
+  (which-key-add-key-based-replacements
+    "SPC '"   (format "Toggle %s popup" backend)
+    "SPC o t" (format "Open %s here" backend)
+    "SPC o T" (format "Toggle %s popup" backend)
+    "SPC f n" (format "Open in neovim (via %s)" backend)))

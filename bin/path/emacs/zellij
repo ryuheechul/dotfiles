@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# mask zellij inside ghostel: its attach burst deadlocks Emacs via the native
+# PTY reader (term_mutex held across a blocking event-pipe flush) - remove this
+# mask once fixed upstream in https://github.com/dakra/ghostel
+# zellij works fine in vterm and outside emacs, so only ghostel bails out
+
+if test "${INSIDE_EMACS%%,*}" = "ghostel" && test -z "${ZELLIJ_EVEN_IF_GHOSTEL}"; then
+  >&2 echo '[masked] zellij deadlocks Emacs inside ghostel (native PTY mutex bug).'
+  >&2 echo '         use ghostty or vterm instead, or force with: ZELLIJ_EVEN_IF_GHOSTEL=1 zellij'
+  exit 1
+fi
+
+realorig="$(which -a zellij | grep -v 'bin/path/emacs' | head -n1)"
+
+if test -z "${realorig}"; then
+  >&2 echo "couldn't find the real zellij in \$PATH: ${PATH}"
+  exit 127
+fi
+
+exec "${realorig}" "${@}"
