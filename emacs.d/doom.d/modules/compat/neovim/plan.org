@@ -1,0 +1,230 @@
+#+TITLE: Plan: closing the neovim -> emacs gap
+#+STARTUP: overview
+
+* Read this first                                                 :meta:
+
+This is a reference menu, not a sprint backlog. Nothing below is meant to
+be worked through proactively or systematically - pick up a single item
+only when a real, felt need for it actually comes up in daily use. "Let's
+knock out Phase 1" is explicitly not the intent, even though the phases
+are ordered by effort and risk, roughly smallest first.
+
+This snapshot was written against the neovim config as it stood on
+[2026-07-03]. That config keeps evolving on its own, so every reference
+below to a specific nvim file, line, or behavior is provisional - re-check
+the actual current nvim source before acting on any item, since the thing
+being described may have moved, changed, or been removed entirely since
+this was written.
+
+* Goal
+
+Make doom emacs feel like [[file:../../../../../nvim/][the neovim config]] for the things that matter -
+muscle memory and quality of life - not a full port. Anything without a
+daily-use payoff stays in neovim land (see [[*Not porting (deliberately)][not porting]]).
+
+* Where things go (established by the recent commits)
+
+| home                        | concern                                 | examples already there                                                                                                                       |
+|-----------------------------+-----------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------|
+| [[file:../../my-custom/morevil/][morevil]]                     | muscle memory: keybindings, evil tweaks | jk-escape, q smart-quit binding, TAB/S-TAB windows, SPC TAB next buffer, C-hjkl + tmux handoff, SPC w / and w -, SPC s c nohighlight, gx, go |
+| [[file:./][compat/neovim]] (this module) | behavior/system parity                  | hotfuzz fuzzy completion, corfu preselect, virtualedit (onemore), listchars via whitespace-mode, [[file:./smart-quit.el][smart-quit.el]]                               |
+| [[file:../../my-custom/term-enhance/][term-enhance]]                | terminal + multiplexer parity           | ghostel/vterm mux bridge, mw* aliases, q-as-pane-close, C-hjkl TUI passthrough                                                               |
+
+# outside emacs (nvim plugin, raw terminal, ...) this table looks ragged:
+# org pads cells to FOLDED link widths, which only emacs displays. view
+# this file through the `gloworg' zsh alias instead (pandoc org->markdown
+# piped into glow - defined in ../../../../../zsh/my_addons/aliases)
+
+Rule of thumb: a keybinding goes to morevil, a setting/mode goes here, anything
+touching the terminal goes to term-enhance.
+
+* Phase 1: muscle memory gaps (small, high frequency)
+
+Ported from [[file:../../../../../nvim/lua/plugins/keymaps.lua][keymaps.lua]] unless noted. Each is a few lines in morevil.
+
+** TODO ~gn~ -> jump forward
+nvim: ~<C-I>~. ~go~ is currently ~xref-go-back~; consider moving both to
+doom's better-jumper (~better-jumper-jump-backward~/~-forward~) which
+tracks all motions like nvim's jumplist, not just xref jumps.
+
+** TODO ~gl~ -> go to definition under cursor
+nvim: ~<C-]>~. Emacs: ~+lookup/definition~.
+
+** TODO ~Y~ -> yank to end of line
+~(setq evil-want-Y-yank-to-eol t)~. Caveat: ~evil-want-*~ vars must be set
+BEFORE evil loads - needs ~init.el~ or this module's ~packages.el~-adjacent
+early init, not ~config.el~ (doom loads evil first).
+
+** TODO ~j~/~k~ move by visual line when no count
+Pairs with the existing ~global-visual-line-mode~:
+~(setq evil-respect-visual-line-mode t)~ - same before-evil-loads caveat as ~Y~.
+
+** TODO ~,~ -> repeat last ex command
+nvim: ~@:~. Emacs: ~evil-ex-repeat~.
+
+** TODO ~+~ / ~-~ -> increment/decrement number at point
+nvim: ~<C-A>~/~<C-X>~. Emacs: ~evil-numbers/inc-at-pt~ / ~dec-at-pt~
+(package needed; doom doesn't ship it by default).
+
+** TODO ~SPC RET~ -> run macro q
+nvim: ~@q~. Emacs: ~(evil-execute-macro 1 (evil-get-register ?q))~.
+
+** TODO ~SPC j~ / ~SPC k~ -> previous/next page
+nvim: ~Hzb~ / ~Lzt~ trick. Emacs equivalent of the same trick:
+~evil-window-top~ + ~evil-scroll-line-to-bottom~ (and the mirror), or simply
+~evil-scroll-page-up/down~ if the exact cursor placement doesn't matter in
+practice.
+
+** TODO ~SPC b t~ -> trim trailing whitespace on buffer
+~delete-trailing-whitespace~.
+
+** TODO ~SPC t l~ -> toggle listchars
+~whitespace-mode~ toggle (the mode itself is already set up in this module).
+
+** TODO ~SPC t b~ -> toggle dark/light
+The machinery exists ([[file:../../my-custom/term-enhance/theme.el][term-enhance/theme.el]] + the shell ~dark~/~light~
+commands) - just needs a leader binding that flips and keeps base16-shell
+in sync.
+
+** TODO ~SPC w z~ / ~SPC w m~ zoom semantics
+Reuse the window-configuration save/restore toggle technique from
+term-enhance's ~mux/zoom~ as a general ~SPC w z~; nvim's ~SPC w m~ (maximize
+editor + outer mux) can call the ~mux-zoom~ script when ~$TMUX~ is set, like
+morevil's C-hjkl tmux handoff does.
+
+** TODO verify ~z=~ (fix spelling picker)
+Doom's ~:checkers spell +flyspell~ likely already binds it to
+~+spell/correct~ - confirm it pops a picker like Telescope ~spell_suggest~ did.
+
+* Phase 2: QoL behaviors
+
+From [[file:../../../../../nvim/lua/boot/misc.lua][boot/misc.lua]].
+
+** TODO autoread
+~global-auto-revert-mode~ (+ ~global-auto-revert-non-file-buffers~ for
+dired). Doom does NOT enable this by default. Goes in this module.
+
+** TODO help buffers act like ~less~
+nvim maps d/u/f/b + Esc in help/qf. morevil already does this for
+Info-mode; extend the same map to ~help-mode~ (and ~helpful-mode~ if it ever
+gets enabled). nvim also auto-maximizes help windows - doom's popup rules
+can do that with a ~set-popup-rule!~ size bump if wanted.
+
+** TODO spell check on by default
+nvim: ~vim.o.spell = true~ globally. Doom enables flyspell per-mode;
+decide whether text+prog (comments) coverage via ~flyspell-prog-mode~
+matches the nvim feel closely enough.
+
+** TODO verify save-place
+nvim: last-position restore autocmd. Doom's ~:config default~ enables
+~save-place-mode~ - confirm, then check the gitcommit exclusion nvim has
+(~save-place-ignore-files-regexp~).
+
+** TODO verify smartcase search
+Evil's ~evil-ex-search-case~ defaults to ~'smart~ - confirm nothing in the
+config overrides it.
+
+** DONE yank highlight
+~:ui ophints~ (enabled).
+
+** DONE undofile
+~:emacs undo~ (enabled).
+
+** DONE clipboard sync
+Emacs default + ~:os (tty +osc)~ for OSC 52 (enabled).
+
+** DONE cursorline
+Doom hl-line. cursorcolumn intentionally skipped: emacs has no
+first-class equivalent and it mattered mostly alongside ~virtualedit=all~,
+which can't be fully ported anyway (see [[file:./config.el][config.el]]).
+
+* Phase 3: plugin equivalents
+
+Mostly "turn on a doom module." From the plugin inventory in
+[[file:../../../../../nvim/lua/plugins/][nvim/lua/plugins/]].
+
+** TODO vim-visual-multi
+Enable doom ~:editor multiple-cursors~ (evil-multiedit/evil-mc). Biggest
+missing editing power tool.
+
+** TODO indent-blankline
+Enable doom ~:ui indent-guides~.
+
+** TODO vim-matchup (smarter ~%~)
+~evil-matchit~ package.
+
+** TODO rainbow-delimiters
+Small ~use-package!~; doom has no module for it.
+
+** TODO mkdir.nvim (auto-create parent dirs on save)
+Verify: doom prompts to create missing dirs on save already; if the
+prompt annoys, advise it away.
+
+** TODO tidy.nvim (trim trailing whitespace on save)
+Verify what ~:editor format +onsave~ / ws-butler currently do before
+adding anything.
+
+** TODO fugitive ~SPC g x~ GBrowse
+~browse-at-remote~ is bundled with doom's magit; bind to match
+(~+vc/browse-region-or-line~ area). Check what ~SPC g o~ offers first.
+
+** DONE toggleterm
+term-enhance toggle + popup.
+
+** DONE telescope
+vertico/consult (doom); the nvim SPC map was modeled on doom's in the
+first place, so most SPC f/s/b bindings already agree.
+
+** DONE neogit
+magit (~SPC g g~ matches by design).
+
+** DONE gitsigns
+~:emacs vc~ gutter.
+
+** DONE Comment.nvim (~gc~)
+evil-nerd-commenter via doom.
+
+** DONE todo-comments
+~:ui hl-todo~.
+
+** DONE easymotion-style jump
+doom evil-snipe + avy (~gs~ prefix).
+
+** DONE lf/oil
+~:emacs dired~ (+ the existing ~SPC f t~/~SPC t f~ treemacs).
+
+** DONE Navigator.nvim
+morevil's ~my/window-move-or-tmux~.
+
+* Not porting (deliberately)
+
+- DAP / neotest / sniprun / conjure / luapad :: debugging and REPL
+  workflows differ enough in emacs (dape, ert, org-babel already cover the
+  need when it arises); revisit only on real demand, in ~lab~ first per its
+  charter.
+- UI cosmetics with no muscle-memory weight :: alpha dashboard (doom has
+  its own), scrollbar, drop.nvim snow, noice/wilder/dressing (vertico
+  replaces the lot), bufferline (workspaces + modeline cover it).
+- nvim-ghost / package-info / ChatGPT-era plugins :: stale or superseded.
+- nvim's ~t~ -> Telescope buffers mapping :: a mistake on the nvim side,
+  not a habit: it's shadowed by other tools there and the buffer picker is
+  already reachable via ~SPC b b~/~SPC f b~ on both editors. Candidate for
+  removal from [[file:../../../../../nvim/lua/plugins/keymaps.lua][keymaps.lua]] rather than porting.
+- ~virtualedit=all~ full parity :: impossible at the emacs core level
+  (documented in [[file:./config.el][config.el]]); ~onemore~ is the ceiling.
+- TTY C-hjkl window motion in raw terminal emacs :: key events genuinely
+  don't arrive distinctly (noted in morevil); the ~C-w~/~SPC w~ prefix is
+  the accepted fallback, and inside ghostel the terminal-side dispatcher
+  already handles it.
+
+* Sequencing
+
+Phase 1 is many independent, commit-sized bindings - knock out in one or
+two "emacs - port neovim muscle memory batch N" commits /when actually
+picked up/, testing each in both GUI and TTY (the TAB/jk commits showed
+GUI/TTY key-symbol splits are the usual trap). Phase 2 next; each item is
+isolated. Phase 3 last - each module flip can ride its own commit so a
+misbehaving package is a one-line revert.
+
+Reminder: "sequencing" describes the order to prefer /if/ and /when/ work
+on this starts, not a schedule. See [[*Read this first][Read this first]] above.
