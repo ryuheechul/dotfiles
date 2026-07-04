@@ -145,9 +145,30 @@
 ;;;; to match with my muscle memory with ../../../../../nvim/lua/plugins/keymaps.lua
 (map! :leader :prefix "f" :g "h" #'doom/help-search)
 (map! :n "gx" #'browse-url-xdg-open)
-(map! :n "go" #'xref-go-back)
-;; to give the illusion of putting the editor in the background (in case as if emacs was terminal)
-(map! :n "\\s" #'term-enhance/full-w-toggle)
+;; jumplist navigation like nvim's C-O/C-I (bound go/gn there too, see
+;; ../../../../../nvim/lua/plugins/keymaps.lua). better-jumper piggybacks
+;; evil's jump list, so plain motions (gg, G, /search) are tracked - doom
+;; was already remapping the previous xref-go-back binding here onto
+;; better-jumper-jump-backward; bind both directions explicitly instead
+(map! :n "go" #'better-jumper-jump-backward)
+(map! :n "gn" #'better-jumper-jump-forward)
+;; , repeats the last ex command like nvim's @: (same trade as there: it
+;; shadows evil's reverse f/t repeat, ; still repeats forward)
+(map! :n "," #'evil-ex-repeat)
+;; \s mimics neovim's :suspend (leader s in
+;; ../../../../../nvim/lua/plugins/keymaps.lua): in a TTY frame the real
+;; thing exists - `suspend-frame' sends SIGTSTP like vim's :suspend, back
+;; with fg (also right for emacsclient -nw: it suspends just that client).
+;; a GUI frame has no parent shell to drop into (launchd started it;
+;; suspend-frame would merely iconify), so keep the illusion there: toggle
+;; the full-window terminal instead - whose shell aliases fg to toggle
+;; back (../../../shell/source.zsh), completing the
+;; suspend/fg round trip. checked per keypress, so daemon frames of both
+;; kinds each get the right behavior
+(map! :desc "suspend to shell (GUI: toggle terminal)"
+      :n "\\s" (cmd! (if (display-graphic-p)
+                         (term-enhance/full-w-toggle)
+                       (suspend-frame))))
 
 (map! (:after info :map Info-mode-map
        :leader :prefix "m" :n "ee"     #'eval-last-sexp)

@@ -42,13 +42,24 @@ touching the terminal goes to term-enhance.
 
 Ported from [[file:../../../../../nvim/lua/plugins/keymaps.lua][keymaps.lua]] unless noted. Each is a few lines in morevil.
 
-** TODO ~gn~ -> jump forward
-nvim: ~<C-I>~. ~go~ is currently ~xref-go-back~; consider moving both to
-doom's better-jumper (~better-jumper-jump-backward~/~-forward~) which
-tracks all motions like nvim's jumplist, not just xref jumps.
+** DONE ~gn~ / ~go~ -> jumplist forward/back
+nvim: ~<C-I>~ / ~<C-O>~. Both bound to better-jumper in morevil. It turned
+out ~go~ already behaved: doom remaps xref-go-back onto
+~better-jumper-jump-backward~, which piggybacks evil's jump list (plain
+motions like gg/G//search are tracked) - the real gap was only ~gn~,
+which was unbound. Now both directions are explicit.
 
-** TODO ~gl~ -> go to definition under cursor
-nvim: ~<C-]>~. Emacs: ~+lookup/definition~.
+** TODO ~gl~ -> go to definition under cursor (NOT straightforward)
+nvim: ~<C-]>~. Emacs candidate: ~+lookup/definition~ - but two findings
+from trying it (2026-07-03) demoted this from a one-liner:
+- the underlying lookup is broken where it matters: ~gd~ (doom's default
+  for the same thing) did nothing in a lua buffer, so binding ~gl~ to it
+  would bind a no-op. fix definition lookup first (eglot attach for lua?
+  check ~M-x eglot~ / ~SPC c d~ there), and treat ~gd~/~gr~
+  (definition/references) parity as one work item with ~gl~.
+- ~gl~ is not free in doom: it is ~evil-lion-left~, the align operator
+  (e.g. ~glip=~ aligns a paragraph on ~=~). shadowing it is a decision to
+  make consciously (~gL~ right-align would survive).
 
 ** TODO ~Y~ -> yank to end of line
 ~(setq evil-want-Y-yank-to-eol t)~. Caveat: ~evil-want-*~ vars must be set
@@ -59,8 +70,9 @@ early init, not ~config.el~ (doom loads evil first).
 Pairs with the existing ~global-visual-line-mode~:
 ~(setq evil-respect-visual-line-mode t)~ - same before-evil-loads caveat as ~Y~.
 
-** TODO ~,~ -> repeat last ex command
-nvim: ~@:~. Emacs: ~evil-ex-repeat~.
+** DONE ~,~ -> repeat last ex command
+nvim: ~@:~. Bound to ~evil-ex-repeat~ in morevil. Shadows evil's reverse
+f/t repeat (same trade nvim made); ~;~ still repeats forward.
 
 ** TODO ~+~ / ~-~ -> increment/decrement number at point
 nvim: ~<C-A>~/~<C-X>~. Emacs: ~evil-numbers/inc-at-pt~ / ~dec-at-pt~
@@ -95,6 +107,30 @@ morevil's C-hjkl tmux handoff does.
 ** TODO verify ~z=~ (fix spelling picker)
 Doom's ~:checkers spell +flyspell~ likely already binds it to
 ~+spell/correct~ - confirm it pops a picker like Telescope ~spell_suggest~ did.
+
+** DONE ~\s~ -> suspend to shell
+nvim: ~:suspend~ (leader s). Real suspend is TTY-only: ~suspend-frame~ =
+SIGTSTP, back with ~fg~, and correct for ~emacsclient -nw~ too. A GUI
+frame has no parent shell (launchd started it), so there ~\s~ keeps
+toggling the full-window terminal - whose shell aliases ~fg~ to toggle
+back, completing the suspend/fg round trip. Dispatched per keypress on
+~display-graphic-p~ in morevil.
+
+** DONE dashboard ~i~ -> open a fresh unnamed buffer
+nvim's dashboard offers this as an official menu entry (quick scratch
+note, usually never saved; it does NOT enter insert state - that is up
+to the user, so neither do we). ported the same way: a real
+~+dashboard-menu-sections~ entry in compat/neovim (not morevil: it is a
+dashboard behavior, not just a keybinding), with doom's own
+~+default/new-buffer~ as the action - no custom command needed. the ~i~
+binding must live in the evil normal AUX keymap of
+~+dashboard-mode-map~: the menu renderer looks up its displayed key hint
+there, and the dashboard's own ~[remap evil-insert] -> ignore~ lives
+there too, swallowing ~i~ before any remap in the raw keymap is
+consulted (first attempt failed exactly that way). the dashboard also
+refuses insert state entirely now (advice on ~evil-insert-state~; an
+earlier bug left it stuck in insert because evil-buffer-new's
+set-window-buffer does not change the current buffer).
 
 * Phase 2: QoL behaviors
 
@@ -208,8 +244,8 @@ morevil's ~my/window-move-or-tmux~.
 - nvim-ghost / package-info / ChatGPT-era plugins :: stale or superseded.
 - nvim's ~t~ -> Telescope buffers mapping :: a mistake on the nvim side,
   not a habit: it's shadowed by other tools there and the buffer picker is
-  already reachable via ~SPC b b~/~SPC f b~ on both editors. Candidate for
-  removal from [[file:../../../../../nvim/lua/plugins/keymaps.lua][keymaps.lua]] rather than porting.
+  already reachable via ~SPC b b~/~SPC f b~ on both editors. Removed from
+  [[file:../../../../../nvim/lua/plugins/keymaps.lua][keymaps.lua]] on [2026-07-04] instead of porting.
 - ~virtualedit=all~ full parity :: impossible at the emacs core level
   (documented in [[file:./config.el][config.el]]); ~onemore~ is the ceiling.
 - TTY C-hjkl window motion in raw terminal emacs :: key events genuinely

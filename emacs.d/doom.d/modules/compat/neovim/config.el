@@ -53,3 +53,32 @@
 
 ;; make `q' mimic neovim's overall quit semantics - see ./smart-quit.el
 (load! "smart-quit")
+
+;; nvim's dashboard has an official menu entry for opening a fresh
+;; unnamed buffer (quick scratch note, usually never saved; entering
+;; insert state is up to the user afterwards, in nvim too) - give doom's
+;; dashboard the same, as a real menu item rather than a hidden
+;; keybinding. doom's +default/new-buffer already does exactly this.
+(add-to-list '+dashboard-menu-sections
+             '("New unnamed buffer"
+               :icon (nerd-icons-faicon "nf-fa-pencil" :face '+dashboard-menu-title)
+               :action +default/new-buffer)
+             'append)
+
+;; the binding must live in the evil NORMAL auxiliary keymap of
+;; +dashboard-mode-map (what map!'s :n does here) for two reasons: that
+;; map is where the menu renderer looks up the key hint it displays next
+;; to the entry (+dashboard--insert-menu), and a direct binding there
+;; preempts the module's own `[remap evil-insert] -> ignore', which
+;; otherwise swallows i before any remap in the raw keymap is consulted
+(map! :map +dashboard-mode-map :n "i" #'+default/new-buffer)
+
+;; never let the dashboard itself enter insert state - it is a read-only
+;; menu, there is nothing to insert into. an :around advice, not an entry
+;; hook: switching states from inside evil's entry hook loses to the
+;; in-flight transition, refusing to start it at all cannot
+(defadvice! +neovim/dashboard-block-insert-a (fn &rest args)
+  "Refuse to enter insert state in the dashboard."
+  :around #'evil-insert-state
+  (unless (derived-mode-p '+dashboard-mode)
+    (apply fn args)))

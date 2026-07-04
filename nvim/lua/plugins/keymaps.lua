@@ -32,8 +32,6 @@ local init = function()
     '<Cmd>wincmd W<CR>',
     { noremap = true, silent = true, desc = 'go to "previous" window' }
   )
-  vim.keymap.set('n', 't', cmdify 'Telescope buffers', { noremap = true, silent = true, desc = ':Telescope buffers' })
-
   -- replace builtin spell suggestions - see `:h z=`
   vim.keymap.set('n', 'z=', cmdify 'Telescope spell_suggest', { noremap = true, desc = 'fix spelling' })
 
