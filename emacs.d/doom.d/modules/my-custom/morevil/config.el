@@ -142,6 +142,23 @@
       "c"
       #'evil-ex-nohighlight)
 
+;; trim trailing whitespace on the buffer, same as nvim's SPC b t
+;; (:%s/\s\+$//e in ../../../../../nvim/lua/plugins/keymaps.lua)
+(map! :leader
+      :prefix "b"
+      :desc "Trim trailing whitespace"
+      :g
+      "t"
+      #'delete-trailing-whitespace)
+
+;; SPC t l toggles listchars (whitespace-mode, set up by
+;; ../../compat/neovim/) like nvim's :set list! - doom's line-number
+;; toggle moves from t l to the free, and frankly more mnemonic, t n
+(map! :leader
+      :prefix "t"
+      :desc "Hidden chars (listchars)" :g "l" #'whitespace-mode
+      :desc "Line numbers"             :g "n" #'doom/toggle-line-numbers)
+
 ;;;; to match with my muscle memory with ../../../../../nvim/lua/plugins/keymaps.lua
 (map! :leader :prefix "f" :g "h" #'doom/help-search)
 (map! :n "gx" #'browse-url-xdg-open)

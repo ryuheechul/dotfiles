@@ -1,0 +1,5 @@
+* emacs.d
+This is not =.emacs.d=
+
+- [[file:doom.d/applying-changes.org][How to apply config changes to a running emacs]] - when to eval, when
+  to restart which instance, and when =doom sync= is actually needed

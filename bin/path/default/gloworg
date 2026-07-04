@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+# render an org file the way glow renders markdown - glow has no org
+# support, so pandoc converts org -> gfm on the fly.
+# a real script rather than a zsh function so non-shell callers can use
+# it too, e.g. ../../../lf/
+# also reachable as `orglow` (sibling symlink): gloworg for glow<TAB>
+# discoverability, orglow for the nicer portmanteau
+
+# usages
+# - view a file: gloworg path/to/file.org
+# - no argument: browse org files under $PWD with fzf (rendered preview)
+#   and view the pick - mimicking how bare `glow` browses markdown files
+#   (fzf over gum/sk: gum filter has no preview pane, and fzf is already
+#   the picker everywhere else in this repo)
+
+set -euo pipefail
+
+# `light` or `dark`; same logic as theme-tone in
+# ../../../zsh/my_addons/aliases, which is a zsh function and thus out of
+# reach here (current-base16 is a sibling script)
+tone="$(current-base16 | sed s/solarized-//)"
+
+if test -n "${1:-}"; then
+  # org's headline TODO/DONE keywords have no markdown equivalent (org's
+  # real checkboxes are `- [ ]` LIST items, which pandoc already converts
+  # to gfm task lists) - pandoc emits them as html spans that glow renders
+  # as noise, so map them to checkbox-looking markers. done as a pandoc
+  # AST filter rather than sed on the output: only genuine headline
+  # keywords are Header+Span nodes, so literal text quoting these spans
+  # (code blocks, docs about this very mechanism) can never false-positive
+  pandoc -f org -t gfm --lua-filter=<(cat <<'EOF'
+function Header(h)
+  local first = h.content[1]
+  if first and first.t == "Span" then
+    if first.classes:includes("todo") then
+      h.content[1] = pandoc.RawInline("markdown", "[ ]")
+    elseif first.classes:includes("done") then
+      h.content[1] = pandoc.RawInline("markdown", "[x]")
+    end
+  end
+  return h
+end
+EOF
+  ) -- "$1" | glow -p -s "$tone" -
+  exit
+fi
+
+# cancelling fzf (ESC) exits non-zero, which set -e propagates - same as
+# quitting bare glow's browser; the preview simply recurses (glow skips
+# its pager when output is a pipe, so -p is harmless there)
+file="$(fd --type f --extension org | fzf --preview "$0 {}")"
+exec "$0" "$file"

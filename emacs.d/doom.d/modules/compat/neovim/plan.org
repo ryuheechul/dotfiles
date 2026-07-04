@@ -69,10 +69,11 @@ motion-state buffers get it too) to +neovim/goto-link (compat/neovim):
 a button/Info link when on one, otherwise the first xref definition
 with no picker; gd keeps the picker.
 
-** TODO ~Y~ -> yank to end of line
-~(setq evil-want-Y-yank-to-eol t)~. Caveat: ~evil-want-*~ vars must be set
-BEFORE evil loads - needs ~init.el~ or this module's ~packages.el~-adjacent
-early init, not ~config.el~ (doom loads evil first).
+** DONE ~Y~ -> yank to end of line
+~(setq evil-want-Y-yank-to-eol t)~ in this module's [[file:./init.el][init.el]] - module
+init.el files run at doom's early-init stage, before any package (evil
+included) loads, which is what the ~evil-want-*~ family requires;
+config.el is too late. (evil's default Y = whole line; nvim's = y$.)
 
 ** TODO ~j~/~k~ move by visual line when no count
 Pairs with the existing ~global-visual-line-mode~:
@@ -95,16 +96,18 @@ nvim: ~Hzb~ / ~Lzt~ trick. Emacs equivalent of the same trick:
 ~evil-scroll-page-up/down~ if the exact cursor placement doesn't matter in
 practice.
 
-** TODO ~SPC b t~ -> trim trailing whitespace on buffer
-~delete-trailing-whitespace~.
+** DONE ~SPC b t~ -> trim trailing whitespace on buffer
+~delete-trailing-whitespace~, bound in morevil (the key was free).
 
-** TODO ~SPC t l~ -> toggle listchars
-~whitespace-mode~ toggle (the mode itself is already set up in this module).
+** DONE ~SPC t l~ -> toggle listchars
+~whitespace-mode~ toggle (the mode itself is set up in this module).
+conflicted with doom's ~doom/toggle-line-numbers~ - resolved by swapping:
+listchars takes ~t l~ (nvim muscle memory), line numbers move to the
+previously free and more mnemonic ~SPC t n~.
 
-** TODO ~SPC t b~ -> toggle dark/light
-The machinery exists ([[file:../../my-custom/term-enhance/theme.el][term-enhance/theme.el]] + the shell ~dark~/~light~
-commands) - just needs a leader binding that flips and keeps base16-shell
-in sync.
+** DONE ~SPC t b~ -> toggle dark/light
+Turned out to already exist: ~SPC t b~ was bound to
+~toggle-doom-theme-tone~ ([[file:../../my-custom/term-enhance/theme.el][term-enhance/theme.el]]) all along.
 
 ** TODO ~SPC w z~ / ~SPC w m~ zoom semantics
 Reuse the window-configuration save/restore toggle technique from
@@ -112,9 +115,9 @@ term-enhance's ~mux/zoom~ as a general ~SPC w z~; nvim's ~SPC w m~ (maximize
 editor + outer mux) can call the ~mux-zoom~ script when ~$TMUX~ is set, like
 morevil's C-hjkl tmux handoff does.
 
-** TODO verify ~z=~ (fix spelling picker)
-Doom's ~:checkers spell +flyspell~ likely already binds it to
-~+spell/correct~ - confirm it pops a picker like Telescope ~spell_suggest~ did.
+** DONE verify ~z=~ (fix spelling picker)
+Confirmed working out of the box (2026-07-04) - doom's
+~:checkers spell +flyspell~ covers it.
 
 ** DONE ~\s~ -> suspend to shell
 nvim: ~:suspend~ (leader s). Real suspend is TTY-only: ~suspend-frame~ =

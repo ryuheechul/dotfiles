@@ -28,6 +28,16 @@ markdown-via-glow() {
   with-glow $1
 }
 
+org-via-gloworg() {
+  function with-gloworg() {
+    title Org gloworg "${1}"
+    # ../bin/path/default/gloworg - pandoc org->gfm piped into glow
+    gloworg "${1}"
+  }
+
+  with-gloworg "${1}"
+}
+
 zip-via-unzip() {
   function with-unzip() {
     title Zip unzip "${1}"
@@ -99,6 +109,9 @@ file-via-bat() {
 case "${ext}" in
 md)
   markdown-via-glow "${1}"
+  ;;
+org)
+  org-via-gloworg "${1}"
   ;;
 jpg | jpeg | png | gif | bmp)
   show-image "${1}"

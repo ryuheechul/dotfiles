@@ -368,13 +368,9 @@ alias rgc='rg -C' # with context
 alias rgc5='rgc 5' # with context value that is 5
 
 alias glow='glow -p -s "$(theme-tone)"'
-# render an org file the way glow renders markdown (glow has no org
-# support): pandoc converts org -> gfm on the fly; same pager/theme flags
-# as the glow alias above (`command` = don't depend on that alias)
-gloworg() {
-  pandoc -f org -t gfm -- "${1:?usage: gloworg <file.org>}" |
-    command glow -p -s "$(theme-tone)" -
-}
+# gloworg (render org files via glow) is a real script at
+# ../../bin/path/default/gloworg - not a function here, so that non-shell
+# callers (e.g. ../../lf/) can use it too
 
 alias fzfp='env fzf --height 100% --preview "preview {}"'
 alias fzfpp='fzfp|fpp'

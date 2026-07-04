@@ -1,0 +1,100 @@
+#+TITLE: Applying config changes to a running emacs
+What to actually do after editing this doom config, instead of
+defaulting to "restart everything". Written for me /and/ for agents
+advising me.
+
+The two rules that dissolve most of the confusion:
+
+1. *=doom sync= never applies anything to a running emacs.* It prepares
+   files on disk (package installs, autoload indexes). A (re)start is
+   what applies. So the question is always two-part: /does disk need
+   syncing?/ and /which running instances need reloading?/
+2. *Every emacs process loads the config independently at its own
+   startup.* There are usually two here: the GUI Emacs.app and the
+   background daemon behind =emacsclient=. Fixing one does nothing for
+   the other; ghostel terminals live inside the GUI instance, so they
+   follow it.
+
+* By kind of change
+| change                                                              | =doom sync=? | then                                                  |
+|---------------------------------------------------------------------+--------------+-------------------------------------------------------|
+| code in a module's =config.el= (bindings, defuns, settings, advice) | no           | eval it live, or restart the instance                 |
+| a module's =init.el= (early vars, e.g. =evil-want-*=)               | no           | restart the instance (eval is too late by definition) |
+| module list in =doom.d/init.el= (=doom!= block)                     | *yes*        | restart                                               |
+| any =packages.el= (=package!= add/remove/pin)                       | *yes*        | restart                                               |
+| autoload cookies (=;;;###autoload=) or new =autoload.el=            | *yes*        | restart                                               |
+| shell environment changed (PATH, new tools, env vars)               | =doom env=   | restart (or =M-x doom/reload-env=)                    |
+
+"Restart the instance" means each instance you care about - see below.
+Per =doom help sync=, a sync is also due after updating doom itself,
+moving =$EMACSDIR=/=$DOOMDIR=, or up/downgrading emacs.
+
+* Where =doom env= fits
+=doom env= scrapes the login shell's environment (=$SHELL -ic env=) into
+an envvars file that emacs loads at startup. It exists because the GUI
+app and the daemon are launched by launchd, not by a shell - without the
+snapshot they would never see the real =PATH= (mise shims, mason bin,
+etc.). So it is not about elisp changes at all: regenerate it when the
+/shell/ side moved (new tool locations, changed =PATH= entries, exported
+vars emacs should inherit), then restart - or =M-x doom/reload-env= to
+reload the file into a running instance. =doom sync -e= regenerates it
+as part of a sync.
+
+* Eval live (fastest, for config.el-level edits)
+- Inside emacs: =M-x eval-buffer= on the changed file, or
+  =eval-last-sexp= on just the changed form.
+- Doom's =doom/reload= (=SPC h r r=) re-evals the whole private config
+  in place - but its own docstring calls it experimental ("likely always
+  will be"), it internally runs a full =doom sync=, and misconfigurations
+  can compound; doom's own advice for anything doubtful is sync outside
+  emacs + restart, "that will always work".
+- From a shell, into the daemon: =emacsclient -e '(load! "..." )'= style
+  one-offs work too.
+- Caveat: eval only *adds* state. Old hooks, advice, and keybindings
+  from the previous version stay behind until a restart - if a change
+  /removes/ or /renames/ something, restart instead of chasing ghosts.
+
+* Restarting each instance
+- *GUI Emacs.app*: quit and reopen. Covers all ghostel/vterm terminals
+  inside it.
+
+- *Daemon (what =emacsclient= talks to)*: plain =emacsclient= does NOT
+  respawn it - restart with:
+
+  #+begin_src sh
+  emacsclient -e '(kill-emacs)'   # stop it
+  emacsclient -a '' -e t          # -a '' spawns a fresh daemon
+  #+end_src
+
+- Gotcha (learned the hard way): the default =emacsclient= socket
+  belongs to the *daemon*, not the GUI app. =emacsclient -e ...= proving
+  a change works says nothing about the GUI instance, and vice versa. To
+  reach the emacs hosting a ghostel/vterm terminal from its shell, use
+  the =ghostel_cmd=/=vterm_cmd= bridge, not emacsclient.
+
+- =env emacs -nw= from a shell gives a throwaway third instance for
+  testing a fresh startup without touching either long-lived one.
+
+* Rules of thumb
+- Only touched =config.el= files and the change is additive? Eval it
+  live and move on - no sync, no restart.
+- Unsure, or the change removes/renames things? Restart the instance(s)
+  you'll test in. Slower but always correct - the old default, now as
+  fallback rather than reflex.
+- Touched =packages.el= or the =doom!= block? =doom sync= first, then
+  restart; nothing less will do.
+
+* References
+Claims above were checked against this doom checkout (2026-07-04):
+
+- =doom help sync= - the authoritative list of when a sync is required
+  (its six triggers are reflected in the table above)
+- =doom help env= - what the envvars file is and why it beats
+  exec-path-from-shell
+- =SPC h f doom/reload= - the "experimental, likely always will be"
+  warning and the sync-plus-restart recommendation quoted above
+- upstream docs: https://docs.doomemacs.org/ (modules' =init.el= vs
+  =config.el= load order); also verified empirically here -
+  =evil-want-Y-yank-to-eol= set in
+  [[file:modules/compat/neovim/init.el][compat/neovim's init.el]] takes effect, which is only possible if module
+  init.el files run before packages load
