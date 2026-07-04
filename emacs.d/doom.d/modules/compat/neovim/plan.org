@@ -49,17 +49,25 @@ out ~go~ already behaved: doom remaps xref-go-back onto
 motions like gg/G//search are tracked) - the real gap was only ~gn~,
 which was unbound. Now both directions are explicit.
 
-** TODO ~gl~ -> go to definition under cursor (NOT straightforward)
-nvim: ~<C-]>~. Emacs candidate: ~+lookup/definition~ - but two findings
-from trying it (2026-07-03) demoted this from a one-liner:
-- the underlying lookup is broken where it matters: ~gd~ (doom's default
-  for the same thing) did nothing in a lua buffer, so binding ~gl~ to it
-  would bind a no-op. fix definition lookup first (eglot attach for lua?
-  check ~M-x eglot~ / ~SPC c d~ there), and treat ~gd~/~gr~
-  (definition/references) parity as one work item with ~gl~.
-- ~gl~ is not free in doom: it is ~evil-lion-left~, the align operator
-  (e.g. ~glip=~ aligns a paragraph on ~=~). shadowing it is a decision to
-  make consciously (~gL~ right-align would survive).
+** DONE ~gl~ / ~gr~ / ~gd~ -> definition, references
+nvim: ~gd~/~gr~ = lsp definition/references, ~gl~ = ~<C-]>~ via tagfunc.
+root cause of "gd does nothing in lua" (2026-07-03): .lua files open in
+lua-mode (doom's :lang lua has no +lsp flag) while ext-lang/lua hooked
+lsp! only on lua-ts-mode, which nothing routes files to - eglot simply
+never attached. fixed by hooking lua-mode too (ext-lang/lua/config.el);
+gd needed no binding change (+lookup/definition all along). gl and gr
+bound in morevil, shadowing accepted knowingly: gl was evil-lion's
+left-align operator (gL survives), gr was doom's +eval:region (gR and
+SPC-level eval bindings survive). follow-up (2026-07-04): gl and gd are
+NOT the same thing in nvim - gd (vim.lsp.buf.definition) offers a
+selection when the server reports several entities (lua-ls: name +
+body), which doom's consult-xref picker mirrors correctly, while gl
+(C-]) has TAG-jump semantics: follow the "link" to the FIRST match
+immediately - and its real heritage is :help, where C-] follows the
+help-tag hyperlink under the cursor. so gl is bound (:nm, so doc-ish
+motion-state buffers get it too) to +neovim/goto-link (compat/neovim):
+a button/Info link when on one, otherwise the first xref definition
+with no picker; gd keeps the picker.
 
 ** TODO ~Y~ -> yank to end of line
 ~(setq evil-want-Y-yank-to-eol t)~. Caveat: ~evil-want-*~ vars must be set

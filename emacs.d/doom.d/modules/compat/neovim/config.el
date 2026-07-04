@@ -54,6 +54,33 @@
 ;; make `q' mimic neovim's overall quit semantics - see ./smart-quit.el
 (load! "smart-quit")
 
+;; nvim's C-] (bound to gl there, "go to the link under the cursor") is
+;; first and foremost the :help navigation key - it follows the help-tag
+;; HYPERLINK under the cursor; lsp's tagfunc merely extended the same key
+;; to code, where it means "first match right away, never a list". that
+;; is unlike gd (vim.lsp.buf.definition), which offers a selection when
+;; the server reports several entities (lua-ls: name + body) - so gd's
+;; picker is correct parity and this is gl's no-picker counterpart
+;; (bound in ../../my-custom/morevil/)
+(defun +neovim/goto-link ()
+  "Follow the link at point like nvim's C-].
+A real link (button, Info reference) when on one - the :help heritage -
+otherwise the first definition, tag-jump style, no picker."
+  (interactive)
+  (cond
+   ;; help-mode xref links, custom links, ... are all buttons
+   ((button-at (point)) (push-button))
+   ((derived-mode-p 'Info-mode) (Info-follow-nearest-node))
+   ((let* ((backend (xref-find-backend))
+           (id (xref-backend-identifier-at-point backend))
+           (defs (and id (xref-backend-definitions backend id))))
+      (when defs
+        ;; record the jump so nvim-style go/gn can come back
+        (evil-set-jump)
+        (xref-pop-to-location (car defs))
+        t)))
+   (t (user-error "No link to follow at point"))))
+
 ;; nvim's dashboard has an official menu entry for opening a fresh
 ;; unnamed buffer (quick scratch note, usually never saved; entering
 ;; insert state is up to the user afterwards, in nvim too) - give doom's

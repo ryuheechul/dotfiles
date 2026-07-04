@@ -155,6 +155,22 @@
 ;; , repeats the last ex command like nvim's @: (same trade as there: it
 ;; shadows evil's reverse f/t repeat, ; still repeats forward)
 (map! :n "," #'evil-ex-repeat)
+
+;; gl/gr complete the lookup muscle memory from
+;; ../../../../../nvim/lua/plugins/config/lsp.lua (gd was already doom's
+;; +lookup/definition; it only LOOKED broken in lua buffers - see
+;; ../../ext-lang/lua/config.el): gl = follow the "link" like nvim's C-]
+;; tag jump (first match, no picker - see +neovim/goto-link in
+;; ../../compat/neovim/config.el), gr = references. shadows accepted
+;; knowingly, mirroring nvim's own trades: gl was evil-lion's left-align
+;; operator (gL right-align survives) and gr was doom's +eval:region
+;; operator (gR still evals the buffer, and the SPC-level eval bindings
+;; remain)
+;; :nm - motion state too, so gl also works in doc-ish buffers (help,
+;; Info, ...) that evil keeps out of normal state; that is where the
+;; original C-] mattered most in vim
+(map! :nm "gl" #'+neovim/goto-link)
+(map! :n "gr" #'+lookup/references)
 ;; \s mimics neovim's :suspend (leader s in
 ;; ../../../../../nvim/lua/plugins/keymaps.lua): in a TTY frame the real
 ;; thing exists - `suspend-frame' sends SIGTSTP like vim's :suspend, back
