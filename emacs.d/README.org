@@ -3,3 +3,8 @@ This is not =.emacs.d=
 
 - [[file:doom.d/applying-changes.org][How to apply config changes to a running emacs]] - when to eval, when
   to restart which instance, and when =doom sync= is actually needed
+- [[file:bin/run-tests][bin/run-tests]] - ERT regression tests for the config (dispatches on
+  the active chemacs profile to [[file:doom.d/run-tests][doom.d/run-tests]], which runs
+  [[file:doom.d/tests/parity-tests.el][tests/parity-tests.el]] in a throwaway daemon on its own socket - the
+  live daemon and its clients stay untouched); run after any config
+  change instead of re-verifying by hand

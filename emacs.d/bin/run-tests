@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# entry point for emacs config tests, dispatching on the active chemacs
+# profile (../emacs-profiles.el; ~/.emacs-profile overrides, absent means
+# "default") - currently only the doom config has a suite
+
+set -euo pipefail
+
+script_d="$(cd "$(dirname "$0")" && pwd)"
+
+profile="$(cat "${HOME}/.emacs-profile" 2>/dev/null || echo default)"
+
+# the profile's line in the profiles alist names its user-emacs-directory
+if grep "\"${profile}\"" "${HOME}/.emacs-profiles.el" 2>/dev/null | grep -q doom; then
+  exec "${script_d}/../doom.d/run-tests" "$@"
+fi
+
+echo "no tests for the '${profile}' emacs profile (only doom.d has a suite)"

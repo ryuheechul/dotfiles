@@ -54,6 +54,65 @@
 ;; make `q' mimic neovim's overall quit semantics - see ./smart-quit.el
 (load! "smart-quit")
 
+;; nvim's `autoread` (+ the autoread/shortmess tweak in boot/misc.lua):
+;; a file changed outside emacs (git checkout, another editor, a
+;; formatter...) reloads automatically instead of asking "file changed on
+;; disk, really edit?" later; non-file buffers like dired refresh too
+(global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers t)
+
+;; restore the last cursor position when reopening a file (nvim: the
+;; LastPlace autocmd in boot/misc.lua) - measured OFF in this doom
+;; checkout, so enable it here. saveplace's default
+;; `save-place-ignore-files-regexp' already excludes COMMIT_EDITMSG,
+;; matching the gitcommit exclusion the nvim autocmd makes
+(save-place-mode 1)
+
+;; nvim has global `spell`; doom's :checkers spell already covers prose
+;; modes (org, markdown, ...) - extend to code via flyspell-prog-mode,
+;; whose narrow scope keeps the overhead negligible
+(add-hook 'prog-mode-hook #'flyspell-prog-mode)
+;; ... and match nvim's scope while at it: its treesitter @spell captures
+;; check comments, NOT plain strings (identifiers/paths/format specifiers
+;; there are all false positives) - flyspell-prog-mode does strings by
+;; default, so drop that; docstrings stay, they are prose
+(after! flyspell
+  (setq flyspell-prog-text-faces
+        (remq 'font-lock-string-face flyspell-prog-text-faces))
+  ;; eglot semantic tokens turn the `face' text property into a LIST
+  ;; (e.g. (eglot-semantic-comment font-lock-comment-face)) and the stock
+  ;; predicate's bare memq cannot see into it - flyspell then silently
+  ;; skips every semantically-fontified comment word (typos only got
+  ;; flagged when the check won the race against the async tokens)
+  (defadvice! +neovim/flyspell-prog-verify-face-lists-a ()
+    :override #'flyspell-generic-progmode-verify
+    (unless (eql (point) (point-min))
+      (let ((f (get-text-property (1- (point)) 'face)))
+        (cl-intersection (ensure-list f) flyspell-prog-text-faces))))
+  ;; the stock faces hide behind a `(supports :underline (:style wave))'
+  ;; display guard, so on terminals that don't advertise styled underlines
+  ;; they render as NOTHING at all (invisible flags). replace with an
+  ;; unconditional wave that leaves the text color alone - a hint, not an
+  ;; alarm - degrading to a plain underline (never to nothing) where the
+  ;; terminal can't style underlines. yellow3/cyan3 are the exact RGB the
+  ;; terminal palette renders "yellow"/"cyan" as, so GUI and TUI frames
+  ;; come out identical; cyan for duplicates over the stock DarkOrange
+  ;; because orange blurs into the yellow of misspellings.
+  ;; face-OVERRIDE-spec, not defface spec: doom-themes define these faces
+  ;; too and a theme beats a defface, but nothing beats the override spec
+  (face-spec-set 'flyspell-incorrect
+                 '((t :underline (:style wave :color "yellow3")))
+                 'face-override-spec)
+  (face-spec-set 'flyspell-duplicate
+                 '((t :underline (:style wave :color "cyan3")))
+                 'face-override-spec))
+
+;; trim trailing whitespace on every save, whole buffer, like nvim's
+;; tidy.nvim - nothing here did that (apheleia only formats modes with a
+;; configured formatter, ws-butler is not installed); the
+;; touches-unedited-lines diff noise is a tradeoff nvim already accepted
+(add-hook 'before-save-hook #'delete-trailing-whitespace)
+
 ;; nvim's C-] (bound to gl there, "go to the link under the cursor") is
 ;; first and foremost the :help navigation key - it follows the help-tag
 ;; HYPERLINK under the cursor; lsp's tagfunc merely extended the same key

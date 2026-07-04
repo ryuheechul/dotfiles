@@ -83,9 +83,10 @@ Pairs with the existing ~global-visual-line-mode~:
 nvim: ~@:~. Bound to ~evil-ex-repeat~ in morevil. Shadows evil's reverse
 f/t repeat (same trade nvim made); ~;~ still repeats forward.
 
-** TODO ~+~ / ~-~ -> increment/decrement number at point
-nvim: ~<C-A>~/~<C-X>~. Emacs: ~evil-numbers/inc-at-pt~ / ~dec-at-pt~
-(package needed; doom doesn't ship it by default).
+** DONE ~+~ / ~-~ -> increment/decrement number at point
+nvim: ~<C-A>~/~<C-X>~. ~evil-numbers/inc-at-pt~ / ~dec-at-pt~ in morevil;
+the package was already present transitively but is now declared in
+morevil's packages.el so doom sync cannot autoremove it.
 
 ** TODO ~SPC RET~ -> run macro q
 nvim: ~@q~. Emacs: ~(evil-execute-macro 1 (evil-get-register ?q))~.
@@ -147,29 +148,52 @@ set-window-buffer does not change the current buffer).
 
 From [[file:../../../../../nvim/lua/boot/misc.lua][boot/misc.lua]].
 
-** TODO autoread
-~global-auto-revert-mode~ (+ ~global-auto-revert-non-file-buffers~ for
-dired). Doom does NOT enable this by default. Goes in this module.
+** DONE autoread
+nvim: ~autoread~ (+ shortmess tweak in boot/misc.lua) silently reloads a
+file that changed outside the editor (git checkout, formatter, ...)
+instead of prompting. emacs: ~global-auto-revert-mode~ +
+~global-auto-revert-non-file-buffers~, in this module (doom does not
+enable it; measured off).
 
-** TODO help buffers act like ~less~
-nvim maps d/u/f/b + Esc in help/qf. morevil already does this for
-Info-mode; extend the same map to ~help-mode~ (and ~helpful-mode~ if it ever
-gets enabled). nvim also auto-maximizes help windows - doom's popup rules
-can do that with a ~set-popup-rule!~ size bump if wanted.
+** DONE help buffers act like ~less~
+d/u/f/b scroll in ~help-mode~ now (morevil, next to the older Info-mode
+map); verified they were NOT less-like before (d was literally ~ignore~).
+nvim's auto-maximize of help windows not ported - doom's popup rules
+could via ~set-popup-rule!~ if ever missed.
 
-** TODO spell check on by default
-nvim: ~vim.o.spell = true~ globally. Doom enables flyspell per-mode;
-decide whether text+prog (comments) coverage via ~flyspell-prog-mode~
-matches the nvim feel closely enough.
+** DONE spell check on by default
+verified doom's :checkers spell already hooks flyspell in prose modes
+(org, markdown); added ~flyspell-prog-mode~ on prog-mode for the nvim
+global-spell feel, scoped like nvim's treesitter @spell captures:
+comments and docstrings but NOT plain strings
+(~font-lock-string-face~ dropped from ~flyspell-prog-text-faces~ -
+identifiers/paths in strings are all false positives). making it
+actually WORK in TUI took two real fixes (2026-07-04): eglot semantic
+tokens turn the face property into a LIST that the stock prog-mode
+predicate's memq cannot see - overridden in compat/neovim; and the
+default faces hide behind a supports-wave display guard that renders as
+NOTHING on conservative terminals - replaced via
+face-OVERRIDE-spec (a theme beats a defface, nothing beats the override)
+with unconditional squiggles that leave text color alone: yellow3 for
+misspellings, cyan3 for duplicates, identical in GUI and TUI (those are
+the exact RGB the terminal palette gives "yellow"/"cyan"; cyan over the
+stock DarkOrange because orange blurs into the misspelling yellow).
+doom's flyspell-lazy was wrongly convicted along the way (a confounded
+experiment: disabling it overlapped with the predicate fix landing); a
+controlled re-test with lazy re-enabled showed TUI flagging works fine
+under it, just idle-batched (~1s) - so lazy STAYS enabled, trading a
+little lag on a never-urgent signal for keystroke-path headroom.
 
-** TODO verify save-place
-nvim: last-position restore autocmd. Doom's ~:config default~ enables
-~save-place-mode~ - confirm, then check the gitcommit exclusion nvim has
-(~save-place-ignore-files-regexp~).
+** DONE save-place
+nvim: the LastPlace autocmd in boot/misc.lua reopens every file at the
+last cursor position (gitcommit buffers excluded). emacs verification
+came back negative: ~save-place-mode~ was OFF in this doom
+checkout (the assumption that :config default enables it did not hold) -
+enabled in compat/neovim. saveplace's default ignore regexp already
+excludes COMMIT_EDITMSG, matching nvim's gitcommit exclusion.
 
-** TODO verify smartcase search
-Evil's ~evil-ex-search-case~ defaults to ~'smart~ - confirm nothing in the
-config overrides it.
+** DONE verify smartcase search
+confirmed: ~evil-ex-search-case~ is ~smart~ (2026-07-04).
 
 ** DONE yank highlight
 ~:ui ophints~ (enabled).
@@ -194,11 +218,14 @@ Mostly "turn on a doom module." From the plugin inventory in
 Enable doom ~:editor multiple-cursors~ (evil-multiedit/evil-mc). Biggest
 missing editing power tool.
 
-** TODO indent-blankline
-Enable doom ~:ui indent-guides~.
+** DONE indent-blankline
+doom ~:ui indent-guides~ enabled in init.el.
 
-** TODO vim-matchup (smarter ~%~)
-~evil-matchit~ package.
+** DONE vim-matchup (smarter ~%~)
+nvim: vim-matchup (editing.lua) extends ~%~ beyond bracket pairs to
+language constructs - if/else/end, function/end, html open/close tags -
+with the matched pair highlighted. emacs: ~evil-matchit~ +
+~global-evil-matchit-mode~, in morevil.
 
 ** TODO rainbow-delimiters
 Small ~use-package!~; doom has no module for it.
@@ -207,9 +234,11 @@ Small ~use-package!~; doom has no module for it.
 Verify: doom prompts to create missing dirs on save already; if the
 prompt annoys, advise it away.
 
-** TODO tidy.nvim (trim trailing whitespace on save)
-Verify what ~:editor format +onsave~ / ws-butler currently do before
-adding anything.
+** DONE tidy.nvim (trim trailing whitespace on save)
+verified: nothing trimmed on save (apheleia only formats modes with a
+configured formatter; ws-butler not installed) - added
+~delete-trailing-whitespace~ on ~before-save-hook~ in compat/neovim,
+whole-buffer like tidy.nvim, same diff-noise tradeoff as there.
 
 ** TODO fugitive ~SPC g x~ GBrowse
 ~browse-at-remote~ is bundled with doom's magit; bind to match

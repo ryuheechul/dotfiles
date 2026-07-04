@@ -12,6 +12,13 @@
 ;; enables cil, cal, vil, val, dil, dal, yil, yal, etc
 (use-package! evil-textobj-line :after evil)
 
+;; % jumps between matching language KEYWORDS too (if/end, function/end,
+;; html tags, ...), not only brackets - the vim-matchup of
+;; ../../../../../nvim/lua/plugins/editing.lua
+(use-package! evil-matchit
+  :after evil
+  :config (global-evil-matchit-mode 1))
+
 ;; to algin with my neovim keybindings
 (map! :textobj "e" #'+evil:whole-buffer-txtobj         #'+evil:whole-buffer-txtobj)
 
@@ -172,6 +179,20 @@
 ;; , repeats the last ex command like nvim's @: (same trade as there: it
 ;; shadows evil's reverse f/t repeat, ; still repeats forward)
 (map! :n "," #'evil-ex-repeat)
+
+;; + / - increment/decrement the number at point, as remapped in nvim
+;; (keymaps.lua: + = C-A, - = C-X, since the defaults never got used)
+(map! :n "+" #'evil-numbers/inc-at-pt
+      :n "-" #'evil-numbers/dec-at-pt)
+
+;; help buffers scroll like less, as nvim arranges in boot/misc.lua
+;; (d/u/f/b -> C-d/C-u/C-f/C-b there); help is read-only, so the shadowed
+;; evil-delete/undo/snipe-f/backward-word lose nothing of value
+(map! :map help-mode-map
+      :n "d" #'evil-scroll-down
+      :n "u" #'evil-scroll-up
+      :n "f" #'evil-scroll-page-down
+      :n "b" #'evil-scroll-page-up)
 
 ;; gl/gr complete the lookup muscle memory from
 ;; ../../../../../nvim/lua/plugins/config/lsp.lua (gd was already doom's

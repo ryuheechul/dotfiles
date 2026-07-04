@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# run the ERT regression tests in ./tests/ against a THROWAWAY daemon on
+# its own socket - the config gets loaded exactly as a fresh emacs would
+# (the point of testing; see ./applying-changes.org for the instance
+# model) while the long-lived daemon and every client attached to it
+# stay untouched. usually invoked via ../bin/run-tests, which dispatches
+# on the active chemacs profile.
+
+set -euo pipefail
+
+tests_el="$(cd "$(dirname "$0")" && pwd)/tests/parity-tests.el"
+socket="doom-parity-tests"
+
+cleanup() { emacsclient -s "${socket}" -e '(kill-emacs)' 2>/dev/null || true; }
+trap cleanup EXIT
+# in case a previous run leaked one
+cleanup
+
+# --bg-daemon returns only after init completes, so the socket is ready
+emacs --bg-daemon="${socket}"
+
+# ert-run-tests-batch prints its report inside the daemon, out of our
+# sight - collect the stats object and render the verdict client-side
+result="$(emacsclient -s "${socket}" -e "
+(progn
+  (load \"${tests_el}\" nil t)
+  (let ((stats (ert-run-tests-batch t)))
+    (list (ert-stats-total stats)
+          (ert-stats-completed-unexpected stats)
+          (mapcar #'ert-test-name
+                  (cl-remove-if-not
+                   (lambda (test)
+                     (let ((r (ert-test-most-recent-result test)))
+                       (and r (not (ert-test-result-expected-p test r)))))
+                   (append (ert--stats-tests stats) nil))))))")"
+
+total="$(printf '%s' "$result" | sed -E 's/^\(([0-9]+) .*/\1/')"
+failed="$(printf '%s' "$result" | sed -E 's/^\([0-9]+ ([0-9]+) .*/\1/')"
+
+if test "$failed" = "0"; then
+  echo "OK: ${total} tests passed"
+else
+  echo "FAILED: ${failed}/${total} - ${result}"
+  exit 1
+fi
