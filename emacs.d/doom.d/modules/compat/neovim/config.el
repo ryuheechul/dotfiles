@@ -50,3 +50,6 @@
 ;; - `extends'/`precedes' (line-wrap continuation arrows, only visible when nowrap) need
 ;;   nothing here - emacs already shows the same thing natively via fringe arrows
 ;;   whenever `truncate-lines' is set on a buffer
+
+;; make `q' mimic neovim's overall quit semantics - see ./smart-quit.el
+(load! "smart-quit")
