@@ -5,6 +5,10 @@
 ;; equivalent to =:lua vim.wo.wrap = false= in Neovim
 (global-visual-line-mode t)
 
+;; doom's own default (modules/editor/evil/config.el) sets this to nil,
+;; C-g is the only escape it binds out of the box
+(setq evil-escape-key-sequence "jk")
+
 ;; enables cil, cal, vil, val, dil, dal, yil, yal, etc
 (use-package! evil-textobj-line :after evil)
 
@@ -27,13 +31,42 @@
 ;; alternatively the above could be as simple as below
 ;; (define-key evil-normal-state-map (kbd "q") #'evil-quit)
 
-;; switching buffer and windows
+;; switching buffer and windows - `<tab>' (the symbol) only ever fires in a
+;; GUI frame; a plain terminal has no way to tell the physical Tab key
+;; apart from literal `TAB'/C-i (no extended keyboard protocol in play,
+;; same reason C-h collides with Backspace - see
+;; ../term-enhance/vterm.el's comment on that), so a TTY always sends
+;; "TAB" instead - bind both so this works the same in both contexts
 (define-key evil-normal-state-map (kbd "<tab>") #'other-window)
+(define-key evil-normal-state-map (kbd "TAB") #'other-window)
 
+;; same GUI-vs-TTY key-symbol split as above; also fully shadows doom's own
+;; default "workspace" prefix-map on this key (both `<tab>' and `TAB', see
+;; modules/config/default/+evil-bindings.el) - moved to `SPC u' below since
+;; workspaces aren't used here, so `SPC TAB' can just mean "next buffer"
 (map! :leader
-      :g
-      "<tab>"
-      'switch-to-next-buffer)
+      :g "<tab>" #'switch-to-next-buffer
+      :g "TAB"   #'switch-to-next-buffer)
+
+;; which-key ties `:desc' to the key sequence, not the command (same
+;; surprise as ../term-enhance/integration.el's comment on this) - without
+;; this, `SPC TAB' would still show doom's original "workspace" label here
+;; even though it now switches buffers
+(which-key-add-key-based-replacements "SPC TAB" "Next buffer")
+
+;; doom's `:prefix-map' names the underlying keymap after its DESCRIPTION,
+;; not its key (modules/doom/compat/+keybinds.el: `("doom-leader-%s-map"
+;; desc)') - so the workspace keymap doom built for `SPC TAB' already
+;; exists as `doom-leader-workspace-map', sub-bindings and all. no need to
+;; redeclare any of that; just point a free top-level leader letter at the
+;; same keymap. `u' turned out to already be doom's own "Universal
+;; argument" (+evil-bindings.el - a plain single-key binding, not a
+;; prefix-map, easy to miss when only grepping for `:prefix-map'); `k' is
+;; confirmed free across every doom module and this repo's own, by both
+;; :prefix-map and plain single-key leader bindings
+(map! :leader
+      (:when (modulep! :ui workspaces)
+       :desc "workspace" "k" doom-leader-workspace-map))
 
 ;; emulate `dynamotn/Navigator.nvim' (used in
 ;; ../../../../../nvim/lua/plugins/system.lua in place of the older

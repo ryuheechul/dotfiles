@@ -31,11 +31,11 @@
   :after lsp-mode
   :init
   ;; don't forget to install the server via (lsp-install-server)
-  (setq! lsp-tailwindcss-add-on-mode t
-         ;; find versions at https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss
-         lsp-tailwindcss-server-version "0.14.9"
-         ;; necessary for tailwind v4 - https://github.com/merrickluo/lsp-tailwindcss/issues/80#issuecomment-2715963134
-         lsp-tailwindcss-skip-config-check t)
+  (setopt lsp-tailwindcss-add-on-mode t
+          ;; find versions at https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss
+          lsp-tailwindcss-server-version "0.14.9"
+          ;; necessary for tailwind v4 - https://github.com/merrickluo/lsp-tailwindcss/issues/80#issuecomment-2715963134
+          lsp-tailwindcss-skip-config-check t)
   :config
   (add-to-list 'lsp-tailwindcss-major-modes 'astro-ts-mode))
 
