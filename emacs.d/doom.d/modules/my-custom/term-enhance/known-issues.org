@@ -1,0 +1,60 @@
+#+TITLE: term-enhance known issues
+
+Tracked problems found while testing tramp + terminal integration
+(2026-07-04), not fixable from this repo's config alone. Referenced from
+[[file:integration.el][integration.el]] (the tramp-forces-vterm override) and [[file:vterm.el][vterm.el]].
+
+** TODO ghostel: "Forbidden reentrant call of Tramp" on any tramp buffer
+Calling ~(ghostel)~ (or any wrapper here that reaches it) from a buffer
+whose ~default-directory~ is remote throws this error every time -
+confirmed deterministic and host-independent: reproduces identically
+against =/ssh:localhost:= (loopback) and a genuinely different real
+remote host (Linux, over the network, not loopback). Ruled out via direct testing before
+concluding this: ~ghostel-tramp-shell-integration~ on/off, the
+~ghostel-tramp-shells~ getent/=bin/zsh= fallback, ~global-auto-revert-mode~,
+~tramp-use-connection-share~ on/off, a fully fresh daemon, and even
+cancelling every active timer (regular and idle) immediately before the
+call - none of it changes the outcome. This is inside ghostel's own
+compiled spawn path, not this config.
+
+Workaround in place: [[file:integration.el][integration.el]]'s ~term-enhance/backend~ forces vterm
+whenever ~default-directory~ is remote, regardless of
+~term-enhance/backend-priority~ (which still prefers ghostel locally).
+
+Next step: file this upstream with ghostel with a minimal repro (open
+any tramp file, call ~(ghostel)~) - then remove the override in
+~term-enhance/backend~ once fixed.
+
+** TODO vterm's tramp shell resolution works on Linux remotes, not macOS ones
+Confirmed on 2026-07-04 with a controlled two-host test (see
+[[file:*ghostel: "Forbidden reentrant call of Tramp" on any tramp buffer][the item above]] for the same hosts):
+- a real remote Linux host (~getent~ present): vterm resolves the correct
+  remote shell automatically and a session there is fully interactive
+  (real zsh, real starship prompt, command output verified round-trip).
+- =/ssh:localhost:= (this Mac, ~getent~ absent - confirmed via
+  ~"/bin/sh: getent: command not found"~): vterm's shell detection
+  (~vterm--get-shell~ in vterm.el, same getent-based mechanism ghostel
+  uses) fails silently and falls through to the explicit ~vterm-shell~
+  variable - which [[file:vterm.el][vterm.el]]'s existing ~vterm/reset-shell-for-tramp~ (from
+  the March 2025 commit fixing a real, different problem: stale remote
+  tramp paths leaking into ~vterm-shell~ across sessions) sets to this
+  machine's *local* absolute shell path
+  (e.g. =/opt/homebrew/bin/zsh=). That path only "worked" against
+  localhost by coincidence (same machine); against a genuinely different
+  macOS host it would not exist there at all. Observed symptom: the
+  outer wrapper vterm always spawns through
+  (~"/bin/sh" "-c" "stty ... && exec <shell>"~) never successfully execs,
+  leaving the session stuck at a bare =sh-3.2$= prompt.
+
+Low priority in practice - day-to-day remote targets here are Linux
+hosts, where this never triggers. Only matters for macOS-to-macOS tramp
+sessions specifically.
+
+Candidate fix, mirroring what was done for ghostel: make
+~vterm/reset-shell-for-tramp~ remote-aware instead of unconditionally
+copying the *local* ~shell-file-name~ - e.g. only reset ~vterm-shell~ to
+~shell-file-name~ when ~default-directory~ is NOT remote (undoing the
+stale-tramp-path problem it was written for), and leave it alone (or set
+a portable fallback like =/bin/zsh=) when it is remote, so vterm's own
+~vterm--get-shell~ connection-local/getent detection chain isn't
+pre-empted by a value that only makes sense locally.

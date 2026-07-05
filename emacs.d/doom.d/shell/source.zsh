@@ -117,6 +117,16 @@ echo "${INSIDE_EMACS}" | grep tramp >/dev/null ||
 # TODO: this technically don't need to wait for all the things above, so consider moving up there to skip extra things to wait
 cmd_to_run="${INSIDE_EMACS_RUN_CMD_ON_START_UP}"
 unset INSIDE_EMACS_RUN_CMD_ON_START_UP
-test -n "${cmd_to_run}" && exec zsh -c "$cmd_to_run"
+# the child `zsh -c` below is non-interactive, so it sources .zshenv but
+# NOT .zshrc - which means ../../../zsh/path/set-basic's nix-profile
+# "float to front of $PATH" trick never runs there (only .zshrc's
+# `float_nix_path=1 source .../path/set` call does that; .zshenv's own
+# path/set call doesn't set that flag). without it, /opt/homebrew/bin
+# (added earlier, e.g. via path_helper) can outrank ~/.nix-profile/bin in
+# $PATH, so a command like `nvim` silently resolves to a stale Homebrew
+# install instead of the nix one - exporting float_nix_path=1 here makes
+# the child's own .zshenv -> zsh/env -> path/set float nix-profile to the
+# front, same as a normal interactive shell does
+test -n "${cmd_to_run}" && float_nix_path=1 exec zsh -c "$cmd_to_run"
 
 echo "shell overriding for doom emacs has been completed."
