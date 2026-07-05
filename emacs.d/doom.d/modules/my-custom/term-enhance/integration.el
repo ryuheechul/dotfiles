@@ -1,10 +1,14 @@
 ;;; $DOOMDIR/modules/my-custom/term-enhance/integration.el -*- lexical-binding: t; -*-
 
-;; single place that decides which terminal backend (ghostel or vterm) the
-;; shared, user-facing keybindings below actually act through, so nothing
-;; else (this module's own files, ../morevil, ...) has to hardcode "ghostel
-;; wins". edit `term-enhance/backend-priority' to change the preference -
-;; nothing else needs to change, as long as ./ghostel.el and ./vterm.el keep
+;; single place for how the two terminal backends (ghostel/vterm) integrate
+;; with the rest of emacs: which one the shared, user-facing keybindings
+;; below actually act through (so nothing else - this module's own files,
+;; ../morevil, ... - has to hardcode "ghostel wins"), plus cross-cutting
+;; integration concerns that apply regardless of which backend is picked -
+;; tramp is one of those (see both the tramp override in
+;; `term-enhance/backend' and the envrc fix below). edit
+;; `term-enhance/backend-priority' to change the LOCAL preference - nothing
+;; else needs to change, as long as ./ghostel.el and ./vterm.el keep
 ;; providing the functions dispatched to below.
 
 (defvar term-enhance/backend-priority '(ghostel vterm)
@@ -27,6 +31,27 @@ should be removed once that is fixed upstream."
            (doom-module-active-p :term 'vterm))
       'vterm
     (seq-find (lambda (b) (doom-module-active-p :term b)) term-enhance/backend-priority)))
+
+;; direnv/envrc integration (doom's :tools direnv, enabled over tramp too
+;; by ../../tools/tramp-support/config.el's `envrc-remote t') makes no
+;; sense in a terminal buffer - the shell running there already manages
+;; its own env (its own direnv hook, if it has one) - and leaving it on
+;; is actively harmful over tramp: `envrc--update' walks UP the directory
+;; tree looking for a `.envrc', and each parent directory checked is a
+;; SEPARATE, SYNCHRONOUS SSH ROUND-TRIP. caught live via SIGUSR2 + a
+;; backtrace during a real hang (2026-07-04): this - not anything in
+;; vterm/ghostel/tramp's own terminal-spawning code - is what caused the
+;; intermittent "SPC f n hangs on a tramp buffer" symptom (it only hangs
+;; when that walk happens to be slow, which is why it didn't reproduce
+;; every time). skip the expensive part entirely for both terminal
+;; backends, local or remote - `envrc-mode' itself may still nominally
+;; turn on (harmless: a lighter with nothing behind it), it just never
+;; does its slow work here
+(after! envrc
+  (defadvice! term-enhance/skip-envrc-update-in-terminals-a (fn &rest args)
+    :around #'envrc--update
+    (unless (derived-mode-p 'vterm-mode 'ghostel-mode)
+      (apply fn args))))
 
 (defun term-enhance/dispatch (fn-alist &rest args)
   "Call the function in FN-ALIST keyed by the active backend, with ARGS."
