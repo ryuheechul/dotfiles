@@ -12,7 +12,7 @@ profile="$(cat "${HOME}/.emacs-profile" 2>/dev/null || echo default)"
 
 # the profile's line in the profiles alist names its user-emacs-directory
 if grep "\"${profile}\"" "${HOME}/.emacs-profiles.el" 2>/dev/null | grep -q doom; then
-  exec "${script_d}/../doom.d/run-tests" "$@"
+  exec "${script_d}/../doom.d/bin/run-tests" "$@"
 fi
 
 echo "no tests for the '${profile}' emacs profile (only doom.d has a suite)"

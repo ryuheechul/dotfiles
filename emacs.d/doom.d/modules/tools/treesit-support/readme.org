@@ -1,8 +1,8 @@
 #+title: Readme - treesit-support
 
-This module is a way to bridge the gap between [[https://github.com/doomemacs/doomemacs/tree/master/modules/tools/tree-sitter][the old way]] and the lack of support for the new way in the doom yet.
+This module was a way to bridge the gap between [[https://github.com/doomemacs/doomemacs/tree/master/modules/tools/tree-sitter][the old way]] and the lack of support for the new way in doom.
 
-Therefore, powering the support for tree-sitter via =treesit= until this issue, https://github.com/doomemacs/doomemacs/issues/7623 is resolved.
+UPDATE: https://github.com/doomemacs/doomemacs/issues/7623 (native =treesit= support in =:tools tree-sitter=) is now closed/resolved upstream, and that module is enabled in =init.el= alongside this one. TODO: check whether =treesit-langs= here still pulls its weight (e.g. broader grammar coverage) or whether this module can be retired in favor of =:tools tree-sitter= alone.
 
 * Some Links
 - https://robbmann.io/posts/emacs-treesit-auto/

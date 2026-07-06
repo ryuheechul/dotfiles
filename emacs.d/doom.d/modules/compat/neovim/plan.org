@@ -235,10 +235,12 @@ Verify: doom prompts to create missing dirs on save already; if the
 prompt annoys, advise it away.
 
 ** DONE tidy.nvim (trim trailing whitespace on save)
-verified: nothing trimmed on save (apheleia only formats modes with a
-configured formatter; ws-butler not installed) - added
-~delete-trailing-whitespace~ on ~before-save-hook~ in compat/neovim,
-whole-buffer like tidy.nvim, same diff-noise tradeoff as there.
+originally: nothing trimmed on save (apheleia only formats modes with a
+configured formatter; ws-butler not installed), so added a whole-buffer
+~delete-trailing-whitespace~ on ~before-save-hook~ in compat/neovim, same
+diff-noise tradeoff as tidy.nvim. Superseded once doom's
+~:editor whitespace +trim~ was enabled - ws-butler now handles this
+(trims only touched lines, less diff noise) - the old hook was removed.
 
 ** TODO fugitive ~SPC g x~ GBrowse
 ~browse-at-remote~ is bundled with doom's magit; bind to match

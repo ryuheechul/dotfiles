@@ -41,7 +41,14 @@
   (setq whitespace-style '(face tabs tab-mark trailing newline newline-mark))
   (setq whitespace-display-mappings
         '((tab-mark ?\t [?> ?\t] [?\\ ?\t])
-          (newline-mark ?\n [?↵ ?\n] [?$ ?\n]))))
+          (newline-mark ?\n [?↵ ?\n] [?$ ?\n])))
+  ;; :editor whitespace's own per-buffer indent-mismatch highlighter already
+  ;; no-ops itself whenever `global-whitespace-mode' is on (see its own guard
+  ;; clause), which it always is here - remove it explicitly so that bypass
+  ;; is documented instead of incidental
+  (remove-hook 'after-change-major-mode-hook
+               #'+whitespace-highlight-incorrect-indentation-h))
+
 ;; two things filetype.lua's listchars does that have no port here:
 ;; - `trail:·' marks trailing whitespace with a literal character; whitespace-mode has
 ;;   no per-trailing glyph substitution (only `space-mark', which would mark ALL spaces,
@@ -106,12 +113,6 @@
   (face-spec-set 'flyspell-duplicate
                  '((t :underline (:style wave :color "cyan3")))
                  'face-override-spec))
-
-;; trim trailing whitespace on every save, whole buffer, like nvim's
-;; tidy.nvim - nothing here did that (apheleia only formats modes with a
-;; configured formatter, ws-butler is not installed); the
-;; touches-unedited-lines diff noise is a tradeoff nvim already accepted
-(add-hook 'before-save-hook #'delete-trailing-whitespace)
 
 ;; nvim's C-] (bound to gl there, "go to the link under the cursor") is
 ;; first and foremost the :help navigation key - it follows the help-tag

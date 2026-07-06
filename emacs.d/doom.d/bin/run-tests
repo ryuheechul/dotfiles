@@ -9,7 +9,7 @@
 
 set -euo pipefail
 
-tests_el="$(cd "$(dirname "$0")" && pwd)/tests/parity-tests.el"
+tests_el="$(cd "$(dirname "$0")" && pwd)/../tests/parity-tests.el"
 socket="doom-parity-tests"
 
 cleanup() { emacsclient -s "${socket}" -e '(kill-emacs)' 2>/dev/null || true; }
