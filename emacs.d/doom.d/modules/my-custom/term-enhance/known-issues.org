@@ -25,36 +25,47 @@ Next step: file this upstream with ghostel with a minimal repro (open
 any tramp file, call ~(ghostel)~) - then remove the override in
 ~term-enhance/backend~ once fixed.
 
-** TODO vterm's tramp shell resolution works on Linux remotes, not macOS ones
+** DONE vterm's tramp shell resolution works on Linux remotes, not macOS ones
 Confirmed on 2026-07-04 with a controlled two-host test (see
 [[file:*ghostel: "Forbidden reentrant call of Tramp" on any tramp buffer][the item above]] for the same hosts):
 - a real remote Linux host (~getent~ present): vterm resolves the correct
   remote shell automatically and a session there is fully interactive
   (real zsh, real starship prompt, command output verified round-trip).
 - =/ssh:localhost:= (this Mac, ~getent~ absent - confirmed via
-  ~"/bin/sh: getent: command not found"~): vterm's shell detection
-  (~vterm--get-shell~ in vterm.el, same getent-based mechanism ghostel
-  uses) fails silently and falls through to the explicit ~vterm-shell~
-  variable - which [[file:vterm.el][vterm.el]]'s existing ~vterm/reset-shell-for-tramp~ (from
-  the March 2025 commit fixing a real, different problem: stale remote
-  tramp paths leaking into ~vterm-shell~ across sessions) sets to this
-  machine's *local* absolute shell path
-  (e.g. =/opt/homebrew/bin/zsh=). That path only "worked" against
-  localhost by coincidence (same machine); against a genuinely different
-  macOS host it would not exist there at all. Observed symptom: the
-  outer wrapper vterm always spawns through
-  (~"/bin/sh" "-c" "stty ... && exec <shell>"~) never successfully execs,
-  leaving the session stuck at a bare =sh-3.2$= prompt.
+  ~"/bin/sh: getent: command not found"~): stuck at a bare =sh-3.2$=
+  prompt instead of zsh.
 
-Low priority in practice - day-to-day remote targets here are Linux
-hosts, where this never triggers. Only matters for macOS-to-macOS tramp
-sessions specifically.
+Root cause, confirmed by reading vterm.el's actual resolution order
+(~vterm--get-shell~):
+#+begin_src emacs-lisp
+(or (vterm--tramp-get-shell method)   ; per-method entry in vterm-tramp-shells
+    (vterm--tramp-get-shell t)        ; catch-all entry
+    (with-connection-local-variables shell-file-name)  ; tramp's own default
+    vterm-shell)                      ; last resort
+#+end_src
+Default ~vterm-tramp-shells~ is ~'(("ssh" login-shell) ("scp" login-shell)
+("docker" "/bin/sh"))~ - no fallback configured for =ssh=. On a real Linux
+remote, =login-shell='s ~getent passwd $LOGNAME~ (run *on that host* via
+tramp) succeeds and resolves at the first step. On macOS-as-remote, getent
+doesn't exist at all - deterministic and host-independent, not a
+localhost coincidence - so both ~vterm--tramp-get-shell~ calls return nil
+and resolution falls to step 3: tramp hardcodes ~shell-file-name~ to
+=/bin/sh= via a connection-local profile
+(~tramp-connection-local-default-shell-variables~ in tramp-integration.el)
+for *any* remote connection. That's what lands you at =sh=.
 
-Candidate fix, mirroring what was done for ghostel: make
-~vterm/reset-shell-for-tramp~ remote-aware instead of unconditionally
-copying the *local* ~shell-file-name~ - e.g. only reset ~vterm-shell~ to
-~shell-file-name~ when ~default-directory~ is NOT remote (undoing the
-stale-tramp-path problem it was written for), and leave it alone (or set
-a portable fallback like =/bin/zsh=) when it is remote, so vterm's own
-~vterm--get-shell~ connection-local/getent detection chain isn't
-pre-empted by a value that only makes sense locally.
+[[file:vterm.el][vterm.el]]'s ~vterm/reset-shell-for-tramp~ (setting the explicit ~vterm-shell~
+variable) is step 4 - *never reached* here, since step 3 always resolves
+to something non-nil first. It was never the mechanism at play for this
+bug; it only matters for local sessions (keeping ~vterm-shell~ in sync
+across opens, its original March 2025 purpose).
+
+Fix applied: configure the fallback slot ~vterm-tramp-shells~ already
+supports, rather than touching ~vterm/reset-shell-for-tramp~:
+#+begin_src emacs-lisp
+(setq vterm-tramp-shells '(("ssh" login-shell "zsh")))
+#+end_src
+The fallback slot is spliced unquoted into vterm's =exec %s= (unlike
+ghostel's, which shell-quotes it), so a bare =zsh= does a =$PATH= lookup
+on the remote shell rather than needing a hardcoded path - tested and
+confirmed working.

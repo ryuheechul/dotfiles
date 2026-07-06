@@ -10,10 +10,24 @@
 
 ;; techincally not envvar but to clean up the mess made with tramp
 ;; `vterm-shell' - hooked into ../config.el's `prep-env-for-term' since
-;; ghostel has no equivalent variable to reset
+;; ghostel has no equivalent variable to reset. NOTE: this only matters for
+;; local sessions - `vterm--get-shell' resolves remote/tramp buffers via
+;; `vterm-tramp-shells' then tramp's own connection-local `shell-file-name'
+;; before ever consulting this `vterm-shell' variable, so it can't fix
+;; anything on the tramp path (see ./known-issues.org item 2).
 (add-hook 'term-enhance/prep-env-hook
           (defun vterm/reset-shell-for-tramp ()
             (setq vterm-shell shell-file-name)))
+
+;; macOS remotes have no `getent`, so vterm-tramp-shells' default
+;; `("ssh" login-shell)` entry (no fallback) falls through past login-shell
+;; detection to tramp's own connection-local `shell-file-name', which tramp
+;; hardcodes to "/bin/sh" for any remote connection - landing at a bare sh
+;; prompt instead of zsh (see ./known-issues.org item 2). The fallback slot
+;; is spliced unquoted into `exec %s' (unlike ghostel's, which
+;; shell-quotes it), so a bare "zsh" does a $PATH lookup on the remote
+;; shell rather than needing a hardcoded path - confirmed working here.
+(setq vterm-tramp-shells '(("ssh" login-shell "zsh")))
 
 ;; setting TERM=eterm-256color worked best with `lf`
 ;; although some lines might look not properly aligned

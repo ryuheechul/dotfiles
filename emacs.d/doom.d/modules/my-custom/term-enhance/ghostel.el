@@ -15,6 +15,17 @@
 ;; bundled terminfo doesn't advertise `Ms', so nvim/tmux won't auto-detect it)
 (setq ghostel-enable-osc52 t)
 
+;; macOS remotes have no `getent`, so ghostel-tramp-shells' login-shell
+;; auto-detection (getent passwd) always fails there - fall back to a bare
+;; "zsh" (no path) rather than vterm's old trick of copying the *local*
+;; machine's shell path (see ./known-issues.org item 2). ghostel execs the
+;; fallback via `/bin/sh -c "... exec zsh ..."` on the remote, so a bare name
+;; is a $PATH lookup on that remote host - unlike a hardcoded path (e.g.
+;; ~/.nix-profile/bin/zsh), this isn't tied to one user/host layout. Caveat:
+;; only finds zsh if it's on $PATH for that non-interactive shell (governed
+;; by `tramp-remote-path', not .zshrc/.profile).
+(setq ghostel-tramp-shells '(("ssh" login-shell "zsh")))
+
 ;; NOTE: zellij deadlocks the native PTY reader (upstream ghostel bug) - it is
 ;; masked shell-side via bin/path/emacs/zellij instead of giving up
 ;; `ghostel-use-native-pty' performance globally
