@@ -17,6 +17,11 @@
 [transfer]
   fsckObjects = true
 
+[credential]
+  ; Explicitly set no credential.helper to prevent unwanted macOS keychain pop up
+  ; https://stackoverflow.com/questions/16052602/how-to-disable-osxkeychain-as-credential-helper-in-git-config
+  helper =
+
 [push]
   autoSetupRemote = true
 
