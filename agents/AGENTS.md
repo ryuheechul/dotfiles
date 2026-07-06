@@ -6,6 +6,7 @@
 - Do not run `git restore .` nor `git checkout .`.
 - Do not run or suggest `git add` unless explicitly instructed.
 - Provide a summary of changes (e.g., a diff or clear explanation) after each successful improvement, if applicable.
+- Commit messages describe the resulting diff only, not the session's editing journey to get there (e.g. a file that was edited then reverted before ever being committed, or code that moved from one file to another mid-session). That history isn't in the diff and reading the message shouldn't require having watched the session. Keep messages concise - skip narrating verification/testing steps performed along the way unless the outcome is essential to understanding the change.
 
 ## Documentation
 - Use Markdown link syntax whenever a project file is referenced in a Markdown document.

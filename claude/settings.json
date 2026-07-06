@@ -1,7 +1,9 @@
 {
+  "includeCoAuthoredBy": false,
   "permissions": {
     "defaultMode": "plan"
   },
+  "model": "sonnet",
   "hooks": {
     "Notification": [
       {
@@ -44,7 +46,10 @@
   },
   "enabledPlugins": {
     "context-mode@context-mode": true,
-    "typescript-lsp@claude-plugins-official": true
+    "mempalace@mempalace": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "ponytail@ponytail": true,
+    "lua-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "context-mode": {
@@ -52,6 +57,21 @@
         "source": "github",
         "repo": "mksglu/context-mode"
       }
+    },
+    "mempalace": {
+      "source": {
+        "source": "github",
+        "repo": "MemPalace/mempalace"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
     }
-  }
+  },
+  "tui": "fullscreen",
+  "theme": "dark-ansi",
+  "agentPushNotifEnabled": true
 }

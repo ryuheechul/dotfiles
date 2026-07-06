@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.74.0",
+  "lastChangelogVersion": "0.79.8",
   "theme": "light",
   "npmCommand": [
     "mise",
@@ -13,8 +13,9 @@
   "packages": [
     "npm:context-mode",
     "npm:pi-searxng",
-    "npm:@gotgenes/pi-permission-system",
-    "npm:pi-chucknorris"
+    "npm:pi-chucknorris",
+    "npm:@vanillagreen/pi-extension-manager",
+    "npm:@vanillagreen/pi-qol"
   ],
   "hideThinkingBlock": false,
   "defaultThinkingLevel": "medium"
