@@ -162,13 +162,13 @@ return {
     event = 'VeryLazy',
     opts = {},
   },
-  { -- The Refactoring library based off the Refactoring book by Martin Fowler
-    'ThePrimeagen/refactoring.nvim',
-    event = 'VeryLazy',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'arborist-ts/arborist.nvim',
-    },
-    opts = {},
-  },
+  -- { -- The Refactoring library based off the Refactoring book by Martin Fowler
+  --   'ThePrimeagen/refactoring.nvim',
+  --   event = 'VeryLazy',
+  --   dependencies = {
+  --     'nvim-lua/plenary.nvim',
+  --     'arborist-ts/arborist.nvim',
+  --   },
+  --   opts = {},
+  -- },
 }

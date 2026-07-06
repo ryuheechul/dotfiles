@@ -22,7 +22,7 @@
 # that case here; an already-correct symlink is left alone since mise
 # re-points symlinks freely on its own
 run = '''
-for target in "$HOME/.config/rsop" "$HOME/.config/espanso" "$HOME/.config/ghostty" "$HOME/.config/herdr/config.toml"; do
+for target in "$HOME/.config/carapace" "$HOME/.config/rsop" "$HOME/.config/espanso" "$HOME/.config/ghostty" "$HOME/.config/herdr/config.toml"; do
   # exists (real file/dir or symlink) AND is not already a symlink
   # -> a real leftover blocking [dotfiles], so clear it
   if test -e "$target" && test ! -L "$target"; then

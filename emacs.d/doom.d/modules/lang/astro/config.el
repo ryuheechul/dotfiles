@@ -6,6 +6,7 @@
 ;; https://github.com/virchau13/tree-sitter-astro
 (add-to-list 'treesit-language-source-alist
              '(astro "https://github.com/virchau13/tree-sitter-astro"))
+;; install above with M-x treesit-install-language-grammar
 
 (when (and (modulep! :tools lsp +eglot)(modulep! +lsp))
   (with-eval-after-load 'eglot
