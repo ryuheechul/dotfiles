@@ -1,0 +1,27 @@
+#+TITLE: doom.d known issues
+
+General environment/OS gotchas, not module-specific - see
+[[file:modules/my-custom/term-enhance/known-issues.org][term-enhance's known-issues.org]] for tramp + terminal issues instead.
+
+** DONE macOS keyboard layout silently breaks M- (Meta) bindings
+Symptom: =M-x= (or any =M-<key>=) does nothing in terminal Emacs, works
+fine in GUI Emacs.app. Ghostty's ~macos-option-as-alt~ (see
+[[file:../../ghostty/config][ghostty/config]]) and tmux settings are the obvious suspects - check
+those, but they may not be it.
+
+One possible cause, hit once: a wrong hardware-level macOS keyboard
+layout file. Normal typing looked fine, only Option-as-Meta broke.
+Fixed by loading the correct layout (example:
+https://gist.github.com/ryuheechul/1b1fc1d017cf1eb4d7813ec671cceaa5).
+
+Debug method (works for this whole class of bug, not just this cause):
+compare raw bytes for the same keypress across contexts.
+#+begin_src sh
+cat -v
+# press the M- combo once (e.g. Option+x for M-x), Ctrl-C to exit
+#+end_src
+Expect =^[x= (=ESC= =x=). Run in each layer (bare terminal, tmux, ssh,
+...) to see where the byte stream diverges from expected.
+
+If M- bindings go dead again: check keyboard layout before blaming the
+terminal or multiplexer.

@@ -22,6 +22,20 @@ font-size = 15
 clipboard-read = allow
 app-notifications = no-clipboard-copy
 
+# macOS treats Option as a dead-key modifier for accented chars by default,
+# not Meta - Emacs (and any other terminal app relying on M- bindings) never
+# sees it as such, unlike GUI Emacs.app which reads the raw macOS Option key
+# directly. `true` maps both Option keys to Alt/Meta; use `left`/`right`
+# instead to keep the other side free for macOS accent input (e.g. right for
+# that, left for Meta)
+#
+# NOTE: this setting alone doesn't guarantee M- bindings work - a
+# hardware-level macOS keyboard layout misconfiguration can silently break
+# Option-as-Meta even with this set correctly. If M-x etc. ever go dead
+# again, check the keyboard layout first - see
+# ../emacs.d/doom.d/known-issues.org
+macos-option-as-alt = true
+
 # thanks to https://github.com/ghostty-org/ghostty/discussions/2811
 # for linux (Gnome)
 keybind = performable:shift+insert=paste_from_clipboard

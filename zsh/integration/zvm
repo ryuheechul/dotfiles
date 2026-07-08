@@ -33,6 +33,12 @@ my-fzf-history-widget() {
   zvm_append_eol
 }
 
+my-tldr-prefix() {
+  BUFFER="tldr ${BUFFER}"
+  CURSOR=${#BUFFER}
+  zvm_enter_insert_mode
+}
+
 my-fzf-file-widget() {
   CURSOR=$((CURSOR+1)) # in case the cursor is not a space, advance the cursor to the right (learned from zvm_append_eol and https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html or `man zshzle`)
   # another safety to add more space to avoid any case of not having any space with previous word which affects `fzf-file-widget` below
@@ -49,12 +55,28 @@ my-fzf-file-widget() {
 zvm_after_lazy_keybindings() {
   zvm_define_widget my_zvm_kill_line
   zvm_define_widget my-fzf-history-widget
+  zvm_define_widget my-tldr-prefix
   zvm_define_widget my-fzf-file-widget
 
   zvm_bindkey vicmd  'q' my_zvm_kill_line # `p` to bring back the killed line
   zvm_bindkey vicmd '/' my-fzf-history-widget # aka ctrl+r
-  zvm_bindkey vicmd ',' my-fzf-history-widget # aka ctrl+r
+  # ,/;/: here follow the "anti-shift keybindings" theme in
+  # ../../docs/philosophy.md - that's the source of truth for the
+  # cross-tool mapping/rationale, comments below are zsh-local detail only
+  #
+  # over the default vi-repeat-find
+  zvm_bindkey vicmd ';' my-fzf-history-widget # aka ctrl+r
   zvm_bindkey vicmd  't' my-fzf-file-widget   # aka ctrl+t
+
+  # over the default vi-rev-repeat-find - `up-line-or-history` is the
+  # builtin widget `k` already uses here, just prepares the last command
+  # in the buffer, doesn't run it
+  zvm_bindkey vicmd ',' up-line-or-history
+
+  # otherwise free in vicmd (no builtin meaning) - prefixes `tldr ` onto
+  # whatever's already typed (or an empty buffer) so a quick <Enter> shows
+  # its cheatsheet
+  zvm_bindkey vicmd ':' my-tldr-prefix
 }
 
 # just a helper to quickly show it through bound keys for vicmd

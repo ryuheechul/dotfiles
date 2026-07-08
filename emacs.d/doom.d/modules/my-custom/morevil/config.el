@@ -176,9 +176,64 @@
 ;; better-jumper-jump-backward; bind both directions explicitly instead
 (map! :n "go" #'better-jumper-jump-backward)
 (map! :n "gn" #'better-jumper-jump-forward)
-;; , repeats the last ex command like nvim's @: (same trade as there: it
-;; shadows evil's reverse f/t repeat, ; still repeats forward)
+;; ,/;/:/gh/gk/leader bindings below follow the "anti-shift keybindings"
+;; theme in ../../../../../docs/philosophy.md - that's the source of truth
+;; for the cross-tool mapping/rationale, comments here are emacs-local
+;; detail only
+;;
+;; repeats the last ex command (shadows evil's reverse f/t repeat, ; still
+;; repeats forward)
 (map! :n "," #'evil-ex-repeat)
+
+;; enters the ex command-line without needing shift - plain evil-ex
+;; already gives completion-at-point suggestions as you type (native
+;; command names/file paths), plus M-p/M-n for `evil-ex-history'; no need
+;; for a completing-read/evil-ex-execute detour
+(map! :n ";" #'evil-ex)
+;; on-demand searchable history
+(map! :map evil-ex-completion-map "M-r" #'consult-history)
+;; the ex prompt is a literal ":" hardcoded in evil-ex.el (not a
+;; variable), so advise the primitive it's passed to rather than evil
+;; itself - scoped to an exact ":" prompt, which nothing else in this
+;; config uses, to avoid relabeling unrelated minibuffers
+(advice-add #'read-from-minibuffer :filter-args
+            (lambda (args)
+              (if (equal (car args) ":")
+                  (cons ";" (cdr args))
+                args)))
+
+;; swap SPC ; and SPC : (doom's stock ";" = pp-eval-expression, ":" = M-x) -
+;; pp-eval-expression moves into the freed SPC : slot rather than being
+;; dropped
+(map! :leader
+      :desc "M-x" ";" #'execute-extended-command
+      :desc "Eval expression" ":" #'pp-eval-expression)
+;; searchable box over documented symbols (helpful's completing-read
+;; prompt, defaults to symbol at point but editable/searchable via
+;; vertico) - gh already covers "describe the symbol at point" below, so
+;; this is for browsing/searching by name instead
+(map! :n ":" #'helpful-symbol)
+
+;; frees K, which duplicated gh's job here (+lookup/documentation IS
+;; doom's own multi-source aggregator). Both keys are free globally -
+;; dired's own "gh" (dirvish-subtree-up) and magit's git-rebase-mode's
+;; "gk" are mode-local overrides that still win in their own buffers
+(defun +eldoc-help-at-point ()
+  "Pure eldoc/LSP hover.
+`eldoc-box-help-at-point' only re-displays whatever eldoc last computed
+- force a fresh lookup first, or a first-ever call in the session has
+nothing to show yet. Its floating box is a child frame, which needs a
+graphical display (../../tools/lsp-support/config.el guards the
+equivalent automatic hover-mode the same way) - fall back to the plain
+doc buffer in a terminal frame (e.g. ghostel/vterm)."
+  (interactive)
+  (eldoc-print-current-symbol-info)
+  (if (display-graphic-p)
+      (eldoc-box-help-at-point)
+    (eldoc-doc-buffer t)))
+(map! :n "gh" #'+lookup/documentation
+      :n "gk" #'+eldoc-help-at-point
+      :n "K" nil)
 
 ;; + / - increment/decrement the number at point, as remapped in nvim
 ;; (keymaps.lua: + = C-A, - = C-X, since the defaults never got used)

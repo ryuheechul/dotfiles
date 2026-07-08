@@ -60,6 +60,17 @@ local init = function()
   -- , to repeat last normal command - https://stackoverflow.com/a/4789842/1570165
   vim.keymap.set('n', ',', '@:<CR>', { noremap = true, desc = 'repeat last normal command' })
 
+  -- ,/;/: here follow the "anti-shift keybindings" theme in
+  -- ../../../docs/philosophy.md - that's the source of truth for the
+  -- cross-tool mapping/rationale, comments below are nvim-local detail only
+  --
+  -- enters command-line without needing shift
+  vim.keymap.set('n', ';', ':', { noremap = true, desc = 'enter command-line mode' })
+  -- searchable box over all :help topics - `gh`/`gk` already cover
+  -- "describe the keyword at point" (hover.nvim / LSP hover), so this is
+  -- for browsing/searching help by name instead
+  vim.keymap.set('n', ':', cmdify 'Telescope help_tags', { noremap = true, desc = 'search help topics' })
+
   -- since I don't use the default way of `+`, `-`, mapping these to increase/decrease numbers
   -- - https://learnbyexample.github.io/tips/vim-tip-1/
   vim.keymap.set('n', '+', '<C-A>', { noremap = true, silent = true, desc = 'increase number' })
@@ -108,8 +119,9 @@ local config = function()
   }
 
   wk.add {
-    -- similar experience to doomemacs' keybinding for `M-x`
-    { '<Space>:', cmdify 'Telescope commands', desc = 'commands' },
+    -- <Space>; (was <Space>:) - see ../../../docs/philosophy.md's
+    -- anti-shift keybindings section
+    { '<Space>;', cmdify 'Telescope commands', desc = 'commands' },
     {
       "<Space>'",
       -- use count 9 to be independent from the horizontal one
