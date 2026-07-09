@@ -9,7 +9,7 @@
 
 set -euo pipefail
 
-tests_el="$(cd "$(dirname "$0")" && pwd)/../tests/parity-tests.el"
+tests_d="$(cd "$(dirname "$0")" && pwd)/../tests"
 socket="doom-parity-tests"
 
 cleanup() { emacsclient -s "${socket}" -e '(kill-emacs)' 2>/dev/null || true; }
@@ -24,7 +24,8 @@ emacs --bg-daemon="${socket}"
 # sight - collect the stats object and render the verdict client-side
 result="$(emacsclient -s "${socket}" -e "
 (progn
-  (load \"${tests_el}\" nil t)
+  (dolist (f (file-expand-wildcards \"${tests_d}/*-tests.el\"))
+    (load f nil t))
   (let ((stats (ert-run-tests-batch t)))
     (list (ert-stats-total stats)
           (ert-stats-completed-unexpected stats)

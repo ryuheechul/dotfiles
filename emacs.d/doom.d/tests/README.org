@@ -1,0 +1,30 @@
+#+title: Tests
+
+ERT regression tests for this doom config. Run via [[file:../bin/run-tests][../bin/run-tests]],
+which loads every =*-tests.el= here into a throwaway daemon (fresh
+config load, long-lived daemon untouched - see
+[[file:../bin/applying-changes.org][applying-changes.org]] for the instance model).
+
+* One test file per behavior contract
+
+A test file is the executable half of exactly one behavior document -
+not a mirror of a code file or directory. Code moves between files
+freely (smart-quit itself migrated modules once); the documented
+behavior is the stable thing worth keying on.
+
+| test file | contract it executes |
+|-----------+----------------------|
+| [[file:parity-tests.el][parity-tests.el]] | the neovim-parity plan, [[file:../modules/compat/neovim/plan.org][plan.org]] |
+| [[file:smart-quit-tests.el][smart-quit-tests.el]] | the behavior matrix in [[file:../modules/compat/neovim/smart-quit.el][smart-quit.el]]'s header |
+
+* Conventions
+
+- new file only when a new contract gets its first test; until then a
+  test joins the file of the contract it belongs to
+- file header links to its contract, contract links back
+- test name prefix = feature (=parity/=, =smart-quit/=), independent of
+  which file it lives in - prefixes survive future splits/merges
+- docstring states the behavior (and names the regression it guards,
+  if any) in one or two sentences
+- helpers/macros stay in the file that uses them; a shared helpers file
+  only once a helper has two consumer files

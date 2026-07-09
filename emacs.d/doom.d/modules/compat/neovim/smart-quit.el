@@ -16,7 +16,7 @@
 ;; a major-mode keymap beats the global evil-normal-state-map one).
 ;;
 ;; behavior matrix (side-window rows regression-tested in
-;; ../../../tests/parity-tests.el, the rest verified live):
+;; ../../../tests/smart-quit-tests.el, the rest verified live):
 ;;
 ;; buffer            | environment          | other real buf? | unsaved?     | q does
 ;; ------------------+----------------------+------------------+--------------+---------------------------------------------
