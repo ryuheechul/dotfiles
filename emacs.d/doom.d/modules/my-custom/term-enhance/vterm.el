@@ -108,9 +108,9 @@
               ;; decide to silently do nothing", which is exactly what
               ;; happens when called from here (the vterm_cmd bridge, not a
               ;; mouse event) - this was the "q keeps coming back" bug.
-              ;; `kill-current-buffer' is what it tells you to use instead
-              ;; for keyboard/programmatic invocation
-              (kill-current-buffer)))))
+              ;; the ../config.el helper wraps the `kill-current-buffer' it
+              ;; tells you to use instead, minus the running-process prompt
+              (term-enhance/kill-terminal-no-questions)))))
     ;; when 'vterm-buffer-name is not bound
     (+vterm/here nil)))
 
@@ -160,7 +160,12 @@
     (cond
      ;; the full window one: hide instead of kill so the shell stays warm
      ;; and the next toggle feels prompt
-     ((= (count-windows) 1) (vterm/full-w/toggle))
+     ((= (count-windows) 1)
+      (if (string= (buffer-name) vterm-buffer-name)
+          (vterm/full-w/toggle)
+        ;; some other terminal buffer as the sole window (e.g. the popup
+        ;; one promoted to full frame) - shared body in ../config.el
+        (term-enhance/bury-or-kill-sole-terminal)))
      ;; doom's popup terminal: same warm-hide reasoning
      ((and (fboundp '+popup-window-p) (+popup-window-p)) (+vterm/toggle nil))
      ;; a plain split pane (the mw/ mw- ones) - shared body in ../config.el
@@ -202,6 +207,15 @@
 
 (after! vterm
   ;; let these consumable from shell side (via vterm_cmd)
+  ;; find-file is already whitelisted by vterm's own default
+  ;; vterm-eval-cmds, but it opens in the CURRENT window - i.e. this
+  ;; terminal's own window, replacing it. find-file-other-window (like
+  ;; ghostel already whitelists by default) avoids that, but doesn't
+  ;; guarantee reusing a specific existing window either - see
+  ;; ../config.el's term-enhance/find-file-editor-window, what
+  ;; ../../../shell/source.zsh's `find-file' shell function actually calls
+  (add-to-list 'vterm-eval-cmds '("find-file-editor-window" term-enhance/find-file-editor-window))
+  (add-to-list 'vterm-eval-cmds '("find-file-other-window" find-file-other-window))
   (add-to-list 'vterm-eval-cmds '("vterm/hide" vterm/hide))
   (add-to-list 'vterm-eval-cmds '("vterm/unhide-mode-line" vterm/turn-off-hide-mode-line))
   (add-to-list 'vterm-eval-cmds '("mux/new-shell" vterm/mux-new-shell))

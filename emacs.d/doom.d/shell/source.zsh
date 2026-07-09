@@ -22,7 +22,7 @@ vterm)
 ghostel)
   # nothing to source - ghostel auto-injects its own integration (OSC 7/133/2
   # tracking and the ghostel_cmd elisp bridge) before .zshrc even runs
-  if (( ${+functions[ghostel_cmd]} )); then
+  if ((${+functions[ghostel_cmd]})); then
     term_cmd="ghostel_cmd"
   else
     >&2 echo 'ghostel_cmd is missing - ghostel shell integration was not injected'
@@ -32,7 +32,12 @@ esac
 
 if test -n "${term_cmd}"; then
   find-file() {
-    "${term_cmd}" find-file "$(realpath "${@:-.}")"
+    # -editor-window: reuse the existing non-terminal window in the
+    # frame (not this terminal's own, which bare find-file would
+    # replace) - -other-window alone doesn't guarantee that, it can
+    # still split a new one; see
+    # ../modules/my-custom/term-enhance/{config,ghostel,vterm}.el
+    "${term_cmd}" find-file-editor-window "$(realpath "${@:-.}")"
   }
   # block in case of SSH, otherwise it will try to open the clients (if there is the same path exist)
   test -z "${SSH_CONNECTION}" && alias emacs="find-file"
@@ -103,14 +108,14 @@ if test -n "${term_cmd}"; then
 fi
 
 # stop using these alias for now - while replacing `e` is good `vi` is actually confusing so let me think about it
-# alias vi='vterm_cmd find-file'
-# alias e='vi $(fzf)'
+alias vi='find-file'
+alias e='vi $(fzf)'
 
 # sync in case of drift between Emacs and base16-shell
 echo "${INSIDE_EMACS}" | grep tramp >/dev/null ||
   {
     test "${DOOM_EMACS_THEME}" = "base16-$(current-base16)" ||
-      { test "${DOOM_EMACS_THEME}" = "base16-solarized-dark" && dark || light }
+      { test "${DOOM_EMACS_THEME}" = "base16-solarized-dark" && dark || light; }
   }
 
 # run command on start up requested from Emacs

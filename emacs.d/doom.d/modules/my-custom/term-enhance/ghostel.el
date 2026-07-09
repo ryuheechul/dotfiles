@@ -63,9 +63,10 @@
               ;; reliably invoked only from the menu bar, otherwise it could
               ;; decide to silently do nothing", which is exactly what
               ;; happens when called from here (the ghostel_cmd bridge, not
-              ;; a mouse event) - `kill-current-buffer' is what it tells you
-              ;; to use instead for keyboard/programmatic invocation
-              (kill-current-buffer)))))
+              ;; a mouse event); the ../config.el helper wraps the
+              ;; `kill-current-buffer' it tells you to use instead, minus
+              ;; the running-process prompt
+              (term-enhance/kill-terminal-no-questions)))))
     ;; when '+ghostel--buffer-name is not bound
     (+ghostel/here)))
 
@@ -131,7 +132,13 @@
     (cond
      ;; the full window one: hide instead of kill so the shell stays warm
      ;; and the next toggle feels prompt
-     ((= (count-windows) 1) (ghostel/full-w/toggle))
+     ((= (count-windows) 1)
+      (if (and (fboundp '+ghostel--buffer-name)
+               (string= (buffer-name) (+ghostel--buffer-name)))
+          (ghostel/full-w/toggle)
+        ;; some other terminal buffer as the sole window (e.g. the popup
+        ;; one promoted to full frame) - shared body in ../config.el
+        (term-enhance/bury-or-kill-sole-terminal)))
      ;; doom's popup terminal: same warm-hide reasoning
      ((and (fboundp '+popup-window-p) (+popup-window-p)) (+ghostel/toggle nil))
      ;; a plain split pane (the mw/ mw- ones) - shared body in ../config.el
@@ -169,6 +176,12 @@
 
 (after! ghostel
   ;; let these consumable from shell side (via ghostel_cmd)
+  ;; find-file-other-window (whitelisted by default) avoids replacing
+  ;; this terminal's own window, but doesn't guarantee reusing a
+  ;; specific existing window either - see ../config.el's
+  ;; term-enhance/find-file-editor-window, what
+  ;; ../../../shell/source.zsh's `find-file' shell function actually calls
+  (add-to-list 'ghostel-eval-cmds '("find-file-editor-window" term-enhance/find-file-editor-window))
   (add-to-list 'ghostel-eval-cmds '("ghostel/hide" ghostel/hide))
   (add-to-list 'ghostel-eval-cmds '("ghostel/unhide-mode-line" ghostel/full-w/turn-off-hide-mode-line))
   (add-to-list 'ghostel-eval-cmds '("mux/new-shell" ghostel/mux-new-shell))

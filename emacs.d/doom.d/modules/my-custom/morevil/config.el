@@ -38,21 +38,10 @@
        '(navigation additional)
      '(navigation insert additional))))
 
-;; close buffer and window
-(defun close-buffer-or-doom ()
-  (if (string= (buffer-name) "*doom*")
-      (evil-quit)
-    (kill-buffer)))
-
-(defun close-window-or-buffer ()
-  (interactive)
-  (if (> (count-windows) 1)
-      (+workspace/close-window-or-workspace)
-    (close-buffer-or-doom)))
-
-(define-key evil-normal-state-map (kbd "q") #'close-window-or-buffer)
-;; alternatively the above could be as simple as below
-;; (define-key evil-normal-state-map (kbd "q") #'evil-quit)
+;; close buffer and window - see ../../compat/neovim/smart-quit.el for
+;; `close-window-or-buffer' itself and its evil-normal-state-map "q"
+;; binding (follows my-smart-quit.lua's :q semantics, one entrypoint many
+;; branches)
 
 ;; switching buffer and windows - `<tab>' (the symbol) only ever fires in a
 ;; GUI frame; a plain terminal has no way to tell the physical Tab key

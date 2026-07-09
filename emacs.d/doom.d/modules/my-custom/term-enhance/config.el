@@ -50,6 +50,26 @@ term-enhance/close-quick-editor-wconf-on-exit)."
     (set-window-configuration term-enhance/--quick-editor-wconf)
     (setq term-enhance/--quick-editor-wconf nil)))
 
+;; for ../../../shell/source.zsh's `find-file' shell function -
+;; `find-file-other-window' doesn't guarantee reusing a SPECIFIC
+;; existing window, only that it avoids the selected one; with an editor
+;; window above and a terminal below, it can still split a third window
+;; in between rather than reusing the editor one. This targets "the
+;; first non-terminal window" explicitly instead
+(defun term-enhance/find-file-editor-window (file)
+  "Open FILE by reusing the first non-terminal window in the frame
+(switching its buffer), falling back to `find-file-other-window' if
+every window is currently a terminal."
+  (if-let* ((win (cl-find-if
+                   (lambda (w)
+                     (not (memq (buffer-local-value 'major-mode (window-buffer w))
+                                '(vterm-mode ghostel-mode))))
+                   (window-list))))
+      (progn
+        (select-window win)
+        (find-file file))
+    (find-file-other-window file)))
+
 ;; setenv wrapper that works for tramp remote shell as well
 (defun settermenv (key val)
   ;; for a local env, it's simple as that
@@ -182,20 +202,43 @@ restore the window configuration ourselves."
       (when (and win (window-live-p win) (not (frame-root-window-p win)))
         (delete-window win)))))
 
+;; kill the current terminal buffer without any "has a running process;
+;; kill it?" prompt: the shell just accepted the `q' that got us here, so
+;; nothing of value is running - in fact by OSC 133 bookkeeping that very
+;; `q' alias is STILL running (ghostel_cmd fires its elisp before the
+;; command-finished D marker), which is exactly what ghostel's kill query
+;; (`ghostel-query-before-killing' 'auto) flags. That query lives in the
+;; buffer-LOCAL `kill-buffer-query-functions', so a let-bind of the global
+;; value can't mask it - clear the dying buffer's local hook instead
+;; (also moots vterm's global process query, since a local nil stops the
+;; global value from being consulted at all)
+(defun term-enhance/kill-terminal-no-questions ()
+  (setq-local kill-buffer-query-functions nil)
+  (kill-current-buffer))
+
 ;; what `q' (`ghostel/hide'/`vterm/hide') should do for a plain split pane
 ;; (not the popup or full-window singleton, which each backend already
 ;; knows how to warm-hide instead so the shell stays alive for a fast
 ;; re-toggle): behave like closing a terminal pane - kill the buffer and
 ;; remove its window in one action (the manual equivalent was exit + kill
-;; file buffer + delete window). `kill-buffer-query-functions' nil skips
-;; the running-process prompt
+;; file buffer + delete window)
 (defun term-enhance/mux-close-pane ()
-  (let ((buf (current-buffer))
-        (win (get-buffer-window (current-buffer)))
-        (kill-buffer-query-functions nil))
-    (kill-buffer buf)
+  (let ((win (get-buffer-window (current-buffer))))
+    (term-enhance/kill-terminal-no-questions)
     (when (and win (window-live-p win) (not (frame-root-window-p win)))
       (delete-window win))))
+
+;; what `q' should do when the terminal is the sole window but NOT the
+;; backend's full-window singleton - e.g. the popup buffer promoted to
+;; full frame by smart-quit's duplicate collapse
+;; (../../compat/neovim/smart-quit.el). The backends' full-w/toggle would
+;; target the singleton instead of this buffer and look like a refusal;
+;; warm-bury when there's somewhere to go back to, kill otherwise (the
+;; same choice each full-w/toggle makes for its own buffer)
+(defun term-enhance/bury-or-kill-sole-terminal ()
+  (if (> (length (doom-real-buffer-list)) 1)
+      (bury-buffer)
+    (term-enhance/kill-terminal-no-questions)))
 
 ;; manage code related theme separately
 (load! "theme")      ;; ./theme.el
