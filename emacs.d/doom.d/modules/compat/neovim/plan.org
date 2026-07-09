@@ -227,6 +227,15 @@ language constructs - if/else/end, function/end, html open/close tags -
 with the matched pair highlighted. emacs: ~evil-matchit~ +
 ~global-evil-matchit-mode~, in morevil.
 
+** DONE cmp-path (complete ~./~ and ~../~ file paths as you type)
+nvim: the ~path~ cmp source is global
+([[file:../../../../../nvim/lua/plugins/config/completion.lua][completion.lua]]), so paths complete in any buffer. emacs: doom's corfu
+module already wires ~cape-file~, but only into prog-mode - extended to
+the text/conf mode families in [[file:./config.el][config.el]] (org/markdown derive from
+text-mode, so they're covered). corfu-auto's 2-char prefix means ~./~
+or ~../~ pops on its own; minibuffer paths were already fine via the
+built-in file completion.
+
 ** TODO rainbow-delimiters
 Small ~use-package!~; doom has no module for it.
 

@@ -22,6 +22,13 @@
   ;; let's not make the enter key embarassing when there is no candidate
   (setq corfu-preselect 'first))
 
+;; ./ and ../ path completion everywhere, like nvim's cmp-path source
+;; (../../../../../nvim/lua/plugins/config/completion.lua lists it
+;; globally): doom's corfu module wires `cape-file' into prog-mode only -
+;; extend it to the text/conf families (org/markdown derive from
+;; text-mode, so they're covered)
+(add-hook! '(text-mode-hook conf-mode-hook) #'+corfu-add-cape-file-h)
+
 ;; let the cursor move past the end of a line - PARTIAL parity with
 ;; ../../../../../nvim/lua/boot/misc.lua's `vim.o.virtualedit = 'all'`.
 ;; this only gets `virtualedit=onemore' (one extra column, a real buffer

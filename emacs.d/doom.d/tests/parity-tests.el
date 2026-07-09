@@ -56,7 +56,10 @@
   (should global-auto-revert-mode)
   (should global-evil-matchit-mode)
   (should (memq 'flyspell-prog-mode prog-mode-hook))
-  (should (memq 'delete-trailing-whitespace before-save-hook)))
+  ;; trim-on-save is ws-butler's job now (:editor whitespace +trim), not a
+  ;; blunt before-save delete-trailing-whitespace; doom defers the global
+  ;; mode to the first real buffer, so assert the wiring not the mode
+  (should (memq 'ws-butler-global-mode doom-first-buffer-hook)))
 
 (ert-deftest parity/smartcase-search ()
   (should (eq evil-ex-search-case 'smart)))
@@ -105,6 +108,15 @@ the no-spaces assertion distinguishes our custom style from the default
   (should (memq 'tab-mark whitespace-style))
   (should (memq 'trailing whitespace-style))
   (should-not (memq 'spaces whitespace-style)))
+
+(ert-deftest parity/path-completion-capf-everywhere ()
+  "cape-file (nvim cmp-path parity) reaches text/conf modes too, not
+just doom's prog-mode default - ./ and ../ complete in org/markdown/
+plain text like they do in nvim."
+  (dolist (mode '(emacs-lisp-mode text-mode conf-unix-mode))
+    (with-temp-buffer
+      (funcall mode)
+      (should (memq 'cape-file completion-at-point-functions)))))
 
 (defmacro parity--with-main-and-side-window (main-var side-var &rest body)
   "Set up MAIN-VAR (a plain window/buffer) and SIDE-VAR (a dedicated
