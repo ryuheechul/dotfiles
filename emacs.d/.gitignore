@@ -1,0 +1,4 @@
+# flycheck's emacs-lisp checker byte-compiles a same-directory temp copy
+# (needed for correct load-path/require resolution) and normally cleans it
+# up - only survives a check interrupted mid-flight (e.g. daemon restart)
+flycheck_*

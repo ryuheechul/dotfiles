@@ -95,14 +95,20 @@
     (kbd "C-l") (lambda () (interactive) (ghostel/mux--nav "l" #'evil-window-right))))
 
 ;; a hack to let zsh to run command on start up - conjunction with ../../../shell/source.zsh
-;; currently the assumption of this function is that run it in full window
+;; shown as a modal (see ./config.el's term-enhance/open-in-modal, matching
+;; nvim's toggleterm float for opening emacs the other direction) rather
+;; than a plain in-place window swap
 (defun ghostel-with-cmd (cmd)
   ;; this will be read by ../../../shell/source.zsh
   (settermenv "INSIDE_EMACS_RUN_CMD_ON_START_UP" cmd)
-  ;; to avoid buffer collision with regular ones; +ghostel/here let-binds
+  ;; not "*ghostel-with-cmd*" - deliberately doesn't start with "*ghostel"
+  ;; so ./config.el's exit hook can pattern-match it uniformly with
+  ;; vterm-with-cmd's "*quick-editor-vterm*"; +ghostel/here let-binds
   ;; `ghostel-buffer-name' internally so call `ghostel' directly instead
-  (let ((ghostel-buffer-name (generate-new-buffer-name "*ghostel-with-cmd*")))
-    (switch-to-buffer (save-window-excursion (ghostel))))
+  (let ((ghostel-buffer-name (generate-new-buffer-name "*quick-editor-ghostel*")))
+    (term-enhance/open-in-modal
+     ghostel-buffer-name
+     (lambda () (pop-to-buffer (save-window-excursion (ghostel))))))
   ;; clean up this because it should be set only momentarily
   (settermenv "INSIDE_EMACS_RUN_CMD_ON_START_UP" nil))
 
@@ -136,6 +142,9 @@
 ;; this before `ghostel-kill-buffer-on-exit' kills the buffer (see
 ;; `ghostel--sentinel'), so the buffer's window is still discoverable here
 (add-hook 'ghostel-exit-functions #'term-enhance/mux-close-window-on-exit)
+;; restores the pre-modal window layout once a ghostel-with-cmd quick
+;; editor terminal exits - shared body in ../config.el
+(add-hook 'ghostel-exit-functions #'term-enhance/close-quick-editor-wconf-on-exit)
 
 ;; the doom module hides the modeline via `mode-line-invisible-mode';
 ;; despite its name this should only kick in for the "full screen one"

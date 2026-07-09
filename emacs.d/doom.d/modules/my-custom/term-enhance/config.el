@@ -7,6 +7,49 @@
 
 (setq tui-emacs (eq window-system nil))
 
+;; ghostel-with-cmd/vterm-with-cmd's "quick nvim" terminal needs to be
+;; shown in front of everything, not disturb any other window, and be
+;; disposable - properties true floating (child frames, e.g. posframe)
+;; would give for free, but only in a graphical frame; this needs to work
+;; in TTY too (where a second frame surface can't be layered at all), so
+;; instead: save the window configuration, take over the whole frame
+;; (mirroring term-enhance/mux-zoom's save/delete-other-windows below,
+;; not reinventing it), and restore automatically once the terminal
+;; exits. Nothing else's window layout is ever touched - just not
+;; displayed while the modal is up, then restored exactly as it was
+(defvar term-enhance/--quick-editor-wconf nil
+  "Window configuration to restore once the quick-editor terminal exits.")
+
+(defun term-enhance/open-in-modal (buffer-name display-fn)
+  "Save the window configuration, call DISPLAY-FN (which should display
+BUFFER-NAME however it wants), then force that window to fill the whole
+frame regardless. `delete-other-windows' up front isn't enough on its
+own - it only clears windows that already existed *before* DISPLAY-FN
+runs, not a side/bottom window some other display-buffer-alist rule
+creates *while* DISPLAY-FN displays the buffer (confirmed: this is
+exactly why it came out as a right-side/bottom-50% pane instead of full
+frame). Restored once the resulting terminal exits (see
+term-enhance/close-quick-editor-wconf-on-exit)."
+  (setq term-enhance/--quick-editor-wconf
+        (unless (one-window-p) (current-window-configuration)))
+  (funcall display-fn)
+  (when-let* ((win (get-buffer-window buffer-name)))
+    (select-window win)
+    (delete-other-windows)))
+
+;; hooked into both ghostel-exit-functions/vterm-exit-functions below
+;; (same (buf event) signature term-enhance/mux-close-window-on-exit
+;; uses further down) - restores regardless of whichever hook order they
+;; end up running in; set-window-configuration overwrites the whole
+;; frame's window tree, so it doesn't matter if the other hook already
+;; tried (and safely no-op'd on) deleting this buffer's window first
+(defun term-enhance/close-quick-editor-wconf-on-exit (buf _event)
+  (when (and buf
+             (string-match-p "^\\*quick-editor-" (buffer-name buf))
+             term-enhance/--quick-editor-wconf)
+    (set-window-configuration term-enhance/--quick-editor-wconf)
+    (setq term-enhance/--quick-editor-wconf nil)))
+
 ;; setenv wrapper that works for tramp remote shell as well
 (defun settermenv (key val)
   ;; for a local env, it's simple as that

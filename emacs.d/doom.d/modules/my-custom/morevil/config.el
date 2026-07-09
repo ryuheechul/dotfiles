@@ -21,6 +21,22 @@
 
 ;; to algin with my neovim keybindings
 (map! :textobj "e" #'+evil:whole-buffer-txtobj         #'+evil:whole-buffer-txtobj)
+;; evil-markdown's own "ae" (markdown-element-textobj) shadows the global
+;; e -> +evil:whole-buffer-txtobj above, but only in markdown buffers -
+;; mode-local keymaps win over the global evil-outer-text-objects-map
+;; lookup. Basic keybindings should behave the same regardless of mode,
+;; so drop the "textobjects" key theme entirely (its only content is
+;; that one binding, see evil-markdown.el's
+;; evil-markdown--populate-textobjects-bindings) and let ae/ie fall
+;; through to the global maps like everywhere else. Calling the setter
+;; directly (not `setq') since `evil-markdown-key-theme's `:set'
+;; function is what actually rebuilds the keymap - a plain setq wouldn't
+;; trigger it
+(after! evil-markdown
+  (evil-markdown-set-key-theme
+   (if (bound-and-true-p evil-disable-insert-state-bindings)
+       '(navigation additional)
+     '(navigation insert additional))))
 
 ;; close buffer and window
 (defun close-buffer-or-doom ()

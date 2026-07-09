@@ -162,7 +162,25 @@ local config = function()
     {
       '<Space>fe',
       function()
-        vim.cmd([[silent exec "!open 'org-protocol://find-file?path=]] .. vim.fn.expand '%:p' .. [['"]])
+        -- mirrors term-enhance/nvim-open-cmd's approach for the opposite
+        -- direction (emacs opening nvim): a dedicated terminal running the
+        -- other editor's CLI directly, shown immediately - not a
+        -- background daemon write + GUI-focus dance. `-t` opens a
+        -- terminal-mode (not GUI) Emacs frame; `-a ''` auto-spawns a
+        -- daemon first if none is running yet
+        require('toggleterm.terminal').Terminal
+          :new({
+            cmd = string.format("emacsclient -a '' -t +%d '%s'", vim.fn.line '.', vim.fn.expand '%:p'),
+            close_on_exit = true,
+            direction = 'float',
+            -- bigger than the 60% global default (config/term.lua) - a full
+            -- editor session benefits from more room than a quick shell peek
+            float_opts = {
+              width = function() return math.floor(vim.o.columns * 0.8) end,
+              height = function() return math.floor(vim.o.lines * 0.8) end,
+            },
+          })
+          :toggle()
       end,
       desc = 'open in Emacs',
     },

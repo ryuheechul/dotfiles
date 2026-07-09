@@ -115,13 +115,27 @@
     (+vterm/here nil)))
 
 ;; a hack to let zsh run a command on start up - conjunction with ../../../shell/source.zsh
-;; currently the assumption of this function is that run it in full window
+;; shown as a modal (see ./config.el's term-enhance/open-in-modal, matching
+;; nvim's toggleterm float for opening emacs the other direction) rather
+;; than a plain in-place window swap. `+vterm/here' can't be reused for
+;; this - it explicitly does `(let (display-buffer-alist) (vterm ...))'
+;; internally, always forcing "current window" display by design (its
+;; whole point is "open here"), which would fight term-enhance/open-in-modal's
+;; own window-configuration handling. Calling `vterm' directly (same
+;; call `+vterm/here' makes, minus that override - see doom's
+;; term/vterm/autoload.el) lets it apply instead
 (defun vterm-with-cmd (cmd)
   ;; this will be read by ../../../shell/source.zsh
   (settermenv "INSIDE_EMACS_RUN_CMD_ON_START_UP" cmd)
-  ;; to avoid buffer collision with regular ones
-  (setq vterm-buffer-name "*vterm-with-cmd*")
-  (+vterm/here nil)
+  ;; not "*vterm-with-cmd*" - deliberately doesn't start with "*vterm" so
+  ;; ./config.el's exit hook can pattern-match it uniformly with
+  ;; ghostel-with-cmd's "*quick-editor-ghostel*"
+  (setq vterm-buffer-name "*quick-editor-vterm*")
+  (term-enhance/open-in-modal
+   vterm-buffer-name
+   (lambda ()
+     (require 'vterm)
+     (vterm vterm-buffer-name)))
   ;; fix the global name back to normal - assuming the original name is `*vterm*`
   (setq vterm-buffer-name "*vterm*")
   ;; clean up this because it should be set only momentarily
@@ -170,6 +184,9 @@
 ;; same (buf event) signature as ghostel's exit hook, so the shared body
 ;; works unmodified
 (add-hook 'vterm-exit-functions #'term-enhance/mux-close-window-on-exit)
+;; restores the pre-modal window layout once a vterm-with-cmd quick
+;; editor terminal exits - shared body in ../config.el
+(add-hook 'vterm-exit-functions #'term-enhance/close-quick-editor-wconf-on-exit)
 
 ;; vterm's half of the shared emacs-as-a-multiplexer commands
 ;; (../config.el's `term-enhance/mux-new-shell'/`term-enhance/mux-zoom') for
