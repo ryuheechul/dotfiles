@@ -1,6 +1,10 @@
 # -*- mode: sh; -*- vim: set ft=zsh:
 
-# extra things to load for emacs for seamless integration
+# extra things to load for emacs for seamless integration. these single
+# -variable checks are trustworthy even with editors nested inside each
+# other's terminals because each editor scrubs the other's markers from
+# its terminals' environment - "nearest editor wins" in
+# ../../docs/philosophy.md
 if test -n "${INSIDE_EMACS}"; then
   to_source_for_emacs="${my_dot_d}/emacs.d/shell/source.zsh"
   test -f "${to_source_for_emacs}" && source "${to_source_for_emacs}"

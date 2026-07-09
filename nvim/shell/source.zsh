@@ -9,7 +9,11 @@ unset TMUX TMUX_PANE
 # simply close the window instead of exiting
 # which bringing back the shell much faster
 # use `exit` to exit
-alias q="clear; nvr --remote-send '<esc>:q<cr>'"
+# -c (an Ex command over RPC), NOT --remote-send: sent keys replay through
+# the host's mappings, and ':' no longer enters cmdline there (remapped to
+# a Telescope picker by the anti-shift keybindings) - so the old
+# '<esc>:q<cr>' opened that picker with "q" as the filter instead
+alias q="clear; nvr -c quit"
 
 ## use host nvim instead of creating another nvim process
 # for programs like lf

@@ -102,7 +102,15 @@ every window is currently a terminal."
   (settermenv "INSIDE_DOOM_EMACS" "1")
   (settermenv "UNSET_ALL_MY_ZSH_STUFF_LOADED" "1")
   (settermenv "UNSET_MY_BASIC_ZSH_STUFF_LOADED" "1")
-  (settermenv "UNSET_HOST_ALWAYS_USE_TMUX" "1"))
+  (settermenv "UNSET_HOST_ALWAYS_USE_TMUX" "1")
+  ;; if THIS emacs runs inside nvim's :terminal, its markers would leak
+  ;; into our terminals and pull in the wrong shell integration - scrub
+  ;; them, shells in our terminals are emacs's ("nearest editor wins" in
+  ;; ../../../../../docs/philosophy.md; nvim's boot/misc.lua scrubs the
+  ;; emacs markers symmetrically)
+  (settermenv "NVIM" nil)
+  (settermenv "NVIM_LISTEN_ADDRESS" nil)
+  (settermenv "VIMRUNTIME" nil))
 ;; invoke on startup so the local shell is ready
 (prep-env-for-term)
 ;; invoke again for when tramp is ready

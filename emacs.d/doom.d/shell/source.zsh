@@ -25,6 +25,10 @@ ghostel)
   if ((${+functions[ghostel_cmd]})); then
     term_cmd="ghostel_cmd"
   else
+    # ghostel injects the bridge only into its direct child shell (a
+    # nested shell merely inherits INSIDE_EMACS - though the [neo]vim
+    # :terminal case never even gets sourced, see
+    # ../../../zsh/integration/editors)
     >&2 echo 'ghostel_cmd is missing - ghostel shell integration was not injected'
   fi
   ;;
@@ -73,17 +77,11 @@ if test "${term_in_emacs}" = "vterm"; then
   export TERMINFO_DIRS="$(nix-outpath infocmp)/share/terminfo"
 fi
 
-# for terminal inside neovim inside the emacs terminal
-
-# term inside neovim inside the emacs terminal
-if test -n "${VIMRUNTIME}"; then
-  export TERM=xterm-256color
-  echo '[Info] You are in the term inside [neo]vim.'
-
-  # stop loading the rest in case in neovim
-  return
-fi
-# now these should be for the emacs terminal level only
+# (a terminal inside [neo]vim never gets here - nvim scrubs INSIDE_EMACS
+# from its :terminal environment, so ../../../zsh/integration/editors
+# never sources this file there: "nearest editor wins" in
+# ../../../docs/philosophy.md. nvim sets its own TERM and
+# ../../../nvim/shell/source.zsh owns that shell's integration)
 
 if test "${term_in_emacs}" = "vterm"; then
   export TERM=eterm-color
@@ -122,16 +120,23 @@ echo "${INSIDE_EMACS}" | grep tramp >/dev/null ||
 # TODO: this technically don't need to wait for all the things above, so consider moving up there to skip extra things to wait
 cmd_to_run="${INSIDE_EMACS_RUN_CMD_ON_START_UP}"
 unset INSIDE_EMACS_RUN_CMD_ON_START_UP
-# the child `zsh -c` below is non-interactive, so it sources .zshenv but
-# NOT .zshrc - which means ../../../zsh/path/set-basic's nix-profile
-# "float to front of $PATH" trick never runs there (only .zshrc's
-# `float_nix_path=1 source .../path/set` call does that; .zshenv's own
-# path/set call doesn't set that flag). without it, /opt/homebrew/bin
-# (added earlier, e.g. via path_helper) can outrank ~/.nix-profile/bin in
-# $PATH, so a command like `nvim` silently resolves to a stale Homebrew
-# install instead of the nix one - exporting float_nix_path=1 here makes
-# the child's own .zshenv -> zsh/env -> path/set float nix-profile to the
-# front, same as a normal interactive shell does
-test -n "${cmd_to_run}" && float_nix_path=1 exec zsh -c "$cmd_to_run"
+if test -n "${cmd_to_run}"; then
+  # (the quick-editor env this shell was fast-pathed with - e.g.
+  # fast_shell_in_editor - deliberately rides along into the command:
+  # nvim scrubs it for its own children in boot/misc.lua, "nearest
+  # editor wins" in ../../../docs/philosophy.md)
+  #
+  # the child `zsh -c` below is non-interactive, so it sources .zshenv but
+  # NOT .zshrc - which means ../../../zsh/path/set-basic's nix-profile
+  # "float to front of $PATH" trick never runs there (only .zshrc's
+  # `float_nix_path=1 source .../path/set` call does that; .zshenv's own
+  # path/set call doesn't set that flag). without it, /opt/homebrew/bin
+  # (added earlier, e.g. via path_helper) can outrank ~/.nix-profile/bin in
+  # $PATH, so a command like `nvim` silently resolves to a stale Homebrew
+  # install instead of the nix one - exporting float_nix_path=1 here makes
+  # the child's own .zshenv -> zsh/env -> path/set float nix-profile to the
+  # front, same as a normal interactive shell does
+  float_nix_path=1 exec zsh -c "$cmd_to_run"
+fi
 
 echo "shell overriding for doom emacs has been completed."

@@ -31,6 +31,71 @@ extra keystrokes to escape the picker just to type something new) - so
 it was reverted in favor of the tool's own native behavior, even though
 that reintroduced a small cross-tool inconsistency.
 
+## Enter anywhere, nest anything
+
+Any tool can be the entry point - a bare terminal, tmux/zellij, emacs,
+neovim - and any other tool can be invoked from inside it, nested to
+whatever depth is technically possible: a terminal inside nvim inside a
+terminal inside emacs is a legitimate stack, not an edge case, and so are
+zellij inside tmux, a tmux client inside zellij, or emacs acting as the
+multiplexer itself. No config gets to assume a fixed hierarchy ("emacs is
+always outermost") - when a nesting order exposes a barrier, the barrier
+is what gets fixed, not the workflow ("don't do that") that hit it.
+
+Barriers lifted so far, and how (each layer decides "mine or the inner
+one's?" at runtime instead of by assumption):
+
+- *One prefix/nav keyset can't serve every depth* - `tmux.conf` inspects
+  the pane's live process (`is_zellij`, `is_vim`) and forwards `C-b` and
+  `C-hjkl` inward when an inner zellij/vim/emacs should own them;
+  ghostel does the same via alt-screen detection (pane nav at a prompt,
+  raw keys into the inner TUI).
+- *"Which mux do the mw* aliases control?" is ambiguous when muxes nest* -
+  `zsh/integration/multiplexers` walks real process ancestry instead of
+  guessing from env (pane env inherits stale answers), emacs included as
+  a mux.
+- *A shell inside an editor is normally a dead end* - the bridges
+  (`ghostel_cmd`/`vterm_cmd`, nvr) let the inner shell drive its host:
+  `find-file`/`vi` opens in the editor window above, `q` hides the
+  terminal instead of killing the shell, `nvim` inside nvim's terminal
+  becomes `nvr --remote-tab` on the host instead of nvim-in-nvim.
+- *Editors summoning each other used to degrade* - "open in emacs" from
+  nvim runs `emacsclient -t` in a disposable float (not GUI/org-protocol
+  indirection); "open in nvim" from emacs is a full-frame modal that
+  restores the window layout on exit.
+- *Inherited env lies about the present* - editor markers
+  (`INSIDE_EMACS`, `NVIM`) are scrubbed by the spawning editor so only
+  the nearest one's integration loads ("nearest editor wins": emacs's
+  `prep-env-for-term`, nvim's `boot/misc.lua`); the quick-editor
+  fast-path flags get the same scrub before nvim launches, so its nested
+  shells load the full zsh config.
+- *Tools grab the outermost layer's features when a nearer one fits* -
+  `nvim/shell/source.zsh` unsets `TMUX` so fzf uses the current pane,
+  not a popup in the tmux two layers up.
+- *One-shot vs re-load of shell config across depth* - the
+  loaded-markers handshake in `zsh/zshrc` (`*_LOADED` + `UNSET_*`/
+  `IGNORE_UNSET_*`) lets each layer decide whether the shell below
+  reloads everything or deliberately skips.
+- *TERM/terminfo and clipboard degrade through layers* - each layer sets
+  its own TERM (ghostel ships terminfo, nvim exports its own for
+  `:terminal`), emacs scrubs the outer terminal's leftovers
+  (`env-vars-to-exclude`), and nvim picks its clipboard provider by
+  inspecting the actual stack (SSH/zellij/emacs) instead of one default.
+
+The recurring failure mode is *inherited state lying about the present*:
+environment variables propagate indefinitely, so a marker that truthfully
+described the parent (`INSIDE_EMACS`, `NVIM`, quick-editor fast-path
+flags, loaded-markers) reaches grandchildren where it's stale - and
+nesting order is undecidable from the variables alone. The mechanism
+that keeps entry free is **nearest editor wins**: a marker is only
+meaningful one hop from the tool that set it, and the spawning tool -
+the only party that knows it's the nearest - scrubs the other editors'
+markers from the environment it hands to its children (emacs:
+`prep-env-for-term` in term-enhance; nvim: `boot/misc.lua`). Consumers
+(`zsh/integration/editors`) then stay dumb single-variable checks,
+mutually exclusive by construction, instead of trying to out-guess
+nesting order.
+
 ## Anti-shift keybindings
 
 Avoid Shift wherever a Shift-free key can carry the same meaning, across

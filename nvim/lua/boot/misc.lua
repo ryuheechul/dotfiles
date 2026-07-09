@@ -166,6 +166,25 @@ else
   end
 end
 
+-- if THIS nvim runs inside an emacs terminal, emacs's markers would leak
+-- into our :terminal shells and pull in the wrong shell integration -
+-- scrub them, shells in our terminals are nvim's ("nearest editor wins"
+-- in ../../../docs/philosophy.md; emacs's prep-env-for-term scrubs the
+-- nvim markers symmetrically). is_emacs above already captured what this
+-- nvim itself needed to know
+vim.env.INSIDE_EMACS = nil
+vim.env.INSIDE_DOOM_EMACS = nil
+vim.env.TUI_EMACS = nil
+vim.env.EMACS_VTERM_PATH = nil
+vim.env.DOOM_EMACS_THEME = nil
+-- also emacs's, from its quick-editor flow (term-enhance/
+-- prep-env-for-quick-editor): meant to fast-path the wrapper shell that
+-- launched this nvim, but they'd bypass zshrc before the UNSET_*
+-- handshake (../../plugins/config/term.lua) even gets a say, leaving
+-- our :terminal shells bare
+vim.env.fast_shell_in_editor = nil
+vim.env.IGNORE_UNSET_ALL_MY_ZSH_STUFF_LOADED = nil
+
 vim.diagnostic.config {
   -- available since Neovim v0.11
   virtual_lines = {
