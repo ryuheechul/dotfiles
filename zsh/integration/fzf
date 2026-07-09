@@ -15,11 +15,11 @@ export FZF_DEFAULT_OPTS='
   '
 
 # CTRL-T - Paste the selected files and directories onto the command-line
-export FZF_CTRL_T_COMMAND='fd'
+export FZF_CTRL_T_COMMAND='fd --type f --hidden --exclude .git'
 export FZF_CTRL_T_OPTS='--preview "preview {}"'
 
 # ALT-C - cd into the selected directory
-export FZF_ALT_C_COMMAND='fd -t d'
+export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git'
 export FZF_ALT_C_OPTS='--preview "preview {}"'
 
 # sourcing itself is being taken care of at `../my_addons/zinit`
