@@ -102,6 +102,10 @@
 ;;   ;; to trigger emacs to be full screen on start up - https://emacsredux.com/blog/2020/12/04/maximize-the-emacs-frame-on-startup/
 ;;   (add-hook 'window-setup-hook #'toggle-frame-fullscreen))
 
+;; startup snappiness: warm doom's deferred layers during idle, without
+;; ever blocking input - see [[file:warmup.el]]
+(load! "warmup")
+
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `with-eval-after-load' block, otherwise Doom's defaults may override your
 ;; settings. E.g.
