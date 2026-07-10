@@ -74,10 +74,11 @@
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/File-Notifications.html
 (require 'filenotify)
 
+;; subscriber of "One tone, every layer" - ../../../../../docs/philosophy.md
 (file-notify-add-watch
   ;; ;; this `file-notify-add-watch' actually can handle change on the symlink directory like below
   ;; "~/.base16_theme" '(change) (lambda (event) (follow-theme-base16-shell))
-  ;; ;; however on my another watcher, ~/.config/dfs-rhc/bin/local/base16-shell-auto-reload-on-tmux can't
+  ;; ;; however on my another watcher, ~/.config/dfs-rhc/bin/path/default/base16-shell-auto-reload can't
   ;; ;; since it relys on entr and it doesn't support that - https://github.com/eradman/entr/issues/30
   ;; ;; therefore we just watch the same file as other watchers to maintain the same logic across watchers
   "~/.base16_theme.updated-time" '(change) (lambda (event) (follow-theme-base16-shell)))

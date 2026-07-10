@@ -1,0 +1,47 @@
+#!/usr/bin/env nu
+
+# repaint everything herdr shows with the current base16 theme
+# (called per theme change by ./base16-shell-auto-reload; see
+# "One tone, every layer" in docs/philosophy.md for the why)
+#
+# herdr has no tmux-style escape passthrough, keeps per-pane palettes, and
+# renders through each attached client's host terminal - so deliver the raw
+# palette escapes ourselves to
+# (a) each client's host tty (chrome + client-side rendering; herdr's UI
+#     theme is set to "terminal" so it follows the host palette)
+# (b) each pane's pty (updates herdr's per-pane palettes, so apps drawing
+#     with ansi colors follow)
+
+def main [] {
+  let esc = (^zsh -c 'source ~/.base16_theme' | into binary)
+
+  # (a) host ttys of all herdr client/server processes
+  let client_ttys = (
+    ^ps -axo tty=,comm=
+    | lines
+    | parse --regex '^\s*(?<tty>\S+)\s+(?<comm>.*)$'
+    | where comm == 'herdr'
+    | get tty
+  )
+
+  # (b) pane ptys via each pane's foreground process group
+  let pane_ttys = (
+    ^herdr pane list
+    | from json
+    | get result.panes.pane_id
+    | each {|pane|
+        let pgid = (^herdr pane process-info --pane $pane | from json | get result.process_info.foreground_process_group_id)
+        ^ps -o tty= -p $pgid | str trim
+      }
+  )
+
+  $client_ttys
+  | append $pane_ttys
+  | uniq
+  | where { $in != '??' and $in != '' }
+  | each {|tty|
+      # some ttys can reject writes (permissions); skip quietly
+      try { $esc | save --raw --force $'/dev/($tty)' }
+    }
+  | ignore
+}

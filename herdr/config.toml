@@ -5,7 +5,7 @@
 onboarding = false
 
 [theme]
-name = "catppuccin-latte"
+name = "terminal"
 
 [keys]
 prefix = "ctrl+a"

@@ -45,6 +45,7 @@ return {
       follow_base16_shell()
 
       -- set up a callback on file change so it can correct the theme tone by itself
+      -- (subscriber of "One tone, every layer" - ../../../docs/philosophy.md)
       local fwatch = require 'fwatch'
       -- because `~` wouldn't work here
       fwatch.watch(vim.env.HOME .. '/.base16_theme.updated-time', {

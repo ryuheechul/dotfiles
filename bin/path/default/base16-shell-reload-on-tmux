@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# repaint every tmux pane with the current base16 theme
+# (called per theme change by ./base16-shell-auto-reload; see
+# "One tone, every layer" in docs/philosophy.md for the why)
+#
+# a throwaway window sources the theme; the base16 script sees $TMUX and
+# passes the palette escapes through to the host terminal, which recolors
+# every pane at once
+
+# running from inside tmux would limit the repaint to that one session -
+# these unsets simulate being outside of tmux, so it's safe to call this
+# from anywhere
+unset TERM
+unset TERM_PROGRAM
+unset TMUX
+unset TMUX_PANE
+unset TMUX_PLUGIN_MANAGER_PATH
+unset tmux_version
+
+tmux new-window "sleep 0.1 && source ~/.base16_theme && exit"

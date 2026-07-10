@@ -96,6 +96,59 @@ markers from the environment it hands to its children (emacs:
 mutually exclusive by construction, instead of trying to out-guess
 nesting order.
 
+## One tone, every layer
+
+Light/dark is a single system-wide decision, not a per-tool setting: when
+the tone flips (macOS appearance change, or manual `dark`/`light`),
+everything currently on screen follows - every tmux pane, every herdr
+client and pane, emacs, and whatever TUI is running inside any of them -
+without restarting anything.
+
+The mechanism is a tiny pub/sub bus made of two files:
+[zsh/fn/theme](../zsh/fn/theme) points `~/.base16_theme` at the new
+base16-shell script (the *state*) and bumps
+`~/.base16_theme.updated-time` (the *signal*). Publishers: the
+system-appearance launchd agent and the manual `dark`/`light` commands
+(both in [watch-theme-change.nix](../nix/home/services/watch-theme-change.nix)
+/ `zsh/fn/theme`). Subscribers watch the signal file, each with its own
+delivery problem:
+
+- **new shells** need no delivery at all - they source `~/.base16_theme`
+  at startup, so the state file alone covers everything born after the
+  flip. The rest is about what's *already running*.
+- **tmux** ([base16-shell-reload-on-tmux](../bin/path/default/base16-shell-reload-on-tmux),
+  called by the [base16-shell-auto-reload](../bin/path/default/base16-shell-auto-reload)
+  `entr` watcher): a throwaway window sources the theme; the base16
+  script sees `$TMUX` and passes the palette escapes through to the host
+  terminal, which recolors every pane at once.
+- **herdr** ([base16-shell-reload-on-herdr](../bin/path/default/base16-shell-reload-on-herdr),
+  same watcher): no passthrough exists, and herdr both keeps
+  *per-pane* palettes and renders through each attached client's host
+  terminal - so the watcher writes the raw escapes itself, to every
+  attached client's host tty (chrome + client-side rendering; herdr's UI
+  theme is set to `terminal` so it follows the host palette) and to every
+  pane's pty (found via herdr's socket API), which updates the per-pane
+  palettes.
+- **emacs** ([term-enhance/theme.el](../emacs.d/doom.d/modules/my-custom/term-enhance/theme.el)):
+  `file-notify` on the same signal file switches the doom theme, and
+  `switch-theme` is also exposed the other way (shell -> emacs) via the
+  terminal bridges.
+- **nvim** ([plugins/theme.lua](../nvim/lua/plugins/theme.lua)): same
+  idea with `fwatch` - the signal file flips the colorscheme tone in
+  every running instance.
+
+Two load-bearing choices make "every layer" actually hold:
+
+- **indexed colors over truecolor where a choice exists** - a palette
+  remap can only recolor apps that draw with ANSI colors; anything
+  painting explicit RGB is immune to the whole mechanism. So when a TUI
+  offers an ansi variant of its theme, that variant is the one to pick.
+- **remote shells opt out** - a tone flip is a *client-side* event;
+  `zsh/fn/theme` refuses to run over SSH/tramp (the remote's palette is
+  the local client's business, not the remote's), and
+  [source.zsh](../emacs.d/doom.d/shell/source.zsh)'s theme-drift sync
+  skips tramp shells for the same reason.
+
 ## Anti-shift keybindings
 
 Avoid Shift wherever a Shift-free key can carry the same meaning, across

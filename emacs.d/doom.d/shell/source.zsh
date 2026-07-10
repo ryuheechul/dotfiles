@@ -114,6 +114,7 @@ alias vi='find-file'
 alias e='vi $(fzf)'
 
 # sync in case of drift between Emacs and base16-shell
+# (tramp shells opt out - "One tone, every layer" in ../../../docs/philosophy.md)
 echo "${INSIDE_EMACS}" | grep tramp >/dev/null ||
   {
     test "${DOOM_EMACS_THEME}" = "base16-$(current-base16)" ||

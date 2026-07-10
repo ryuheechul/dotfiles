@@ -10,7 +10,7 @@ let
   emacs = import ./emacs.nix { pkgs = pkgs; };
   opener = import ./opener.nix { pkgs = pkgs; };
   syncthing = import ./syncthing.nix { pkgs = pkgs; };
-  tmux-watch-theme-change = import ./tmux-watch-theme-change.nix {
+  watch-theme-change = import ./watch-theme-change.nix {
     config = config;
     pkgs = pkgs;
   };
@@ -22,7 +22,7 @@ in
     emacs
     opener
     syncthing
-    tmux-watch-theme-change
+    watch-theme-change
     podman-remote-shim
   ];
 

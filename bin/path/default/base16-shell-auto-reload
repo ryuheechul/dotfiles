@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# the watcher of "One tone, every layer" - see ../../../docs/philosophy.md
+#
+# two modes:
+# - no args (default): the watcher daemon - reacts to base16 theme changes
+# - "apply": repaint tmux and herdr once (what the watcher runs per change)
+
+if test "$1" = "apply"; then
+  # each multiplexer's delivery mechanism lives in its own script
+  base16-shell-reload-on-tmux
+  base16-shell-reload-on-herdr
+  exit 0
+fi
+
+# prevent failure when there is no such file (initially)
+touch ~/.base16_theme.updated-time
+
+echo "this process is to watch the base16-shell's theme change and apply automatically using tmux and herdr"
+
+# `-n`: non-interactive mode which makes possible to run as daemon
+# `-p`: "postpone" the first execution until the change is detected
+find ~/.base16_theme.updated-time | entr -p -n "$0" apply
