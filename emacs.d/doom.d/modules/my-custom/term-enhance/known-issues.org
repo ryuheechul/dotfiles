@@ -1,29 +1,86 @@
 #+TITLE: term-enhance known issues
 
 Tracked problems found while testing tramp + terminal integration
-(2026-07-04), not fixable from this repo's config alone. Referenced from
-[[file:integration.el][integration.el]] (the tramp-forces-vterm override) and [[file:vterm.el][vterm.el]].
+(2026-07-04). Referenced from [[file:integration.el][integration.el]] and [[file:vterm.el][vterm.el]].
 
-** TODO ghostel: "Forbidden reentrant call of Tramp" on any tramp buffer
+** DONE ghostel: "Forbidden reentrant call of Tramp" on any tramp buffer
 Calling ~(ghostel)~ (or any wrapper here that reaches it) from a buffer
-whose ~default-directory~ is remote throws this error every time -
-confirmed deterministic and host-independent: reproduces identically
-against =/ssh:localhost:= (loopback) and a genuinely different real
-remote host (Linux, over the network, not loopback). Ruled out via direct testing before
-concluding this: ~ghostel-tramp-shell-integration~ on/off, the
-~ghostel-tramp-shells~ getent/=bin/zsh= fallback, ~global-auto-revert-mode~,
-~tramp-use-connection-share~ on/off, a fully fresh daemon, and even
-cancelling every active timer (regular and idle) immediately before the
-call - none of it changes the outcome. This is inside ghostel's own
-compiled spawn path, not this config.
+whose ~default-directory~ is remote threw this error every time -
+deterministic and host-independent (=/ssh:localhost:= and a real Linux
+remote alike). Originally misattributed to ghostel's own spawn path and
+worked around by forcing vterm for remote buffers in
+~term-enhance/backend~.
 
-Workaround in place: [[file:integration.el][integration.el]]'s ~term-enhance/backend~ forces vterm
-whenever ~default-directory~ is remote, regardless of
-~term-enhance/backend-priority~ (which still prefers ghostel locally).
+Root-caused 2026-07-10 (fresh isolated daemon, lock-transition tracing on
+tramp's per-connection "locked" property, plus a backtrace captured at the
+*original* signal point via an advice on ~tramp-signal-hook-function~ -
+~with-tramp-debug-message~ re-signals errors, so a plain
+~debug-on-error~/~handler-bind~ backtrace collapses to
+~tramp-maybe-open-connection~ and points at the wrong place):
 
-Next step: file this upstream with ghostel with a minimal repro (open
-any tramp file, call ~(ghostel)~) - then remove the override in
-~term-enhance/backend~ once fixed.
+- tramp's ~make-process~ handler makes the terminal buffer itself the
+  connection buffer for the dedicated "ghostel" ssh channel, so the whole
+  login handshake gets INSERTED into the ghostel buffer while tramp holds
+  that channel's connection lock inside
+  ~tramp-accept-process-output~/~tramp-process-actions~.
+- doom's global flycheck (~flycheck-global-modes~ was ~t~ = everywhere,
+  and ~ghostel-mode~ derives from no parent, so no special-mode escape
+  hatch applied) had installed its ~after-change-functions~ hook in that
+  buffer. Each handshake insert fired ~flycheck-handle-change~ ->
+  ~flycheck-may-check-automatically~ -> ~file-exists-p~ on the remote
+  ~default-directory~ -> a nested tramp op on the locked channel ->
+  "Forbidden reentrant call of Tramp".
+- this also explains every earlier dead end: it's not a timer (tramp
+  suspends those), not connection-share, not shell integration - it fires
+  on *any* config where a remote-file-probing ~after-change-functions~
+  hook lives in the terminal buffer. A minimal batch emacs (tramp +
+  ghostel only, no flycheck) spawns remote ghostel fine, which is how the
+  config - not ghostel - was implicated.
+
+Fix: [[file:integration.el][integration.el]] excludes ~ghostel-mode~/~vterm-mode~ from
+~flycheck-global-modes~ (a mode hook can't do it - global minor modes
+enable via ~after-change-major-mode-hook~, which runs after mode hooks).
+The remote-forces-vterm override in ~term-enhance/backend~ is removed;
+~term-enhance/backend-priority~ now applies to remote buffers too.
+Verified end-to-end against =/ssh:localhost:=: spawn, interactive prompt
+(starship + full zsh rc), command round-trip.
+
+Possibly still worth an upstream note to ghostel (and arguably tramp):
+any package whose ~after-change-functions~ hook touches remote files can
+break any tramp-spawned terminal this way; tramp could bind
+~inhibit-modification-hooks~ while writing handshake output into the
+connection buffer.
+
+** DONE ghostel over tramp: shell loads, then exits (code 1) right away
+Follow-up to the reentrant fix above: with spawning fixed, the remote shell
+rendered its full prompt (zshrc completed) and then died 1-2 seconds later -
+sentinel reported "exited abnormally with code 1", silently, with a shim-armed
+zsh ~EXIT~ trap never firing.
+
+Diagnosis trail (isolated daemon, =/ssh:localhost:=): a
+~process-send-string~/~process-send-eof~ sniffer proved Emacs sends nothing
+after tramp's exec, so the exit was remote-side; ~zsh -f -i~ survived, so it
+was shell config; an env-var bisect (~DISTROBOX_ENTER_PATH~ skip) narrowed it
+to [[file:../../../../../zsh/zlogin][zsh/zlogin]].
+
+Root cause: zlogin's ssh branch (session persistence) guarded tramp only via
+=TERM != dumb= - true for tramp's own dumb shells, but a terminal spawned
+*over* tramp gets a real TERM (=xterm-ghostty= via ghostel's on-remote
+probe). So the remote interactive shell took the is-ssh branch and ~exec~'d
+[[file:../../../../../bin/terminal/tmux-attach-or-new.sh][tmux-attach-or-new.sh]], which resolved =tmux= to the
+[[file:../../../../../bin/path/emacs/tmux][bin/path/emacs mask]] (INSIDE_EMACS present), which ~exit 1~s under ghostel.
+~exec~ had already replaced zsh, hence: prompt appears, then the whole
+session exits 1 with no exit trap. This never bit vterm+tramp because those
+sessions predated ghostel's remote TERM probe (vterm remotes kept
+tramp-flavored TERM handling), and never bit locally because local shells
+aren't ~is-ssh~.
+
+Fix: [[file:../../../../../zsh/zlogin][zsh/zlogin]] now also skips the block when ~INSIDE_EMACS~ contains
+=tramp= (tramp appends =,tramp:VER=). ~znap prompt~ was briefly suspected
+(xtrace pointed there, but only because znap's instant-prompt redirects
+stderr mid-flight, hiding the real trail) - it is innocent and untouched.
+Verified: remote ghostel shell survives past startup and round-trips
+commands with the full zshrc, znap prompt included.
 
 ** DONE vterm's tramp shell resolution works on Linux remotes, not macOS ones
 Confirmed on 2026-07-04 with a controlled two-host test (see

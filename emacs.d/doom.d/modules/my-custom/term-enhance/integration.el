@@ -19,18 +19,8 @@ vterm' in init.el) are considered; the first available one wins.")
 (defun term-enhance/backend ()
   "Return the terminal backend to dispatch to: `ghostel' or `vterm'.
 Uses `doom-module-active-p' (a plain function, unlike the `modulep!' macro)
-since the module to check is picked at runtime, not known at compile time.
-
-A remote (tramp) `default-directory' always forces vterm, ignoring
-`term-enhance/backend-priority': ghostel throws \"Forbidden reentrant
-call of Tramp\" spawning from ANY tramp buffer - confirmed against both
-a loopback host and a genuinely different remote, independent of
-timers/settings/session state (see ./known-issues.org). This override
-should be removed once that is fixed upstream."
-  (if (and (file-remote-p default-directory)
-           (doom-module-active-p :term 'vterm))
-      'vterm
-    (seq-find (lambda (b) (doom-module-active-p :term b)) term-enhance/backend-priority)))
+since the module to check is picked at runtime, not known at compile time."
+  (seq-find (lambda (b) (doom-module-active-p :term b)) term-enhance/backend-priority))
 
 ;; direnv/envrc integration (doom's :tools direnv, enabled over tramp too
 ;; by ../../tools/tramp-support/config.el's `envrc-remote t') makes no
@@ -52,6 +42,17 @@ should be removed once that is fixed upstream."
     :around #'envrc--update
     (unless (derived-mode-p 'vterm-mode 'ghostel-mode)
       (apply fn args))))
+
+;; flycheck makes as little sense in a terminal buffer as envrc above, and
+;; leaving it on is what broke ghostel over tramp: tramp uses the terminal
+;; buffer as its connection buffer, so the ssh handshake is inserted there
+;; while tramp holds the connection lock - flycheck's after-change hook then
+;; probes the remote `default-directory', and that nested tramp op dies with
+;; "Forbidden reentrant call of Tramp" on every remote spawn (see
+;; ./known-issues.org item 1). must be this predicate, not a mode hook:
+;; global minor modes enable AFTER mode hooks run
+(after! flycheck
+  (setq flycheck-global-modes '(not ghostel-mode vterm-mode)))
 
 (defun term-enhance/dispatch (fn-alist &rest args)
   "Call the function in FN-ALIST keyed by the active backend, with ARGS."

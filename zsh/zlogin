@@ -2,8 +2,14 @@
 
 # - persist a session via zellij on SSH connection
 # - but avoid doing this for tramp-mode on emacs - https://www.emacswiki.org/emacs/TrampMode
+#   - TERM=dumb only catches tramp's own dumb shells; a terminal spawned over
+#     tramp (ghostel/vterm) gets a real TERM, so also check INSIDE_EMACS
+#     (tramp appends ",tramp:VER") - otherwise the is-ssh branch `exec`s
+#     tmux/zellij inside the emacs terminal buffer and the fresh shell exits
+#     right away (see emacs.d/doom.d/modules/my-custom/term-enhance/known-issues.org)
 # - also guard this behaviour for non-interactive shell usage
-if is-zsh-interactive && test "${TERM}" != 'dumb'; then
+if is-zsh-interactive && test "${TERM}" != 'dumb' &&
+  ! { printenv INSIDE_EMACS | grep -q tramp }; then
   if is-ssh && ! printenv DISTROBOX_ENTER_PATH >/dev/null; then
     source "${my_dot_d}/zsh/integration/interactive-ssh"
   else # when not SSH

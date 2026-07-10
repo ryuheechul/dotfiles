@@ -26,6 +26,14 @@
 ;; by `tramp-remote-path', not .zshrc/.profile).
 (setq ghostel-tramp-shells '(("ssh" login-shell "zsh")))
 
+;; push shell integration (OSC 7 cwd tracking, OSC 133 prompt marks, the
+;; ghostel_cmd bridge) to remote zsh sessions: ghostel writes it to a remote
+;; temp dir (cleaned on buffer kill) and loads it via a ZDOTDIR shim that
+;; still sources the real ~/.zshenv first. zsh-only - the only login shell
+;; on the remotes here; ../../../shell/source.zsh's tramp branch documents
+;; this variable
+(setq ghostel-tramp-shell-integration '(zsh))
+
 ;; NOTE: zellij deadlocks the native PTY reader (upstream ghostel bug) - it is
 ;; masked shell-side via bin/path/emacs/zellij instead of giving up
 ;; `ghostel-use-native-pty' performance globally

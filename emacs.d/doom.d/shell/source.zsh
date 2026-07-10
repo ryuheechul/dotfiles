@@ -24,6 +24,10 @@ ghostel)
   # tracking and the ghostel_cmd elisp bridge) before .zshrc even runs
   if ((${+functions[ghostel_cmd]})); then
     term_cmd="ghostel_cmd"
+  elif [[ "${INSIDE_EMACS}" = *,tramp:* ]]; then
+    # informational, not an error: the bridge only reaches a remote shell
+    # when `ghostel-tramp-shell-integration` is enabled emacs-side
+    >&2 echo 'ghostel_cmd bridge not pushed to this remote shell (tramp) - enable ghostel-tramp-shell-integration emacs-side if wanted'
   else
     # ghostel injects the bridge only into its direct child shell (a
     # nested shell merely inherits INSIDE_EMACS - though the [neo]vim
