@@ -139,14 +139,14 @@ with pkgs;
   #   - now at client side, `curl localhost:7070` should forward traffic to remote host's 8080 port (if you specified)
   #   - `exit` from connection should unmount and stop forwarding just like docker container experience!
   boring # SSH tunnel manager
+  ssh-agent-switcher # SSH agent proxy for tmux - see ../../../zsh/integration/interactive-ssh
 ]
 ++ ifEnv "MY_NIX_EXTRA_SSH_XORG" [
-  # xorg.xorgserver
-  # xorg.xauth
+  xorg.xorgserver
+  xorg.xauth
   # debug xauth - https://www.linuxquestions.org/questions/linux-newbie-8/warning-no-xauth-data-although-i%27m-using-%60ssh-y%60-4175525755/#post5272443
   # `xauth list`
   # `mcookie | xargs xauth add :0 .`
-  ssh-agent-switcher # SSH agent proxy for tmux - see ../../../zsh/integration/interactive-ssh
 ]
 ++ ifEnv "WSL_DISTRO_NAME" wsl
 ++ ifEnv "MY_NIX_EXTRA_RUSTY_FAM" rusty-fam
