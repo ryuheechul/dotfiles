@@ -58,6 +58,10 @@ return {
   end,
   neogit = function()
     require('neogit').setup {
+      -- syntax-highlight hunk content via treesitter (already installed,
+      -- no external binary) - off by default, unlike magit-delta's
+      -- external-process approach on the emacs side
+      treesitter_diff_highlight = true,
       integrations = {
         -- `d` key to open diffview -- FYI: the custom keybinding from diffview is being ignored for some reason
         diffview = true,

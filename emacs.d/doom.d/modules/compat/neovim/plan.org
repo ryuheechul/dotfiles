@@ -261,6 +261,17 @@ Small ~use-package!~; doom has no module for it. Hooked on prog-mode in
 [[file:./config.el][config.el]], nvim's custom highlight-group/color order not ported - doom
 themes already style ~rainbow-delimiters-depth-N-face~ out of the box.
 
+** DONE syntax-highlighted magit hunks (2026-07-10)
+Not an original list item - came up mid-use: magit's own diff rendering
+has no language syntax highlighting inside a hunk at all (only
+add/remove line coloring), nothing to configure away, unlike nvim's
+diffview.nvim/treesitter diffs. Fixed with ~magit-delta~ ([[file:./config.el][config.el]],
+hooked on ~magit-mode~) - pipes magit's diff buffers through the same
+~delta~ binary already installed and configured as the CLI git
+pager/diffFilter in ../../../../../gitconfig, so magit hunks now match
+what ~git diff~ already looks like in the terminal. Tradeoff: renders via
+an external process per diff (not instant on huge diffs).
+
 ** DONE mkdir.nvim (auto-create parent dirs on save)
 Confirmed (2026-07-10): ~doom-create-missing-directories-h~
 (~~/.doom-emacs.d/lisp/doom-emacs.el~), hooked on

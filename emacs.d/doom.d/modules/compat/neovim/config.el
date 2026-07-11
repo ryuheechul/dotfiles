@@ -90,6 +90,15 @@
 (use-package! rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
+;; syntax-highlighted magit hunks, like nvim's diffview.nvim/treesitter
+;; diffs - magit's own diff rendering has no language syntax highlighting
+;; at all (only add/remove line coloring), nothing to configure away.
+;; `delta' (the binary) is already installed and wired into ../../../../../gitconfig
+;; for CLI git diff/pager - magit-delta just pipes magit's diff buffers
+;; through that same binary for the identical look
+(use-package! magit-delta
+  :hook (magit-mode . magit-delta-mode))
+
 ;; nvim has global `spell`; doom's :checkers spell already covers prose
 ;; modes (org, markdown, ...) - extend to code via flyspell-prog-mode,
 ;; whose narrow scope keeps the overhead negligible

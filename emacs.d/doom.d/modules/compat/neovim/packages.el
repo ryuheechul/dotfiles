@@ -3,3 +3,4 @@
 
 (package! hotfuzz)
 (package! rainbow-delimiters)
+(package! magit-delta)
