@@ -78,11 +78,17 @@ the full behavior matrix."
        ;; shouldn't sweep away, or a live side-window terminal that a quit
        ;; would kill - just close this one; *doom* is never killed, bury
        ;; it instead (its own regeneration is more involved than
-       ;; *scratch*'s)
+       ;; *scratch*'s).
+       ;;
+       ;; go through `quit-window' here too, not just for *doom*: plain
+       ;; `kill-buffer' skips its bookkeeping, so a buffer displayed via
+       ;; `pop-to-buffer-same-window' (e.g. a file visited from a magit
+       ;; hunk via `e') leaves the window's `quit-restore' parameter
+       ;; stale once emacs falls back to showing the previous buffer -
+       ;; breaking THAT buffer's own next quit-window call (see
+       ;; ../../../tests/smart-quit-tests.el)
        ((or other-real-buffers unsaved-somewhere-p side-window-present)
-        (if (string= (buffer-name) "*doom*")
-            (quit-window)
-          (kill-buffer))
+        (quit-window (not (string= (buffer-name) "*doom*")))
         ;; killing the last real buffer can make emacs fall back to the
         ;; very buffer the side-window terminal already shows - same
         ;; terminal in two windows. Collapse: drop the side-window so the

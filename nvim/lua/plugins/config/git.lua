@@ -72,6 +72,10 @@ return {
           ['h'] = 'Toggle',
           ['l'] = 'Toggle',
           ['<tab>'] = false,
+          -- tig's `e` opens the line under cursor in $EDITOR; <cr> already
+          -- does this here (GoToFile) - alias e alongside it, matching
+          -- the tig muscle memory
+          ['e'] = 'GoToFile',
         },
       },
     }

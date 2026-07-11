@@ -75,4 +75,61 @@ the main window's only prev-buffer."
     (should (= (length (window-list)) 1))
     (should (eq (window-buffer (selected-window)) main))))
 
+(ert-deftest smart-quit/closing-buffer-with-quit-restore-does-not-strand-window ()
+  "Regression (2026-07-10): a buffer displayed via
+`pop-to-buffer-same-window' (as magit-diff-visit-file does when `e' on a
+hunk visits the file in place) sets a `quit-restore' window parameter.
+Closing that buffer via plain `kill-buffer' left it stale once emacs
+fell back to redisplaying the previous buffer (e.g. magit-status) - that
+buffer's own next q silently could not make any further progress. Real
+repro: magit status -> e on a hunk -> close the visited file -> q on
+magit status again did nothing."
+  (smart-quit--with-main-and-side-window main side
+    (let ((visited (generate-new-buffer "smart-quit-test-visited")))
+      (unwind-protect
+          (progn
+            (select-window (get-buffer-window main))
+            (pop-to-buffer-same-window visited)
+            (should (window-parameter (selected-window) 'quit-restore))
+            (with-current-buffer (window-buffer (selected-window))
+              (call-interactively #'close-window-or-buffer))
+            (should-not (buffer-live-p visited))
+            (should (eq (window-buffer (selected-window)) main))
+            ;; closing `main' now must still make progress, not silently
+            ;; no-op like the bug did
+            (with-current-buffer (window-buffer (selected-window))
+              (call-interactively #'close-window-or-buffer))
+            (should-not (buffer-live-p main)))
+        (when (buffer-live-p visited) (kill-buffer visited))))))
+
+(ert-deftest smart-quit/magit-quit-falls-back-when-bury-is-inert ()
+  "Regression (2026-07-10): magit's own q (doom's +magit/quit,
+../modules/my-custom/morevil/config.el) doesn't go through
+`close-window-or-buffer' at all normally - it buries via
+`magit-bury-buffer-function', then checks whether a magit window is
+still visible to decide whether to escalate. Once that bury is a no-op
+(same bug as the test above, but hitting magit's OWN quit path instead
+of this file's), the check is fooled: the window IS still showing a
+magit buffer, just the same stuck one. The +magit-quit-actually-quit-a
+advice there detects the no-op and falls back to
+`close-window-or-buffer'. Simulates the no-op bury directly rather than
+reproducing the full e-then-q setup (fragile to drive headlessly)."
+  (require 'magit)
+  (let ((buf (generate-new-buffer "smart-quit-test-magit-quit"))
+        (fallback-ran nil))
+    (unwind-protect
+        (with-current-buffer buf
+          (magit-mode)
+          (setq-local magit--default-directory "/tmp/")
+          (delete-other-windows)
+          (switch-to-buffer buf)
+          (let ((magit-bury-buffer-function #'ignore))
+            (cl-letf (((symbol-function 'close-window-or-buffer)
+                       (lambda () (interactive) (setq fallback-ran t)))
+                      ((symbol-function 'magit-toplevel)
+                       (lambda (&rest _) "/tmp/")))
+              (+magit/quit)))
+          (should fallback-ran))
+      (when (buffer-live-p buf) (kill-buffer buf)))))
+
 ;;; smart-quit-tests.el ends here

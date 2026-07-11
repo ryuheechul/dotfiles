@@ -267,16 +267,53 @@ doc buffer in a terminal frame (e.g. ghostel/vterm)."
 (map! :map magit-mode-map
       :n "h" #'magit-section-toggle
       :n "l" #'magit-section-toggle)
+
+;; tig's `e' opens the line under cursor in $EDITOR (../../../../../vim.tigrc,
+;; tig's own default binding, not overridden there) - magit already has
+;; this via magit-visit-thing/magit-diff-visit-file, bound to RET; alias
+;; e alongside it. Shadows magit-ediff-dwim (3-way diff compare, a
+;; different feature) - E still gives full magit-ediff
+(map! :map magit-mode-map :n "e" #'magit-visit-thing)
+
+;; bug (2026-07-10): q sometimes silently fails to close magit - repro:
+;; SPC g g -> e on a hunk -> q (closes the file, back to magit-status) ->
+;; q again (does nothing). doom's own +magit/quit
+;; (tools/magit/autoload.el) buries via magit-bury-buffer-function; once
+;; quit-restore/prev-buffers are exhausted (see the smart-quit.el fix
+;; above) that just re-buries the SAME still-displayed buffer, and
+;; +magit/quit's own "is a magit window still visible?" check is fooled
+;; into thinking nothing more needs doing. advising the function instead
+;; of rebinding q sidesteps a keymap-precedence tangle (evil-collection
+;; vs. doom vs. this config): detect the no-op and fall back to
+;; close-window-or-buffer, which has a real last resort (offer to quit)
+(after! magit
+  (defadvice! +magit-quit-actually-quit-a (fn &optional kill-buffer)
+    "See the q comment block above for the full bug writeup."
+    :around #'+magit/quit
+    (let ((buf (current-buffer))
+          (win (selected-window)))
+      (funcall fn kill-buffer)
+      (when (and (eq (selected-window) win)
+                 (eq (window-buffer win) buf)
+                 (buffer-live-p buf))
+        (call-interactively #'close-window-or-buffer)))))
+
 ;; the dispatch popup (bound to `?', see above) has ITS OWN separate key
 ;; table (magit-dispatch's transient suffixes) that still hardcodes h ->
-;; "Help"/magit-info and l -> "Log"/magit-log - stale now that the outer
-;; h/l mean something else. h's entry is a pure duplicate already (magit-info
-;; is also on "C-x i" in the same popup) - free to drop. l's entry has no
-;; duplicate in the popup, so this does cost the one-keystroke path to
-;; plain magit-log from inside `?' (still reachable via M-x or `L')
+;; "Help"/magit-info, l -> "Log"/magit-log, and e -> "Ediff
+;; (dwim)"/magit-ediff-dwim - stale now that the outer h/l/e mean
+;; something else. Relabel rather than remove, so `?' (a cheat sheet by
+;; design) still tells the truth about what pressing h/l/e does: Help,
+;; Log, and Ediff (dwim) move out of the popup entirely (M-x still
+;; reaches all three; `L' also covers magit-log-refresh, `E' still covers
+;; full magit-ediff)
 (after! magit
-  (transient-remove-suffix 'magit-dispatch "h")
-  (transient-remove-suffix 'magit-dispatch "l"))
+  (transient-replace-suffix 'magit-dispatch "h"
+    '("h" "Toggle section" magit-section-toggle))
+  (transient-replace-suffix 'magit-dispatch "l"
+    '("l" "Toggle section" magit-section-toggle))
+  (transient-replace-suffix 'magit-dispatch "e"
+    '("e" "Visit thing" magit-visit-thing)))
 
 ;; + / - increment/decrement the number at point, as remapped in nvim
 ;; (keymaps.lua: + = C-A, - = C-X, since the defaults never got used)
