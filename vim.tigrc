@@ -94,6 +94,19 @@ bind stage   s  status-update # toggle stage/unstage - but doesn't seem to work 
 bind status  l  enter
 bind main    l  enter
 bind refs    l  enter
+
+# magit/neogit's TAB toggles a section open/closed; tig has no
+# foldable-section model at all to toggle (diffs render as flat, fully
+# expanded text - checked tig(1)/tigrc(5), no fold/collapse/expand
+# concept anywhere) - closest mimic is TAB = l's open/enter/maximize
+# action, same per view as above, open-only, no close-on-second-press
+bind diff    <Tab>  maximize
+bind stash   <Tab>  enter
+bind stage   <Tab>  maximize
+bind status  <Tab>  enter
+bind main    <Tab>  enter
+bind refs    <Tab>  enter
+
 bind diff    <esc> view-close
 bind stage   <esc> view-close
 # although this gets applied but doesn't seem to work

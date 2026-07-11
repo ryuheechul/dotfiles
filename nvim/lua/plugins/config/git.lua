@@ -71,7 +71,7 @@ return {
           -- WARNING: these mapped keys don't seem to reflect to hint
           ['h'] = 'Toggle',
           ['l'] = 'Toggle',
-          ['<tab>'] = false,
+          ['<tab>'] = 'Toggle', -- matches magit's TAB
           -- tig's `e` opens the line under cursor in $EDITOR; <cr> already
           -- does this here (GoToFile) - alias e alongside it, matching
           -- the tig muscle memory
