@@ -75,6 +75,15 @@
 (global-auto-revert-mode 1)
 (setq global-auto-revert-non-file-buffers t)
 
+;; same idea, the other direction: visit a file from a magit hunk (`e'),
+;; save, `q' back - the status buffer should already show the new diff,
+;; not the stale one from before the edit. global-auto-revert-non-file-
+;; buffers above is timer/focus-polled, not immediate, and doesn't
+;; reliably catch this; magit's own magit-after-save-refresh-status
+;; (intended for after-save-hook, not wired by default) refreshes right
+;; on save instead
+(add-hook 'after-save-hook #'magit-after-save-refresh-status)
+
 ;; restore the last cursor position when reopening a file (nvim: the
 ;; LastPlace autocmd in boot/misc.lua) - measured OFF in this doom
 ;; checkout, so enable it here. saveplace's default
@@ -97,7 +106,19 @@
 ;; for CLI git diff/pager - magit-delta just pipes magit's diff buffers
 ;; through that same binary for the identical look
 (use-package! magit-delta
-  :hook (magit-mode . magit-delta-mode))
+  :hook (magit-mode . magit-delta-mode)
+  :config
+  ;; bug (2026-07-11): staging/unstaging a hunk errored "corrupt patch".
+  ;; ../../../../../gitconfig's [delta] features = line-numbers decorations
+  ;; leaks into every delta call incl. magit-delta's - `--color-only'
+  ;; only promises not to reorder diff content, not to suppress that.
+  ;; the line-number gutter (e.g. "  1 ⋮  1 │ ") is real text, so it
+  ;; ends up prefixed on every diff line magit later extracts to build
+  ;; the patch it feeds `git apply' - not valid unified-diff. override
+  ;; features for magit-delta's own calls only; CLI git diff keeps
+  ;; line numbers, untouched
+  (setq magit-delta-delta-args
+        (append magit-delta-delta-args '("--features" ""))))
 
 ;; nvim has global `spell`; doom's :checkers spell already covers prose
 ;; modes (org, markdown, ...) - extend to code via flyspell-prog-mode,

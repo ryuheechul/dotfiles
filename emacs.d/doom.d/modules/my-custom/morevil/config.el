@@ -275,6 +275,15 @@ doc buffer in a terminal frame (e.g. ghostel/vterm)."
 ;; different feature) - E still gives full magit-ediff
 (map! :map magit-mode-map :n "e" #'magit-visit-thing)
 
+;; e/RET on a STAGED hunk defaults to visiting the read-only index blob
+;; (git cat-file output, no real file behind it - see
+;; ../../tools/lsp-support/config.el for the eglot fallout from that),
+;; not the actual worktree file - magit-diff-visit-file's own docstring:
+;; "In the past RET ... used to go to the file in the worktree, if
+;; point is on an added or context line of a diff showing staged
+;; changes." restore that: always land on the real, editable file
+(setq magit-diff-visit-prefer-worktree t)
+
 ;; bug (2026-07-10): q sometimes silently fails to close magit - repro:
 ;; SPC g g -> e on a hunk -> q (closes the file, back to magit-status) ->
 ;; q again (does nothing). doom's own +magit/quit
