@@ -9,6 +9,12 @@
 ;; C-g is the only escape it binds out of the box
 (setq evil-escape-key-sequence "jk")
 
+;; "jk" is unwanted in terminal buffers: the shell already has its own
+;; j/k muscle memory, and it breaks TUI apps like lf where j/k are
+;; up/down - see ../term-enhance/integration.el for the same
+;; vterm-mode/ghostel-mode exclusion pattern used elsewhere
+(setq evil-escape-excluded-major-modes '(vterm-mode ghostel-mode))
+
 ;; enables cil, cal, vil, val, dil, dal, yil, yal, etc
 (use-package! evil-textobj-line :after evil)
 
