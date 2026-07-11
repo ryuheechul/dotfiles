@@ -30,27 +30,6 @@ return {
           vim.g.tabby_inline_completion_trigger = 'auto'
         end,
       },
-      { -- to turn github copilot into a cmp source
-        'zbirenbaum/copilot-cmp',
-        dependencies = {
-          { -- Chat with GitHub Copilot in Neovim
-            'CopilotC-Nvim/CopilotChat.nvim',
-            branch = 'canary',
-            dependencies = {
-              { -- Fully featured & enhanced replacement for copilot.vim complete with API for interacting with Github Copilot
-                'zbirenbaum/copilot.lua',
-                opts = {},
-              },
-              { 'nvim-lua/plenary.nvim' }, -- for curl, log wrapper
-            },
-            opts = {},
-          },
-        },
-        opts = {},
-        cond = function()
-          return vim.env.my_nvim_copilot ~= nil
-        end,
-      },
     },
     config = require 'plugins.config.completion',
   },
