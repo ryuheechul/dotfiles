@@ -250,6 +250,28 @@ doc buffer in a terminal frame (e.g. ghostel/vterm)."
       :n "gk" #'+eldoc-help-at-point
       :n "K" nil)
 
+;; magit's base keymap binds h -> magit-dispatch and l -> magit-log,
+;; clobbering the h/l = expand/collapse section muscle memory from
+;; neogit (../../../../../nvim/lua/plugins/config/git.lua: both mapped to
+;; 'Toggle') and tig (../../../vim.tigrc: h = close/back, l = enter/open -
+;; same collapse/expand spirit, different verbs). Neither loses real
+;; functionality: `?' still opens the dispatch popup (same command, h was
+;; a plain duplicate), and Log is still one more keystroke away (`L' for
+;; magit-log-refresh, or M-x magit-log)
+(map! :map magit-mode-map
+      :n "h" #'magit-section-toggle
+      :n "l" #'magit-section-toggle)
+;; the dispatch popup (bound to `?', see above) has ITS OWN separate key
+;; table (magit-dispatch's transient suffixes) that still hardcodes h ->
+;; "Help"/magit-info and l -> "Log"/magit-log - stale now that the outer
+;; h/l mean something else. h's entry is a pure duplicate already (magit-info
+;; is also on "C-x i" in the same popup) - free to drop. l's entry has no
+;; duplicate in the popup, so this does cost the one-keystroke path to
+;; plain magit-log from inside `?' (still reachable via M-x or `L')
+(after! magit
+  (transient-remove-suffix 'magit-dispatch "h")
+  (transient-remove-suffix 'magit-dispatch "l"))
+
 ;; + / - increment/decrement the number at point, as remapped in nvim
 ;; (keymaps.lua: + = C-A, - = C-X, since the defaults never got used)
 (map! :n "+" #'evil-numbers/inc-at-pt
