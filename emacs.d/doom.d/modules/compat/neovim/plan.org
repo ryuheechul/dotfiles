@@ -69,15 +69,25 @@ motion-state buffers get it too) to +neovim/goto-link (compat/neovim):
 a button/Info link when on one, otherwise the first xref definition
 with no picker; gd keeps the picker.
 
+** DONE ~gx~ -> open URL under cursor (bugfix, 2026-07-10)
+Was bound but broken on macOS: [[file:../../my-custom/morevil/config.el][morevil/config.el]] called
+~browse-url-xdg-open~, which shells out to the ~xdg-open~ binary
+unconditionally (Linux-only; errored "Searching for program: No such
+file or directory, xdg-open"). Rebound to plain ~browse-url~, which
+dispatches via ~browse-url-browser-function~ and auto-detects
+~system-type~ (macOS: ~open~, Linux: xdg-open if present, ...) -
+cross-platform without any extra code.
+
 ** DONE ~Y~ -> yank to end of line
 ~(setq evil-want-Y-yank-to-eol t)~ in this module's [[file:./init.el][init.el]] - module
 init.el files run at doom's early-init stage, before any package (evil
 included) loads, which is what the ~evil-want-*~ family requires;
 config.el is too late. (evil's default Y = whole line; nvim's = y$.)
 
-** TODO ~j~/~k~ move by visual line when no count
+** DONE ~j~/~k~ move by visual line when no count
 Pairs with the existing ~global-visual-line-mode~:
-~(setq evil-respect-visual-line-mode t)~ - same before-evil-loads caveat as ~Y~.
+~(setq evil-respect-visual-line-mode t)~ in this module's [[file:./init.el][init.el]] -
+same before-evil-loads caveat as ~Y~.
 
 ** DONE ~,~ -> repeat last ex command
 nvim: ~@:~. Bound to ~evil-ex-repeat~ in morevil. Shadows evil's reverse
@@ -215,8 +225,18 @@ Mostly "turn on a doom module." From the plugin inventory in
 [[file:../../../../../nvim/lua/plugins/][nvim/lua/plugins/]].
 
 ** TODO vim-visual-multi
-Enable doom ~:editor multiple-cursors~ (evil-multiedit/evil-mc). Biggest
-missing editing power tool.
+Enable doom ~:editor multiple-cursors~ (evil-multiedit/evil-mc, currently
+commented out at [[file:../../../init.el][init.el]]:68). Skipped for now (2026-07-10): nvim's
+~mg979/vim-visual-multi~ is itself gated behind ~cond =
+vim.env.my_nvim_visual_multi ~= nil~ ([[file:../../../../../nvim/lua/plugins/editing.lua][editing.lua]]:119) - not loaded by
+default there either, so this isn't actually daily muscle memory to
+port. Once enabled, doom wires two backends for free under leader ~gz~
+(evil-mc) and ~M-d~/~R~ (evil-multiedit), defined in doom's own
+~config/default/+evil-bindings.el~ - but chords don't match nvim's
+(~C-m~/~M-Down~/~M-Up~/~s~/~r~); exact parity needs custom morevil
+bindings on top, and the ~M-Down~/~M-Up~ pair is a TTY risk (Meta+arrow
+often doesn't arrive distinctly in raw terminals, same class of trap as
+the ~C-hjkl~ GUI/TTY split). Revisit if the env var gets set for real use.
 
 ** DONE indent-blankline
 doom ~:ui indent-guides~ enabled in init.el.
@@ -236,12 +256,17 @@ text-mode, so they're covered). corfu-auto's 2-char prefix means ~./~
 or ~../~ pops on its own; minibuffer paths were already fine via the
 built-in file completion.
 
-** TODO rainbow-delimiters
-Small ~use-package!~; doom has no module for it.
+** DONE rainbow-delimiters
+Small ~use-package!~; doom has no module for it. Hooked on prog-mode in
+[[file:./config.el][config.el]], nvim's custom highlight-group/color order not ported - doom
+themes already style ~rainbow-delimiters-depth-N-face~ out of the box.
 
-** TODO mkdir.nvim (auto-create parent dirs on save)
-Verify: doom prompts to create missing dirs on save already; if the
-prompt annoys, advise it away.
+** DONE mkdir.nvim (auto-create parent dirs on save)
+Confirmed (2026-07-10): ~doom-create-missing-directories-h~
+(~~/.doom-emacs.d/lisp/doom-emacs.el~), hooked on
+~find-file-not-found-functions~, prompts ~y-or-n-p~ to create the missing
+parent dir tree (skips remote files) - covers it out of the box, no code
+needed.
 
 ** DONE tidy.nvim (trim trailing whitespace on save)
 originally: nothing trimmed on save (apheleia only formats modes with a
@@ -251,9 +276,16 @@ diff-noise tradeoff as tidy.nvim. Superseded once doom's
 ~:editor whitespace +trim~ was enabled - ws-butler now handles this
 (trims only touched lines, less diff noise) - the old hook was removed.
 
-** TODO fugitive ~SPC g x~ GBrowse
-~browse-at-remote~ is bundled with doom's magit; bind to match
-(~+vc/browse-region-or-line~ area). Check what ~SPC g o~ offers first.
+** DONE fugitive ~SPC g x~ GBrowse
+Confirmed (2026-07-10): already covered, no binding needed.
+~SPC g o o~ (~+vc/git-link~, stock doom ~:tools vc~/magit, no module
+flip required) browses the current file/region at its git remote -
+GBrowse equivalent. Sibling keys in the same ~o~ (open in browser) prefix:
+~h~ homepage, ~r~ browse remote, ~c~ browse commit. Chord doesn't match
+nvim's single ~SPC g x~ (two keys after prefix vs one) - left as-is
+rather than aliasing, since ~SPC g o o~ is already muscle-adjacent and a
+plain alias would just be one more binding to remember. Revisit only if
+the two-key chord actually annoys in practice.
 
 ** DONE toggleterm
 term-enhance toggle + popup.

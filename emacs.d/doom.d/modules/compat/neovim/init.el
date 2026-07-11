@@ -8,3 +8,8 @@
 ;; nvim yanks to END OF LINE on Y (its default since 0.6, and explicit in
 ;; ../../../../../nvim/lua/plugins/keymaps.lua); evil defaults to whole line
 (setq evil-want-Y-yank-to-eol t)
+
+;; nvim's j/k move by VISUAL line, wrapping into account, when no count is
+;; given (its default). evil defaults to logical-line j/k regardless of
+;; wrap; pairs with the existing global-visual-line-mode elsewhere in doom
+(setq evil-respect-visual-line-mode t)

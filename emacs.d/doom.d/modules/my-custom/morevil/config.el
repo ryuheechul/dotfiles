@@ -179,7 +179,11 @@
 
 ;;;; to match with my muscle memory with ../../../../../nvim/lua/plugins/keymaps.lua
 (map! :leader :prefix "f" :g "h" #'doom/help-search)
-(map! :n "gx" #'browse-url-xdg-open)
+;; browse-url-xdg-open shells out to `xdg-open' unconditionally - Linux
+;; only, breaks on macOS (no such binary). plain `browse-url' dispatches
+;; via browse-url-browser-function, which auto-detects system-type (macOS:
+;; `open', Linux: xdg-open, ...) - cross-platform for free
+(map! :n "gx" #'browse-url)
 ;; jumplist navigation like nvim's C-O/C-I (bound go/gn there too, see
 ;; ../../../../../nvim/lua/plugins/keymaps.lua). better-jumper piggybacks
 ;; evil's jump list, so plain motions (gg, G, /search) are tracked - doom

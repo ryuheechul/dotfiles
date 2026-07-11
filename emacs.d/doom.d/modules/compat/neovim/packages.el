@@ -2,3 +2,4 @@
 ;;; compat/neovim/packages.el
 
 (package! hotfuzz)
+(package! rainbow-delimiters)

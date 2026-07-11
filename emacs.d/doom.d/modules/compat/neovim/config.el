@@ -82,6 +82,14 @@
 ;; matching the gitcommit exclusion the nvim autocmd makes
 (save-place-mode 1)
 
+;; rainbow bracket depth highlighting, like nvim's
+;; hiphish/rainbow-delimiters.nvim (extra.lua) - doom has no bundled module
+;; for this. scoped to prog-mode, same convention as flyspell-prog-mode
+;; below; nvim's custom highlight-group/color order not ported, doom
+;; themes already style rainbow-delimiters-depth-N-face out of the box
+(use-package! rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
 ;; nvim has global `spell`; doom's :checkers spell already covers prose
 ;; modes (org, markdown, ...) - extend to code via flyspell-prog-mode,
 ;; whose narrow scope keeps the overhead negligible
