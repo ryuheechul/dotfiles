@@ -101,6 +101,13 @@ return function()
 
     -- Automatically install popular language parsers at startup
     install_popular = true,
+
+    -- "conf" has no bundled registry entry, so arborist's heuristic
+    -- fallback guesses tree-sitter-grammars/tree-sitter-conf, which
+    -- doesn't exist. The clone then hangs forever on a hidden git
+    -- credential prompt instead of failing fast (no GIT_TERMINAL_PROMPT=0
+    -- set upstream). Skip it until arborist fixes the guess-and-hang bug.
+    ignore = { 'conf' },
   }
 
   -- Use native Neovim indentation

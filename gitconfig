@@ -22,6 +22,15 @@
   ; https://stackoverflow.com/questions/16052602/how-to-disable-osxkeychain-as-credential-helper-in-git-config
   helper =
 
+[core]
+  ; GIT_TERMINAL_PROMPT=0 has no .gitconfig equivalent (env-var only). Without an
+  ; askpass program, git opens /dev/tty directly and blocks forever waiting for
+  ; a username/password that nothing will ever type (e.g. a script cloning a
+  ; URL that 404s into an auth challenge). Pointing askPass at `echo` makes git
+  ; get an instant (garbage) answer instead, so auth fails fast rather than
+  ; hanging indefinitely.
+  askPass = echo
+
 [push]
   autoSetupRemote = true
 
