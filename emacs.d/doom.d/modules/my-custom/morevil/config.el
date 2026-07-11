@@ -179,6 +179,12 @@
 
 ;;;; to match with my muscle memory with ../../../../../nvim/lua/plugins/keymaps.lua
 (map! :leader :prefix "f" :g "h" #'doom/help-search)
+;; nvim's folke/noice.nvim message log, bound to <space>fm there
+;; (../../../../../nvim/lua/plugins/extra.lua) - emacs' plain built-in
+;; equivalent is the *Messages* buffer (view-echo-area-messages, normally
+;; only reachable via C-h e); SPC f m was free at the top level, matching
+;; nvim's f-prefix placement rather than SPC b m (already "Set bookmark")
+(map! :leader :prefix "f" :desc "Messages" "m" #'view-echo-area-messages)
 ;; browse-url-xdg-open shells out to `xdg-open' unconditionally - Linux
 ;; only, breaks on macOS (no such binary). plain `browse-url' dispatches
 ;; via browse-url-browser-function, which auto-detects system-type (macOS:
