@@ -1,4 +1,7 @@
 skip-shell-integration-prompt = true
 
+[list]
+json-schema = 2
+
 [remove]
 delete-branch = false # leave the branch alone and just delete the worktree
