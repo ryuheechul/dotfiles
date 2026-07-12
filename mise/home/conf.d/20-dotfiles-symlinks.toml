@@ -92,6 +92,7 @@ done
 "~/.config/opencode/AGENTS.md" = "~/.config/dfs-rhc/opencode/AGENTS.md"
 "~/.config/opencode/plugins" = { source = "~/.config/dfs-rhc/opencode/plugins", mode = "symlink-each" }
 # pi coding agent
+"~/.pi/agent/AGENTS.md" = "~/.config/dfs-rhc/pi/agent/AGENTS.md"
 "~/.pi/agent/keybindings.json" = "~/.config/dfs-rhc/pi/agent/keybindings.json"
 "~/.pi/agent/settings.json" = "~/.config/dfs-rhc/pi/agent/settings.json"
 "~/.pi/agent/models.json" = "~/.config/dfs-rhc/pi/agent/models.json"
