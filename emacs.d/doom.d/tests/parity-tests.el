@@ -40,7 +40,11 @@
     (evil-local-mode 1)
     (evil-normal-state)
     (call-interactively (key-binding "Y"))
-    (should (equal (substring-no-properties (current-kill 0)) "def"))))
+    ;; nil paste function: this asserts kill-ring semantics - the live
+    ;; +neovim/frame-aware-paste would hand current-kill the machine's
+    ;; real clipboard here (batch daemon frames are non-graphic)
+    (let ((interprogram-paste-function nil))
+      (should (equal (substring-no-properties (current-kill 0)) "def")))))
 
 (ert-deftest parity/percent-jumps-language-keywords ()
   "evil-matchit: % on a lua `if' lands on its `end' (vim-matchup parity)."
@@ -68,6 +72,20 @@
 
 (ert-deftest parity/smartcase-search ()
   (should (eq evil-ex-search-case 'smart)))
+
+(ert-deftest parity/tty-paste-reads-system-clipboard ()
+  "Regression (2026-07-11, pre-existing): evil's p in a TTY frame never
+saw the system clipboard - OSC 52 only carries kills OUT.
++neovim/frame-aware-paste reads pbpaste on non-graphic frames (batch
+daemon frames are non-graphic, so that branch is what runs here) and
+dedups against the kill-ring head so yank rotation still works."
+  (cl-letf (((symbol-function 'executable-find) (lambda (_) t))
+            ((symbol-function 'shell-command-to-string)
+             (lambda (_) "from-system")))
+    (let ((kill-ring nil))
+      (should (equal (+neovim/frame-aware-paste) "from-system")))
+    (let ((kill-ring '("from-system")))
+      (should-not (+neovim/frame-aware-paste)))))
 
 (ert-deftest parity/spell-checks-comments-not-strings ()
   "Functional spell check: comment typos flagged, string typos ignored.

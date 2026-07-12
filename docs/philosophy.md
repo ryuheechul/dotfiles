@@ -106,8 +106,9 @@ one's?" at runtime instead of by assumption):
 - *TERM/terminfo and clipboard degrade through layers* - each layer sets
   its own TERM (ghostel ships terminfo, nvim exports its own for
   `:terminal`), emacs scrubs the outer terminal's leftovers
-  (`env-vars-to-exclude`), and nvim picks its clipboard provider by
-  inspecting the actual stack (SSH/zellij/emacs) instead of one default.
+  (`env-vars-to-exclude`), and both editors pick their clipboard
+  provider by inspecting the actual stack instead of one default (see
+  *one clipboard, every layer* below).
 
 The recurring failure mode is *inherited state lying about the present*:
 environment variables propagate indefinitely, so a marker that truthfully
@@ -188,6 +189,49 @@ Two load-bearing choices make "every layer" actually hold:
   the local client's business, not the remote's), and
   [source.zsh](../emacs.d/doom.d/shell/source.zsh)'s theme-drift sync
   skips tramp shells for the same reason.
+
+## One clipboard, every layer
+
+Copy in any layer at any depth - a TUI on a remote box inside tmux
+inside a terminal, nvim inside emacs, plain GUI emacs - and it lands on
+the one system clipboard; paste anywhere reads it back. ("Copy" and
+"paste" throughout: vim calls the first one yank, emacs calls the
+*second* one yank - the word is banned here for everyone's sanity.)
+Three mechanisms compose:
+
+- **Universal verbs**: [pbcopy](../bin/path/default/pbcopy) /
+  [pbpaste](../bin/path/default/pbpaste) wrappers give every machine
+  the same two commands and dispatch per stack, in preference order:
+  native `/usr/bin/pb{copy,paste}` on local macOS, then `osc` (OSC 52
+  escapes) for everything remote, and only when neither applies the
+  `xsel`/X11-forwarding path as last resort. Consumers stay oblivious:
+  nvim's fallback provider and emacs's TTY-frame paste both just call
+  `pbcopy`/`pbpaste` and work wherever the wrappers do.
+- **Escape-sequence transport**: remotely, OSC 52 is the *preferred*
+  method, not one option among peers - the clipboard belongs to the
+  terminal being physically looked at, and OSC 52 rides the tty
+  connection itself, so it follows through ssh/tmux/nesting with zero
+  extra infrastructure. X11 forwarding by contrast needs `ForwardX11`,
+  a live X server, and a network round-trip slow enough that the
+  pbcopy wrapper has to `nohup` its xsel path - fallback only. Every
+  layer is configured to let OSC 52 through: tmux `set-clipboard on`
+  plus `get-clipboard both` (so reads pass through too),
+  [ghostty](../ghostty/config) `clipboard-read = allow` (deliberate:
+  most terminals refuse reads), vterm/ghostel forward inner programs'
+  OSC 52 to the system clipboard
+  (`vterm-enable-manipulate-selection-data-by-osc52`,
+  `ghostel-enable-osc52`), and doom's `:os (tty +osc)` sends copies
+  made in TTY emacs out the same way. Zellij is the known hole (no OSC 52
+  paste), so the wrappers and providers route around it.
+- **Native first, per actual stack**: when an immediate native provider
+  exists, it beats the escape-sequence one (no async race) - so each
+  editor inspects the stack it really runs in instead of assuming one:
+  nvim ([boot/misc.lua](../nvim/lua/boot/misc.lua)) autodetects native
+  locally, uses its internal OSC 52 provider only for bare SSH, and
+  falls back to the wrappers for SSH+zellij/emacs; emacs
+  ([compat/neovim](../emacs.d/doom.d/modules/compat/neovim/config.el))
+  keeps GUI frames native and gives TTY frames OSC 52 out /
+  `pbpaste` in, per frame (`+neovim/frame-aware-paste`).
 
 ## Anti-shift keybindings
 

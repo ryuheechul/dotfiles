@@ -36,7 +36,10 @@ if [ -z "$MY_BASIC_ZSH_STUFF_LOADED" ] || [ -n "$FORCE_LOAD_MY_ZSH_STUFF" ]; the
 
   # default only - don't clobber an inherited value: editors hand their
   # own to child processes (nvim: nvimclient via boot/misc.lua, emacs:
-  # emacsclient via term-enhance's prep-env-for-term)
+  # emacsclient via term-enhance's prep-env-for-term). an inherited
+  # nano is the one exception - always override it: nothing in this
+  # setup ever hands down nano, so it can only be some tool's default
+  test "${EDITOR}" = nano && unset EDITOR
   export EDITOR="${EDITOR:-nvim}"
   # insert below at ~/.local.zshenv if you want emacs to be EDITOR normally
   # test nvim = "$EDITOR" && export EDITOR='emacsclient -nw -a='

@@ -212,7 +212,10 @@ confirmed: ~evil-ex-search-case~ is ~smart~ (2026-07-04).
 ~:emacs undo~ (enabled).
 
 ** DONE clipboard sync
-Emacs default + ~:os (tty +osc)~ for OSC 52 (enabled).
+Emacs default + ~:os (tty +osc)~ for OSC 52 (enabled). OSC 52 turned
+out to be write-only in practice (terminals refuse clipboard reads), so
+TTY-frame paste reads ~pbpaste~ via ~+neovim/frame-aware-paste~ in
+[[file:./config.el][config.el]] - GUI frames keep the native path (2026-07-11).
 
 ** DONE cursorline
 Doom hl-line. cursorcolumn intentionally skipped: emacs has no
