@@ -199,6 +199,16 @@ vim.env.NVIM_LISTEN_ADDRESS = vim.v.servername
 vim.opt.autoread = true -- Reload unchanged files automatically.
 vim.opt.shortmess:append 'A' -- This is needed to avoid swapfile warning when auto-reloading
 
--- to use host nvim instead of creating another nvim process
--- mainly for `lf.nvim` plugin at ../plugins/system.lua
-vim.env.EDITOR = 'editor-in-nvim'
+-- to use host nvim instead of creating another nvim process, for any
+-- $EDITOR consumer this nvim spawns - mainly `lf.nvim`'s `e`
+-- (../plugins/system.lua), which runs lf without a zsh in between.
+-- nvimclient (nvim's emacsclient - connect to the running instance,
+-- open as a tab, block) lives in its own context dir, handed out here
+-- rather than sitting on everyone's $PATH; leaking into deeper layers
+-- is inert - $EDITOR is what selects, and emacs scrubs
+-- NVIM_LISTEN_ADDRESS so a manual run there errors instead of
+-- opening on the wrong host
+if vim.env.my_dot_d then
+  vim.env.PATH = vim.env.my_dot_d .. '/bin/path/nvim:' .. vim.env.PATH
+end
+vim.env.EDITOR = 'nvimclient'

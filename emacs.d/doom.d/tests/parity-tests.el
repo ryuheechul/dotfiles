@@ -60,8 +60,11 @@
   (should (memq 'flyspell-prog-mode prog-mode-hook))
   ;; trim-on-save is ws-butler's job now (:editor whitespace +trim), not a
   ;; blunt before-save delete-trailing-whitespace; doom defers the global
-  ;; mode to the first real buffer, so assert the wiring not the mode
-  (should (memq 'ws-butler-global-mode doom-first-buffer-hook)))
+  ;; mode to the first real buffer, so accept either state: still queued
+  ;; on the hook, or already enabled because an earlier test's find-file
+  ;; fired doom-first-buffer-hook (test files load alphabetically)
+  (should (or (memq 'ws-butler-global-mode doom-first-buffer-hook)
+              (bound-and-true-p ws-butler-global-mode))))
 
 (ert-deftest parity/smartcase-search ()
   (should (eq evil-ex-search-case 'smart)))

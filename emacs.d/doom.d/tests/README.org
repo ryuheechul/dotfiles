@@ -16,6 +16,7 @@ behavior is the stable thing worth keying on.
 |-----------+----------------------|
 | [[file:parity-tests.el][parity-tests.el]] | the neovim-parity plan, [[file:../modules/compat/neovim/plan.org][plan.org]] |
 | [[file:smart-quit-tests.el][smart-quit-tests.el]] | the behavior matrix in [[file:../modules/compat/neovim/smart-quit.el][smart-quit.el]]'s header |
+| [[file:editor-summon-tests.el][editor-summon-tests.el]] | "$EDITOR/summon opens as a tab of the host, done closes back" - the server-window/done-hook machinery in [[file:../modules/my-custom/term-enhance/config.el][term-enhance/config.el]] |
 
 * Conventions
 

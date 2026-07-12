@@ -162,6 +162,16 @@ local config = function()
     {
       '<Space>fe',
       function()
+        -- EMACS_SOCKET_NAME present = an ancestor emacs spawned this nvim
+        -- (term-enhance's prep-env-for-term). A `-t` frame here would be
+        -- rendered, transitively, by the very emacs it connects to - one
+        -- event loop feeding itself = freeze. Plain -n instead: the
+        -- ancestor's `server-window' opens it in a fresh workspace
+        -- (doom tab) - visible immediately, no new frame, no wait
+        if vim.env.EMACS_SOCKET_NAME then
+          vim.fn.system { 'emacsclient', '-n', '+' .. vim.fn.line '.', vim.fn.expand '%:p' }
+          return
+        end
         -- mirrors term-enhance/nvim-open-cmd's approach for the opposite
         -- direction (emacs opening nvim): a dedicated terminal running the
         -- other editor's CLI directly, shown immediately - not a

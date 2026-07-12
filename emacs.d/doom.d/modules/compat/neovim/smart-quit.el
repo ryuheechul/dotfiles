@@ -20,8 +20,10 @@
 ;;
 ;; buffer            | environment          | other real buf? | unsaved?     | q does
 ;; ------------------+----------------------+------------------+--------------+---------------------------------------------
+;; server client buf | any                  | -                | -            | server-edit: finish the client, its workspace closes (term-enhance)
 ;; (in side-window)  | any                  | -                | -            | close that side-window
 ;; any, last main win| any                  | (side-window terminal present) | just close this buffer - never quits with a live terminal around
+;; any, last main win| other workspaces exist | -              | no           | close this workspace, like nvim's :q on a tab page's last window
 ;; file, last one    | emacsclient TUI      | no               | no           | quit client, silently (real shell to return to)
 ;; file, last one    | GUI / TUI no client  | no               | no           | ask "Quit Emacs?" first
 ;; file              | any                  | yes              | no           | just close this buffer
@@ -56,6 +58,11 @@ nvim/lua/utils/my-smart-quit.lua - see this file's header comment for
 the full behavior matrix."
   (interactive)
   (cond
+   ;; a server client is waiting on this buffer ($EDITOR from a
+   ;; terminal, e.g. git commit) - q means "done", like closing the tab
+   ;; of nvim's --remote-tab-wait; term-enhance's server-done-hook then
+   ;; closes the workspace the buffer was summoned into
+   ((bound-and-true-p server-buffer-clients) (server-edit))
    ;; `q' while IN a side-window popup (e.g. the terminal) - close it;
    ;; delete-window is safe here, a side-window is never the last main one
    ((window-side-p (selected-window)) (delete-window))
@@ -98,6 +105,25 @@ the full behavior matrix."
                      (not (eq w (selected-window)))
                      (eq (window-buffer w) (window-buffer (selected-window))))
             (delete-window w))))
+       ;; nothing else in THIS workspace - but other workspaces still
+       ;; live (e.g. the terminal/nvim stack that summoned this file
+       ;; into its own workspace via
+       ;; term-enhance/server-window-workspace): close the workspace
+       ;; like nvim closes a tab page on its last window's :q - never
+       ;; the editor. Switch away BEFORE killing: doom's
+       ;; +workspace/kill on the CURRENT workspace follows its switch
+       ;; with a `doom-buffer-frame-predicate' check that swaps an
+       ;; "unreal" buffer for the fallback - and a vterm/ghostel
+       ;; terminal is unreal, so returning to the terminal workspace
+       ;; would show the dashboard instead of the terminal
+       ((cdr (+workspace-list-names))
+        (let* ((name (+workspace-current-name))
+               (last (and (+workspace-exists-p +workspace--last)
+                          (not (equal +workspace--last name))
+                          +workspace--last)))
+          (+workspace-switch
+           (or last (car (remove name (+workspace-list-names)))))
+          (+workspace-kill name)))
        ;; truly nothing else, nothing unsaved - quit
        (emacsclient-tui-p (save-buffers-kill-terminal))
        ((y-or-n-p "Quit Emacs? ") (save-buffers-kill-terminal)))))))

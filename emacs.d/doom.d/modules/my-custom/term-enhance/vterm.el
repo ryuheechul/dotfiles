@@ -215,6 +215,8 @@
   ;; ../config.el's term-enhance/find-file-editor-window, what
   ;; ../../../shell/source.zsh's `find-file' shell function actually calls
   (add-to-list 'vterm-eval-cmds '("find-file-editor-window" term-enhance/find-file-editor-window))
+  ;; the no-arg `e' picker (../../../../../zsh/my_addons/aliases)
+  (add-to-list 'vterm-eval-cmds '("find-file-picker-editor-window" term-enhance/find-file-picker-editor-window))
   (add-to-list 'vterm-eval-cmds '("find-file-other-window" find-file-other-window))
   (add-to-list 'vterm-eval-cmds '("vterm/hide" vterm/hide))
   (add-to-list 'vterm-eval-cmds '("vterm/unhide-mode-line" vterm/turn-off-hide-mode-line))

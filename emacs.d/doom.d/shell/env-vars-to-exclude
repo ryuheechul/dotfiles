@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-# this will be used few places including ../init.el and ./source.zsh
+# two consumers, two meanings:
+# - ./source.zsh unsets everything printed WITHOUT FOR_DOOM_SYNC_ENV in
+#   shells inside emacs (outer-terminal contamination)
+# - ../init.el runs this WITH FOR_DOOM_SYNC_ENV=1 and denies everything
+#   printed from the doom env snapshot ('doom sync'/'doom env'), so
+#   per-session state never gets baked into future emacs launches
 
 # both for doom sync and on loading shell until it says otherwise
 echo -n "TERM
@@ -79,7 +84,12 @@ configureFlags
 hardeningDisable
 "
 
-# only for doom sync - things that I don't want shell to unset
+# only for doom sync - things that the shell must NOT unset.
+# When an editor starts handing a new per-session var to its children
+# (emacs: prep-env-for-term in
+# ../modules/my-custom/term-enhance/config.el, nvim: boot/misc.lua),
+# list it here too - otherwise running 'doom sync' from a shell inside
+# an editor bakes that session's value into every future emacs launch.
 test -n "${FOR_DOOM_SYNC_ENV}" &&
   echo -n "DISPLAY
 XAUTHORITY
@@ -90,6 +100,8 @@ STARSHIP_SHELL
 STARSHIP_SESSION_KEY
 LANG
 LS_COLORS
+EDITOR
+EMACS_SOCKET_NAME
 INSIDE_EMACS
 INSIDE_DOOM_EMACS
 EMACS_VTERM_PATH

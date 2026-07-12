@@ -47,8 +47,11 @@ if test -n "${term_cmd}"; then
     # ../modules/my-custom/term-enhance/{config,ghostel,vterm}.el
     "${term_cmd}" find-file-editor-window "$(realpath "${@:-.}")"
   }
-  # block in case of SSH, otherwise it will try to open the clients (if there is the same path exist)
-  test -z "${SSH_CONNECTION}" && alias emacs="find-file"
+  # safe over tramp too: the elisp side resolves the bare remote path
+  # against the calling buffer's tramp prefix
+  # (term-enhance/from-caller-fs), so the HOST's same-looking local
+  # file is never opened by mistake
+  alias emacs="find-file"
 fi
 
 # fix cursor shape in the shell inside the terminal - https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
@@ -57,9 +60,21 @@ echo '\e[2 q'
 if test "${term_in_emacs}" = "vterm"; then
   # this is a workaround that fixes the cursor is not changing shape properly between modes for neovim with TERM=eterm-color
   alias nvim='TERM=xterm-256color nvim'
-  export EDITOR='TERM=xterm-256color nvim'
 fi
-# (under ghostel, nvim and EDITOR need no TERM workaround - xterm-ghostty handles cursor shapes)
+# (under ghostel, nvim needs no TERM workaround - xterm-ghostty handles cursor shapes)
+
+# ($EDITOR is already `emacsclient` here - inherited from this emacs's
+# env, set by prep-env-for-term with EMACS_SOCKET_NAME pointing at THIS
+# emacs; plain client = blocking (git commit works), opened in its own
+# workspace via `server-window', C-x #/q closes it and returns. tramp
+# shells never see it: plain setenv doesn't reach the remote env)
+if [[ "${INSIDE_EMACS}" != *tramp* ]]; then
+  # a manual `emacsclient` would inherit -nw from the global alias
+  # (../../../zsh/my_addons/aliases) - a tty frame of this very emacs
+  # inside its own terminal freezes (one event loop feeding itself);
+  # reuse the existing frame instead
+  alias emacsclient='command emacsclient -n'
+fi
 
 # because excluding these at `../init.el` wasn't enough when you run emacs from terminal inside tmux
 for env_var in $(${script_d}/env-vars-to-exclude); do
@@ -109,9 +124,20 @@ if test -n "${term_cmd}"; then
   "${term_cmd}" "${term_in_emacs}/unhide-mode-line"
 fi
 
-# stop using these alias for now - while replacing `e` is good `vi` is actually confusing so let me think about it
-alias vi='find-file'
-alias e='vi $(fzf)'
+# reshape the global `vi`/`e` (../../../zsh/my_addons/aliases):
+# interactive opening shouldn't block this terminal, so route through
+# the non-blocking find-file bridge instead of $EDITOR (which stays
+# `emacsclient` above for consumers that NEED blocking, e.g. git)
+if test -n "${term_cmd}"; then
+  alias vi='find-file'
+  function e {
+    if (( $# )); then
+      find-file "$@"
+    else
+      "${term_cmd}" find-file-picker-editor-window "$(realpath .)"
+    fi
+  }
+fi
 
 # sync in case of drift between Emacs and base16-shell
 # (tramp shells opt out - "One tone, every layer" in ../../../docs/philosophy.md)

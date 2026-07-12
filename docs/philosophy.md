@@ -54,15 +54,42 @@ one's?" at runtime instead of by assumption):
   `zsh/integration/multiplexers` walks real process ancestry instead of
   guessing from env (pane env inherits stale answers), emacs included as
   a mux.
-- *A shell inside an editor is normally a dead end* - the bridges
-  (`ghostel_cmd`/`vterm_cmd`, nvr) let the inner shell drive its host:
-  `find-file`/`vi` opens in the editor window above, `q` hides the
+- *A shell inside an editor is normally a dead end* - `$EDITOR` itself
+  points back at the host, so anything that shells out to an editor and
+  needs to wait (`git commit`, lf, suffix aliases) lands there and
+  blocks like an editor should - and opens as a *tab of the host*,
+  which closes back to the terminal when done: inside nvim it's
+  `nvimclient` (nvr `--remote-tab-wait` + trap-close-for-term - nvim's
+  own emacsclient, in `bin/path/nvim/` handed out by the editor itself),
+  inside emacs it's plain `emacsclient` against the parent's own socket
+  (`EMACS_SOCKET_NAME`, handed down by `prep-env-for-term`) shown in
+  its own workspace via `server-window`, closed and returned from by
+  `server-done-hook` - the same tab-in/tab-out shape on both editors.
+  The bridges
+  (`ghostel_cmd`/`vterm_cmd`, nvr) cover the *interactive* openers,
+  which shouldn't block the terminal: `find-file`/`emacs`/`vi` opens in
+  the editor window above and returns immediately, `q` hides the
   terminal instead of killing the shell, `nvim` inside nvim's terminal
   becomes `nvr --remote-tab` on the host instead of nvim-in-nvim.
+- *One command, each layer's own shape* - the base `vi`/`e` in
+  `zsh/my_addons/aliases` stay dumb (`$EDITOR` at call time; `e` with
+  no args picks with fzf first), and each editor's own `source.zsh`
+  reshapes them for its shells rather than the base function trying to
+  detect where it runs: inside nvim `e` picks with Telescope (same as
+  `<Space>ff`), inside emacs `vi`/`e` route through the non-blocking
+  find-file bridge and `e` picks with vertico `find-file` (same as
+  `SPC f f`).
 - *Editors summoning each other used to degrade* - "open in emacs" from
   nvim runs `emacsclient -t` in a disposable float (not GUI/org-protocol
   indirection); "open in nvim" from emacs is a full-frame modal that
-  restores the window layout on exit.
+  restores the window layout on exit. One hard limit: a tty client
+  frame must never target an *ancestor* emacs (the frame would be
+  rendered by the very event loop it's waiting on - a freeze, not a
+  degradation), so wherever `EMACS_SOCKET_NAME` reveals an ancestor,
+  `emacs`/`<Space>fe` become plain `emacsclient -n` - the ancestor's
+  `server-window` opens the file in a fresh workspace (doom tab),
+  visible immediately even when its frame is a fullscreen terminal,
+  and `q` there closes the workspace and returns.
 - *Inherited env lies about the present* - editor markers
   (`INSIDE_EMACS`, `NVIM`) are scrubbed by the spawning editor so only
   the nearest one's integration loads ("nearest editor wins": emacs's
@@ -94,7 +121,20 @@ markers from the environment it hands to its children (emacs:
 `prep-env-for-term` in term-enhance; nvim: `boot/misc.lua`). Consumers
 (`zsh/integration/editors`) then stay dumb single-variable checks,
 mutually exclusive by construction, instead of trying to out-guess
-nesting order.
+nesting order. `EMACS_SOCKET_NAME` rides the same one-hop rule: each
+emacs overwrites it for its own terminals (unique PID-based server
+name), so `emacsclient` always reaches the nearest emacs, never a
+stale grandparent or an unrelated daemon.
+
+Nesting isn't the only way inherited state goes stale - *snapshots*
+leak it forward in time. Doom's env file (`doom sync`) captures the
+invoking shell's environment for every future emacs launch, so a sync
+run from a shell inside an editor would freeze that session's
+handed-down vars (`EDITOR`, `EMACS_SOCKET_NAME`, `NVIM_LISTEN_ADDRESS`)
+into permanent config. The deny list in
+[env-vars-to-exclude](../emacs.d/doom.d/shell/env-vars-to-exclude)
+keeps session-scoped vars out of the snapshot; the rule of thumb lives
+there: whatever an editor hands its children never gets baked.
 
 ## One tone, every layer
 

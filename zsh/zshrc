@@ -34,7 +34,12 @@ if [ -z "$MY_BASIC_ZSH_STUFF_LOADED" ] || [ -n "$FORCE_LOAD_MY_ZSH_STUFF" ]; the
   # to speed up SpaceVim startup time
   export PYTHON3_HOST_PROG=`command -v python3`
 
-  export EDITOR="nvim"
+  # default only - don't clobber an inherited value: editors hand their
+  # own to child processes (nvim: nvimclient via boot/misc.lua, emacs:
+  # emacsclient via term-enhance's prep-env-for-term)
+  export EDITOR="${EDITOR:-nvim}"
+  # insert below at ~/.local.zshenv if you want emacs to be EDITOR normally
+  # test nvim = "$EDITOR" && export EDITOR='emacsclient -nw -a='
 
   # vi keybinding
   export KEYTIMEOUT=1

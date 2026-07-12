@@ -16,10 +16,34 @@ unset TMUX TMUX_PANE
 alias q="clear; nvr -c quit"
 
 ## use host nvim instead of creating another nvim process
-# for programs like lf
-export EDITOR='editor-in-nvim'
+# ($EDITOR is already `nvimclient` - inherited from the host nvim's env,
+# boot/misc.lua - and zshrc only defaults EDITOR, never clobbers)
 # for shell
 alias nvim='nvr --remote-tab'
+
+# reshape the global `e` (../../zsh/my_addons/aliases): no args = the
+# host nvim's own picker instead of fzf (same as <Space>ff)
+function e {
+  if (( $# )); then
+    ${=EDITOR} "$@"
+  else
+    nvr -c 'Telescope file_browser'
+  fi
+}
+
+# EMACS_SOCKET_NAME = an ancestor emacs spawned this nvim
+# (prep-env-for-term). A -nw/-t client frame here would be rendered,
+# transitively, by the very emacs it connects to - one event loop
+# feeding itself = freeze. So no tty frame: plain -n visits open in a
+# fresh workspace (doom tab) of the ancestor (its `server-window',
+# term-enhance/server-window-workspace) and q there returns; no `-a ''`
+# fallback on purpose - if the ancestor died, erroring beats spawning a
+# stray daemon
+if test -n "${EMACS_SOCKET_NAME}"; then
+  # `emacs` needs no own override: the global `alias emacs='emacsclient'`
+  # (../../zsh/my_addons/aliases) keeps expanding into this one
+  alias emacsclient='command emacsclient -n'
+fi
 
 # try to maintain clean state for devenv
 test -z "${DEVENV_PROFILE}" || { cd ~ && cd - }

@@ -50,25 +50,55 @@ term-enhance/close-quick-editor-wconf-on-exit)."
     (set-window-configuration term-enhance/--quick-editor-wconf)
     (setq term-enhance/--quick-editor-wconf nil)))
 
-;; for ../../../shell/source.zsh's `find-file' shell function -
 ;; `find-file-other-window' doesn't guarantee reusing a SPECIFIC
 ;; existing window, only that it avoids the selected one; with an editor
 ;; window above and a terminal below, it can still split a third window
 ;; in between rather than reusing the editor one. This targets "the
-;; first non-terminal window" explicitly instead
+;; first non-terminal window" explicitly instead - shared by the
+;; find-file bridge and the `e' picker below
+(defun term-enhance/editor-window ()
+  "First non-terminal window in the frame, or nil."
+  (cl-find-if (lambda (w)
+                (not (memq (buffer-local-value 'major-mode (window-buffer w))
+                           '(vterm-mode ghostel-mode))))
+              (window-list)))
+
+;; bridge calls run with the calling terminal's buffer current, and a
+;; tramp terminal's shell hands over a bare remote-side path - resolve
+;; it against that buffer's remote prefix BEFORE any window switching,
+;; or the host would open its own same-looking local file
+(defun term-enhance/from-caller-fs (file)
+  "FILE as the calling terminal's filesystem sees it."
+  (if-let* ((remote (file-remote-p default-directory)))
+      (concat remote file)
+    file))
+
+;; for ../../../shell/source.zsh's `find-file' shell function
 (defun term-enhance/find-file-editor-window (file)
   "Open FILE by reusing the first non-terminal window in the frame
 (switching its buffer), falling back to `find-file-other-window' if
 every window is currently a terminal."
-  (if-let* ((win (cl-find-if
-                   (lambda (w)
-                     (not (memq (buffer-local-value 'major-mode (window-buffer w))
-                                '(vterm-mode ghostel-mode))))
-                   (window-list))))
-      (progn
-        (select-window win)
-        (find-file file))
-    (find-file-other-window file)))
+  (let ((file (term-enhance/from-caller-fs file)))
+    (if-let* ((win (term-enhance/editor-window)))
+        (progn
+          (select-window win)
+          (find-file file))
+      (find-file-other-window file))))
+
+;; for `e' with no args in a shell inside this emacs: run the
+;; interactive find-file picker (vertico, same as SPC f f) with the
+;; editor window selected, rooted at DIR. deferred via run-at-time so
+;; the minibuffer isn't entered from inside the bridge's process filter
+(defun term-enhance/find-file-picker-editor-window (dir)
+  ;; resolve against the caller's remote prefix NOW - the deferred
+  ;; lambda runs with some other buffer current
+  (let ((dir (term-enhance/from-caller-fs dir)))
+    (run-at-time 0 nil
+                 (lambda ()
+                   (when-let* ((win (term-enhance/editor-window)))
+                     (select-window win))
+                   (let ((default-directory (file-name-as-directory dir)))
+                     (call-interactively #'find-file))))))
 
 ;; setenv wrapper that works for tramp remote shell as well
 (defun settermenv (key val)
@@ -86,6 +116,57 @@ every window is currently a terminal."
         (add-to-list 'tramp-remote-process-environment (concat key "=" val)))))
 
 
+;; $EDITOR in our terminals is plain `emacsclient' (see
+;; ../../../shell/source.zsh) - it must reach THIS emacs, not whatever
+;; daemon `-a ""' would find or spawn. unique (PID) name so parallel
+;; emacsen don't fight over the default socket; children are pointed at
+;; it via EMACS_SOCKET_NAME in `prep-env-for-term' below.
+;; NOT for a --daemon: it starts its own server under the default name
+;; AFTER init - renaming server-name here would strand its socket where
+;; `emacsclient -a ""' (which waits on the default name) never looks
+(require 'server)
+(unless (or (daemonp) (bound-and-true-p server-process))
+  (setq server-name (format "server-%d" (emacs-pid)))
+  (server-start))
+
+;; $EDITOR client visits (git commit from a terminal here, or the
+;; `emacsclient -n' escape hatch) mirror nvim's `--remote-tab-wait':
+;; each buffer opens in its own fresh workspace (doom tab), and
+;; finishing it (C-x # / q, see ../../compat/neovim/smart-quit.el)
+;; closes that workspace and returns to where the terminal was - the
+;; elisp twin of nvim's trap-close-for-term.lua. (without a
+;; server-window function the buffer would open in the calling
+;; terminal's own window, replacing it)
+;; regression-tested in ../../../tests/editor-summon-tests.el
+(defvar-local term-enhance/--server-workspace nil
+  "Workspace created to show this server client buffer, if any.")
+
+(defun term-enhance/server-window-workspace (buf)
+  "Show the server client buffer BUF in a fresh workspace of its own,
+remembering it buffer-locally so `server-done-hook' can close it."
+  (+workspace/new)
+  (switch-to-buffer buf)
+  (setq term-enhance/--server-workspace (+workspace-current-name)))
+(setq server-window #'term-enhance/server-window-workspace)
+
+(defun term-enhance/server-done-close-workspace ()
+  "Close the workspace made for this client buffer and return.
+Runs off `server-done-hook' (current buffer = the client buffer,
+before any killing). Switch away BEFORE killing: killing the CURRENT
+workspace swaps \"unreal\" buffers - e.g. the terminal being returned
+to - for the fallback buffer (same trap smart-quit.el dodges)."
+  (when-let* ((ws term-enhance/--server-workspace))
+    (setq term-enhance/--server-workspace nil)
+    (when (+workspace-exists-p ws)
+      (when (equal (+workspace-current-name) ws)
+        (+workspace-switch
+         (or (and (+workspace-exists-p +workspace--last)
+                  (not (equal +workspace--last ws))
+                  +workspace--last)
+             (car (remove ws (+workspace-list-names))))))
+      (+workspace-kill ws))))
+(add-hook 'server-done-hook #'term-enhance/server-done-close-workspace)
+
 ;; extension point for backend-specific setup that has to run on every
 ;; `prep-env-for-term' call but doesn't belong in this terminal-agnostic
 ;; function itself (e.g. vterm's `vterm-shell' tramp workaround, hooked in
@@ -95,8 +176,19 @@ every window is currently a terminal."
 ;; this is a function to let to prepare my (zsh) shell work well within emacs
 ;; needed to be called before a terminal launches
 ;; to cover all possible scenario it's currently being called in multiple places
+;;
+;; handing a NEW per-session var to children here? also add it to
+;; ../../../shell/env-vars-to-exclude's FOR_DOOM_SYNC_ENV section, or
+;; 'doom sync' run from a shell inside an editor bakes that session's
+;; value into every future emacs launch
 (defun prep-env-for-term ()
   (run-hooks 'term-enhance/prep-env-hook)
+  ;; plain setenv, NOT settermenv: emacsclient against our socket is
+  ;; local-only, a tramp remote must keep its own default (zshrc only
+  ;; defaults EDITOR when unset, so this inherited value survives the
+  ;; shell's own init - nvim hands out `nvimclient' the same way,
+  ;; boot/misc.lua)
+  (setenv "EDITOR" "emacsclient")
   (if tui-emacs (settermenv "TUI_EMACS" "1"))
   ;; desired default
   (settermenv "INSIDE_DOOM_EMACS" "1")
@@ -110,7 +202,15 @@ every window is currently a terminal."
   ;; emacs markers symmetrically)
   (settermenv "NVIM" nil)
   (settermenv "NVIM_LISTEN_ADDRESS" nil)
-  (settermenv "VIMRUNTIME" nil))
+  (settermenv "VIMRUNTIME" nil)
+  ;; hand children the absolute socket path so their `emacsclient'
+  ;; ($EDITOR) reaches this very emacs - honored like --socket-name.
+  ;; one-hop like the markers above: a nested emacs overwrites it for
+  ;; its own terminals (useless-but-harmless on tramp remotes: the
+  ;; path doesn't exist there and EDITOR itself never reaches them,
+  ;; being plain-setenv'd above)
+  (settermenv "EMACS_SOCKET_NAME"
+              (expand-file-name server-name server-socket-dir)))
 ;; invoke on startup so the local shell is ready
 (prep-env-for-term)
 ;; invoke again for when tramp is ready

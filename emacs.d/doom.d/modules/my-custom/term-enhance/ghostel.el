@@ -190,6 +190,8 @@
   ;; term-enhance/find-file-editor-window, what
   ;; ../../../shell/source.zsh's `find-file' shell function actually calls
   (add-to-list 'ghostel-eval-cmds '("find-file-editor-window" term-enhance/find-file-editor-window))
+  ;; the no-arg `e' picker (../../../../../zsh/my_addons/aliases)
+  (add-to-list 'ghostel-eval-cmds '("find-file-picker-editor-window" term-enhance/find-file-picker-editor-window))
   (add-to-list 'ghostel-eval-cmds '("ghostel/hide" ghostel/hide))
   (add-to-list 'ghostel-eval-cmds '("ghostel/unhide-mode-line" ghostel/full-w/turn-off-hide-mode-line))
   (add-to-list 'ghostel-eval-cmds '("mux/new-shell" ghostel/mux-new-shell))

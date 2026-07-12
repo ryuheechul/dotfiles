@@ -132,4 +132,66 @@ reproducing the full e-then-q setup (fragile to drive headlessly)."
           (should fallback-ran))
       (when (buffer-live-p buf) (kill-buffer buf)))))
 
+(ert-deftest smart-quit/server-client-buffer-q-finishes-client ()
+  "q on a buffer a server client is waiting on ($EDITOR - git commit
+etc.) calls `server-edit' (finish the client) before any
+window/workspace/quit handling."
+  (let ((buf (generate-new-buffer "smart-quit-test-client"))
+        (edited nil))
+    (unwind-protect
+        (progn
+          (switch-to-buffer buf)
+          (setq-local server-buffer-clients '(fake-proc))
+          (cl-letf (((symbol-function 'server-edit)
+                     (lambda (&rest _) (setq edited t))))
+            (call-interactively #'close-window-or-buffer))
+          (should edited))
+      (with-current-buffer buf
+        ;; or server's kill-buffer query would prompt in batch
+        (setq-local server-buffer-clients nil))
+      (kill-buffer buf))))
+
+(ert-deftest smart-quit/last-window-of-extra-workspace-returns-to-previous ()
+  "Regression (2026-07-11): q on the last window of a summoned
+workspace (term-enhance/server-window-workspace) killed the whole
+emacsclient - the last-main-window branch never considered other
+workspaces - and the first fix returned via doom's +workspace/kill on
+the CURRENT workspace, whose frame-predicate check swaps an \"unreal\"
+buffer (the terminal being returned to) for the dashboard. q must land
+back on the previous workspace with its buffer showing, never quit."
+  (skip-unless (bound-and-true-p persp-mode))
+  (let* ((origin-ws (+workspace-current-name))
+         ;; star name = doom-unreal, like a vterm/ghostel terminal
+         (term-buf (generate-new-buffer "*smart-quit-test-term*"))
+         (file-buf (generate-new-buffer "smart-quit-test-file"))
+         summon-ws)
+    (unwind-protect
+        (progn
+          (delete-other-windows)
+          (switch-to-buffer term-buf)
+          (+workspace/new)
+          (setq summon-ws (+workspace-current-name))
+          (switch-to-buffer file-buf)
+          (cl-letf (((symbol-function 'doom-real-buffer-list)
+                     (lambda (&rest _) (list file-buf)))
+                    ((symbol-function 'save-buffers-kill-terminal)
+                     (lambda (&rest _) (error "q must never quit emacs here"))))
+            (call-interactively #'close-window-or-buffer))
+          (should (equal (+workspace-current-name) origin-ws))
+          ;; the daemon's initial frame is unmanaged by persp, so the
+          ;; origin window conf (term-buf showing) can't be asserted
+          ;; headlessly - but the dashboard-swap regression can: the
+          ;; kill-CURRENT-workspace path would have swapped the window
+          ;; to the fallback buffer and the terminal must survive
+          (should-not (eq (window-buffer (selected-window))
+                          (doom-fallback-buffer)))
+          (should (buffer-live-p term-buf))
+          (should-not (+workspace-exists-p summon-ws)))
+      (when (and summon-ws (+workspace-exists-p summon-ws))
+        (+workspace-kill summon-ws))
+      (unless (equal (+workspace-current-name) origin-ws)
+        (+workspace-switch origin-ws))
+      (when (buffer-live-p file-buf) (kill-buffer file-buf))
+      (when (buffer-live-p term-buf) (kill-buffer term-buf)))))
+
 ;;; smart-quit-tests.el ends here

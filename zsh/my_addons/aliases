@@ -258,7 +258,11 @@ alias _pathnvimlazy='echo "${HOME}/.local/share/nvim/lazy"'
 alias pathnvimlazy='_pathnvimlazy | pbcopy ; _pathnvimlazy'
 alias clearnvimswaps='rm -r ~/.local/state/nvim/swap'
 alias vim='nvim'
-alias vi='vim'
+# vi = whatever $EDITOR is at call time - each editor hands its own to
+# its children (nvim: nvimclient, emacs: emacsclient; zshrc only
+# defaults EDITOR to nvim when unset), so vi follows.
+# ${=EDITOR} because the value may contain flags/spaces
+function vi { ${=EDITOR} "$@" }
 
 _dotfilepath="$(readlink -f ~/.config/dfs-rhc)"
 _perflogpath="${_dotfilepath}/.perf.log"
@@ -321,29 +325,12 @@ alias emacsclientgui="env emacsclient -a '' -c -n -F\"'(fullscreen . fullboth)\"
 # open in terminal using daemon process (create if it doesn't exist yet)
 alias emacsclient="emacsclient -nw -a ''"
 
-# just a dirty hack to make `emacs` command to use a handle which work more smoothly
-# in terms of being able to activate the window like any other app on macOS
-typeset -f emacs &> /dev/null && unfunction emacs
-function emacs () {
-  if test -n "${SSH_CONNECTION}"; then
-    # env emacs -nw ${@} # use `emacs` instead of `emacsclient` on SSH session
-    emacsclient "${@}" # just realized that there is no reason to avoid emacsclient in SSH session, hence cancelling the line above
-    # NOTE: there are also these below that I can consider in the future:
-    # - https://mina86.com/2021/emacs-remote/
-    #   - https://irreal.org/blog/?p=9457
-  else
-    # when no args
-    if test $# -eq 0; then
-      if is-darwin; then
-        "${my_dot_d}/bin/path/darwin/open-gui-emacs"
-      else
-        emacsclient
-      fi
-    else
-      emacsclient "${@}"
-    fi
-  fi
-}
+# terminal emacsclient with daemon fallback - expands through the
+# `emacsclient -nw -a ''` alias above (an alias isn't re-expanded inside
+# its own expansion, so it stops there). GUI explicitly via
+# emacsclientgui / open-gui-emacs; inside emacs terminals
+# ../../emacs.d/doom.d/shell/source.zsh re-aliases this to `find-file`
+alias emacs='emacsclient'
 
 # viewer and filter
 alias vimdiff='nvim -dR'
@@ -454,7 +441,18 @@ alias verify-zellij='zellij setup --check'
 # now the above is taken care of by below
 source "${my_zsh_d}/modules/quit" # ../modules/quit
 
-alias e='fzf | xargs ${EDITOR}'
+# e: with args, open in $EDITOR; without, pick with fzf first. shells
+# inside nvim/emacs reshape this with their own native picker via their
+# source.zsh (../integration/editors, "nearest editor wins" in
+# ../../docs/philosophy.md)
+function e {
+  if (( $# )); then
+    ${=EDITOR} "$@"
+  else
+    local f
+    f="$(fzf)" && [[ -n "$f" ]] && ${=EDITOR} "$f"
+  fi
+}
 alias jqstringify='jq ". | tostring"'
 alias jqfromjson='jq "fromjson"'
 # more on it at https://www.cyberciti.biz/faq/unix-linux-check-if-port-is-in-use-command/
