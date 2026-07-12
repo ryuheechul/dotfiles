@@ -6,6 +6,15 @@
 ;; LSP working with `tramp' requires additional touch and see ../tramp-support/ for some tweaks
 ;; LSP executables already installed via neovim is added to the =$PATH= via =../../compat/neovim/=
 
+(defvar +format-with-eglot-excluded-modes nil
+  "Major modes that opt out of eglot-owned on-save formatting.
+Each mode's own module is responsible for adding itself here when it
+wants apheleia (or something else) to format instead - e.g.
+../../ext-lang/lua/config.el for lua-mode/lua-ts-mode + stylua, since
+lua-language-server's own bundled formatter (what eglot-format-buffer
+would otherwise call) aligns trailing comments across contiguous
+lines, which stylua doesn't.")
+
 (define-minor-mode +format-with-eglot-mode
   "Run eglot-format-buffer as a before-save-hook."
   :lighter " fmt"
@@ -18,6 +27,14 @@
       (remove-hook 'before-save-hook 'eglot-format-buffer t)
       ;; turn back on
       (apheleia-mode nil))))
+
+(defun +maybe-format-with-eglot-h ()
+  "Enable `+format-with-eglot-mode' unless the buffer's major-mode opted
+out via `+format-with-eglot-excluded-modes'. Named (not an inline
+lambda on the hook) so it's unit-testable - see
+../../../tests/format-tests.el."
+  (unless (memq major-mode +format-with-eglot-excluded-modes)
+    (+format-with-eglot-mode)))
 
 (when (modulep! :tools lsp +eglot)
   ;;;; this is only necessary for local access
@@ -44,7 +61,7 @@
     :after eglot
     :config (eglot-booster-mode))
   ;; (setq eglot-booster-io-only t) ;; is this way would be better with emacs 30+?
-  (add-hook 'eglot-managed-mode-hook #'+format-with-eglot-mode)
+  (add-hook 'eglot-managed-mode-hook #'+maybe-format-with-eglot-h)
 
   (when (modulep! +hover)
     (if (not (daemonp))
