@@ -11,10 +11,14 @@
 "~/.doom-emacs.d" = { url = "https://github.com/hlissner/doom-emacs.git", ref = "master" }
 
 [bootstrap.hooks.pre-repos]
-# zsh compiles sourced scripts into *.zwc byte-code caches as a side effect of
-# normal shell startup; `repos apply`'s dirty-check treats those as untracked
-# local changes and refuses to proceed, so clear them before it runs
-run = "rm -f ~/.config/base16-shell/*.zwc"
+# `repos apply`'s dirty-check treats untracked local changes as blocking, so
+# each of these clears a runtime-generated dir/cache before it runs
+run = '''
+# zsh compiles sourced scripts into *.zwc byte-code caches as a side effect of normal shell startup
+rm -f ~/.config/base16-shell/*.zwc
+# chemacs2 writes CLI startup logs here at runtime (no compiled elisp/eln-cache - that lives in ~/.doom-emacs.d)
+rm -rf ~/.emacs.d/.local
+'''
 
 [bootstrap.hooks.post-repos]
 # doom-emacs.d's sources/doom+ is a git submodule - a plain clone/pull never
