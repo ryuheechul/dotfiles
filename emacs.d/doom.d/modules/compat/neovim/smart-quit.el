@@ -25,14 +25,14 @@
 ;; any, last main win| any                  | (side-window terminal present) | just close this buffer - never quits with a live terminal around
 ;; any, last main win| other workspaces exist | -              | no           | close this workspace, like nvim's :q on a tab page's last window
 ;; file, last one    | emacsclient TUI      | no               | no           | quit client, silently (real shell to return to)
-;; file, last one    | GUI / TUI no client  | no               | no           | ask "Quit Emacs?" first
+;; file, last one    | GUI / TUI no client  | no               | no           | show dashboard - never quits standalone Emacs
 ;; file              | any                  | yes              | no           | just close this buffer
 ;; file, last one    | any                  | no               | yes,elsewhere| just close this buffer - never auto-quits with unsaved work around
 ;; dashboard, alone  | emacsclient TUI      | no               | no           | quit client, silently
-;; dashboard, alone  | GUI                  | no               | no           | ask "Quit Emacs?" first
+;; dashboard, alone  | GUI                  | no               | no           | ask "Quit Emacs?" first (already at the fallback - nowhere left to resort to)
 ;; dashboard         | any                  | yes (file open)  | -            | bury dashboard, back to that file (`quit-window')
 ;; *scratch*, alone  | emacsclient TUI      | no               | no           | quit client, silently
-;; *scratch*, alone  | GUI                  | no               | no           | ask "Quit Emacs?" first
+;; *scratch*, alone  | GUI                  | no               | no           | show dashboard - never quits standalone Emacs
 ;; *scratch*         | any                  | yes (file open)  | -            | just close/bury scratch, back to that file
 ;;
 ;; "other real buf?" = `doom-real-buffer-list' has something left besides
@@ -58,30 +58,34 @@ nvim/lua/utils/my-smart-quit.lua - see this file's header comment for
 the full behavior matrix."
   (interactive)
   (cond
-   ;; a server client is waiting on this buffer ($EDITOR from a
+   ;; 1. a server client is waiting on this buffer ($EDITOR from a
    ;; terminal, e.g. git commit) - q means "done", like closing the tab
    ;; of nvim's --remote-tab-wait; term-enhance's server-done-hook then
    ;; closes the workspace the buffer was summoned into
    ((bound-and-true-p server-buffer-clients) (server-edit))
-   ;; `q' while IN a side-window popup (e.g. the terminal) - close it;
+   ;; 2. `q' while IN a side-window popup (e.g. the terminal) - close it;
    ;; delete-window is safe here, a side-window is never the last main one
    ((window-side-p (selected-window)) (delete-window))
-   ;; another MAIN window (side-windows don't count - deleting the last
+   ;; 3. another MAIN window (side-windows don't count - deleting the last
    ;; main window is impossible) - let doom's own cascade handle deleting
    ;; this one (dedicated/workspace/frame fallbacks already solid there)
    ((seq-some (lambda (w) (and (not (eq w (selected-window)))
                                (not (window-side-p w))))
               (window-list))
     (+workspace/close-window-or-workspace))
-   ;; only main window left
+   ;; 4. only main window left
    (t
-    (let* ((other-real-buffers (cl-remove (current-buffer) (doom-real-buffer-list) :test #'eq))
-           (unsaved-somewhere-p (seq-some (lambda (b) (and (buffer-file-name b) (buffer-modified-p b)))
-                                          (buffer-list)))
+    (let* ((other-real-buffers
+            (cl-remove (current-buffer) (doom-real-buffer-list) :test #'eq))
+           (unsaved-somewhere-p
+            (seq-some
+             (lambda (b) (and (buffer-file-name b) (buffer-modified-p b)))
+             (buffer-list)))
            (side-window-present (seq-some #'window-side-p (window-list)))
-           (emacsclient-tui-p (and (not (display-graphic-p)) (frame-parameter nil 'client))))
+           (emacsclient-tui-p
+            (and (not (display-graphic-p)) (frame-parameter nil 'client))))
       (cond
-       ;; something to fall back to, unsaved work somewhere that a quit
+       ;; 4a. something to fall back to, unsaved work somewhere that a quit
        ;; shouldn't sweep away, or a live side-window terminal that a quit
        ;; would kill - just close this one; *doom* is never killed, bury
        ;; it instead (its own regeneration is more involved than
@@ -105,7 +109,7 @@ the full behavior matrix."
                      (not (eq w (selected-window)))
                      (eq (window-buffer w) (window-buffer (selected-window))))
             (delete-window w))))
-       ;; nothing else in THIS workspace - but other workspaces still
+       ;; 4b. nothing else in THIS workspace - but other workspaces still
        ;; live (e.g. the terminal/nvim stack that summoned this file
        ;; into its own workspace via
        ;; term-enhance/server-window-workspace): close the workspace
@@ -124,9 +128,27 @@ the full behavior matrix."
           (+workspace-switch
            (or last (car (remove name (+workspace-list-names)))))
           (+workspace-kill name)))
-       ;; truly nothing else, nothing unsaved - quit
+       ;; 4c. truly nothing else, nothing unsaved - a client always has a
+       ;; real shell to return to, so quitting there is safe and silent
        (emacsclient-tui-p (save-buffers-kill-terminal))
-       ((y-or-n-p "Quit Emacs? ") (save-buffers-kill-terminal)))))))
+       ;; 4d. already at the dashboard - "resort to the dashboard" is
+       ;; meaningless once you're already looking at it, and would
+       ;; otherwise trap `q' with no way to actually quit standalone Emacs
+       ;; at all, so this is the one case that still can
+       ((eq (current-buffer) (doom-fallback-buffer))
+        (when (y-or-n-p "Quit Emacs? ") (save-buffers-kill-terminal)))
+       ;; 4e. standalone Emacs (GUI or a bare TUI instance, not the dashboard
+       ;; already) has nothing to fall back to but relaunching the whole
+       ;; process, so rest at the dashboard instead of quitting. a bare
+       ;; `switch-to-buffer' would leave this buffer alive (just not
+       ;; displayed) - the very next `q', now on the dashboard, would then
+       ;; see it as an "other real buffer" and `quit-window' straight back
+       ;; to it: dashboard -> file -> dashboard -> file forever. kill it,
+       ;; matching what the other-real-buffers branch above already does
+       ;; via `quit-window's KILL arg for the same reason
+       (t (let ((buf (current-buffer)))
+            (switch-to-buffer (doom-fallback-buffer))
+            (kill-buffer buf))))))))
 
 (define-key evil-normal-state-map (kbd "q") #'close-window-or-buffer)
 ;; alternatively the above could be as simple as below

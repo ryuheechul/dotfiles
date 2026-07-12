@@ -194,4 +194,44 @@ back on the previous workspace with its buffer showing, never quit."
       (when (buffer-live-p file-buf) (kill-buffer file-buf))
       (when (buffer-live-p term-buf) (kill-buffer term-buf)))))
 
+(ert-deftest smart-quit/standalone-last-buffer-shows-dashboard-instead-of-quitting ()
+  "Regression: q on the last file/scratch buffer of a standalone (non
+emacsclient) Emacs used to prompt \"Quit Emacs?\" and could kill the
+whole process. It must switch to the dashboard instead - quitting
+standalone Emacs just to relaunch it at the dashboard anyway was the
+actual friction (see ../../nextup.org). Also regression: a bare
+`switch-to-buffer' left the old buffer alive (just undisplayed), so the
+very next q - now on the dashboard - saw it as an \"other real buffer\"
+and `quit-window'd straight back to it, forever. The buffer must
+actually die, not just lose its window."
+  (let ((file-buf (generate-new-buffer "smart-quit-test-file")))
+    (unwind-protect
+        (progn
+          (delete-other-windows)
+          (switch-to-buffer file-buf)
+          (cl-letf (((symbol-function 'doom-real-buffer-list) (lambda (&rest _) (list file-buf)))
+                    ((symbol-function 'display-graphic-p) (lambda (&rest _) t))
+                    ((symbol-function 'save-buffers-kill-terminal)
+                     (lambda (&rest _) (error "q must never quit emacs here"))))
+            (call-interactively #'close-window-or-buffer))
+          (should (eq (window-buffer (selected-window)) (doom-fallback-buffer)))
+          (should-not (buffer-live-p file-buf)))
+      (when (buffer-live-p file-buf) (kill-buffer file-buf)))))
+
+(ert-deftest smart-quit/standalone-dashboard-alone-still-prompts-to-quit ()
+  "q while already on the dashboard (last buffer, standalone Emacs) still
+asks \"Quit Emacs?\" - nowhere left to \"resort to\", so this is the one
+case that must still be able to actually quit standalone Emacs (see the
+sibling test above)."
+  (let (quit-prompted)
+    (switch-to-buffer (doom-fallback-buffer))
+    (delete-other-windows)
+    (cl-letf (((symbol-function 'doom-real-buffer-list) (lambda (&rest _) nil))
+              ((symbol-function 'display-graphic-p) (lambda (&rest _) t))
+              ((symbol-function 'y-or-n-p) (lambda (&rest _) (setq quit-prompted t) nil))
+              ((symbol-function 'save-buffers-kill-terminal)
+               (lambda (&rest _) (error "y-or-n-p returned nil, must not quit"))))
+      (call-interactively #'close-window-or-buffer))
+    (should quit-prompted)))
+
 ;;; smart-quit-tests.el ends here
