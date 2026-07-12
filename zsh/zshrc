@@ -31,8 +31,8 @@ function _echo() {
 
 # prevent overriding unnecessarily in case it's being loaded again
 if [ -z "$MY_BASIC_ZSH_STUFF_LOADED" ] || [ -n "$FORCE_LOAD_MY_ZSH_STUFF" ]; then
-  # to speed up SpaceVim startup time
-  export PYTHON3_HOST_PROG=`command -v python3`
+  # # to speed up SpaceVim startup time
+  # export PYTHON3_HOST_PROG=`command -v python3`
 
   # default only - don't clobber an inherited value: editors hand their
   # own to child processes (nvim: nvimclient via boot/misc.lua, emacs:

@@ -13,9 +13,8 @@ the purpose of this folder/method is to reduce typing hard ones by avoiding:
 
 ```bash
 ln -sf /Applications apps
-ln -sf /Desktop desktop
-ln -sf /Downloads downloads
-ln -sf ~/.SpaceVim.d vimconfig
+ln -sf ~/Desktop desktop
+ln -sf ~/Downloads downloads
 ln -sf ~/.config config
 ln -sf ~/.zshrc zshrc
 ln -sf ~/dotfiles dot
