@@ -74,7 +74,7 @@
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/File-Notifications.html
 (require 'filenotify)
 
-;; subscriber of "One tone, every layer" - ../../../../../docs/philosophy.md
+;; subscriber of "One tone, every layer" - ../../../../../docs/mechanics.md
 (file-notify-add-watch
   ;; ;; this `file-notify-add-watch' actually can handle change on the symlink directory like below
   ;; "~/.base16_theme" '(change) (lambda (event) (follow-theme-base16-shell))

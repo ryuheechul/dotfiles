@@ -1,117 +1,88 @@
 # Dotfiles
 
-A highly opinionated dotfiles that makes my life much easier as a developer and
-an individual.
+A highly opinionated set of dotfiles that makes my life much easier as a
+developer and an individual. It's actually slightly more than just dotfiles -
+package installation, services, and cross-tool integration all live here too.
 
-> actually it's slightly more than just dotfiles
+## Goals
 
-It's aimed to:
+- reproducible across multiple devices
+- modular, minimal, and clean
+- frequently updated as needs grow
+- usable by anyone who wants to try it - I keep no names, email addresses, or
+  hard-coded home paths of mine in this repo (though bootstrapping can still
+  conflict with dotfiles you already manage, so the safe way to try it is a
+  throwaway VM, a container, or at least a clean user account)
+- adaptable to new ways of doing things - e.g. the main package manager used to
+  be [brew](https://brew.sh) and is now [nix](https://github.com/NixOS/nix)
+- a place to capture useful workstation changes in a more permanent fashion,
+  and to share better settings I've figured out
 
-- be reproducible across multiple devices
-- be modular and minimal and clean
-- be frequently updated as necessary
-- be used for anyone if desired\*
-- be adaptable to new ways of doing things as things arise\*\*
-- capture recent useful changes in my workstations into more permanent fashion
-- share what I learned to configure better settings
-
-### \*
-
-- I try my best to leave no names or email addresses or assumed specific home
-  path of mine in this repo
-- But this doesn't mean bootstrapping will not conflict with your own dotfiles
-  if you already manage them
-- so a recommended way to try this repo is to do it inside a (throwaway) VM or a
-  container or at least with a clean user account. >
-
-### \*\*
-
-For example, the main package installation choice was used to be to
-[brew](https://brew.sh) but now it's [nix](https://github.com/NixOS/nix) at the
-moment.
+Cross-tool design themes that aren't specific to any one config live in
+[docs](docs): [philosophy.md](docs/philosophy.md) for the *why* and
+[mechanics.md](docs/mechanics.md) for the *how*.
 
 ## Prepare
 
-You may clone this repository to start using. I usually clone to
-`${HOME}/dotfiles` or `~/dotfiles` but it should work regardless of location.
-Rest of my instruction will assume that you cloned to `~/dotfiles` though.
+Clone this repository to start. I usually clone to `~/dotfiles`, and the rest
+of these instructions assume that, but it should work regardless of location.
 
 ## Bootstrap
 
-### Be Cautious of These Steps
+### Be cautious of these steps
 
-These scripts that you are about to run have a high probability of overwriting
-your existing folders and files especially other "dotfiles". Since the scripts
-are meant to not run interactively most of the time, there is a high chance it
-doesn't prompt to double check of what it is about to do. Therefore you must
-read what they do beforehand to avoid unwanted behavior.
+These scripts have a high probability of overwriting your existing folders and
+files, especially other dotfiles. They're meant to run non-interactively most
+of the time, so they often won't prompt before doing what they do - read them
+first to avoid surprises.
 
-It also installs Nix the package manager, and it does create a volume on macOS
-to workaround the limitation that doesn't exist on Linux. This might affect
-across all user accounts locally.
+They also install the Nix package manager, and on macOS create a dedicated
+volume (a workaround for a limitation that doesn't exist on Linux), which can
+affect all local user accounts.
 
-The safe ways to try these out are below:
+Safe ways to try this out:
 
-- run these inside virtual machines as it makes easy to "uninstall".
-- things might partially work on Github Codespaces if not all
-- I've run these inside containers before
-- https://github.com/ryuheechul/dotfiles-launchpad uses Vagrant and Docker
-  container version to bootstrap the portable environment
-  - dotfiles-launchpad clones this repo as submodule and many times it's not
-    up-to-date, FYI.
+- run it inside a virtual machine, so it's easy to "uninstall"
+- run it inside a container (I've done this before)
+- things might partially work on GitHub Codespaces, if not all
+- at minimum, use a clean user account
+- [dotfiles-launchpad](https://github.com/ryuheechul/dotfiles-launchpad)
+  bootstraps this as a portable, throwaway environment
 
-### Platform Foundation
+Bootstrapping is two steps: first a platform-specific **foundation**
+([bootstrap/foundation](bootstrap/foundation)), then the platform-agnostic
+[bootstrap/configuration.sh](bootstrap/configuration.sh). The foundation
+differs per platform; the examples below cover each.
 
-`~/dotfiles/bootstrap/foundation/darwin/essential.sh` # recommended you to look
-at an example below
-
-or
-
-`~/dotfiles/bootstrap/foundation/nixos/switch.sh` # recommended you to look at
-an example below
-
-or
-
-`~/dotfiles/bootstrap/foundation/linux.sh` # recommended to look at an example
-below
-
-### Configuration
-
-`~/dotfiles/bootstrap/configuration.sh` # recommended you to look at an example
-below
-
-### Examples
-
-#### macOS
+### macOS
 
 ```sh
-# this should prepare essential stuff
+# prepare essential stuff
 ~/dotfiles/bootstrap/foundation/darwin/essential.sh
 
-# do below only optionally since it's heavily customized to the author
-# make sure to sign in to appstore first
+# optional and heavily customized to the author - sign in to the App Store first
 ~/dotfiles/bootstrap/foundation/darwin/extra.sh
 
-# this should prepare platform agnostic essential stuff
-# you might need to open a new terminal window to be able to do this successfully
+# platform-agnostic essential stuff
+# (you might need a new terminal window for this to succeed)
 ~/dotfiles/bootstrap/configuration.sh
 ```
 
-#### NixOS
+### NixOS
 
 ```sh
-# optionally - you probably want to run this first to be able to clone this repo and also use the vim editor
+# optionally, run this first to be able to clone this repo and use vim
 nix-shell -p git vim
 
-# this should prepare essential stuff
+# prepare essential stuff
 ~/dotfiles/bootstrap/foundation/nixos/switch.sh
 
-# this should prepare platform agnostic essential stuff
-# you might need to open a new terminal window to be able to do this successfully
+# platform-agnostic essential stuff
+# (you might need a new terminal window for this to succeed)
 ~/dotfiles/bootstrap/configuration.sh
 ```
 
-#### Linux
+### Linux
 
 ```sh
 ~/dotfiles/bootstrap/foundation/linux.sh
@@ -120,15 +91,48 @@ source /etc/profile.d/user-shim-for-nix-path.sh
 ~/dotfiles/bootstrap/configuration.sh
 ```
 
-> See https://github.com/ryuheechul/dotfiles-launchpad/tree/master/Vagrantfile
-> for more details
+On Ubuntu you may be missing `git`/`curl`/`openssh-server` needed to get this
+far - [bootstrap/foundation/optional/ubuntu-prerequisite.sh](bootstrap/foundation/optional/ubuntu-prerequisite.sh)
+installs them.
 
-## Stuff That Come With
+### WSL2
 
-All the source code here aim to be self explanatory. You can take a look at
-directories and files especially top level ones and
-`bootstrap/configuration.sh`, `nix/pkgs/`. Frequent updates are expected as the
-needs grow.
+[bootstrap/foundation/wsl.sh](bootstrap/foundation/wsl.sh) installs Nix and
+runs home-manager itself (it prompts, so run it yourself rather than
+unattended), then points you at `bootstrap/configuration.sh` for the rest:
 
-https://github.com/ryuheechul/dotfiles-launchpad might be useful to see how it's
-being used
+```sh
+~/dotfiles/bootstrap/foundation/wsl.sh
+~/dotfiles/bootstrap/configuration.sh
+```
+
+### GitHub Codespaces
+
+[setup.sh](setup.sh) at the repo root is the Codespaces entry point (per
+GitHub's [personal dotfiles](https://docs.github.com/en/codespaces/setting-your-user-preferences/personalizing-github-codespaces-for-your-account)
+convention): it installs single-user Nix and runs home-manager.
+
+## Layout
+
+All the source here aims to be self-explanatory - browse the top-level
+directories and files. The ones with their own README:
+
+- [agents](agents) - shared instructions symlinked into each AI agent tool's config
+- [aliases](aliases) - short, easy-to-type command aliases (no caps, no special chars)
+- [bin](bin) - scripts, with `path/` added to `$PATH`
+- [karabiner](karabiner) - Karabiner-Elements complex modifications for macOS
+- [mise](mise) - [mise](https://mise.jdx.dev/) config, deployed as `~/.config/mise`
+- [nvim](nvim) - my own Neovim config (replaced an earlier SpaceVim setup)
+
+And a few more worth knowing:
+
+- [bootstrap](bootstrap) - the entry-point scripts above
+- [docs](docs) - cross-tool design: philosophy (why) and mechanics (how)
+- [nix](nix) - Nix / home-manager package and service definitions
+- [zsh](zsh) - zsh config (functions, integrations, aliases, and more)
+
+## Related
+
+[dotfiles-launchpad](https://github.com/ryuheechul/dotfiles-launchpad) shows how
+this repo gets used to bootstrap a portable environment. It clones this repo as
+a submodule, which is often not up-to-date - FYI.

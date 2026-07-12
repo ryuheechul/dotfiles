@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# the watcher of "One tone, every layer" - see ../../../docs/philosophy.md
+# the watcher of "One tone, every layer" - see ../../../docs/mechanics.md
 #
 # two modes:
 # - no args (default): the watcher daemon - reacts to base16 theme changes

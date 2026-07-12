@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 
-# runs the watchers of "One tone, every layer" - ../../../docs/philosophy.md
+# runs the watchers of "One tone, every layer" - ../../../docs/mechanics.md
 # may require to run this `systemctl --user start watch-theme-change.service`
 # debug with `systemctl --user cat watch-theme-change.service`
 let

@@ -3,7 +3,7 @@
 export BASE16_SHELL="${XDG_CONFIG_HOME}/base16-shell"
 
 # this is the publisher of the light/dark pub/sub bus - "One tone, every
-# layer" in ../../docs/philosophy.md
+# layer" in ../../docs/mechanics.md
 function _change_my_base16_theme() {
   # helper functions to make theme tone changes and that to be followable by other tools
   _update_theme_changed_time() {
