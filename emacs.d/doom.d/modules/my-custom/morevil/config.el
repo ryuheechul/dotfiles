@@ -18,6 +18,18 @@
 ;; enables cil, cal, vil, val, dil, dal, yil, yal, etc
 (use-package! evil-textobj-line :after evil)
 
+;; nvim's vim-titlecase (christoomey/vim-titlecase,
+;; ../../../../../nvim/lua/plugins/editing.lua): `gz' is a titlecase
+;; operator. `capitalize-region' is emacs' stdlib title-caser - first letter
+;; of each word up, the rest down - matching vim-titlecase's default, so no
+;; package needed. composes with the `il'/`al' line text objects above, so
+;; `gzil' titlecases the current line (the muscle memory noted in plan.org),
+;; and `gziw'/`gz$'/visual `gz' all work for free.
+(evil-define-operator +neovim/evil-titlecase (beg end)
+  "Titlecase the text between BEG and END (nvim's `gz')."
+  (capitalize-region beg end))
+(map! :nv "gz" #'+neovim/evil-titlecase)
+
 ;; % jumps between matching language KEYWORDS too (if/end, function/end,
 ;; html tags, ...), not only brackets - the vim-matchup of
 ;; ../../../../../nvim/lua/plugins/editing.lua

@@ -17,10 +17,35 @@
     :config
     (hotfuzz-setup)))
 
+;; nvim's TAB completes a lone match (nvim-cmp, ../../../../../nvim/lua/plugins/config/completion.lua);
+;; doom binds corfu's TAB to `corfu-next' (config/default's `cmds-tab'), which
+;; with `corfu-preselect 'first' + `corfu-cycle t' just re-selects the only
+;; candidate - looks like a no-op. cycle when there are several, complete when
+;; there is one. `corfu-complete' (not `corfu-insert') so a lone matched
+;; DIRECTORY keeps completing into its contents, like nvim's path completion.
+(defun +neovim/corfu-tab ()
+  "TAB in the corfu popup: cycle when several candidates, complete a lone one."
+  (interactive)
+  (if (= corfu--total 1)
+      (corfu-complete)
+    (corfu-next)))
+
 ;; to make this to resemble the completion experience from Neovim
 (after! corfu
   ;; let's not make the enter key embarassing when there is no candidate
-  (setq corfu-preselect 'first))
+  (setq corfu-preselect 'first)
+  ;; bind BOTH key symbols - "TAB" (TTY) and [tab] (GUI), as doom does - this
+  ;; module has been bitten by GUI/TTY key-symbol splits before. runs on corfu
+  ;; load, after doom's config/default `cmds-tab' binding, so it wins.
+  (map! :map corfu-map
+        :gi "TAB" #'+neovim/corfu-tab
+        :gi [tab] #'+neovim/corfu-tab)
+  ;; corfu quits after any command not in `corfu-continue-commands' (nor
+  ;; matching its built-in `\\`corfu-' regex) - our wrapper name matches
+  ;; neither, so without this the popup dies after a single press: it cycles
+  ;; once, then `corfu--post-command' calls `corfu-quit'. doom registers its
+  ;; own +corfu/* wrappers here for exactly this reason.
+  (add-to-list 'corfu-continue-commands #'+neovim/corfu-tab))
 
 ;; ./ and ../ path completion everywhere, like nvim's cmp-path source
 ;; (../../../../../nvim/lua/plugins/config/completion.lua lists it

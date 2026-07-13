@@ -141,4 +141,54 @@ plain text like they do in nvim."
       (funcall mode)
       (should (memq 'cape-file completion-at-point-functions)))))
 
+(ert-deftest parity/corfu-tab-bound ()
+  "TAB in the corfu popup runs our wrapper, in both key symbols (GUI/TTY)."
+  (require 'corfu)
+  (should (eq (lookup-key corfu-map (kbd "TAB")) '+neovim/corfu-tab))
+  (should (eq (lookup-key corfu-map [tab]) '+neovim/corfu-tab)))
+
+(ert-deftest parity/corfu-tab-continues-completion ()
+  "Regression (2026-07-12): the wrapper must be a `corfu-continue-command'.
+corfu quits after any command not listed there (nor matching its
+`\\`corfu-' regex); +neovim/corfu-tab matches neither, so without the
+explicit registration the popup died after a single press - cycled once,
+then `corfu--post-command' quit it."
+  (require 'corfu)
+  (should (memq '+neovim/corfu-tab corfu-continue-commands)))
+
+(ert-deftest parity/corfu-tab-dispatch ()
+  "Lone candidate completes, several candidates cycle (the TAB parity)."
+  (require 'corfu)
+  (let (called)
+    (cl-letf (((symbol-function 'corfu-complete) (lambda () (setq called 'complete)))
+              ((symbol-function 'corfu-next) (lambda (&optional _) (setq called 'next))))
+      (let ((corfu--total 1)) (+neovim/corfu-tab))
+      (should (eq called 'complete))
+      (setq called nil)
+      (let ((corfu--total 3)) (+neovim/corfu-tab))
+      (should (eq called 'next)))))
+
+(ert-deftest parity/titlecase-operator ()
+  "nvim's vim-titlecase gz: `gzil' titlecases the current line, composing the
+`gz' operator with the `il' line text object (vim-textobj-line parity).
+A real windowed buffer (not `with-temp-buffer') because `execute-kbd-macro'
+feeds keys to the selected window's buffer."
+  (should (eq (lookup-key evil-normal-state-map "gz") '+neovim/evil-titlecase))
+  (let ((buf (get-buffer-create "*parity-titlecase-test*")))
+    (unwind-protect
+        (progn
+          (set-window-buffer (selected-window) buf)
+          (with-current-buffer buf
+            (erase-buffer)
+            (insert "  hello WORLD from EMACS\n")
+            (goto-char (point-min))
+            (evil-local-mode 1)
+            (evil-normal-state)
+            (execute-kbd-macro (kbd "gzil"))
+            ;; `il' is inner line (skips the leading indent), so the content
+            ;; is titlecased and the indentation left untouched
+            (should (equal (buffer-substring-no-properties (point-min) (point-max))
+                           "  Hello World From Emacs\n"))))
+      (kill-buffer buf))))
+
 ;;; parity-tests.el ends here

@@ -250,6 +250,21 @@ language constructs - if/else/end, function/end, html open/close tags -
 with the matched pair highlighted. emacs: ~evil-matchit~ +
 ~global-evil-matchit-mode~, in morevil.
 
+** DONE vim-titlecase ~gz~ operator (2026-07-12)
+nvim: christoomey/vim-titlecase (editing.lua) binds ~gz~ as a titlecase
+operator; combined with the ~il~/~al~ line text objects from
+kana/vim-textobj-line (also editing.lua) it gives ~gzil~ = titlecase the
+current line. emacs already had the text-object half - morevil's
+~evil-textobj-line~ (~il~/~al~) - so only the operator was missing.
+~+neovim/evil-titlecase~ (morevil), an ~evil-define-operator~ over
+~capitalize-region~ (stdlib title-caser: each word's first letter up, the
+rest down, matching vim-titlecase's default - no package needed), bound to
+~gz~ in normal + visual. composes with the existing text objects, so ~gzil~
+titlecases the line and ~gziw~/~gz$~/visual ~gz~ work for free. ~gz~ is the
+evil-mc prefix if ~:editor multiple-cursors~ is ever enabled (still off,
+[[file:../../../init.el][init.el]]) - same key vim-titlecase claims in nvim, so the trade is already
+accepted.
+
 ** DONE cmp-path (complete ~./~ and ~../~ file paths as you type)
 nvim: the ~path~ cmp source is global
 ([[file:../../../../../nvim/lua/plugins/config/completion.lua][completion.lua]]), so paths complete in any buffer. emacs: doom's corfu
@@ -258,6 +273,24 @@ the text/conf mode families in [[file:./config.el][config.el]] (org/markdown der
 text-mode, so they're covered). corfu-auto's 2-char prefix means ~./~
 or ~../~ pops on its own; minibuffer paths were already fine via the
 built-in file completion.
+
+** DONE ~TAB~ completes a lone candidate (2026-07-12)
+nvim's ~TAB~ (nvim-cmp, [[file:../../../../../nvim/lua/plugins/config/completion.lua][completion.lua]]) makes a single match feel
+like it just completes. doom binds corfu's ~TAB~ to ~corfu-next~
+(config/default's ~cmds-tab~ menu-item), which - together with this
+module's ~corfu-preselect 'first~ and ~corfu-cycle t~ - re-selects the only
+candidate when just one matches: no visible change, looks like a bug (you'd
+have to press ~RET~ to insert). fixed with ~+neovim/corfu-tab~ ([[file:./config.el][config.el]],
+bound over ~corfu-map~'s ~TAB~/[[tab]]): cycle when ~corfu--total~ > 1,
+otherwise ~corfu-complete~. chose ~corfu-complete~ over ~corfu-insert~ so a
+lone matched DIRECTORY keeps completing into its contents, like nvim's path
+completion. ~S-TAB~ (reverse cycle) left untouched. regression caught in
+review: a custom wrapper name matches neither ~corfu-continue-commands~ nor
+its built-in ~\`corfu-~ regex, so ~corfu--post-command~ quit the popup after
+one press (cycled once, then closed/selected) - fixed by registering
+~+neovim/corfu-tab~ in ~corfu-continue-commands~, as doom does for its own
+~+corfu/*~ wrappers. all three now covered by ert (~parity/corfu-tab-*~ in
+[[file:../../../tests/parity-tests.el][tests/parity-tests.el]]).
 
 ** DONE rainbow-delimiters
 Small ~use-package!~; doom has no module for it. Hooked on prog-mode in
