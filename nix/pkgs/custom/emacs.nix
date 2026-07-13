@@ -11,9 +11,11 @@ let
     withTreeSitter = true; # this is the default for 29+ version
   };
   emacsWithPackages = (pkgs.emacsPackagesFor emacsWithOptions).emacsWithPackages;
-  customizedEmacs = emacsWithPackages (epkgs: [
-    epkgs.vterm
-  ]); # include libvterm
+  # vterm builds a native libvterm module from source (slow to compile); default
+  # to pure emacs and only pull it in when MY_NIX_EXTRA_EMACS_VTERM is set
+  extraEmacsPackages =
+    epkgs: pkgs.lib.optionals (checkEnv "MY_NIX_EXTRA_EMACS_VTERM") [ epkgs.vterm ];
+  customizedEmacs = emacsWithPackages extraEmacsPackages;
   # above is basically the broken down version of below
   # ((emacsPackagesFor (emacs.override { ... })).emacsWithPackages (epkgs: [ epkgs.vterm ]))
 in

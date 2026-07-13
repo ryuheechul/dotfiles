@@ -27,9 +27,15 @@ in
 with pkgs;
 [
   # anything "extra" but without optional flag goes here
-  hexto256
-  termimagenator
   backlog # Markdown‑native Task Manager & Kanban visualizer for any Git repository
+]
+# hexto256/termimagenator compile from source, so gate them to keep minimal
+# builds (e.g. dotfiles-launchpad) from paying that cost
+++ ifEnv "MY_NIX_EXTRA_HEXTO256" [
+  hexto256 # convert a hex color to the nearest 256-terminal color
+]
+++ ifEnv "MY_NIX_EXTRA_TERMIMAGENATOR" [
+  termimagenator # terminal image generator
 ]
 ++ ifEnv "MY_NIX_EXTRA_NIGHTLY_ALACRITTY" [
   alacritty-nightly
