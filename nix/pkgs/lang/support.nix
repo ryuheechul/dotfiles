@@ -11,6 +11,9 @@ in
 with pkgs;
 [
   efm-langserver # General purpose Language Server
+]
+# emacs-lsp-booster only matters with emacs
+++ ifEnv "MY_NIX_EXTRA_EMACS" [
   emacs-lsp-booster # Emacs LSP performance booster - ../../../emacs.d/doom.d/modules/tools/lsp-support
 ]
 ++ ifEnv "MY_NIX_EXTRA_GIT" [

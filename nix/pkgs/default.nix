@@ -3,7 +3,6 @@
 }:
 
 let
-  emacs = import ./custom/emacs.nix { pkgs = pkgs; };
   urlview = import ./custom/urlview.nix { pkgs = pkgs; };
   isLinux = with pkgs; lib.optionals stdenv.isLinux;
   # No longer needed as upstream is also now 3.7+
@@ -69,15 +68,11 @@ with pkgs;
 ++
   # editor - mostly for neovim
   [
-    emacs # Extensible, customizable GNU text editor
-    # ispell for emacs
-    ispell # Interactive spell-checking program for Unix
     pandoc # Universal markup converter - doubles as doom-emacs's markdown-preview compiler
     neovim # my favorite editor
     neovim-remote # 👌 Support for --remote and friends.
     tree-sitter # An incremental parsing system for programming tools
     # clang-tools # Standalone command line tools for C++ development
-    rust-analyzer # An experimental modular compiler frontend for the Rust language
     stylua # An opinionated Lua code formatter
   ]
 ++
@@ -172,7 +167,6 @@ with pkgs;
     mosh # Mobile shell
     gum # Tasty Bubble Gum for your shell
     vale # A syntax-aware linter for prose built with speed and extensibility in mind
-    vhs # A tool for generating terminal GIFs with code
     nix-tree # Interactively browse a Nix store paths dependencies
     nix-output-monitor # Parses output of nix-build to show additional information
     hydra-check # Check hydra for the build status of a package

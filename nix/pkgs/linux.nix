@@ -25,7 +25,6 @@ let
         # waypipe --socket /tmp/waypipe-test.sock client # in one terminal
         # waypipe --socket /tmp/waypipe-test.sock server [your-gui-app] # in another
         # ````
-        waypipe # Network proxy for Wayland clients (applications)
         sshfs # FUSE-based filesystem that allows remote filesystems to be mounted over SSH
         # example:
         # - `sshfs remote-host:directory ~/mnt/target [-o reconnect]` # existing directories and files under will be shadowed
@@ -38,9 +37,14 @@ let
         sysz # Fzf terminal UI for systemctl
       ]
 
-      ++ ifX86 [
-        usbimager # A very minimal GUI app that can write compressed disk images to USB drives
+      # waypipe/usbimager are GUI/display tools, off unless asked (headless
+      # minimal builds have no use for them)
+      ++ ifEnv "MY_NIX_EXTRA_WAYPIPE" [
+        waypipe # Network proxy for Wayland clients (applications)
       ]
+      ++ ifX86 (ifEnv "MY_NIX_EXTRA_USBIMAGER" [
+        usbimager # A very minimal GUI app that can write compressed disk images to USB drives
+      ])
 
       ++ ifEnv "MY_NIX_EXTRA_LINUX_HOTSPOT" [
         # https://nixos.wiki/wiki/Internet_Connection_Sharing

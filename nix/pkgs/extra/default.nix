@@ -12,6 +12,7 @@ let
   cfn-lint = pkgs.python3.pkgs.cfn-lint;
   hexto256 = import ../custom/hexto256.nix;
   termimagenator = import ../custom/termimagenator.nix;
+  emacs = import ../custom/emacs.nix { pkgs = pkgs; };
   tf-helper = import ../custom/tf-helper.nix { pkgs = pkgs; };
   bat-riffle = import ../custom/bat-riffle { pkgs = pkgs; };
   alacritty-nightly = import ../custom/alacritty-nightly.nix;
@@ -36,6 +37,17 @@ with pkgs;
 ]
 ++ ifEnv "MY_NIX_EXTRA_TERMIMAGENATOR" [
   termimagenator # terminal image generator
+]
+# vhs pulls a full chromium (~700MB) to render, so keep it out of minimal builds
+++ ifEnv "MY_NIX_EXTRA_VHS" [
+  vhs # A tool for generating terminal GIFs with code
+]
+# emacs (+ spell-check) drags in the native-comp toolchain (libgccjit); a
+# minimal build has no use for it. emacs-lsp-booster is gated the same way in
+# ../lang/support.nix
+++ ifEnv "MY_NIX_EXTRA_EMACS" [
+  emacs # Extensible, customizable GNU text editor
+  ispell # Interactive spell-checking program for Unix
 ]
 ++ ifEnv "MY_NIX_EXTRA_NIGHTLY_ALACRITTY" [
   alacritty-nightly

@@ -40,12 +40,11 @@ let
       jupyter # The Jupyter HTML notebook is a web-based notebook environment for interactive computing
     ]
   );
-  via-npm = (
-    [
-      # lsp server for python
-      pyright
-    ]
-  );
+  ifLsp = import ./lsp.nix { inherit pkgs; };
+  via-npm = ifLsp [
+    # lsp server for python
+    pyright
+  ];
   natives = [
     ruff # An extremely fast Python linter and a Language Server Protocol implementation for Ruff
     uv # Extremely fast Python package installer and resolver, written in Rust

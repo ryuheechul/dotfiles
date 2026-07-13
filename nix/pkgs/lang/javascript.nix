@@ -4,6 +4,7 @@
 
 with pkgs;
 let
+  ifLsp = import ./lsp.nix { inherit pkgs; };
   nodejs = nodejs_24;
   bundle-nodejs-with-pkgs = (
     [
@@ -14,6 +15,9 @@ let
       pnpm # Fast, disk space efficient package manager
       yalc # Work with npm/yarn packages locally like a boss.
       typescript # TypeScript is a language for application scale JavaScript development
+    ]
+    # LSP server opt-in like the rest (mason can provide it otherwise)
+    ++ ifLsp [
       typescript-language-server # Language Server Protocol (LSP) implementation for TypeScript using tsserver
     ]
   );
