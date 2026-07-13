@@ -3,6 +3,7 @@
 # for https://github.com/jdx/mise - nixpkgs lags upstream releases, pin directly instead
 
 let
+  # pinned via niv - run `niv update mise` in ./via-niv/ to bump the revision
   sources = import ./via-niv;
   flake = sources.mise.url;
   result = builtins.getFlake flake;

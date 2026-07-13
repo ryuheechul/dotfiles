@@ -6,7 +6,8 @@ let
   emacs = import ./custom/emacs.nix { pkgs = pkgs; };
   urlview = import ./custom/urlview.nix { pkgs = pkgs; };
   isLinux = with pkgs; lib.optionals stdenv.isLinux;
-  tmux-next = import ./custom/tmux-next-3.7.nix { pkgs = pkgs; };
+  # No longer needed as upstream is also now 3.7+
+  # tmux-next = import ./custom/tmux-next-3.7.nix { pkgs = pkgs; };
 in
 with pkgs;
 # just for fun/testing
@@ -61,8 +62,7 @@ with pkgs;
     # bashInteractive # use latest bash
     # zsh # my favorite shell interface
     # starship # cross-shell prompt
-    # tmux # terminal multiplexer
-    tmux-next # until there is official release for 3.7
+    tmux # terminal multiplexer
     zellij # A terminal workspace with batteries included
     sesh # Smart session manager for the terminal
   ]
@@ -175,6 +175,7 @@ with pkgs;
     vhs # A tool for generating terminal GIFs with code
     nix-tree # Interactively browse a Nix store paths dependencies
     nix-output-monitor # Parses output of nix-build to show additional information
+    hydra-check # Check hydra for the build status of a package
     iperf # Tool to measure IP bandwidth using UDP or TCP
     lynis # Security auditing tool for Linux, macOS, and UNIX-based systems
   ]

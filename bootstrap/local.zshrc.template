@@ -46,6 +46,8 @@ export MY_NIX_EXTRA_DEVENV=1
 # export MY_NIX_EXTRA_LINUX_HOTSPOT=1
 # export MY_NIX_EXTRA_NIGHTLY_ALACRITTY=1
 export MY_NIX_EXTRA_GHOSTTY=1
+# wezterm/kitty config + desktop entries (headless setups don't need it)
+export MY_NIX_EXTRA_TERMINALS=1
 # export MY_NIX_EXTRA_LANG_GO=1
 # export MY_NIX_EXTRA_LANG_NIM=1
 # export MY_NIX_EXTRA_LANG_SQL=1
