@@ -71,7 +71,20 @@
               (bound-and-true-p ws-butler-global-mode))))
 
 (ert-deftest parity/smartcase-search ()
-  (should (eq evil-ex-search-case 'smart)))
+  "nvim ignorecase+smartcase parity: a lowercase / pattern folds case, an
+uppercase letter forces a sensitive match. `evil-ex-find-next' lands point
+just past the match, so the end offsets below distinguish the two."
+  (should (eq evil-ex-search-case 'smart))
+  (with-temp-buffer
+    (insert "aaa BANANA banana Banana zzz")
+    ;; lowercase pattern folds case - first hit is BANANA (ends at 11)
+    (goto-char (point-min))
+    (evil-ex-find-next (evil-ex-make-search-pattern "banana") 'forward t)
+    (should (= (point) 11))
+    ;; an uppercase letter forces sensitivity - skips to capitalized Banana
+    (goto-char (point-min))
+    (evil-ex-find-next (evil-ex-make-search-pattern "Banana") 'forward t)
+    (should (= (point) 25))))
 
 (ert-deftest parity/tty-paste-reads-system-clipboard ()
   "Regression (2026-07-11, pre-existing): evil's p in a TTY frame never
@@ -157,16 +170,50 @@ then `corfu--post-command' quit it."
   (should (memq '+neovim/corfu-tab corfu-continue-commands)))
 
 (ert-deftest parity/corfu-tab-dispatch ()
-  "Lone candidate completes, several candidates cycle (the TAB parity)."
+  "Three branches: a lone candidate completes; a fresh popup (point on the
+preselect) lands on the first candidate; an in-progress selection cycles."
   (require 'corfu)
   (let (called)
-    (cl-letf (((symbol-function 'corfu-complete) (lambda () (setq called 'complete)))
-              ((symbol-function 'corfu-next) (lambda (&optional _) (setq called 'next))))
+    (cl-letf (((symbol-function 'corfu-insert) (lambda () (setq called 'insert)))
+              ((symbol-function 'corfu-next) (lambda (&optional _) (setq called 'next)))
+              ((symbol-function 'corfu--goto) (lambda (i) (setq called (cons 'goto i)))))
+      ;; lone candidate -> insert (directory descent handled by cape-file's
+      ;; injected exit-function, so a plain insert suffices)
       (let ((corfu--total 1)) (+neovim/corfu-tab))
-      (should (eq called 'complete))
+      (should (eq called 'insert))
+      ;; fresh popup (index == preselect) -> land on the first, detach preselect
       (setq called nil)
-      (let ((corfu--total 3)) (+neovim/corfu-tab))
+      (let ((corfu--total 3) (corfu--index 0) (corfu--preselect 0))
+        (+neovim/corfu-tab)
+        (should (equal called '(goto . 0)))
+        (should (= corfu--preselect -1)))
+      ;; already navigating (index != preselect) -> cycle
+      (setq called nil)
+      (let ((corfu--total 3) (corfu--index 1) (corfu--preselect -1))
+        (+neovim/corfu-tab))
       (should (eq called 'next)))))
+
+(ert-deftest parity/corfu-tab-selects-first-not-second ()
+  "Regression (2026-07-13): on a fresh popup TAB lands on the FIRST
+candidate, not the second. `corfu-preselect' first silently selects
+candidate 0 but corfu can't preview the preselect, so it reads as unselected
+(seen on ./ path completion) and a plain corfu-next would skip to candidate
+1. The first press must stay on 0 (and now preview it); the next cycles."
+  (require 'corfu)
+  (let ((buf (parity--corfu-undo-buffer '("aaa1" "aaa2" "aaa3"))))
+    (unwind-protect
+        (with-current-buffer buf
+          (evil-insert-state)
+          (execute-kbd-macro (kbd "aaa"))
+          (completion-at-point)
+          (should (= corfu--index 0))               ; first is preselected
+          (should-not (corfu--preview-current-p))   ; but not previewed - the trap
+          (+neovim/corfu-tab)
+          (should (= corfu--index 0))               ; first TAB stays on the FIRST
+          (should (corfu--preview-current-p))       ; and now previews it
+          (+neovim/corfu-tab)
+          (should (= corfu--index 1)))              ; second TAB -> second
+      (kill-buffer buf))))
 
 (ert-deftest parity/titlecase-operator ()
   "nvim's vim-titlecase gz: `gzil' titlecases the current line, composing the
@@ -189,6 +236,174 @@ feeds keys to the selected window's buffer."
             ;; is titlecased and the indentation left untouched
             (should (equal (buffer-substring-no-properties (point-min) (point-max))
                            "  Hello World From Emacs\n"))))
+      (kill-buffer buf))))
+
+(defun parity--corfu-undo-buffer (candidates)
+  "Set up a windowed buffer with corfu + evil and a capf offering CANDIDATES.
+`execute-kbd-macro' feeds the selected window's buffer, and corfu needs a
+live window, so this is a real buffer rather than `with-temp-buffer'."
+  (require 'corfu)
+  (let ((buf (get-buffer-create "*parity-corfu-undo*")))
+    (set-window-buffer (selected-window) buf)
+    (with-current-buffer buf
+      (fundamental-mode)
+      (erase-buffer)
+      (setq-local completion-at-point-functions
+                  (list (lambda ()
+                          (list (line-beginning-position) (point)
+                                candidates :exclusive 'no))))
+      (corfu-mode 1)
+      (evil-local-mode 1))
+    buf))
+
+(ert-deftest parity/corfu-undo-through-completion ()
+  "Accepting a corfu candidate does not split evil's insert-state undo:
+after one insert session (typed prefix + accepted completion), a single
+`u' returns to the pre-insert state and `C-r' restores it. Guards the
+`evil-want-fine-undo' nil grouping against a completion inserting its own
+undo boundary (which would leave stray text after one undo) - the kind of
+undo/redo strangeness that is easy to hit with completion."
+  (let ((buf (parity--corfu-undo-buffer '("parallelism"))))
+    (unwind-protect
+        (with-current-buffer buf
+          (evil-insert-state)
+          (execute-kbd-macro (kbd "para"))
+          (completion-at-point)
+          (corfu-insert)
+          (evil-force-normal-state)
+          (should (equal (buffer-string) "parallelism"))
+          (evil-undo 1)
+          (should (equal (buffer-string) ""))
+          (evil-redo 1)
+          (should (equal (buffer-string) "parallelism")))
+      (kill-buffer buf))))
+
+(ert-deftest parity/corfu-escape-no-preview-leak ()
+  "Escaping insert state while a candidate is previewed
+(`corfu-preview-current' is `insert') must not commit the preview: doom
+quits corfu on `evil-insert-state-exit-hook', so only the typed prefix
+survives and undo stays clean (no leaked candidate text to undo twice)."
+  (let ((buf (parity--corfu-undo-buffer '("parallelism" "paragraph"))))
+    (unwind-protect
+        (with-current-buffer buf
+          (evil-insert-state)
+          (execute-kbd-macro (kbd "par"))
+          (completion-at-point)
+          (corfu-next)                  ; preview a candidate
+          (evil-force-normal-state)
+          ;; the previewed candidate's distinctive tail never lands in the buffer
+          (should-not (string-match-p "graph\\|llelism" (buffer-string)))
+          (evil-undo 1)
+          (should (equal (buffer-string) "")))
+      (kill-buffer buf))))
+
+(ert-deftest parity/corfu-file-descends-into-directory ()
+  "nvim cmp-path parity: completing a directory keeps offering its contents.
+cape-file ships no exit-function, so corfu stopped at the inserted `dir/';
+the advice injects one that re-triggers completion when a directory is
+inserted. Exercised with a real temp dir via the lone-candidate path
+(`corfu-insert', which is what TAB runs for one match)."
+  (require 'corfu)
+  (require 'cape)
+  (let* ((dir (make-temp-file "parity-cape-" t))
+         (sub (expand-file-name "onlysub" dir))
+         (buf (get-buffer-create "*parity-cape-dir*")))
+    (make-directory sub)
+    (write-region "" nil (expand-file-name "f1.txt" sub))
+    (write-region "" nil (expand-file-name "f2.txt" sub))
+    (unwind-protect
+        (progn
+          (set-window-buffer (selected-window) buf)
+          (with-current-buffer buf
+            (fundamental-mode)
+            (erase-buffer)
+            (setq default-directory (file-name-as-directory dir))
+            (setq-local completion-at-point-functions (list #'cape-file))
+            (corfu-mode 1)
+            (evil-local-mode 1)
+            (evil-insert-state)
+            (execute-kbd-macro (kbd "./on"))
+            (completion-at-point)          ; lone candidate: onlysub/
+            (corfu-insert)                 ; insert dir -> exit-function descends
+            (should (string-prefix-p "./onlysub/" (buffer-string)))
+            (should (equal (sort (mapcar #'substring-no-properties corfu--candidates)
+                                 #'string<)
+                           '("f1.txt" "f2.txt")))))
+      (kill-buffer buf)
+      (delete-directory dir t))))
+
+(ert-deftest parity/buffer-word-completion ()
+  "nvim `buffer' cmp source parity: words already in the buffer complete via
+cape-dabbrev (type app -> apple), wired as a low-priority capf in the
+editing-mode families."
+  (require 'cape)
+  (dolist (mode '(emacs-lisp-mode text-mode conf-unix-mode))
+    (with-temp-buffer
+      (funcall mode)
+      (should (memq 'cape-dabbrev completion-at-point-functions))))
+  (with-temp-buffer
+    (prog-mode)
+    (insert "apple banana\napp")
+    (should (member "apple" (all-completions "app" (nth 2 (cape-dabbrev)))))))
+
+(ert-deftest parity/prose-completion-merges-spell-and-buffer ()
+  "nvim shows all sources at once; emacs' capf chain lets the prose spell
+source shadow cape-dabbrev, so a buffer word only appears after the word is
+finished. In text-mode the two are merged (cape-capf-super) so a buffer word
+(current-base16) shows alongside dictionary words while still partial (curr).
+Ordering is asserted separately (corfu-sort-override-function)."
+  (require 'cape)
+  (with-temp-buffer
+    (text-mode)
+    (run-hooks 'text-mode-hook)
+    (insert "current-base16\ncurr")
+    (let ((cands
+           (catch 'hit
+             (dolist (f completion-at-point-functions)
+               (when (functionp f)
+                 (let ((r (ignore-errors (funcall f))))
+                   (when (and r (listp r))
+                     (let ((cc (all-completions "curr" (nth 2 r))))
+                       (when cc (throw 'hit cc))))))))))
+      ;; the first matching capf yields BOTH the buffer word and dict words
+      (should (member "current-base16" cands))
+      (should (> (length cands) 1)))))
+
+(ert-deftest parity/corfu-buffer-words-first-sort ()
+  "The sort partitions buffer words (dabbrev source) ahead of the rest,
+stably, and treats a hyphenated token as one word (current-base16, not
+current)."
+  (with-temp-buffer
+    (insert "current-base16 alpha\n")
+    (should (equal (+neovim/corfu-buffer-words-first
+                    '("current" "current-base16" "alpha" "currency"))
+                   '("current-base16" "alpha" "current" "currency")))))
+
+(ert-deftest parity/prose-buffer-words-rank-first ()
+  "Regression (2026-07-13): in the live corfu popup the buffer word ranks
+above the spell source (corfu-sort-override-function), so the dictionary's
+many words don't bury it - the earlier version left current-base16 last."
+  (require 'corfu)
+  (require 'cape)
+  (let ((buf (get-buffer-create "*parity-prose-order*")))
+    (unwind-protect
+        (progn
+          (set-window-buffer (selected-window) buf)
+          (with-current-buffer buf
+            (text-mode)
+            (run-hooks 'text-mode-hook)
+            (erase-buffer)
+            (insert "current-base16\n")
+            (corfu-mode 1)
+            (evil-local-mode 1)
+            (evil-insert-state)
+            (execute-kbd-macro (kbd "curren"))
+            (completion-at-point)
+            (let ((cands (mapcar #'substring-no-properties corfu--candidates)))
+              (should (member "current-base16" cands))
+              (when (member "currency" cands)
+                (should (< (cl-position "current-base16" cands :test #'equal)
+                           (cl-position "currency" cands :test #'equal)))))))
       (kill-buffer buf))))
 
 ;;; parity-tests.el ends here

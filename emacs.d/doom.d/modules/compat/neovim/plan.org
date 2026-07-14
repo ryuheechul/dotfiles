@@ -203,13 +203,30 @@ enabled in compat/neovim. saveplace's default ignore regexp already
 excludes COMMIT_EDITMSG, matching nvim's gitcommit exclusion.
 
 ** DONE verify smartcase search
-confirmed: ~evil-ex-search-case~ is ~smart~ (2026-07-04).
+confirmed: ~evil-ex-search-case~ is ~smart~ (2026-07-04), which is exactly
+nvim's search config - both ~ignorecase~ AND ~smartcase~ set
+([[file:../../../../../nvim/lua/boot/misc.lua][boot/misc.lua]]:35-36), not plain case-insensitivity. re-verified
+functionally on a "case sensitive?" report (2026-07-13): the ~/~ key is
+~evil-ex-search-forward~ (evil-search module), and "smart" means a
+lowercase pattern folds case (~/banana~ finds ~BANANA~) while any uppercase
+letter forces a sensitive match (~/Banana~ finds only ~Banana~) - same feel
+as nvim, which reads as "insensitive" in daily use only because lowercase
+input is the common case. lower-vs-upper behavior pinned by ~parity/~ test.
 
 ** DONE yank highlight
 ~:ui ophints~ (enabled).
 
 ** DONE undofile
-~:emacs undo~ (enabled).
+~:emacs undo~ (enabled). completion+undo interaction verified on an "undo
+felt strange after selecting a completion" report (2026-07-13): with
+~evil-want-fine-undo~ nil an insert session is a single undo step, so
+accepting a corfu candidate then ~u~ reverts the whole session in one go and
+~C-r~ restores it (matching nvim's insert-session grouping), and corfu's
+preview is not committed on ESC (doom quits corfu on insert-state exit). no
+defect found across plain/cycled/replace/yasnippet-snippet paths; only the
+async ~corfu-auto~ timing a batch daemon can't drive is left unprobed.
+invariants pinned by the ~parity/corfu-undo-*~ / ~parity/corfu-escape-*~
+tests.
 
 ** DONE clipboard sync
 Emacs default + ~:os (tty +osc)~ for OSC 52 (enabled). OSC 52 turned
@@ -226,6 +243,29 @@ which can't be fully ported anyway (see [[file:./config.el][config.el]]).
 
 Mostly "turn on a doom module." From the plugin inventory in
 [[file:../../../../../nvim/lua/plugins/][nvim/lua/plugins/]].
+
+** Completion sources (nvim-cmp parity map)
+
+Which completion source is active, and in what order. Unlike nvim-cmp (one
+merged menu), emacs' ~completion-at-point-functions~ is a CHAIN: the first
+capf that matches wins and shadows the rest, so order and any explicit
+merging matter. The cmp-* entries below detail each; this is the summary.
+
+| nvim-cmp source | emacs capf                   | active in         | priority / notes                                             |
+|-----------------+------------------------------+-------------------+--------------------------------------------------------------|
+| path            | ~cape-file~                  | prog, text, conf  | first (depth -10); wins for ~./~ ~../~, descends into dirs    |
+| lsp             | eglot capf                   | prog, lsp-attached | primary code source                                          |
+| luasnip         | ~yasnippet-capf~             | modes with yas on | alongside lsp (~:editor snippets~)                           |
+| buffer          | ~cape-dabbrev~               | prog, text, conf  | fallback (depth 20); in text, merged and ranked ABOVE spell  |
+| spell           | ~ispell-completion-at-point~ | text only         | lowest; merged after buffer so its many words don't bury it  |
+| lsp signature   | eglot + eldoc                | prog              | eldoc/hover, not a corfu menu source                         |
+
+# short cells here, so this table survives outside emacs (no folded links) -
+# unlike the "Where things go" table above; still nicer via the `gloworg' alias
+
+In text-mode the buffer + spell sources are combined into one
+~cape-capf-super~ (so both show at once, buffer first); everywhere else the
+chain stands, with path highest and buffer as a low-priority fallback.
 
 ** TODO vim-visual-multi
 Enable doom ~:editor multiple-cursors~ (evil-multiedit/evil-mc, currently
@@ -274,6 +314,60 @@ text-mode, so they're covered). corfu-auto's 2-char prefix means ~./~
 or ~../~ pops on its own; minibuffer paths were already fine via the
 built-in file completion.
 
+follow-up (2026-07-13): completing a DIRECTORY should keep offering its
+contents (nvim cmp-path descends as you go deeper), but corfu stopped at the
+inserted ~dir/~ - ~cape-file~ ships no ~:exit-function~, so nothing
+re-triggered completion. added ~+neovim/cape-file-continue-in-dir-a~
+([[file:./config.el][config.el]], a ~:filter-return~ advice) that injects an exit-function
+re-invoking ~completion-at-point~ whenever the inserted candidate ends in
+~/~; fires for RET (a dir picked from several) and TAB (a lone dir) alike and
+recurses as you descend. this is also why ~+neovim/corfu-tab~'s lone-match
+branch is now ~corfu-insert~ rather than ~corfu-complete~ (the exit-function
+drives the directory continuation, so the simpler insert is enough). pinned
+by ~parity/corfu-file-descends-into-directory~.
+
+** DONE cmp-buffer (complete words from the buffer) (2026-07-13)
+nvim's ~buffer~ cmp source (completion.lua, ~keyword_length = 4~) suggests
+words already typed in the buffer - "apple" is there, type ~app~, it
+completes. emacs had nothing: doom gates the equivalent (~cape-dabbrev~)
+behind the corfu module's ~+dabbrev~ flag, which ~(corfu +icons)~
+([[file:../../../init.el][init.el]]) doesn't set, so ~cape-dabbrev~ was absent from the capf list
+(prog buffers had only ~cape-file~). wired ~cape-dabbrev~ in directly
+([[file:./config.el][config.el]], ~+neovim/add-cape-dabbrev-h~ on the prog/text/conf hooks) at
+depth 20, a low-priority fallback after lsp/file - the ordering nvim also
+gives its ~buffer~ source. corfu-auto's 2-char prefix triggers it a touch
+earlier than nvim's keyword_length 4, which is the responsive feel it's
+wanted for. pinned by ~parity/buffer-word-completion~.
+
+edge case (2026-07-13): nvim-cmp merges every source into one menu, but
+emacs' ~completion-at-point-functions~ is a CHAIN - the first capf that
+returns matches wins, even when both are ~:exclusive no~ (that only means
+"fall through if I match nothing", not "merge"). so in a prose buffer the
+spell source (~ispell-completion-at-point~, text-mode only) shadowed
+~cape-dabbrev~: typing ~curr~ next to a ~current-base16~ showed only
+dictionary words until the word was finished. merged the two with
+~cape-capf-super~ ([[file:./config.el][config.el]],
+~+neovim/merge-spell-and-buffer-completion-h~) so spelling and buffer words
+appear together, added ahead (depth -1) of the standalone entries so it wins
+and ~cape-file~ (depth -10) still takes real paths first. scoped to
+text-mode (prog's flyspell only flags; conf has no spell capf to shadow).
+prog-mode's lsp-vs-dabbrev shadowing is the same chain limitation but left
+as-is (lsp dominates and an eglot super-capf is riskier). pinned by
+~parity/prose-completion-merges-spell-and-buffer~.
+
+ordering follow-up (2026-07-13): merged, the spell source's dozens of
+dictionary words buried the one buffer word - "current-base16" sank to the
+BOTTOM. source order alone can't fix it: the completion style (hotfuzz) sorts
+by fuzzy score, and cape-super's ~:display-sort-function~ is ~identity~
+(keeps that score order). ~corfu--sort-function~ consults
+~corfu-sort-override-function~ FIRST (ahead of any display-sort-function), so
+set it buffer-locally (text-mode) to ~+neovim/corfu-buffer-words-first~,
+which partitions candidates that appear as a token in the buffer to the front
+(one buffer scan, ~[[:alnum:]_-]+~ so hyphenated dabbrev words like
+current-base16 count whole). spelling stays visible, just below the buffer
+words. pinned by ~parity/corfu-buffer-words-first-sort~ (unit) and
+~parity/prose-buffer-words-rank-first~ (live corfu popup).
+
 ** DONE ~TAB~ completes a lone candidate (2026-07-12)
 nvim's ~TAB~ (nvim-cmp, [[file:../../../../../nvim/lua/plugins/config/completion.lua][completion.lua]]) makes a single match feel
 like it just completes. doom binds corfu's ~TAB~ to ~corfu-next~
@@ -291,6 +385,18 @@ one press (cycled once, then closed/selected) - fixed by registering
 ~+neovim/corfu-tab~ in ~corfu-continue-commands~, as doom does for its own
 ~+corfu/*~ wrappers. all three now covered by ert (~parity/corfu-tab-*~ in
 [[file:../../../tests/parity-tests.el][tests/parity-tests.el]]).
+
+second fix (2026-07-13), "TAB skips the first candidate": most visible on
+~./~ path completion - the popup shows candidates but the first looks
+unselected, and the first ~TAB~ jumped to the SECOND. cause: ~corfu-preselect
+'first~ silently selects candidate 0, but corfu previews a candidate only
+when point differs from the preselect (~corfu--preview-current-p~), so
+candidate 0 shows unfilled, and ~corfu-next~ then advanced to candidate 1.
+nvim's completion.lua uses ~menuone,noselect~, so the first ~TAB~ lands ON
+the first candidate; matched by detaching the preselect on that first press
+(~corfu--goto~ 0) so candidate 0 becomes previewable. ~RET~ still inserts
+candidate 0 (index stays >= 0, no "embarrassing newline"), later presses
+cycle. pinned by ~parity/corfu-tab-selects-first-not-second~.
 
 ** DONE rainbow-delimiters
 Small ~use-package!~; doom has no module for it. Hooked on prog-mode in
