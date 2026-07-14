@@ -35,6 +35,71 @@ extra keystrokes to escape the picker just to type something new) - so
 it was reverted in favor of the tool's own native behavior, even though
 that reintroduced a small cross-tool inconsistency.
 
+## Instant by default
+
+Latency is a feature, not an afterthought. The gap between a keystroke and
+its visible effect is part of ergonomics: *maximum ergonomics* above is
+"fewer steps AND less time between 'I want X' and 'X happens'." Across every
+tool, the interactive path - typing, cursor motion, the completion popup,
+shell startup - is a budget to defend: work that doesn't have to happen
+*this* keystroke gets pushed off it, so responsiveness stays near-instant
+even as features accumulate.
+
+Three choices keep the budget:
+
+- **Keep the keystroke path clear** - anything not needed for the current
+  keystroke runs on an idle timer, async, or debounce instead of inline. A
+  signal that is never urgent can afford to lag (spell squiggles idle-batch
+  about a second behind typing); the cursor and the popup cannot.
+- **Cheap first, expensive last** - order work so the common, cheap path
+  resolves before the costly one is even attempted: an immediate native
+  provider before a subprocess or escape sequence (see *one clipboard,
+  every layer*), the fast completion sources ahead of the slow ones, a
+  single buffer scan rather than one per candidate.
+- **Measure, then bound** - a suspected cost is A/B'd, not assumed (a spell
+  lazy-batcher was once wrongly blamed for TUI misbehavior and re-tested to
+  clear it). When a cost is genuinely unavoidable, its ceiling is named and
+  capped rather than pretended away - a diff prettifier that shells out per
+  hunk is accepted *and* flagged "not instant on huge diffs," not shipped as
+  if it were free.
+
+The through-line: never make the interactive path pay for a feature that
+could wait, and when something must cost, know exactly what and cap it.
+
+## Legible on purpose
+
+Config is written to be re-read - by whoever comes to it next, needing to
+understand intent before touching anything. Two facets: the source is
+legible, and so is what it puts on screen.
+
+- **Comment the why over the what** - every non-obvious choice carries its
+  reason and the trade-off it accepted, and cross-references a theme here
+  instead of restating it (these docs are the source of truth; a config just
+  implements one). A decision that changed is edited in place, so what you
+  read is the current story, not a changelog to reconstruct.
+- **Make the screen legible too** - the same care extends to output:
+  syntax-highlighted diffs, visible whitespace, rainbow-matched brackets,
+  spell squiggles under prose. The terminal should read as clearly as a
+  graphical IDE, because most of the time it *is* the IDE.
+
+## Build once, compose everywhere
+
+Prefer small, single-purpose pieces with clean seams over monoliths, and
+build a capability once behind a stable interface rather than reimplementing
+it per tool. Most themes below are instances of this: nesting, the universal
+clipboard verbs, the one-tone bus.
+
+- **One mechanism, many consumers** - the same `delta` binary renders both
+  the CLI git pager and Emacs's magit hunks; one `pbcopy`/`pbpaste` pair
+  serves every machine; one pub/sub signal drives every tone subscriber. A
+  new consumer subscribes to the seam, it doesn't fork the mechanism.
+- **Dumb parts, smart wiring** - each piece stays a narrow, context-free
+  check so the pieces remain freely combinable (the *nearest editor wins*
+  single-variable consumers; base shell functions that don't branch on
+  context, with editors reshaping behavior via override). The intelligence
+  lives in how they compose, not smeared into every part - which is also
+  what keeps each part individually readable and individually testable.
+
 ## Enter anywhere, nest anything
 
 Any tool can be the entry point - a bare terminal, tmux/zellij, emacs,
