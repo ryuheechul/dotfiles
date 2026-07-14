@@ -406,4 +406,38 @@ many words don't bury it - the earlier version left current-base16 last."
                            (cl-position "currency" cands :test #'equal)))))))
       (kill-buffer buf))))
 
+(ert-deftest parity/operator-jk-full-linewise ()
+  "dj/dk/yj span two FULL lines including the cursor line, like nvim.
+`evil-respect-visual-line-mode' makes bare j/k visual-line motions; without
+the operator-state override that left dj a 1-line exclusive delete that
+dropped the line below - the muscle-memory hazard this guards against."
+  (let ((buf (get-buffer-create "*parity-opjk*")))
+    (unwind-protect
+        (progn
+          (set-window-buffer (selected-window) buf)
+          (dolist (spec '(("dj" "line1\nline4\n")   ; cursor line + below
+                          ("dk" "line3\nline4\n")))  ; cursor line + above
+            (with-current-buffer buf
+              (visual-line-mode 1)
+              (erase-buffer)
+              (insert "line1\nline2\nline3\nline4\n")
+              (goto-char (point-min))
+              (forward-line 1)               ; on line2
+              (evil-local-mode 1)
+              (evil-normal-state)
+              (execute-kbd-macro (kbd (car spec)))
+              (should (equal (buffer-string) (cadr spec)))))
+          ;; yj yanks the two full lines (cursor + below), not one
+          (with-current-buffer buf
+            (erase-buffer)
+            (insert "line1\nline2\nline3\nline4\n")
+            (goto-char (point-min))
+            (forward-line 1)
+            (evil-normal-state)
+            (execute-kbd-macro (kbd "yj"))
+            (let ((interprogram-paste-function nil))
+              (should (equal (substring-no-properties (current-kill 0))
+                             "line2\nline3\n")))))
+      (kill-buffer buf))))
+
 ;;; parity-tests.el ends here

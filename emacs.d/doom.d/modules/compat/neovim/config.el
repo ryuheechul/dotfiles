@@ -160,6 +160,21 @@ survives; a single buffer scan keeps it cheap even for large candidate sets."
 ;; (bug#77438). living with one-column for now.
 (setq evil-move-beyond-eol t)
 
+;; keep dj/dk/yj/yk (and cj, >j, ...) linewise over FULL lines including the
+;; cursor line, like nvim. `evil-respect-visual-line-mode' (./init.el, for the
+;; visual-line j/k navigation) installs a visual-line-mode keymap in MOTION
+;; state binding j/k to the exclusive `evil-next-visual-line' /
+;; `evil-previous-visual-line' (evil-integration.el); operator-pending inherits
+;; motion state, so `dj' turned into a 1-line exclusive delete that dropped the
+;; line below - a real muscle-memory hazard (delete the wrong line). nvim
+;; sidesteps this by remapping j->gj in normal mode only, not operator-pending;
+;; mirror that by restoring the linewise motions in OPERATOR state, so
+;; operators span whole lines again while bare j/k keep visual-line nav.
+(after! evil
+  (evil-define-minor-mode-key 'operator 'visual-line-mode
+    "j" #'evil-next-line
+    "k" #'evil-previous-line))
+
 ;; show hidden/whitespace characters, same as
 ;; ../../../../../nvim/lua/boot/filetype.lua's `vim.opt.list' + `listchars'
 (use-package! whitespace

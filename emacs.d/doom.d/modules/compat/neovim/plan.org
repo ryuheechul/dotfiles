@@ -89,6 +89,18 @@ Pairs with the existing ~global-visual-line-mode~:
 ~(setq evil-respect-visual-line-mode t)~ in this module's [[file:./init.el][init.el]] -
 same before-evil-loads caveat as ~Y~.
 
+follow-up (2026-07-14), operator-motion regression: that setting installs a
+visual-line-mode keymap in MOTION state binding j/k to the EXCLUSIVE
+~evil-next-visual-line~/~evil-previous-visual-line~ (evil-integration.el), and
+operator-pending inherits motion state - so ~dj~/~dk~/~yj~/~yk~ stopped being
+linewise over two full lines and became a 1-line exclusive delete that
+dropped the adjacent line (a real muscle-memory hazard: delete the wrong
+line). nvim avoids this by remapping j->gj in normal mode only, never
+operator-pending; mirrored by restoring the linewise motions in OPERATOR
+state ([[file:./config.el][config.el]], ~evil-define-minor-mode-key~ on ~'operator~) so operators
+span whole lines again while bare j/k keep visual-line nav. pinned by
+~parity/operator-jk-full-linewise~.
+
 ** DONE ~,~ -> repeat last ex command
 nvim: ~@:~. Bound to ~evil-ex-repeat~ in morevil. Shadows evil's reverse
 f/t repeat (same trade nvim made); ~;~ still repeats forward.
