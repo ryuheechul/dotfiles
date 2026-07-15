@@ -167,6 +167,38 @@ to - for the fallback buffer (same trap smart-quit.el dodges)."
       (+workspace-kill ws))))
 (add-hook 'server-done-hook #'term-enhance/server-done-close-workspace)
 
+;; give every tty ($EDITOR = emacsclient -nw) client frame its OWN fresh
+;; workspace, never the shared `main'. doom's
+;; +workspaces-associate-frame-fn lands the FIRST/lone client frame in `main'
+;; - a no-file `emacsclient -nw', or just opening one file at a time (each is
+;; "the first client" while no other is alive) - and every main-dweller then
+;; shares it: instance B's q surfaces instance A's file, cursors move
+;; together, one quit closes both. a fresh #N per tty client isolates them;
+;; GUI clients (-c) defer to doom's default (a primary GUI emacsclient still
+;; wants `main'). quit side handled separately in
+;; ../../compat/neovim/smart-quit.el (workspace-scoped branch 4).
+(defun term-enhance/isolate-client-frame (frame &optional new-frame-p)
+  "Give a tty emacsclient FRAME its own workspace; else defer to doom."
+  (if (and persp-mode (not (display-graphic-p frame)))
+      (with-selected-frame frame
+        (+workspace-switch (format "#%s" (+workspace--generate-id)) t)
+        (unless (doom-real-buffer-p (current-buffer))
+          (switch-to-buffer (doom-fallback-buffer)))
+        (set-frame-parameter frame 'workspace (+workspace-current-name))
+        (persp-set-frame-buffer-predicate frame)
+        (run-at-time 0.1 nil #'+workspace/display))
+    (+workspaces-associate-frame-fn frame new-frame-p)))
+
+;; install it: persp-init-frame (persp-mode.el) consults
+;; `persp-emacsclient-init-frame-behaviour-override' for any frame carrying a
+;; `client' param, and a function value there does the whole assignment - so
+;; pointing it at the above replaces doom's default for emacsclient frames.
+;; `after! persp-mode' so this runs after doom's workspaces config set the
+;; default, and wins.
+(after! persp-mode
+  (setq persp-emacsclient-init-frame-behaviour-override
+        #'term-enhance/isolate-client-frame))
+
 ;; extension point for backend-specific setup that has to run on every
 ;; `prep-env-for-term' call but doesn't belong in this terminal-agnostic
 ;; function itself (e.g. vterm's `vterm-shell' tramp workaround, hooked in

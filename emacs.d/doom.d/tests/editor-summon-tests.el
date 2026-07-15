@@ -65,4 +65,15 @@ prefix - and leave local callers' paths alone."
   (let ((default-directory "/tmp/"))
     (should (equal (term-enhance/from-caller-fs "/tmp/x.txt") "/tmp/x.txt"))))
 
+(ert-deftest editor-summon/tty-client-frames-isolated-not-shared-main ()
+  "Regression (2026-07-15): a tty `emacsclient -nw' client frame must get its
+OWN workspace, never the shared `main' - doom's default lands the first (and
+no-file) client in main, which other clients then share, leaking buffers /
+cursor / quit across terminals. The override is installed on the emacsclient
+frame-init hook; a real tty client frame can't be created headlessly, so this
+guards the wiring, not the live frame."
+  (skip-unless (bound-and-true-p persp-mode))
+  (should (eq persp-emacsclient-init-frame-behaviour-override
+              #'term-enhance/isolate-client-frame)))
+
 ;;; editor-summon-tests.el ends here

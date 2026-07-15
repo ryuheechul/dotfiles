@@ -234,4 +234,41 @@ sibling test above)."
       (call-interactively #'close-window-or-buffer))
     (should quit-prompted)))
 
+(ert-deftest smart-quit/emacsclient-frame-empty-own-workspace-finishes-client ()
+  "Regression (2026-07-15): with $EDITOR = emacsclient -nw each terminal is
+its own client frame on one shared daemon. q on the last buffer of such a
+frame's OWN workspace must finish that client (return to its terminal), not
+surface another client frame's buffer or switch into its workspace - the
+a.txt-leaking-into-b bug. The client frame is simulated via stubs; a real
+second tty client can't be driven headlessly."
+  (skip-unless (bound-and-true-p persp-mode))
+  (let* ((origin-ws (+workspace-current-name))
+         (file-buf (generate-new-buffer "smart-quit-test-client-file"))
+         (orig-fp (symbol-function 'frame-parameter))
+         (killed nil)
+         own-ws)
+    (unwind-protect
+        (progn
+          (delete-other-windows)
+          (+workspace/new)
+          (setq own-ws (+workspace-current-name))
+          (switch-to-buffer file-buf)
+          (cl-letf (((symbol-function 'display-graphic-p) (lambda (&rest _) nil))
+                    ((symbol-function 'frame-parameter)
+                     (lambda (f p) (cond ((eq p 'client) 'fake-client)
+                                         ((eq p 'workspace) own-ws)
+                                         (t (funcall orig-fp f p)))))
+                    ((symbol-function 'save-buffers-kill-terminal)
+                     (lambda (&rest _) (setq killed t))))
+            (call-interactively #'close-window-or-buffer))
+          (should killed)
+          ;; and it did NOT switch into some other workspace
+          (should (equal (+workspace-current-name) own-ws)))
+      (when (and own-ws (+workspace-exists-p own-ws)
+                 (not (equal own-ws origin-ws)))
+        (unless (equal (+workspace-current-name) origin-ws)
+          (+workspace-switch origin-ws))
+        (+workspace-kill own-ws))
+      (when (buffer-live-p file-buf) (kill-buffer file-buf)))))
+
 ;;; smart-quit-tests.el ends here

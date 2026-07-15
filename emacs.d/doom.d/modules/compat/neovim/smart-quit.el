@@ -36,8 +36,10 @@
 ;; *scratch*         | any                  | yes (file open)  | -            | just close/bury scratch, back to that file
 ;;
 ;; "other real buf?" = `doom-real-buffer-list' has something left besides
-;; the buffer being closed. both *scratch* and *doom* count as "unreal" by
-;; doom's own rules. multiple MAIN windows open route through
+;; the buffer being closed - scoped to the CURRENT WORKSPACE, not the whole
+;; daemon, so a sibling `emacsclient -nw' client frame's file never counts
+;; (see the branch-4 comment on shared-daemon isolation). both *scratch* and
+;; *doom* count as "unreal" by doom's own rules. multiple MAIN windows route through
 ;; `+workspace/close-window-or-workspace' instead (its own
 ;; dedicated/workspace/frame cascade already handles that well - not
 ;; reinvented here). `q' typed AT a terminal's shell prompt is the shell
@@ -75,12 +77,22 @@ the full behavior matrix."
     (+workspace/close-window-or-workspace))
    ;; 4. only main window left
    (t
+    ;; buffer/unsaved checks are scoped to the CURRENT WORKSPACE, not the
+    ;; whole daemon: with $EDITOR = `emacsclient -nw' each terminal is its own
+    ;; client frame on one shared daemon, and doom gives each a fresh
+    ;; workspace (+workspaces-associate-frame-fn) - but a GLOBAL
+    ;; `doom-real-buffer-list' let frame B's last-buffer q see frame A's file
+    ;; and fall back to it (a.txt leaking into b's terminal). the summoned-
+    ;; -workspace path (server-window-workspace) already isolates per
+    ;; workspace, so scoping here matches it.
     (let* ((other-real-buffers
-            (cl-remove (current-buffer) (doom-real-buffer-list) :test #'eq))
+            (cl-remove (current-buffer)
+                       (doom-real-buffer-list (+workspace-buffer-list))
+                       :test #'eq))
            (unsaved-somewhere-p
             (seq-some
              (lambda (b) (and (buffer-file-name b) (buffer-modified-p b)))
-             (buffer-list)))
+             (+workspace-buffer-list)))
            (side-window-present (seq-some #'window-side-p (window-list)))
            (emacsclient-tui-p
             (and (not (display-graphic-p)) (frame-parameter nil 'client))))
@@ -109,6 +121,17 @@ the full behavior matrix."
                      (not (eq w (selected-window)))
                      (eq (window-buffer w) (window-buffer (selected-window))))
             (delete-window w))))
+       ;; 4a'. an emacsclient tty frame whose OWN workspace just emptied:
+       ;; finish the client and return to its terminal. MUST precede the
+       ;; workspace branch below - on a shared daemon `+workspace-list-names'
+       ;; is global, so that branch would otherwise switch this frame into
+       ;; ANOTHER client frame's workspace (the a.txt-into-b leak). scoped to
+       ;; the frame's own workspace (the #N +workspaces-associate-frame-fn
+       ;; stamped on it) so a single client using workspaces as tabs still
+       ;; falls back to its other tab via the workspace branch.
+       ((and emacsclient-tui-p
+             (equal (+workspace-current-name) (frame-parameter nil 'workspace)))
+        (save-buffers-kill-terminal))
        ;; 4b. nothing else in THIS workspace - but other workspaces still
        ;; live (e.g. the terminal/nvim stack that summoned this file
        ;; into its own workspace via
