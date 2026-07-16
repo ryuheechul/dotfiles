@@ -440,4 +440,12 @@ dropped the line below - the muscle-memory hazard this guards against."
                              "line2\nline3\n")))))
       (kill-buffer buf))))
 
+(ert-deftest parity/treemacs-roots-at-current-project ()
+  "SPC f t / SPC t f open the sidebar rooted at the CURRENT project
+(+treemacs/toggle), not raw `treemacs' - which reopens the last persisted
+session (the wrong dir on a shared daemon, since treemacs state is global
+apart from its per-persp scope)."
+  (dolist (keys '("f t" "t f"))
+    (should (eq (lookup-key doom-leader-map (kbd keys)) '+treemacs/toggle))))
+
 ;;; parity-tests.el ends here

@@ -153,17 +153,25 @@
 ;; file tree
 (setq treemacs-position 'right)
 
+;; +treemacs/toggle, not the raw `treemacs' command: raw `treemacs' reopens
+;; the last persisted session (doom's own docstring calls that "old
+;; functionality"), so on a shared daemon it shows whatever directory some
+;; other client left it at, not the one this buffer/emacsclient is in.
+;; +treemacs/toggle roots at the CURRENT project exclusively (default-directory
+;; is correct in a client frame - verified), and toggles. treemacs is
+;; persp-scoped (treemacs-set-scope-type 'Perspectives), so each client's own
+;; workspace keeps its own tree.
 (map! :leader
       :prefix "f"
       :g
       "t"
-      #'treemacs)
+      #'+treemacs/toggle)
 
 (map! :leader
       :prefix "t"
       :g
       "f"
-      #'treemacs)
+      #'+treemacs/toggle)
 
 ;; clear highlight by search (/)
 (map! :leader
