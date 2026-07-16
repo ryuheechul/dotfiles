@@ -251,6 +251,27 @@ Doom hl-line. cursorcolumn intentionally skipped: emacs has no
 first-class equivalent and it mattered mostly alongside ~virtualedit=all~,
 which can't be fully ported anyway (see [[file:./config.el][config.el]]).
 
+** DONE colorcolumn (long-line hint) (2026-07-15)
+a subtle vertical rule at the line-width limit, drawn by each editor's display
+engine. emacs ([[file:./config.el][config.el]]): ~display-fill-column-indicator-mode~ (prog/text/conf) in
+the ~fill-column-indicator~ face (a muted grey already - no override needed).
+nvim ([[file:../../../../../nvim/lua/boot/misc.lua][nvim/lua/boot/misc.lua]]): ~colorcolumn=+0~, an offset from ~textwidth~.
+
+*One source of truth for the width lives in [[file:../../../../../.editorconfig][.editorconfig]]* (~max_line_length =
+100~, symlinked to ~~/.editorconfig~), the shared home for cross-editor
+settings. neither editor hardcodes 100: emacs' ~editorconfig~ module (enabled in
+[[file:../init.el][init.el]]) sets ~fill-column~ from it, and ~display-fill-column-indicator-column~
+stays at its ~t~ default to track that; nvim's built-in editorconfig sets
+~textwidth~, and ~+0~ tracks that. 100 = modern width that still survives a
+side-by-side split.
+
+the long-line TEXT is deliberately NOT painted: the loud option is
+whitespace-mode's ~lines~ style (itself gated by ~whitespace-line-column~, nil =
+~fill-column~), and the off-switch is just leaving ~lines~ out of the
+whitespace-style, which this module does (a stale daemon on the default style
+still shows the red tail until restarted). pinned by
+~parity/long-line-hint-is-subtle-rule-not-aggressive-colour~.
+
 * Phase 3: plugin equivalents
 
 Mostly "turn on a doom module." From the plugin inventory in

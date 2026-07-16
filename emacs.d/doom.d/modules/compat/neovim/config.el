@@ -200,6 +200,19 @@ survives; a single buffer scan keeps it cheap even for large candidate sets."
 ;;   nothing here - emacs already shows the same thing natively via fringe arrows
 ;;   whenever `truncate-lines' is set on a buffer
 
+;; a subtle long-line hint, like nvim's colorcolumn but NON-aggressive: a thin
+;; vertical rule in the `fill-column-indicator' face (a muted grey already, no
+;; override needed), drawn by the display engine. the column is NOT hardcoded -
+;; `display-fill-column-indicator-column' stays at its `t' default, which tracks
+;; `fill-column', and the `editorconfig' module sets that from `max_line_length'
+;; in ../../../../../.editorconfig (100) - the one source of truth, shared with
+;; nvim's `colorcolumn'. the long-line TEXT is left undecorated on purpose: the
+;; "special painting" past the column is whitespace-mode's `lines' style, and
+;; the off-switch is simply leaving `lines' out of the whitespace-style above,
+;; which this module does. prog/text/conf only, so dashboards/popups stay clean.
+(add-hook! '(prog-mode-hook text-mode-hook conf-mode-hook)
+  #'display-fill-column-indicator-mode)
+
 ;; make `q' mimic neovim's overall quit semantics - see ./smart-quit.el
 (load! "smart-quit")
 

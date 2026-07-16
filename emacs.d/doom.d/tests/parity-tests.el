@@ -440,6 +440,29 @@ dropped the line below - the muscle-memory hazard this guards against."
                              "line2\nline3\n")))))
       (kill-buffer buf))))
 
+(ert-deftest parity/long-line-hint-is-subtle-rule-not-aggressive-colour ()
+  "Long lines get a dim vertical rule at `fill-column'
+(display-fill-column-indicator), not whitespace-mode's `lines' style
+painting the whole tail in the loud `whitespace-line' face."
+  (require 'whitespace)
+  (should-not (memq 'lines whitespace-style))
+  ;; column is not hardcoded - the indicator tracks `fill-column' (its `t'
+  ;; default), and the `editorconfig' module sets `fill-column' from
+  ;; `max_line_length' (100) in the repo .editorconfig: one source of truth
+  (should (eq (default-value 'display-fill-column-indicator-column) t))
+  ;; doom turns editorconfig-mode on at the first real buffer, which a cold
+  ;; test daemon has not seen yet - force it, then a real file must pick up 100
+  (require 'editorconfig)
+  (editorconfig-mode 1)
+  (let ((buf (find-file-noselect (expand-file-name "init.el" doom-user-dir))))
+    (unwind-protect
+        (with-current-buffer buf (should (= fill-column 100)))
+      (kill-buffer buf)))
+  (dolist (mode '(emacs-lisp-mode text-mode conf-unix-mode))
+    (with-temp-buffer
+      (funcall mode)
+      (should (bound-and-true-p display-fill-column-indicator-mode)))))
+
 (ert-deftest parity/treemacs-roots-at-current-project ()
   "SPC f t / SPC t f open the sidebar rooted at the CURRENT project
 (+treemacs/toggle), not raw `treemacs' - which reopens the last persisted

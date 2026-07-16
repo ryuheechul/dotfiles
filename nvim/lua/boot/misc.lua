@@ -19,6 +19,12 @@ vim.o.spell = true
 -- Make line numbers default
 vim.wo.number = true
 
+-- Long-line guide: a rule at the line-width limit, the counterpart to emacs'
+-- fill-column indicator. '+0' offsets from 'textwidth', which the built-in
+-- editorconfig support sets from `max_line_length` in ../../../.editorconfig -
+-- so the width lives once there, and this draws nothing where textwidth is 0.
+vim.o.colorcolumn = '+0'
+
 -- Do not save when switching buffers
 vim.o.hidden = true
 

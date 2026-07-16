@@ -6,13 +6,37 @@
 
 # https://editorconfig.org/
 
+# who reads this file:
+#   emacs - the `editorconfig` module, enabled in emacs.d/doom.d/init.el
+#   nvim  - built-in support, on by default (:help editorconfig)
+# each option below notes the nvim -> emacs option it drives.
+
 root = true
 
 [*]
+# indent char
+#   nvim  -> `expandtab`
+#   emacs -> `indent-tabs-mode`
 indent_style = space
+# indent width
+#   nvim  -> `shiftwidth`
+#   emacs -> the mode's offset (e.g. `lua-indent-level`)
 indent_size = 2
+# strip trailing on save
+#   nvim  -> `BufWritePre` autocmd
+#   emacs -> `ws-butler` (enabled via `:editor whitespace +trim` in init.el),
+#            which runs regardless of this line and trims only the lines you
+#            touched - unlike the editorconfig default `delete-trailing-whitespace`,
+#            which rewrites the whole buffer
 trim_trailing_whitespace = true
+# ensure final newline
+#   nvim  -> `fixeol`
+#   emacs -> `require-final-newline`
 insert_final_newline = true
+# line width
+#   nvim  -> `textwidth` (drawn by `colorcolumn`)
+#   emacs -> `fill-column` (drawn by the fill-column indicator)
+max_line_length = 100
 
 [*.py]
 indent_size = 4
