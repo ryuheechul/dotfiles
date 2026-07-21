@@ -1,6 +1,10 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "default_agent": "plan",
+  // Hybrid agent: plans first, builds after user approval.
+  // Needed because OpenCode lacks a built-in tool to switch primary agents:
+  // - https://github.com/anomalyco/opencode/issues/6781
+  // - https://github.com/anomalyco/opencode/issues/7801
+  "default_agent": "plan-build",
   "mcp": {
     "context-mode": {
       "type": "local",
