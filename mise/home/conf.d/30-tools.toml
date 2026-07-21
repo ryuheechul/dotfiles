@@ -6,8 +6,10 @@
 # adding a new tool" in ../../README.md
 [tools]
 bun = "latest"
+codex = "latest"
 claude-code = "latest"
 "github:liamg/grace" = { version = "latest", os = ["linux/x86_64"] }
 "npm:@earendil-works/pi-coding-agent" = "latest"
 "npm:hunkdiff" = "latest"
+opencode = "latest"
 worktrunk = "latest"

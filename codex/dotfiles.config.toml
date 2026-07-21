@@ -1,0 +1,31 @@
+# Portable Codex preferences. Runtime state remains in ~/.codex/config.toml.
+model = "gpt-5.6-terra"
+model_reasoning_effort = "medium"
+
+# Context Mode's user-level setup must stay in ~/.codex/config.toml:
+# [plugins."context-mode@context-mode"]
+# enabled = true
+#
+# Recreate it with:
+# `codex plugin marketplace add mksglu/context-mode`
+
+[tui]
+theme = "github"
+
+[tui.keymap.global]
+# Match the external-editor shortcut used by the other coding harnesses.
+open_external_editor = "ctrl-e"
+
+# Tab normally queues a draft while Codex is working and submits it otherwise.
+# Unbind tab from queuing.
+# So Tab should be reserved just for an active list/completion selection instead.
+queue = []
+
+[tui.keymap.composer]
+# The composer has its own queue binding, so unbind it here as well.
+queue = []
+
+[tui.keymap.editor]
+# Ctrl-E is otherwise bound to “move to end of line” in the text editor.
+# Release it so the global external-editor binding handles the key.
+move_line_end = []

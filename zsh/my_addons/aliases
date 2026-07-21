@@ -234,6 +234,18 @@ gdcn() { git diff --cached "$@" | diffnav }
 # do this again although this is done by ../aliases already since this get overwritten by something along the way (probably OMZ)
 alias l="ls -lah -g --git"
 
+# apply profile where it can and works
+codex () {
+  case "${1:-}" in
+    plugin|features|login|logout|update|doctor|completion|app|mcp|mcp-server|app-server|remote-control|cloud|exec-server|help|-h|--help|-V|--version)
+      command codex "$@"
+      ;;
+    *)
+      command codex --profile dotfiles "$@"
+      ;;
+  esac
+}
+
  # https://www.reddit.com/r/bash/comments/tkftlv/comment/iuhhz9g
 _nclr () { local j; for ((j = 0; j <= "${1:-1}"; j++ )); do tput cuu1; done; tput ed; }
 

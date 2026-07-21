@@ -82,6 +82,7 @@ done
 "~/.config/doom" = "~/.config/dfs-rhc/emacs.d/doom.d"
 # nvim
 "~/.config/nvim" = "~/.config/dfs-rhc/nvim"
+"~/.codex/dotfiles.config.toml" = "~/.config/dfs-rhc/codex/dotfiles.config.toml"
 # claude
 "~/.claude/settings.json" = "~/.config/dfs-rhc/claude/settings.json"
 "~/.claude/CLAUDE.md" = "~/.config/dfs-rhc/claude/CLAUDE.md"
