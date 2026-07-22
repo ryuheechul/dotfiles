@@ -24,10 +24,10 @@ indent_style = space
 indent_size = 2
 # strip trailing on save
 #   nvim  -> `BufWritePre` autocmd
-#   emacs -> `ws-butler` (enabled via `:editor whitespace +trim` in init.el),
-#            which runs regardless of this line and trims only the lines you
-#            touched - unlike the editorconfig default `delete-trailing-whitespace`,
-#            which rewrites the whole buffer
+#   emacs -> `editorconfig--delete-trailing-whitespace`, a whole-buffer
+#            before-save hook. `ws-butler` also runs, but its touched-lines-only
+#            behavior cannot limit editorconfig's separate hook; the *.el
+#            escape hatch below leaves its save-time cleanup to ws-butler.
 trim_trailing_whitespace = true
 # ensure final newline
 #   nvim  -> `fixeol`
@@ -37,6 +37,13 @@ insert_final_newline = true
 #   nvim  -> `textwidth` (drawn by `colorcolumn`)
 #   emacs -> `fill-column` (drawn by the fill-column indicator)
 max_line_length = 100
+
+[*.el]
+# Emacs Lisp's mode-owned indentation is normally dynamic (`lisp-indent-offset'
+# nil); forcing the global width rewrites existing Lisp when it is indented.
+indent_size = unset
+# Leave save-time cleanup to ws-butler, which limits it to touched lines.
+trim_trailing_whitespace = unset
 
 [*.py]
 indent_size = 4
