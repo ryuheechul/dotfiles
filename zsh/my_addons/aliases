@@ -394,8 +394,11 @@ alias ddgr='ddgr -n 3'
 alias nix-collect-garbage='nix-collect-garbage --delete-older-than 30d && time nix-store --optimise'
 is-nixos && alias nix-collect-garbage='nix-collect-garbage --delete-older-than 30d; sudo nix-collect-garbage --delete-older-than 30d && time nix-store --optimise'
 
+# post switch-home cleanup
+alias _switch-home-post='evalcache-clear >/dev/null; znap-reset; bat cache --build; is-linux && fc-cache -rf'
+
 # `fc-cache -rf` until this is resolved https://github.com/NixOS/nixpkgs/issues/57780
-alias switch-home='{ home-manager switch && evalcache-clear >/dev/null; znap-reset; bat cache --build; is-linux && fc-cache -rf } |& nom'
+alias switch-home='{ home-manager switch && _switch-home-post } |& nom'
 
 # unifying interface of applying updated nix expressions for different systems
 alias switch-nix='switch-home' # this is default for a simple system that only uses home-manager
