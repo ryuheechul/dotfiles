@@ -225,8 +225,9 @@
        morevil             ; when there is more dark power needed
        client-enhance      ; best of both worlds: daemon sharing and client isolation
        term-enhance        ; tighter integration with my tools, backend-agnostic (ghostel/vterm)
+       web-enhance         ; browse the web in emacs, backend-agnostic (embr)
        soom                ; when doomemacs does not agree with me
-       org                 ; addtional stuff for org mode
+       org                 ; additional stuff for org mode
        lab)                ; where my new configs will be added initially
 
 ;; set it early here instead of ./config.el to avoid seeing frame changes on start up
