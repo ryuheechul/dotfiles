@@ -198,6 +198,7 @@
        :ext-lang
        (nix +lsp)         ; ./modules/ext-lang/nix/
        (lua +lsp)         ; ./modules/ext-lang/lua/
+       toml               ; ./modules/ext-lang/toml/
        typescript         ; ./modules/ext-lang/typescript/
 
        :email
@@ -222,6 +223,7 @@
        ;; from here and below are my more obvious private modules
        :my-custom          ; my own modules
        morevil             ; when there is more dark power needed
+       client-enhance      ; best of both worlds: daemon sharing and client isolation
        term-enhance        ; tighter integration with my tools, backend-agnostic (ghostel/vterm)
        soom                ; when doomemacs does not agree with me
        org                 ; addtional stuff for org mode

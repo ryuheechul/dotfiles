@@ -63,9 +63,9 @@ if test "${term_in_emacs}" = "vterm"; then
 fi
 # (under ghostel, nvim needs no TERM workaround - xterm-ghostty handles cursor shapes)
 
-# ($EDITOR is already `emacsclient` here - inherited from this emacs's
-# env, set by prep-env-for-term with EMACS_SOCKET_NAME pointing at THIS
-# emacs; plain client = blocking (git commit works), opened in its own
+# ($EDITOR is already `emacsclient` here - inherited from this Emacs's
+# env; term-enhance exports EMACS_SOCKET_NAME for THIS local Emacs. Plain
+# client = blocking (git commit works), opened in its own
 # workspace via `server-window', C-x #/q closes it and returns. tramp
 # shells never see it: plain setenv doesn't reach the remote env)
 if [[ "${INSIDE_EMACS}" != *tramp* ]]; then

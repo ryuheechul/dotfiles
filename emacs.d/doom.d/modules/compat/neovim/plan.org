@@ -84,6 +84,15 @@ init.el files run at doom's early-init stage, before any package (evil
 included) loads, which is what the ~evil-want-*~ family requires;
 config.el is too late. (evil's default Y = whole line; nvim's = y$.)
 
+** DONE ~J~ -> join lines
+Evil's active normal-state binding already handles ordinary adjacent lines
+(pinned by ~parity/J-joins-lines~).  The TOML-specific failure was Doom's
+comment-aware join advice: Emacs 30's ~toml-ts-mode~ recognizes =#= comments
+through tree-sitter but leaves ~comment-start~ nil, so the advice passed nil
+to ~comment-search-backward~.  :ext-lang toml now supplies TOML's local
+comment delimiters, restoring nvim's =# one= + =# two= -> =# one two=; pinned
+by ~parity/J-joins-toml-comments~.
+
 ** DONE ~j~/~k~ move by visual line when no count
 Pairs with the existing ~global-visual-line-mode~:
 ~(setq evil-respect-visual-line-mode t)~ in this module's [[file:./init.el][init.el]] -
@@ -169,6 +178,16 @@ set-window-buffer does not change the current buffer).
 * Phase 2: QoL behaviors
 
 From [[file:../../../../../nvim/lua/boot/misc.lua][boot/misc.lua]].
+
+** DONE emacsclient preserves its caller directory
+A no-file client used to retain the daemon's stale buffer-local
+~default-directory~, so Magit could open a project from another client.
+Emacs already receives the caller directory for every emacsclient process;
+at ~server-after-make-frame-hook~, my-custom/client-enhance persists its
+~server-client-directory~ on a per-client clone of Doom's dashboard buffer.
+The isolated TTY client workspace is now also tied to its frame
+and reclaimed in ~delete-frame-functions~, preventing unused =#N= workspaces
+from accumulating.  Both contracts are pinned by client-enhance ERT tests.
 
 ** DONE autoread
 nvim: ~autoread~ (+ shortmess tweak in boot/misc.lua) silently reloads a
@@ -537,7 +556,7 @@ on this starts, not a schedule. See [[*Read this first][Read this first]] above.
 * Open problems (emacs-specific, not nvim parity)
 
 ** DONE shared-daemon leakage across ~emacsclient -nw~ instances (2026-07-15)
-$EDITOR is ~emacsclient -nw~ ([[file:../../my-custom/term-enhance/][term-enhance]]), so each terminal that opens a file
+$EDITOR is ~emacsclient -nw~ ([[file:../../my-custom/client-enhance/][client-enhance]]), so each terminal that opens a file
 is a tty client frame on the one shared daemon - lightweight, but daemon
 state is global. observed: terminal B's ~q~ surfaced terminal A's file, the
 two frames' cursors moved together, and quitting one quit the other.
@@ -546,7 +565,7 @@ two causes, both leaning on doom's per-frame workspaces:
 - FRAME side: doom's ~+workspaces-associate-frame-fn~ sends the first/lone
   client frame to the SHARED ~main~ (only later ones get a fresh ~#N~), so
   clients opened one-at-a-time all pile into ~main~ and share it.
-  ~term-enhance/isolate-client-frame~ ([[file:../../my-custom/term-enhance/config.el][config.el]], installed as
+  ~client-enhance/isolate-client-frame~ ([[file:../../my-custom/client-enhance/config.el][config.el]], installed as
   ~persp-emacsclient-init-frame-behaviour-override~) gives every tty client
   its own ~#N~; GUI clients (-c) keep doom's default.
 - QUIT side: smart-quit ([[file:./smart-quit.el][smart-quit.el]] branch 4) used a GLOBAL
@@ -560,7 +579,7 @@ verified programmatically (~pty.fork~ execs real ~emacsclient -nw~ against a
 throwaway daemon, drained so frame redraws don't block it): two clients land
 in distinct ~#1~/~#2~ and their files stay put -
 ~(("main") ("#1" "a.txt") ("#2" "b.txt"))~. pinned by
-~editor-summon/tty-client-frames-isolated-not-shared-main~ and
+~client-enhance/tty-client-frames-isolated-not-shared-main~ and
 ~smart-quit/emacsclient-frame-empty-own-workspace-finishes-client~; the whole
 smart-quit matrix still passes.
 

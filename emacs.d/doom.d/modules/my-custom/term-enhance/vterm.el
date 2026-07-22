@@ -1,7 +1,7 @@
 ;;; $DOOMDIR/modules/my-custom/term-enhance/vterm.el -*- lexical-binding: t; -*-
 
 ;; everything specific to the vterm terminal backend. shared plumbing lives
-;; in ./config.el; ./integration.el decides whether any of this actually
+;; in ./environment.el, ./editor-bridge.el, and ./mux.el; ./integration.el decides whether any of this actually
 ;; gets bound to a key (ghostel wins by default - see
 ;; `term-enhance/backend-priority').
 
@@ -9,7 +9,7 @@
 (setq vterm-enable-manipulate-selection-data-by-osc52 t)
 
 ;; techincally not envvar but to clean up the mess made with tramp
-;; `vterm-shell' - hooked into ../config.el's `prep-env-for-term' since
+;; `vterm-shell' - hooked into ../environment.el's `prep-env-for-term' since
 ;; ghostel has no equivalent variable to reset. NOTE: this only matters for
 ;; local sessions - `vterm--get-shell' resolves remote/tramp buffers via
 ;; `vterm-tramp-shells' then tramp's own connection-local `shell-file-name'
@@ -108,14 +108,14 @@
               ;; decide to silently do nothing", which is exactly what
               ;; happens when called from here (the vterm_cmd bridge, not a
               ;; mouse event) - this was the "q keeps coming back" bug.
-              ;; the ../config.el helper wraps the `kill-current-buffer' it
+              ;; the ./mux.el helper wraps the `kill-current-buffer' it
               ;; tells you to use instead, minus the running-process prompt
               (term-enhance/kill-terminal-no-questions)))))
     ;; when 'vterm-buffer-name is not bound
     (+vterm/here nil)))
 
 ;; a hack to let zsh run a command on start up - conjunction with ../../../shell/source.zsh
-;; shown as a modal (see ./config.el's term-enhance/open-in-modal, matching
+;; shown as a modal (see ./editor-bridge.el's term-enhance/open-in-modal, matching
 ;; nvim's toggleterm float for opening emacs the other direction) rather
 ;; than a plain in-place window swap. `+vterm/here' can't be reused for
 ;; this - it explicitly does `(let (display-buffer-alist) (vterm ...))'
@@ -128,7 +128,7 @@
   ;; this will be read by ../../../shell/source.zsh
   (settermenv "INSIDE_EMACS_RUN_CMD_ON_START_UP" cmd)
   ;; not "*vterm-with-cmd*" - deliberately doesn't start with "*vterm" so
-  ;; ./config.el's exit hook can pattern-match it uniformly with
+  ;; ./editor-bridge.el's exit hook can pattern-match it uniformly with
   ;; ghostel-with-cmd's "*quick-editor-ghostel*"
   (setq vterm-buffer-name "*quick-editor-vterm*")
   (term-enhance/open-in-modal
@@ -164,11 +164,11 @@
       (if (string= (buffer-name) vterm-buffer-name)
           (vterm/full-w/toggle)
         ;; some other terminal buffer as the sole window (e.g. the popup
-        ;; one promoted to full frame) - shared body in ../config.el
+        ;; one promoted to full frame) - shared body in ./mux.el
         (term-enhance/bury-or-kill-sole-terminal)))
      ;; doom's popup terminal: same warm-hide reasoning
      ((and (fboundp '+popup-window-p) (+popup-window-p)) (+vterm/toggle nil))
-     ;; a plain split pane (the mw/ mw- ones) - shared body in ../config.el
+     ;; a plain split pane (the mw/ mw- ones) - shared body in ./mux.el
      (t (term-enhance/mux-close-pane)))))
 
 ;; Doom's own term/vterm/config.el hides the modeline via
@@ -182,7 +182,7 @@
   (if (string= (buffer-name) vterm-buffer-name)
       (mode-line-invisible-mode -1)))
 
-;; window cleanup on a plain `exit' - shared body in ../config.el
+;; window cleanup on a plain `exit' - shared body in ./mux.el
 ;; (`term-enhance/mux-close-window-on-exit'); `vterm-exit-functions' runs
 ;; this before `vterm-kill-buffer-on-exit' kills the buffer (see
 ;; `vterm--sentinel'), so the buffer's window is still discoverable here.
@@ -190,11 +190,11 @@
 ;; works unmodified
 (add-hook 'vterm-exit-functions #'term-enhance/mux-close-window-on-exit)
 ;; restores the pre-modal window layout once a vterm-with-cmd quick
-;; editor terminal exits - shared body in ../config.el
+;; editor terminal exits - shared body in ./editor-bridge.el
 (add-hook 'vterm-exit-functions #'term-enhance/close-quick-editor-wconf-on-exit)
 
 ;; vterm's half of the shared emacs-as-a-multiplexer commands
-;; (../config.el's `term-enhance/mux-new-shell'/`term-enhance/mux-zoom') for
+;; (./mux.el's `term-enhance/mux-new-shell'/`term-enhance/mux-zoom') for
 ;; the mw* aliases of ../../../../../zsh/integration/multiplexers: exposed
 ;; through vterm_cmd (the tty-bound bridge), mirroring ../ghostel.el
 (defun vterm/mux-new-shell (&optional winop)
@@ -212,7 +212,7 @@
   ;; terminal's own window, replacing it. find-file-other-window (like
   ;; ghostel already whitelists by default) avoids that, but doesn't
   ;; guarantee reusing a specific existing window either - see
-  ;; ../config.el's term-enhance/find-file-editor-window, what
+  ;; ./editor-bridge.el's term-enhance/find-file-editor-window, what
   ;; ../../../shell/source.zsh's `find-file' shell function actually calls
   (add-to-list 'vterm-eval-cmds '("find-file-editor-window" term-enhance/find-file-editor-window))
   ;; the no-arg `e' picker (../../../../../zsh/my_addons/aliases)

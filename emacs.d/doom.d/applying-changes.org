@@ -68,9 +68,9 @@ as part of a sync.
 
 - *=emacsclient= itself NEVER applies anything - do not "restart the
   client" expecting changes to take effect.* It is a dumb pipe: it loads
-  no config, ever; it only attaches to whatever daemon owns the socket
-  and inherits that daemon's state. All config loading happens exactly
-  once, at the /daemon's/ startup. So if a change appears to be picked
+  no config, ever; it only attaches to whichever Emacs server owns the socket
+  and inherits that server's state. All config loading happens exactly
+  once, at that Emacs instance's startup. So if a change appears to be picked
   up "after rerunning emacsclient", that is only because the daemon was
   restarted in between (e.g. by an agent verifying changes with the
   snippet above) - the rerun itself did nothing.

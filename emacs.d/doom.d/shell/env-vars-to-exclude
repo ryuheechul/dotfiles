@@ -86,8 +86,7 @@ hardeningDisable
 
 # only for doom sync - things that the shell must NOT unset.
 # When an editor starts handing a new per-session var to its children
-# (emacs: prep-env-for-term in
-# ../modules/my-custom/term-enhance/config.el, nvim: boot/misc.lua),
+# (emacs: term-enhance/config.el, nvim: boot/misc.lua),
 # list it here too - otherwise running 'doom sync' from a shell inside
 # an editor bakes that session's value into every future emacs launch.
 test -n "${FOR_DOOM_SYNC_ENV}" &&

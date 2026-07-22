@@ -31,7 +31,7 @@ one's?" at runtime instead of by assumption):
   `nvimclient` (nvr `--remote-tab-wait` + trap-close-for-term - nvim's
   own emacsclient, in `bin/path/nvim/` handed out by the editor itself),
   inside emacs it's plain `emacsclient` against the parent's own socket
-  (`EMACS_SOCKET_NAME`, handed down by `prep-env-for-term`) shown in
+  (`EMACS_SOCKET_NAME`, exported by term-enhance's environment preparation) shown in
   its own workspace via `server-window`, closed and returned from by
   `server-done-hook` - the same tab-in/tab-out shape on both editors.
   The bridges
@@ -83,10 +83,11 @@ How "nearest editor wins" is wired: the spawning tool scrubs the other
 editors' markers from the environment it hands to its children (emacs:
 `prep-env-for-term` in term-enhance; nvim: `boot/misc.lua`). Consumers
 (`zsh/integration/editors`) then stay dumb single-variable checks,
-mutually exclusive by construction. `EMACS_SOCKET_NAME` rides the same
-one-hop rule: each emacs overwrites it for its own terminals (unique
-PID-based server name), so `emacsclient` always reaches the nearest emacs,
-never a stale grandparent or an unrelated daemon.
+mutually exclusive by construction. `EMACS_SOCKET_NAME` follows the same
+one-hop rule: term-enhance exports the current Emacs server to its local
+terminal children (a unique PID-based name for regular Emacs, the default name
+for a daemon), so `emacsclient` reaches the nearest Emacs rather than a stale
+grandparent or unrelated daemon.
 
 The snapshot case: Doom's env file (`doom sync`) captures the invoking
 shell's environment for every future emacs launch, so a sync run from a

@@ -1,7 +1,7 @@
 ;;; $DOOMDIR/modules/my-custom/term-enhance/ghostel.el -*- lexical-binding: t; -*-
 
-;; everything specific to the ghostel terminal backend. shared plumbing
-;; (`settermenv', `prep-env-for-term', ...) lives in ./config.el; whether
+;; everything specific to the ghostel terminal backend. shared environment
+;; plumbing (`settermenv', `prep-env-for-term', ...) lives in ./environment.el; whether
 ;; any of this file's functions actually gets bound to a key is decided in
 ;; ./integration.el, not here.
 
@@ -71,7 +71,7 @@
               ;; reliably invoked only from the menu bar, otherwise it could
               ;; decide to silently do nothing", which is exactly what
               ;; happens when called from here (the ghostel_cmd bridge, not
-              ;; a mouse event); the ../config.el helper wraps the
+              ;; a mouse event); the ./mux.el helper wraps the
               ;; `kill-current-buffer' it tells you to use instead, minus
               ;; the running-process prompt
               (term-enhance/kill-terminal-no-questions)))))
@@ -104,14 +104,14 @@
     (kbd "C-l") (lambda () (interactive) (ghostel/mux--nav "l" #'evil-window-right))))
 
 ;; a hack to let zsh to run command on start up - conjunction with ../../../shell/source.zsh
-;; shown as a modal (see ./config.el's term-enhance/open-in-modal, matching
+;; shown as a modal (see ./editor-bridge.el's term-enhance/open-in-modal, matching
 ;; nvim's toggleterm float for opening emacs the other direction) rather
 ;; than a plain in-place window swap
 (defun ghostel-with-cmd (cmd)
   ;; this will be read by ../../../shell/source.zsh
   (settermenv "INSIDE_EMACS_RUN_CMD_ON_START_UP" cmd)
   ;; not "*ghostel-with-cmd*" - deliberately doesn't start with "*ghostel"
-  ;; so ./config.el's exit hook can pattern-match it uniformly with
+  ;; so ./editor-bridge.el's exit hook can pattern-match it uniformly with
   ;; vterm-with-cmd's "*quick-editor-vterm*"; +ghostel/here let-binds
   ;; `ghostel-buffer-name' internally so call `ghostel' directly instead
   (let ((ghostel-buffer-name (generate-new-buffer-name "*quick-editor-ghostel*")))
@@ -145,20 +145,20 @@
                (string= (buffer-name) (+ghostel--buffer-name)))
           (ghostel/full-w/toggle)
         ;; some other terminal buffer as the sole window (e.g. the popup
-        ;; one promoted to full frame) - shared body in ../config.el
+        ;; one promoted to full frame) - shared body in ./mux.el
         (term-enhance/bury-or-kill-sole-terminal)))
      ;; doom's popup terminal: same warm-hide reasoning
      ((and (fboundp '+popup-window-p) (+popup-window-p)) (+ghostel/toggle nil))
-     ;; a plain split pane (the mw/ mw- ones) - shared body in ../config.el
+     ;; a plain split pane (the mw/ mw- ones) - shared body in ./mux.el
      (t (term-enhance/mux-close-pane)))))
 
-;; window cleanup on a plain `exit' - shared body in ../config.el
+;; window cleanup on a plain `exit' - shared body in ./mux.el
 ;; (`term-enhance/mux-close-window-on-exit'); `ghostel-exit-functions' runs
 ;; this before `ghostel-kill-buffer-on-exit' kills the buffer (see
 ;; `ghostel--sentinel'), so the buffer's window is still discoverable here
 (add-hook 'ghostel-exit-functions #'term-enhance/mux-close-window-on-exit)
 ;; restores the pre-modal window layout once a ghostel-with-cmd quick
-;; editor terminal exits - shared body in ../config.el
+;; editor terminal exits - shared body in ./editor-bridge.el
 (add-hook 'ghostel-exit-functions #'term-enhance/close-quick-editor-wconf-on-exit)
 
 ;; the doom module hides the modeline via `mode-line-invisible-mode';
@@ -169,7 +169,7 @@
       (mode-line-invisible-mode -1)))
 
 ;; ghostel's half of the shared emacs-as-a-multiplexer commands
-;; (../config.el's `term-enhance/mux-new-shell'/`term-enhance/mux-zoom') for
+;; (./mux.el's `term-enhance/mux-new-shell'/`term-enhance/mux-zoom') for
 ;; the mw* aliases of ../../../../../zsh/integration/multiplexers: exposed
 ;; through ghostel_cmd (the tty-bound bridge) rather than emacsclient, which
 ;; would reach whichever instance owns the default server socket (e.g. a
@@ -186,7 +186,7 @@
   ;; let these consumable from shell side (via ghostel_cmd)
   ;; find-file-other-window (whitelisted by default) avoids replacing
   ;; this terminal's own window, but doesn't guarantee reusing a
-  ;; specific existing window either - see ../config.el's
+  ;; specific existing window either - see ./editor-bridge.el's
   ;; term-enhance/find-file-editor-window, what
   ;; ../../../shell/source.zsh's `find-file' shell function actually calls
   (add-to-list 'ghostel-eval-cmds '("find-file-editor-window" term-enhance/find-file-editor-window))

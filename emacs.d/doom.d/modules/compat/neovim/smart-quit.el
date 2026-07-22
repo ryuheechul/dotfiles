@@ -135,7 +135,7 @@ the full behavior matrix."
        ;; 4b. nothing else in THIS workspace - but other workspaces still
        ;; live (e.g. the terminal/nvim stack that summoned this file
        ;; into its own workspace via
-       ;; term-enhance/server-window-workspace): close the workspace
+       ;; client-enhance/server-window-workspace): close the workspace
        ;; like nvim closes a tab page on its last window's :q - never
        ;; the editor. Switch away BEFORE killing: doom's
        ;; +workspace/kill on the CURRENT workspace follows its switch

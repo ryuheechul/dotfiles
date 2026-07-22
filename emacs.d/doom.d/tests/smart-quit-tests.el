@@ -153,7 +153,7 @@ window/workspace/quit handling."
 
 (ert-deftest smart-quit/last-window-of-extra-workspace-returns-to-previous ()
   "Regression (2026-07-11): q on the last window of a summoned
-workspace (term-enhance/server-window-workspace) killed the whole
+workspace (client-enhance/server-window-workspace) killed the whole
 emacsclient - the last-main-window branch never considered other
 workspaces - and the first fix returned via doom's +workspace/kill on
 the CURRENT workspace, whose frame-predicate check swaps an \"unreal\"

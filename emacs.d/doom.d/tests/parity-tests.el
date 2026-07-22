@@ -46,6 +46,27 @@
     (let ((interprogram-paste-function nil))
       (should (equal (substring-no-properties (current-kill 0)) "def")))))
 
+(ert-deftest parity/J-joins-lines ()
+  "The baseline J binding joins ordinary adjacent lines, like Neovim."
+  (with-temp-buffer
+    (insert "first\nsecond\n")
+    (goto-char (point-min))
+    (evil-local-mode 1)
+    (evil-normal-state)
+    (call-interactively (key-binding "J"))
+    (should (equal (buffer-string) "first second\n"))))
+
+(ert-deftest parity/J-joins-toml-comments ()
+  "J joins adjacent TOML comments without retaining the second # prefix."
+  (with-temp-buffer
+    (toml-ts-mode)
+    (insert "# one\n# two\n")
+    (goto-char (point-min))
+    (evil-local-mode 1)
+    (evil-normal-state)
+    (call-interactively (key-binding "J"))
+    (should (equal (buffer-string) "# one two\n"))))
+
 (ert-deftest parity/percent-jumps-language-keywords ()
   "evil-matchit: % on a lua `if' lands on its `end' (vim-matchup parity)."
   (with-temp-buffer
