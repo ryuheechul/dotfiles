@@ -16,11 +16,13 @@ let
     config = config;
   };
   dconf = import ./dconf.nix { lib = lib; };
+  gc-roots = import ./extra-gc-roots.nix { };
   shims = import ./shims.nix { pkgs = pkgs; };
   imports = [
     prgs
     svcs
     dconf
+    gc-roots
     shims
   ];
 in
