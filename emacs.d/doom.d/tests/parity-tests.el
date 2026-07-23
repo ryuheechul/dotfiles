@@ -463,10 +463,13 @@ dropped the line below - the muscle-memory hazard this guards against."
 
 (ert-deftest parity/long-line-hint-is-subtle-rule-not-aggressive-colour ()
   "Long lines get a dim vertical rule at `fill-column'
-(display-fill-column-indicator), not whitespace-mode's `lines' style
-painting the whole tail in the loud `whitespace-line' face."
+(display-fill-column-indicator), not whitespace-mode's `lines' or
+`lines-tail' style painting the tail in the loud `whitespace-line' face.
+Doom's :editor whitespace defaults include `lines-tail'; the after! block
+in compat/neovim/config.el must exclude both."
   (require 'whitespace)
   (should-not (memq 'lines whitespace-style))
+  (should-not (memq 'lines-tail whitespace-style))
   ;; column is not hardcoded - the indicator tracks `fill-column' (its `t'
   ;; default), and the `editorconfig' module sets `fill-column' from
   ;; `max_line_length' (100) in the repo .editorconfig: one source of truth
