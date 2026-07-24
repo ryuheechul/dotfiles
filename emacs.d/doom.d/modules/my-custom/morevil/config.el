@@ -363,7 +363,7 @@ doc buffer in a terminal frame (e.g. ghostel/vterm)."
 ;; +lookup/definition; it only LOOKED broken in lua buffers - see
 ;; ../../ext-lang/lua/config.el): gl = follow the "link" like nvim's C-]
 ;; tag jump (first match, no picker - see +neovim/goto-link in
-;; ../../compat/neovim/config.el), gr = references. shadows accepted
+;; ../../compat/neovim/navigate.el), gr = references. shadows accepted
 ;; knowingly, mirroring nvim's own trades: gl was evil-lion's left-align
 ;; operator (gL right-align survives) and gr was doom's +eval:region
 ;; operator (gR still evals the buffer, and the SPC-level eval bindings

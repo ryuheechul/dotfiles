@@ -27,7 +27,7 @@ daily-use payoff stays in neovim land (see [[*Not porting (deliberately)][not po
 | home                        | concern                                 | examples already there                                                                                                                       |
 |-----------------------------+-----------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------|
 | [[file:../../my-custom/morevil/][morevil]]                     | muscle memory: keybindings, evil tweaks | jk-escape, q smart-quit binding, TAB/S-TAB windows, SPC TAB next buffer, C-hjkl + tmux handoff, SPC w / and w -, SPC s c nohighlight, gx, go |
-| [[file:./][compat/neovim]] (this module) | behavior/system parity                  | hotfuzz fuzzy completion, corfu preselect, virtualedit (onemore), listchars via whitespace-mode, [[file:./smart-quit.el][smart-quit.el]]                               |
+| [[file:./][compat/neovim]] (this module) | behavior/system parity                  | [[file:./completion.el][completion.el]], [[file:./visual-aid.el][visual-aid.el]], [[file:./smart-quit.el][smart-quit.el]], [[file:./clipboard.el][clipboard.el]], [[file:./spell.el][spell.el]] |
 | [[file:../../my-custom/term-enhance/][term-enhance]]                | terminal + multiplexer parity           | ghostel/vterm mux bridge, mw* aliases, q-as-pane-close, C-hjkl TUI passthrough                                                               |
 
 # outside emacs (nvim plugin, raw terminal, ...) this table looks ragged:
@@ -106,7 +106,7 @@ linewise over two full lines and became a 1-line exclusive delete that
 dropped the adjacent line (a real muscle-memory hazard: delete the wrong
 line). nvim avoids this by remapping j->gj in normal mode only, never
 operator-pending; mirrored by restoring the linewise motions in OPERATOR
-state ([[file:./config.el][config.el]], ~evil-define-minor-mode-key~ on ~'operator~) so operators
+state ([[file:./navigate.el][navigate.el]], ~evil-define-minor-mode-key~ on ~'operator~) so operators
 span whole lines again while bare j/k keep visual-line nav. pinned by
 ~parity/operator-jk-full-linewise~.
 
@@ -263,16 +263,16 @@ tests.
 Emacs default + ~:os (tty +osc)~ for OSC 52 (enabled). OSC 52 turned
 out to be write-only in practice (terminals refuse clipboard reads), so
 TTY-frame paste reads ~pbpaste~ via ~+neovim/frame-aware-paste~ in
-[[file:./config.el][config.el]] - GUI frames keep the native path (2026-07-11).
+[[file:./clipboard.el][clipboard.el]] - GUI frames keep the native path (2026-07-11).
 
 ** DONE cursorline
 Doom hl-line. cursorcolumn intentionally skipped: emacs has no
 first-class equivalent and it mattered mostly alongside ~virtualedit=all~,
-which can't be fully ported anyway (see [[file:./config.el][config.el]]).
+which can't be fully ported anyway (see [[file:./navigate.el][navigate.el]]).
 
 ** DONE colorcolumn (long-line hint) (2026-07-15)
 a subtle vertical rule at the line-width limit, drawn by each editor's display
-engine. emacs ([[file:./config.el][config.el]]): ~display-fill-column-indicator-mode~ (prog/text/conf) in
+engine. emacs ([[file:./visual-aid.el][visual-aid.el]]): ~display-fill-column-indicator-mode~ (prog/text/conf) in
 the ~fill-column-indicator~ face (a muted grey already - no override needed).
 nvim ([[file:../../../../../nvim/lua/boot/misc.lua][nvim/lua/boot/misc.lua]]): ~colorcolumn=+0~, an offset from ~textwidth~.
 
@@ -361,7 +361,7 @@ accepted.
 nvim: the ~path~ cmp source is global
 ([[file:../../../../../nvim/lua/plugins/config/completion.lua][completion.lua]]), so paths complete in any buffer. emacs: doom's corfu
 module already wires ~cape-file~, but only into prog-mode - extended to
-the text/conf mode families in [[file:./config.el][config.el]] (org/markdown derive from
+the text/conf mode families in [[file:./completion.el][completion.el]] (org/markdown derive from
 text-mode, so they're covered). corfu-auto's 2-char prefix means ~./~
 or ~../~ pops on its own; minibuffer paths were already fine via the
 built-in file completion.
@@ -370,7 +370,7 @@ follow-up (2026-07-13): completing a DIRECTORY should keep offering its
 contents (nvim cmp-path descends as you go deeper), but corfu stopped at the
 inserted ~dir/~ - ~cape-file~ ships no ~:exit-function~, so nothing
 re-triggered completion. added ~+neovim/cape-file-continue-in-dir-a~
-([[file:./config.el][config.el]], a ~:filter-return~ advice) that injects an exit-function
+([[file:./completion.el][completion.el]], a ~:filter-return~ advice) that injects an exit-function
 re-invoking ~completion-at-point~ whenever the inserted candidate ends in
 ~/~; fires for RET (a dir picked from several) and TAB (a lone dir) alike and
 recurses as you descend. this is also why ~+neovim/corfu-tab~'s lone-match
@@ -385,7 +385,7 @@ completes. emacs had nothing: doom gates the equivalent (~cape-dabbrev~)
 behind the corfu module's ~+dabbrev~ flag, which ~(corfu +icons)~
 ([[file:../../../init.el][init.el]]) doesn't set, so ~cape-dabbrev~ was absent from the capf list
 (prog buffers had only ~cape-file~). wired ~cape-dabbrev~ in directly
-([[file:./config.el][config.el]], ~+neovim/add-cape-dabbrev-h~ on the prog/text/conf hooks) at
+([[file:./completion.el][completion.el]], ~+neovim/add-cape-dabbrev-h~ on the prog/text/conf hooks) at
 depth 20, a low-priority fallback after lsp/file - the ordering nvim also
 gives its ~buffer~ source. corfu-auto's 2-char prefix triggers it a touch
 earlier than nvim's keyword_length 4, which is the responsive feel it's
@@ -398,7 +398,7 @@ returns matches wins, even when both are ~:exclusive no~ (that only means
 spell source (~ispell-completion-at-point~, text-mode only) shadowed
 ~cape-dabbrev~: typing ~curr~ next to a ~current-base16~ showed only
 dictionary words until the word was finished. merged the two with
-~cape-capf-super~ ([[file:./config.el][config.el]],
+~cape-capf-super~ ([[file:./completion.el][completion.el]],
 ~+neovim/merge-spell-and-buffer-completion-h~) so spelling and buffer words
 appear together, added ahead (depth -1) of the standalone entries so it wins
 and ~cape-file~ (depth -10) still takes real paths first. scoped to
@@ -426,7 +426,7 @@ like it just completes. doom binds corfu's ~TAB~ to ~corfu-next~
 (config/default's ~cmds-tab~ menu-item), which - together with this
 module's ~corfu-preselect 'first~ and ~corfu-cycle t~ - re-selects the only
 candidate when just one matches: no visible change, looks like a bug (you'd
-have to press ~RET~ to insert). fixed with ~+neovim/corfu-tab~ ([[file:./config.el][config.el]],
+have to press ~RET~ to insert). fixed with ~+neovim/corfu-tab~ ([[file:./completion.el][completion.el]],
 bound over ~corfu-map~'s ~TAB~/[[tab]]): cycle when ~corfu--total~ > 1,
 otherwise ~corfu-complete~. chose ~corfu-complete~ over ~corfu-insert~ so a
 lone matched DIRECTORY keeps completing into its contents, like nvim's path
@@ -452,14 +452,14 @@ cycle. pinned by ~parity/corfu-tab-selects-first-not-second~.
 
 ** DONE rainbow-delimiters
 Small ~use-package!~; doom has no module for it. Hooked on prog-mode in
-[[file:./config.el][config.el]], nvim's custom highlight-group/color order not ported - doom
+[[file:./visual-aid.el][visual-aid.el]], nvim's custom highlight-group/color order not ported - doom
 themes already style ~rainbow-delimiters-depth-N-face~ out of the box.
 
 ** DONE syntax-highlighted magit hunks (2026-07-10)
 Not an original list item - came up mid-use: magit's own diff rendering
 has no language syntax highlighting inside a hunk at all (only
 add/remove line coloring), nothing to configure away, unlike nvim's
-diffview.nvim/treesitter diffs. Fixed with ~magit-delta~ ([[file:./config.el][config.el]],
+diffview.nvim/treesitter diffs. Fixed with ~magit-delta~ ([[file:./visual-aid.el][visual-aid.el]],
 hooked on ~magit-mode~) - pipes magit's diff buffers through the same
 ~delta~ binary already installed and configured as the CLI git
 pager/diffFilter in ../../../../../gitconfig, so magit hunks now match
@@ -535,7 +535,7 @@ morevil's ~my/window-move-or-tmux~.
   already reachable via ~SPC b b~/~SPC f b~ on both editors. Removed from
   [[file:../../../../../nvim/lua/plugins/keymaps.lua][keymaps.lua]] on [2026-07-04] instead of porting.
 - ~virtualedit=all~ full parity :: impossible at the emacs core level
-  (documented in [[file:./config.el][config.el]]); ~onemore~ is the ceiling.
+  (documented in [[file:./navigate.el][navigate.el]]); ~onemore~ is the ceiling.
 - TTY C-hjkl window motion in raw terminal emacs :: key events genuinely
   don't arrive distinctly (noted in morevil); the ~C-w~/~SPC w~ prefix is
   the accepted fallback, and inside ghostel the terminal-side dispatcher

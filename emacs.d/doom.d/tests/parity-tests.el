@@ -466,7 +466,7 @@ dropped the line below - the muscle-memory hazard this guards against."
 (display-fill-column-indicator), not whitespace-mode's `lines' or
 `lines-tail' style painting the tail in the loud `whitespace-line' face.
 Doom's :editor whitespace defaults include `lines-tail'; the after! block
-in compat/neovim/config.el must exclude both."
+in compat/neovim/visual-aid.el must exclude both."
   (require 'whitespace)
   (should-not (memq 'lines whitespace-style))
   (should-not (memq 'lines-tail whitespace-style))

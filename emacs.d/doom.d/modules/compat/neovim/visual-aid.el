@@ -1,4 +1,4 @@
-;;; compat/neovim/whitespace.el -*- lexical-binding: t; -*-
+;;; compat/neovim/visual-aid.el -*- lexical-binding: t; -*-
 
 ;; show hidden/whitespace characters, same as
 ;; ../../../../../nvim/lua/boot/filetype.lua's `vim.opt.list' + `listchars'
@@ -51,3 +51,32 @@
 ;; which this module does. prog/text/conf only, so dashboards/popups stay clean.
 (add-hook! '(prog-mode-hook text-mode-hook conf-mode-hook)
   #'display-fill-column-indicator-mode)
+
+;; rainbow bracket depth highlighting, like nvim's
+;; hiphish/rainbow-delimiters.nvim (extra.lua) - doom has no bundled module
+;; for this. scoped to prog-mode, same convention as flyspell-prog-mode
+;; (in spell.el); nvim's custom highlight-group/color order not ported, doom
+;; themes already style rainbow-delimiters-depth-N-face out of the box
+(use-package! rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+;; syntax-highlighted magit hunks, like nvim's diffview.nvim/treesitter
+;; diffs - magit's own diff rendering has no language syntax highlighting
+;; at all (only add/remove line coloring), nothing to configure away.
+;; `delta' (the binary) is already installed and wired into ../../../../../gitconfig
+;; for CLI git diff/pager - magit-delta just pipes magit's diff buffers
+;; through that same binary for the identical look
+(use-package! magit-delta
+  :hook (magit-mode . magit-delta-mode)
+  :config
+  ;; bug (2026-07-11): staging/unstaging a hunk errored "corrupt patch".
+  ;; ../../../../../gitconfig's [delta] features = line-numbers decorations
+  ;; leaks into every delta call incl. magit-delta's - `--color-only'
+  ;; only promises not to reorder diff content, not to suppress that.
+  ;; the line-number gutter (e.g. "  1 ⋮  1 │ ") is real text, so it
+  ;; ends up prefixed on every diff line magit later extracts to build
+  ;; the patch it feeds `git apply' - not valid unified-diff. override
+  ;; features for magit-delta's own calls only; CLI git diff keeps
+  ;; line numbers, untouched
+  (setq magit-delta-delta-args
+        (append magit-delta-delta-args '("--features" ""))))
