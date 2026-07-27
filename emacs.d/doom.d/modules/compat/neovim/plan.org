@@ -86,10 +86,10 @@ config.el is too late. (evil's default Y = whole line; nvim's = y$.)
 
 ** DONE ~J~ -> join lines
 Evil's active normal-state binding already handles ordinary adjacent lines
-(pinned by ~parity/J-joins-lines~).  The TOML-specific failure was Doom's
+(pinned by ~parity/J-joins-lines~). The TOML-specific failure was Doom's
 comment-aware join advice: Emacs 30's ~toml-ts-mode~ recognizes =#= comments
 through tree-sitter but leaves ~comment-start~ nil, so the advice passed nil
-to ~comment-search-backward~.  :ext-lang toml now supplies TOML's local
+to ~comment-search-backward~. :ext-lang toml now supplies TOML's local
 comment delimiters, restoring nvim's =# one= + =# two= -> =# one two=; pinned
 by ~parity/J-joins-toml-comments~.
 
@@ -185,9 +185,10 @@ A no-file client used to retain the daemon's stale buffer-local
 Emacs already receives the caller directory for every emacsclient process;
 at ~server-after-make-frame-hook~, my-custom/client-enhance persists its
 ~server-client-directory~ on a per-client clone of Doom's dashboard buffer.
-The isolated TTY client workspace is now also tied to its frame
-and reclaimed in ~delete-frame-functions~, preventing unused =#N= workspaces
-from accumulating.  Both contracts are pinned by client-enhance ERT tests.
+The dashboard clone is cleaned up on frame deletion, preventing orphan
+buffers. Leaked file buffers from the main frame are also cleaned on
+client start (~clean-leaked-file-buffers~). Contracts pinned by
+client-enhance ERT tests.
 
 ** DONE autoread
 nvim: ~autoread~ (+ shortmess tweak in boot/misc.lua) silently reloads a
@@ -561,27 +562,25 @@ is a tty client frame on the one shared daemon - lightweight, but daemon
 state is global. observed: terminal B's ~q~ surfaced terminal A's file, the
 two frames' cursors moved together, and quitting one quit the other.
 
-two causes, both leaning on doom's per-frame workspaces:
-- FRAME side: doom's ~+workspaces-associate-frame-fn~ sends the first/lone
-  client frame to the SHARED ~main~ (only later ones get a fresh ~#N~), so
-  clients opened one-at-a-time all pile into ~main~ and share it.
-  ~client-enhance/isolate-client-frame~ ([[file:../../my-custom/client-enhance/config.el][config.el]], installed as
-  ~persp-emacsclient-init-frame-behaviour-override~) gives every tty client
-  its own ~#N~; GUI clients (-c) keep doom's default.
-- QUIT side: smart-quit ([[file:./smart-quit.el][smart-quit.el]] branch 4) used a GLOBAL
-  ~doom-real-buffer-list~, so B's last-buffer ~q~ saw A's file and fell back
-  to it. scoped the buffer/unsaved checks to the current workspace
-  (~+workspace-buffer-list~), and added a branch - a tty client whose OWN
-  workspace emptied finishes the client (returns to its terminal) instead of
-  switching into another frame's workspace.
+initially fixed with two changes:
+- FRAME side: ~client-enhance/isolate-client-frame~ gave every tty client
+  its own workspace via ~persp-emacsclient-init-frame-behaviour-override~.
+- QUIT side: smart-quit ([[file:./smart-quit.el][smart-quit.el]] branch 4a') scoped buffer/unsaved
+  checks to the current workspace and added a branch for tty clients whose
+  own workspace emptied.
 
-verified programmatically (~pty.fork~ execs real ~emacsclient -nw~ against a
-throwaway daemon, drained so frame redraws don't block it): two clients land
-in distinct ~#1~/~#2~ and their files stay put -
-~(("main") ("#1" "a.txt") ("#2" "b.txt"))~. pinned by
-~client-enhance/tty-client-frames-isolated-not-shared-main~ and
-~smart-quit/emacsclient-frame-empty-own-workspace-finishes-client~; the whole
-smart-quit matrix still passes.
+reverted (2026-07-25): doom's ~+workspaces-associate-frame-fn~ already
+assigns each new client frame its own workspace, making the override
+redundant. the remaining symptom is a **frame-1 buffer leak**: the very
+first client frame created after the main frame is open inherits a file
+buffer from the main frame's buffer list. subsequent frames are not
+affected. fixed by ~client-enhance/clean-leaked-file-buffers~
+([[file:../../my-custom/client-enhance/config.el][config.el]], hooked on ~server-after-make-frame-hook~): on client frame
+creation (TTY or GUI), any file buffer that is also displayed in another
+frame is killed from this frame (it stays alive in the owning frame).
+smart-quit branch 4a' was also restored (for both TTY and GUI client
+frames) to prevent an empty-workspace client from switching into another
+client's workspace.
 
-caveat: the override installs at config load, so a "still leaks" is a stale
-daemon - needs a full restart (not just ~doom/reload~) and fresh sessions.
+pinned by ~client-enhance/leaked-file-buffer-cleaned-on-frame-start~;
+the whole smart-quit matrix still passes.

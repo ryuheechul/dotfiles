@@ -223,7 +223,7 @@
        ;; from here and below are my more obvious private modules
        :my-custom          ; my own modules
        morevil             ; when there is more dark power needed
-       client-enhance      ; best of both worlds: daemon sharing and client isolation
+       client-enhance      ; best of both worlds: daemon sharing and ergonomic client integration
        term-enhance        ; tighter integration with my tools, backend-agnostic (ghostel/vterm)
        web-enhance         ; browse the web in emacs, backend-agnostic (embr)
        soom                ; when doomemacs does not agree with me

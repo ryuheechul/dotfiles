@@ -332,7 +332,10 @@ alias c='cs | xargs ${EDITOR}'
 # for now, it only print the command not run
 alias clean-nvim-cmd='echo "rm -rf  ~/.local/share/nvim/lazy ~/.cache/nvim/lazy"'
 
-alias emacsclientgui="env emacsclient -a '' -c -n -F\"'(fullscreen . fullboth)\""
+# when `-nw` there is always new frame and `-c` is required to create new frame on GUI
+# and intentionally not using -n since using -n doesn't seem to know
+# which directory it is launching from (at least with my current config)
+alias emacsclientgui="env emacsclient -a '' -c -F\"'(fullscreen . fullboth)\""
 
 # open in terminal using daemon process (create if it doesn't exist yet)
 alias emacsclient="emacsclient -nw -a ''"
@@ -343,6 +346,7 @@ alias emacsclient="emacsclient -nw -a ''"
 # emacsclientgui / open-gui-emacs; inside emacs terminals
 # ../../emacs.d/doom.d/shell/source.zsh re-aliases this to `find-file`
 alias emacs='emacsclient'
+alias emacsgui='env emacs'
 
 # viewer and filter
 alias vimdiff='nvim -dR'

@@ -2,6 +2,16 @@
 
 ;; The executable half of client/server lifecycle contract in
 ;; ../modules/my-custom/client-enhance/config.el. Run via ../bin/run-tests.
+;;
+;; Tests are grouped by the sections in config.el:
+;;   - server-visit-workspace-cycle     (section 1: $EDITOR workspace cycle)
+;;   - client-frame-inherits-server-directory (section 2: directory inheritance)
+;;   - initial-buffer-killed-on-frame-delete  (section 3: dashboard clone cleanup)
+;;   - leaked-file-buffer-cleaned-on-frame-start (section 4: leaked buffer cleanup)
+;;
+;; The first test requires persp-mode (doom's workspace module) and exercises
+;; the full open/close lifecycle.  The others use stubs to isolate the logic
+;; from the daemon environment.
 
 (require 'ert)
 
@@ -9,8 +19,7 @@
   "A server client visit ($EDITOR, `emacsclient -n') opens in its own
 workspace via `server-window' (client-enhance/server-window-workspace);
 `server-done-hook''s client-enhance/server-done-close-workspace closes it
-and returns to the workspace - and buffer - the visit came from,
-mirroring nvim's --remote-tab-wait tab-in/tab-out."
+and returns to the workspace - and buffer - the visit came from."
   (skip-unless (bound-and-true-p persp-mode))
   (let* ((origin-ws (+workspace-current-name))
          ;; star name = doom-unreal, like a vterm/ghostel terminal
@@ -49,17 +58,6 @@ mirroring nvim's --remote-tab-wait tab-in/tab-out."
       (when (buffer-live-p client-buf) (kill-buffer client-buf))
       (when (buffer-live-p term-buf) (kill-buffer term-buf)))))
 
-(ert-deftest client-enhance/tty-client-frames-isolated-not-shared-main ()
-  "Regression (2026-07-15): a tty `emacsclient -nw' client frame must get its
-OWN workspace, never the shared `main' - doom's default lands the first (and
-no-file) client in main, which other clients then share, leaking buffers /
-cursor / quit across terminals. The override is installed on the emacsclient
-frame-init hook; a real tty client frame can't be created headlessly, so this
-guards the wiring, not the live frame."
-  (skip-unless (bound-and-true-p persp-mode))
-  (should (eq persp-emacsclient-init-frame-behaviour-override
-              #'client-enhance/isolate-client-frame)))
-
 (ert-deftest client-enhance/client-frame-inherits-server-directory ()
   "A no-file client inherits its caller directory without shell wrappers."
   (let ((client-dir (make-temp-file "client-enhance-client-dir-" t))
@@ -90,21 +88,66 @@ guards the wiring, not the live frame."
         (kill-buffer client-buf))
       (delete-directory client-dir))))
 
-(ert-deftest client-enhance/client-frame-workspace-is-reclaimed ()
-  "Deleting an isolated TTY client frame removes only its #N workspace."
-  (skip-unless (bound-and-true-p persp-mode))
+(ert-deftest client-enhance/initial-buffer-killed-on-frame-delete ()
+  "Deleting a frame kills the dashboard clone created by
+`client-frame-inherit-directory', preventing orphan buffers."
   (let ((frame (selected-frame))
-        ws)
+        clone-buf)
     (unwind-protect
         (with-selected-frame frame
-          (+workspace/new)
-          (setq ws (+workspace-current-name))
-          (set-frame-parameter frame 'client-enhance/client-workspace ws)
-          (client-enhance/reclaim-client-workspace frame)
-          (should-not (+workspace-exists-p ws))
-          (should (memq #'client-enhance/reclaim-client-workspace
+          (setq clone-buf (clone-indirect-buffer nil nil))
+          (set-frame-parameter frame 'client-enhance/client-initial-buffer
+                               clone-buf)
+          (client-enhance/kill-initial-buffer-on-frame-delete frame)
+          (should-not (buffer-live-p clone-buf))
+          (should (memq #'client-enhance/kill-initial-buffer-on-frame-delete
                         delete-frame-functions)))
-      (when (and ws (+workspace-exists-p ws))
-        (+workspace-kill ws)))))
+      (when (and clone-buf (buffer-live-p clone-buf))
+        (kill-buffer clone-buf)))))
+
+(ert-deftest client-enhance/leaked-file-buffer-cleaned-on-frame-start ()
+  "A file buffer in a new client frame that is also displayed in another
+frame is removed from the perspective by `clean-leaked-file-buffers'.
+The buffer stays alive globally; only the perspective reference is removed.
+The stubs simulate an emacsclient frame with a foreign file buffer."
+  (let ((leaked-buf (generate-new-buffer "client-enhance-test-leaked"))
+        (intended-buf (generate-new-buffer "client-enhance-test-intended"))
+        (removed nil))
+    (unwind-protect
+        (progn
+          ;; Give leaked-buf a file name so it looks like a file buffer
+          (with-current-buffer leaked-buf
+            (setq buffer-file-name "/tmp/leaked.txt"))
+          ;; Simulate the client frame context: leaked-buf is in this
+          ;; frame's buffer list and also displayed in another frame.
+          (cl-letf (((symbol-function 'frame-parameter)
+                     (lambda (_frame parameter)
+                       (cond ((eq parameter 'client) 'fake-client)
+                             (t nil))))
+                    ((symbol-function 'get-buffer-window)
+                     (lambda (buf &optional frame)
+                       (when (and (eq buf leaked-buf)
+                                  frame
+                                  (not (eq frame (selected-frame))))
+                         'fake-window)))
+                    ((symbol-function 'buffer-list)
+                     (lambda (&optional _frame)
+                       (list intended-buf leaked-buf)))
+                    ((symbol-function 'window-buffer)
+                     (lambda (&optional _window) intended-buf))
+                    ((symbol-function 'frame-list)
+                     (lambda () (list (selected-frame) 'other-frame)))
+                    ((symbol-function 'persp-remove-buffer)
+                     (lambda (&optional buf &rest _)
+                       (push buf removed)))
+                    ;; Execute the timer lambda immediately in tests
+                    ((symbol-function 'run-with-timer)
+                     (lambda (_secs _idle fn) (funcall fn))))
+            (client-enhance/clean-leaked-file-buffers))
+          ;; leaked-buf was removed from perspective; intended-buf was not
+          (should (memq leaked-buf removed))
+          (should-not (memq intended-buf removed)))
+      (when (buffer-live-p leaked-buf) (kill-buffer leaked-buf))
+      (when (buffer-live-p intended-buf) (kill-buffer intended-buf)))))
 
 ;;; client-enhance-tests.el ends here
