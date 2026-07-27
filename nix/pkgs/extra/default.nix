@@ -107,7 +107,7 @@ with pkgs;
   goose-cli # Open-source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM
 
   # these below are not harness itself but supportive systems
-  context-mode
+  # context-mode # now managed via ../../../mise/home/conf.d/30-tools.toml
 ]
 ++ ifEnv "MY_NIX_EXTRA_AI_PROVIDER" [
   plandex # AI driven development in your terminal. Designed for large, real-world tasks. The sli part

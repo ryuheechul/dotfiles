@@ -2,6 +2,13 @@
 model = "gpt-5.6-terra"
 model_reasoning_effort = "medium"
 
+# first, opt in to a custom sandbox
+sandbox_mode = "workspace-write"
+
+[sandbox_workspace_write]
+# so that context-mode can access network
+network_access = true
+
 # Context Mode's user-level setup must stay in ~/.codex/config.toml:
 # [plugins."context-mode@context-mode"]
 # enabled = true

@@ -241,7 +241,7 @@ codex () {
       command codex "$@"
       ;;
     *)
-      command codex --profile dotfiles "$@"
+      command codex --profile "${CODEX_PROFILE:-dotfiles}" "$@"
       ;;
   esac
 }

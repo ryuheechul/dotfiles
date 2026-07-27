@@ -12,6 +12,7 @@
 - Use Markdown link syntax whenever a project file is referenced in a Markdown document.
   - If pointing to a directory that contains README.md, link to the directory itself instead of pointing to the README.md directly whenever possible.
 - When commenting in YAML, prefer placing the comment on the line above the target field rather than as a trailing comment on the right side.
+- Use single dashes (not em dashes or en dashes) in prose and comments. Use single space after periods, not double.
 
 ## Updating Code
 - Prioritize and respect external modifications to the codebase; do not overwrite them with previously cached or 'stale' information.

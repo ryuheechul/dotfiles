@@ -4,11 +4,14 @@
 # actually bites (a tool that releases often enough that staying current
 # matters more than nix's whole-channel atomicity) - see "Priority when
 # adding a new tool" in ../../README.md
+#
+# run `mise install` to actually install if this file is edited manually
 [tools]
 bun = "latest"
 codex = "latest"
 claude-code = "latest"
 "github:liamg/grace" = { version = "latest", os = ["linux/x86_64"] }
+"npm:context-mode" = "latest"
 "npm:@earendil-works/pi-coding-agent" = "latest"
 "npm:hunkdiff" = "latest"
 opencode = "latest"
