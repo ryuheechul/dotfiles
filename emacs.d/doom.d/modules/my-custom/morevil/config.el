@@ -114,20 +114,6 @@
 ;; `evil-window-left' et al. signal a `user-error' ("No window left from
 ;; selected window") at the edge instead of silently doing nothing -
 ;; `ignore-errors' swallows that before checking whether the window moved
-(defun my/tmux-select-pane (dir)
-  "Ask the tmux server hosting this terminal to move to the pane in DIR
-\(one of \"L\"/\"D\"/\"U\"/\"R\"), if any."
-  (when-let* ((tmux-env (getenv "TMUX"))
-              (socket (car (split-string tmux-env ",")))
-              (pane (getenv "TMUX_PANE")))
-    (call-process "tmux" nil nil nil "-S" socket "select-pane" "-t" pane (concat "-" dir))))
-
-(defun my/window-move-or-tmux (evil-window-fn tmux-dir)
-  (let ((cur-win (selected-window)))
-    (ignore-errors (call-interactively evil-window-fn))
-    (when (eq cur-win (selected-window))
-      (my/tmux-select-pane tmux-dir))))
-
 ;; C-hjkl navigation must override EVERYTHING - this is the tmux/neovim
 ;; pane-switching muscle memory that should work in every buffer, in every
 ;; mode.  evil's keymap lookup order for a state is:
@@ -141,18 +127,13 @@
 ;; the keymap, and a global minor mode keeps the keymap in
 ;; `current-active-maps' so evil's `evil-state-intercept-keymaps' scanner
 ;; finds it on every state normalization.  No-op outside tmux (the inner
-;; `my/tmux-select-pane' is gated on $TMUX).
-;;
-;; TUI caveat remains: C-h collides with Backspace in raw terminals
-;; (https://www.reddit.com/r/emacs/comments/17afhxu/) - these bindings
-;; don't fire in that context; C-w / SPC w is the accepted fallback, and
-;; inside ghostel the terminal-side dispatcher handles it.
+;; `+compat/tmux-select-pane' is gated on $TMUX).
 (defvar my/navigation-override-map (make-sparse-keymap))
 (evil-make-intercept-map my/navigation-override-map 'normal)
-(define-key my/navigation-override-map (kbd "C-h") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-left "L")))
-(define-key my/navigation-override-map (kbd "C-j") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-down "D")))
-(define-key my/navigation-override-map (kbd "C-k") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-up "U")))
-(define-key my/navigation-override-map (kbd "C-l") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-right "R")))
+(define-key my/navigation-override-map (kbd "C-h") (lambda () (interactive) (+compat/window-move-or-tmux #'evil-window-left "L")))
+(define-key my/navigation-override-map (kbd "C-j") (lambda () (interactive) (+compat/window-move-or-tmux #'evil-window-down "D")))
+(define-key my/navigation-override-map (kbd "C-k") (lambda () (interactive) (+compat/window-move-or-tmux #'evil-window-up "U")))
+(define-key my/navigation-override-map (kbd "C-l") (lambda () (interactive) (+compat/window-move-or-tmux #'evil-window-right "R")))
 ;; global minor mode so the keymap appears in `current-active-maps';
 ;; without this, `evil-state-intercept-keymaps' never scans our map
 (define-minor-mode my/navigation-override-mode

@@ -8,6 +8,8 @@
 (load! "completion")
 ;; Navigate: cursor movement, link following, dashboard menu
 (load! "navigate")
+;; Integration: tmux pane navigation (C-hjkl)
+(load! "integration")
 ;; Visual aids: whitespace, fill-column indicator, rainbow brackets, magit-delta
 (load! "visual-aid")
 ;; make `q' mimic neovim's overall quit semantics - see ./smart-quit.el

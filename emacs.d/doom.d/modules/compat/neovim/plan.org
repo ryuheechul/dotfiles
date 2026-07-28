@@ -26,9 +26,9 @@ daily-use payoff stays in neovim land (see [[*Not porting (deliberately)][not po
 
 | home                        | concern                                 | examples already there                                                                                                                       |
 |-----------------------------+-----------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------|
-| [[file:../../my-custom/morevil/][morevil]]                     | muscle memory: keybindings, evil tweaks | jk-escape, q smart-quit binding, TAB/S-TAB windows, SPC TAB next buffer, C-hjkl intercept + tmux handoff, SPC w / and w -, SPC s c nohighlight, gx, go |
-| [[file:./][compat/neovim]] (this module) | behavior/system parity                  | [[file:./completion.el][completion.el]], [[file:./visual-aid.el][visual-aid.el]], [[file:./smart-quit.el][smart-quit.el]], [[file:./clipboard.el][clipboard.el]], [[file:./spell.el][spell.el]] |
-| [[file:../../my-custom/term-enhance/][term-enhance]]                | terminal + multiplexer parity           | ghostel/vterm mux bridge, mw* aliases, q-as-pane-close, C-hjkl TUI passthrough                                                               |
+| [[file:../../my-custom/morevil/][morevil]]                     | muscle memory: keybindings, evil tweaks | jk-escape, q smart-quit binding, TAB/S-TAB windows, SPC TAB next buffer, C-hjkl intercept, SPC w / and w -, SPC s c nohighlight, gx, go |
+| [[file:./][compat/neovim]] (this module) | behavior/system parity                  | [[file:./completion.el][completion.el]], [[file:./visual-aid.el][visual-aid.el]], [[file:./smart-quit.el][smart-quit.el]], [[file:./clipboard.el][clipboard.el]], [[file:./spell.el][spell.el]], [[file:./integration.el][integration.el]] (tmux pane navigation) |
+| [[file:../../my-custom/term-enhance/][term-enhance]]                | terminal + multiplexer parity           | ghostel/vterm mux bridge, mw* aliases, q-as-pane-close, C-hjkl insert-state via +compat/window-move-or-tmux                                                  |
 
 # outside emacs (nvim plugin, raw terminal, ...) this table looks ragged:
 # org pads cells to FOLDED link widths, which only emacs displays. view
@@ -519,7 +519,8 @@ doom evil-snipe + avy (~gs~ prefix).
 ~:emacs dired~ (+ the existing ~SPC f t~/~SPC t f~ treemacs).
 
 ** DONE Navigator.nvim
-morevil's ~my/window-move-or-tmux~.
+~+compat/window-move-or-tmux~ ([[file:./integration.el][integration.el]]), called by the
+morevil intercept (normal state) and ghostel/vterm (insert state).
 
 * Not porting (deliberately)
 
@@ -537,10 +538,11 @@ morevil's ~my/window-move-or-tmux~.
   [[file:../../../../../nvim/lua/plugins/keymaps.lua][keymaps.lua]] on [2026-07-04] instead of porting.
 - ~virtualedit=all~ full parity :: impossible at the emacs core level
   (documented in [[file:./navigate.el][navigate.el]]); ~onemore~ is the ceiling.
-- TTY C-hjkl window motion in raw terminal emacs :: key events genuinely
-  don't arrive distinctly (noted in morevil); the ~C-w~/~SPC w~ prefix is
-  the accepted fallback, and inside ghostel the terminal-side dispatcher
-  already handles it.
+- TTY C-hjkl window motion in raw terminal emacs :: key events
+  don't arrive distinctly in very old terminals (modern terminals handle
+  it correctly); the ~C-w~/~SPC w~ prefix is the accepted fallback,
+  and inside ghostel/vterm the terminal-side dispatcher routes through
+  ~+compat/window-move-or-tmux~ (Emacs windows first, tmux fallback).
 
 * Sequencing
 

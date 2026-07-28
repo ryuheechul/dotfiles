@@ -40,9 +40,9 @@
 ;; C-hjkl = pane navigation with the same semantics as ../../../tmux.conf and
 ;; ../ghostel.el's `ghostel/mux--nav': while a foreground command/TUI holds
 ;; the prompt, send the key into the pty so `christoomey/vim-tmux-navigator'
-;; handles it (e.g. nested nvim); at an idle shell prompt move between emacs
-;; windows instead, matching morevil's normal-state C-hjkl
-;; (../morevil/config.el).
+;; handles it (e.g. nested nvim); at an idle shell prompt move between Emacs
+;; windows first, then tmux panes via `+compat/window-move-or-tmux'
+;; (../../compat/neovim/integration.el).
 ;;
 ;; vterm-module.c has no alt-screen getter to key off of (see ../ghostel.el's
 ;; comment), but `vterm--at-prompt-p' gets us the same distinction a
@@ -52,9 +52,9 @@
 ;; ../../../../zsh/my_addons/znap - order matters, or the marker never
 ;; survives). "cursor sits right where the last prompt ended" turns out to
 ;; be exactly "idle at the prompt" - confirmed live, this part works.
-(defun vterm/mux--nav (evil-window-fn)
+(defun vterm/mux--nav (evil-window-fn tmux-dir)
   (if (vterm--at-prompt-p)
-      (call-interactively evil-window-fn)
+      (+compat/window-move-or-tmux evil-window-fn tmux-dir)
     ;; `vterm--self-insert' reads `last-command-event' (not
     ;; `this-command-keys'), so calling it from inside this wrapper still
     ;; forwards the actual originating key
@@ -76,10 +76,10 @@
 (add-hook 'vterm-mode-hook
           (defun vterm/mux--rebind-nav-keys ()
             (evil-collection-define-key 'insert 'vterm-mode-map
-              (kbd "C-h") (lambda () (interactive) (vterm/mux--nav #'evil-window-left))
-              (kbd "C-j") (lambda () (interactive) (vterm/mux--nav #'evil-window-down))
-              (kbd "C-k") (lambda () (interactive) (vterm/mux--nav #'evil-window-up))
-              (kbd "C-l") (lambda () (interactive) (vterm/mux--nav #'evil-window-right)))))
+              (kbd "C-h") (lambda () (interactive) (vterm/mux--nav #'evil-window-left "L"))
+              (kbd "C-j") (lambda () (interactive) (vterm/mux--nav #'evil-window-down "D"))
+              (kbd "C-k") (lambda () (interactive) (vterm/mux--nav #'evil-window-up "U"))
+              (kbd "C-l") (lambda () (interactive) (vterm/mux--nav #'evil-window-right "R")))))
 
 ;; emulate `akinsho/toggleterm.nvim`
 (defun wrapped/vterm/toggle ()

@@ -82,8 +82,8 @@
   ;; C-hjkl = pane navigation with the same semantics as ../../../tmux.conf:
   ;; while a TUI runs in the terminal (alt-screen, mode 1049 - e.g. nvim)
   ;; send the key into the pty so `christoomey/vim-tmux-navigator' handles
-  ;; it; at a plain shell prompt move between emacs windows instead,
-  ;; matching morevil's normal-state C-hjkl (../morevil/config.el).
+  ;; it; at a plain shell prompt move between Emacs windows first, then
+  ;; tmux panes via `+compat/window-move-or-tmux' (../../compat/neovim/integration.el).
   ;; C-l clear and C-k kill-line lose at the prompt, exactly as under tmux.
   ;;
   ;; ghostel-only: this depends on `ghostel--mode-enabled ... 1049' (is the
@@ -93,15 +93,15 @@
   ;; to key this off of there. vterm's insert-state C-hjkl (./vterm.el) just
   ;; always forwards to the pty instead, which is the best available
   ;; fallback without patching the C module.
-  (defun ghostel/mux--nav (key evil-window-fn)
+  (defun ghostel/mux--nav (key evil-window-fn tmux-dir)
     (if (and ghostel--term (ghostel--mode-enabled ghostel--term 1049))
         (ghostel-send-key key "ctrl")
-      (call-interactively evil-window-fn)))
+      (+compat/window-move-or-tmux evil-window-fn tmux-dir)))
   (evil-define-key* 'insert evil-ghostel-mode-map
-    (kbd "C-h") (lambda () (interactive) (ghostel/mux--nav "h" #'evil-window-left))
-    (kbd "C-j") (lambda () (interactive) (ghostel/mux--nav "j" #'evil-window-down))
-    (kbd "C-k") (lambda () (interactive) (ghostel/mux--nav "k" #'evil-window-up))
-    (kbd "C-l") (lambda () (interactive) (ghostel/mux--nav "l" #'evil-window-right))))
+    (kbd "C-h") (lambda () (interactive) (ghostel/mux--nav "h" #'evil-window-left "L"))
+    (kbd "C-j") (lambda () (interactive) (ghostel/mux--nav "j" #'evil-window-down "D"))
+    (kbd "C-k") (lambda () (interactive) (ghostel/mux--nav "k" #'evil-window-up "U"))
+    (kbd "C-l") (lambda () (interactive) (ghostel/mux--nav "l" #'evil-window-right "R"))))
 
 ;; a hack to let zsh to run command on start up - conjunction with ../../../shell/source.zsh
 ;; shown as a modal (see ./editor-bridge.el's term-enhance/open-in-modal, matching
