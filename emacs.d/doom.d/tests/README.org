@@ -19,6 +19,7 @@ behavior is the stable thing worth keying on.
 | [[file:client-enhance-tests.el][client-enhance-tests.el]] | client/server workspace, directory, and buffer lifecycle behavior in [[file:../modules/my-custom/client-enhance/config.el][client-enhance/config.el]] |
 | [[file:term-enhance-tests.el][term-enhance-tests.el]] | terminal bridge path behavior in [[file:../modules/my-custom/term-enhance/editor-bridge.el][editor-bridge.el]] |
 | [[file:format-tests.el][format-tests.el]] | the eglot/apheleia formatting split - [[file:../modules/tools/lsp-support/config.el][lsp-support/config.el]]'s `+format-with-eglot-excluded-modes` opt-out, and lua's use of it in [[file:../modules/ext-lang/lua/config.el][ext-lang/lua/config.el]] |
+| [[file:morevil-tests.el][morevil-tests.el]] | C-hjkl intercept keymap setup in [[file:../modules/my-custom/morevil/config.el][morevil/config.el]] |
 
 * Conventions
 

@@ -96,7 +96,7 @@
 ;; :prefix-map and plain single-key leader bindings
 (map! :leader
       (:when (modulep! :ui workspaces)
-       :desc "workspace" "k" doom-leader-workspace-map))
+        :desc "workspace" "k" doom-leader-workspace-map))
 
 ;; emulate `dynamotn/Navigator.nvim' (used in
 ;; ../../../../../nvim/lua/plugins/system.lua in place of the older
@@ -128,14 +128,38 @@
     (when (eq cur-win (selected-window))
       (my/tmux-select-pane tmux-dir))))
 
-(define-key evil-normal-state-map (kbd "C-h") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-left "L")))
-(define-key evil-normal-state-map (kbd "C-j") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-down "D")))
-(define-key evil-normal-state-map (kbd "C-k") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-up "U")))
-(define-key evil-normal-state-map (kbd "C-l") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-right "R")))
-;; howver these bindings above doesn't seem to work in TUI;
-;; not that it's not bound but the keys themselves seem to be not recognized;
-;; maybe related to this? https://www.reddit.com/r/emacs/comments/17afhxu/getting_all_keybindings_working_in_the_tui/
-;; there is a `C-w' (or `SPC' `w') prefix to workaround
+;; C-hjkl navigation must override EVERYTHING - this is the tmux/neovim
+;; pane-switching muscle memory that should work in every buffer, in every
+;; mode.  evil's keymap lookup order for a state is:
+;;
+;;   intercept > local > minor-mode > auxiliary > overriding > state
+;;
+;; `evil-normal-state-map' is tier-6 (state); auxiliary maps (tier-4, created
+;; by `evil-define-key') and even overriding maps (tier-5) can shadow it.
+;; Only an intercept map (tier-1) sits above everything.  Two pieces are
+;; needed: `evil-make-intercept-map' stamps a [intercept-state] marker onto
+;; the keymap, and a global minor mode keeps the keymap in
+;; `current-active-maps' so evil's `evil-state-intercept-keymaps' scanner
+;; finds it on every state normalization.  No-op outside tmux (the inner
+;; `my/tmux-select-pane' is gated on $TMUX).
+;;
+;; TUI caveat remains: C-h collides with Backspace in raw terminals
+;; (https://www.reddit.com/r/emacs/comments/17afhxu/) - these bindings
+;; don't fire in that context; C-w / SPC w is the accepted fallback, and
+;; inside ghostel the terminal-side dispatcher handles it.
+(defvar my/navigation-override-map (make-sparse-keymap))
+(evil-make-intercept-map my/navigation-override-map 'normal)
+(define-key my/navigation-override-map (kbd "C-h") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-left "L")))
+(define-key my/navigation-override-map (kbd "C-j") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-down "D")))
+(define-key my/navigation-override-map (kbd "C-k") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-up "U")))
+(define-key my/navigation-override-map (kbd "C-l") (lambda () (interactive) (my/window-move-or-tmux #'evil-window-right "R")))
+;; global minor mode so the keymap appears in `current-active-maps';
+;; without this, `evil-state-intercept-keymaps' never scans our map
+(define-minor-mode my/navigation-override-mode
+  "Global C-hjkl window/tmux navigation at intercept priority."
+  :init-value t
+  :lighter nil
+  :keymap my/navigation-override-map)
 
 ;; split window
 (map! :leader

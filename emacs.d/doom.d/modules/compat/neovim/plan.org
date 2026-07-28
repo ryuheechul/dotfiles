@@ -26,7 +26,7 @@ daily-use payoff stays in neovim land (see [[*Not porting (deliberately)][not po
 
 | home                        | concern                                 | examples already there                                                                                                                       |
 |-----------------------------+-----------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------|
-| [[file:../../my-custom/morevil/][morevil]]                     | muscle memory: keybindings, evil tweaks | jk-escape, q smart-quit binding, TAB/S-TAB windows, SPC TAB next buffer, C-hjkl + tmux handoff, SPC w / and w -, SPC s c nohighlight, gx, go |
+| [[file:../../my-custom/morevil/][morevil]]                     | muscle memory: keybindings, evil tweaks | jk-escape, q smart-quit binding, TAB/S-TAB windows, SPC TAB next buffer, C-hjkl intercept + tmux handoff, SPC w / and w -, SPC s c nohighlight, gx, go |
 | [[file:./][compat/neovim]] (this module) | behavior/system parity                  | [[file:./completion.el][completion.el]], [[file:./visual-aid.el][visual-aid.el]], [[file:./smart-quit.el][smart-quit.el]], [[file:./clipboard.el][clipboard.el]], [[file:./spell.el][spell.el]] |
 | [[file:../../my-custom/term-enhance/][term-enhance]]                | terminal + multiplexer parity           | ghostel/vterm mux bridge, mw* aliases, q-as-pane-close, C-hjkl TUI passthrough                                                               |
 
