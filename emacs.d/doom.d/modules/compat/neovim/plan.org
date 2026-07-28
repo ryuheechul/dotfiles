@@ -521,6 +521,12 @@ doom evil-snipe + avy (~gs~ prefix).
 ** DONE Navigator.nvim
 ~+compat/window-move-or-tmux~ ([[file:./integration.el][integration.el]]), called by the
 morevil intercept (normal state) and ghostel/vterm (insert state).
+Pane resolution differs by frame type:
+- emacsclient: derives pane from frame's real TTY device (e.g.
+  ~/dev/ttys017~) via ~tmux list-panes -a~, cached per TTY.
+- ~emacs -nw~: TTY is generic (~/dev/tty~ on macOS, ~/dev/pts/N~ on
+  Linux), falls back to ~TMUX_PANE~ env var which is correct here
+  because the process starts fresh in the current pane.
 
 * Not porting (deliberately)
 
