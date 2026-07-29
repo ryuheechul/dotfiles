@@ -199,6 +199,7 @@
        (nix +lsp)         ; ./modules/ext-lang/nix/
        (lua +lsp)         ; ./modules/ext-lang/lua/
        toml               ; ./modules/ext-lang/toml/
+       nushell            ; ./modules/ext-lang/nushell/
        typescript         ; ./modules/ext-lang/typescript/
 
        :email
