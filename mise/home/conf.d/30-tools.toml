@@ -10,6 +10,7 @@
 bun = "latest"
 codex = "latest"
 claude-code = "latest"
+"github:agavra/tuicr" = "latest"
 "github:liamg/grace" = { version = "latest", os = ["linux/x86_64"] }
 "npm:context-mode" = "latest"
 "npm:@earendil-works/pi-coding-agent" = "latest"

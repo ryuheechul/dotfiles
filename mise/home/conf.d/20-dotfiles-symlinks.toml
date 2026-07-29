@@ -1,3 +1,5 @@
+# view status with `mise dotfiles status` and sync with `mise dotfiles apply`
+#
 # [dotfiles] whole-file/whole-dir symlink (+ symlink-each) entries.
 # All sources are anchored at the dfs-rhc self-discovery symlink (created by
 # ../../../bootstrap/configuration.sh before `mise bootstrap` runs), so this
@@ -40,6 +42,8 @@ done
 "~/.tigrc" = "~/.config/dfs-rhc/vim.tigrc"
 # hunk
 "~/.config/hunk" = "~/.config/dfs-rhc/hunk"
+# tuicr
+"~/.config/tuicr" = "~/.config/dfs-rhc/tuicr"
 # herdr (file, not dir - herdr writes logs into ~/.config/herdr/)
 "~/.config/herdr/config.toml" = "~/.config/dfs-rhc/herdr/config.toml"
 # gh

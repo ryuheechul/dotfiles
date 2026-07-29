@@ -169,6 +169,13 @@ function hunk {
   current-base16 | xargs env hunk "$@" --theme
 }
 
+function tuicr {
+  # explicitly set since appearance at ../../tuicr/config.toml
+  # doesn't seem to detect the system's very well
+  env tuicr --appearance=$(theme-tone) "$@"
+  # couldn't make tuicr work with xargs
+}
+
 # to make this to surive through piping; let's see if this is a good idea
 alias grc='grc --colour=on'
 
