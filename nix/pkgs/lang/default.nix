@@ -2,6 +2,7 @@
 
 let
   go = import ./go.nix { pkgs = pkgs; };
+  zig = import ./zig.nix { pkgs = pkgs; };
   lua = import ./lua.nix { pkgs = pkgs; };
   nix = import ./nix.nix { pkgs = pkgs; };
   nim = import ./nim.nix { pkgs = pkgs; };
@@ -23,6 +24,7 @@ let
   ifEnv = envName: pkgs.lib.optionals (checkEnv envName);
   defaults = (
     nix
+    ++ zig
     ++ lua
     ++ ruby
     ++ python
