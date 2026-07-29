@@ -4,3 +4,4 @@
 (package! hotfuzz)
 (package! rainbow-delimiters)
 (package! magit-delta)
+(package! blamer)

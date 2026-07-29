@@ -212,7 +212,7 @@ local config = function()
   wk.add {
     { '<Space>g', group = 'Git' },
     { '<Space>gb', group = 'Blame' },
-    { '<Space>gbb', cmdify 'Git blame', desc = 'toggle git blame pane' },
+    { '<Space>gbb', cmdify 'Git blame', desc = 'open git blame pane' },
     { '<Space>gd', cmdify 'DiffviewOpen', desc = 'show git diff' },
     -- { '<Space>gg', require('gfold').pick_repo, desc = 'pick repo via gfold' },
     { '<Space>gn', cmdify 'Neogit', desc = 'open Neogit' },

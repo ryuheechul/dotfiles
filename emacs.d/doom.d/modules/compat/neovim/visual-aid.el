@@ -80,3 +80,30 @@
   ;; line numbers, untouched
   (setq magit-delta-delta-args
         (append magit-delta-delta-args '("--features" ""))))
+
+;; inline git blame suffix on the current line, like nvim's git-blame.nvim
+;; virtual text (extra.lua) — toggled via SPC g b t (morevil/config.el).
+;; starts OFF (toggle on when wanted), matching nvim's gitblame_display_virtual_text = 0.
+;; face config deferred — autoloads on first toggle via global-blamer-mode.
+(after! blamer
+  (setq blamer-idle-time 0.3
+        blamer-min-offset 70
+        blamer-max-commit-message-length 60)
+  (set-face-attribute 'blamer-face nil
+                      :foreground "#7a88cf"
+                      :background nil
+                      :height 140
+                      :italic t))
+
+;; toggled by SPC g b t (morevil blame prefix) — needs to be defined here so
+;; the keybinding in morevil/config.el can reference it even before blamer.el
+;; is installed by `doom sync'
+(defun +neovim/toggle-blamer ()
+  "Toggle `global-blamer-mode', loading blamer if needed."
+  (interactive)
+  (require 'blamer)
+  (if global-blamer-mode
+      (global-blamer-mode -1)
+    (global-blamer-mode +1)))
+
+;; Blame for full file is handled by magit-blame-addition (SPC g b b).

@@ -506,6 +506,14 @@ magit (~SPC g g~ matches by design).
 ** DONE gitsigns
 ~:emacs vc~ gutter.
 
+** DONE git blame (~SPC g b~ prefix)
+nvim: ~SPC g b~ is the "Blame" group (keymaps.lua:214), with ~SPC g b b~
+(blame pane) and ~SPC g b t~ (toggle inline virtual text). Emacs: ~SPC g b~
+now a "Blame" prefix in morevil, mapping the nvim structure:
+  - ~SPC g b b~ = ~magit-blame-addition~ (blame current chunk/region)
+  - ~SPC g b t~ = ~global-blamer-mode~ (toggle inline blame, via blamer.el)
+  - ~SPC g B~ = ~magit-branch-checkout~ (displaced from ~SPC g b~)
+
 ** DONE Comment.nvim (~gc~)
 evil-nerd-commenter via doom.
 

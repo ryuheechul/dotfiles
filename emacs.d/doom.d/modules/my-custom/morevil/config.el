@@ -281,6 +281,24 @@ doc buffer in a terminal frame (e.g. ghostel/vterm)."
       :n "gk" #'+eldoc-help-at-point
       :n "K" nil)
 
+;; git blame: override SPC g b (normally magit-branch-checkout) to be a
+;; "Blame" prefix, matching nvim's SPC g b group
+;; (../../../../../nvim/lua/plugins/keymaps.lua:214).  The displaced
+;; magit-branch-checkout lives at SPC g B.
+;;
+;; Key    | nvim equivalent           | emacs command
+;; -------+---------------------------+-------------------------
+;; SPC g b b | SPC g b b (blame)      | magit-blame-addition
+;; SPC g b t | SPC g b t (toggle)     | +neovim/toggle-blamer
+;; SPC g B   | --                       | magit-branch-checkout (displaced)
+;; +neovim/toggle-blamer is defined in ../../compat/neovim/visual-aid.el
+
+(defvar doom-leader-blame-map (make-sparse-keymap))
+(define-key doom-leader-blame-map (kbd "b") '("Blame" . magit-blame-addition))
+(define-key doom-leader-blame-map (kbd "t") '("Toggle inline blame" . +neovim/toggle-blamer))
+(define-key doom-leader-git-map (kbd "b") `("Blame" . ,doom-leader-blame-map))
+(define-key doom-leader-git-map (kbd "B") '("Switch branch" . magit-branch-checkout))
+
 ;; magit's base keymap binds h -> magit-dispatch and l -> magit-log,
 ;; clobbering the h/l = expand/collapse section muscle memory from
 ;; neogit (../../../../../nvim/lua/plugins/config/git.lua: both mapped to

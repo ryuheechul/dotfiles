@@ -387,7 +387,7 @@ return {
       vim.g.gitblame_display_virtual_text = 0
       vim.g.gitblame_ignored_filetypes = { 'gitcommit' }
       -- toggle virtual text
-      vim.keymap.set('n', '<space>gb', function()
+      vim.keymap.set('n', '<space>gbt', function()
         if vim.g.gitblame_display_virtual_text == 0 then
           vim.g.gitblame_display_virtual_text = 1
         else
