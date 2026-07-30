@@ -1,0 +1,91 @@
+#!/usr/bin/env nu
+
+# TUI for browsing Raycast extensions and managing my curated install list.
+# Uses nushell's built-in `input list --fuzzy` for interactive filtering.
+#
+# Data sources
+#   - raycast/config.toml in this repo (curated list)
+#   - ~/.config/raycast/extensions/*/package.json (installed extensions)
+#
+# Usage
+#   raycast-ext          interactive TUI
+#   raycast-ext --test   run self-checks
+#
+# See also: nushell/modules/raycast-extensions.nu
+
+use ../../../nushell/modules/raycast-extensions.nu *
+# FILE_PWD is bin/path/darwin/ so ../../.. reaches the repo root.
+cd ($env.FILE_PWD | path join "../../.." | path expand)
+
+def main [--test] {
+    if $test { do-test; exit 0 }
+
+    # set the fuzzy-match highlight color
+    $env.config.color_config.search_result = "yellow"
+
+    let extensions = (combined-list)
+
+    if ($extensions | length) == 0 {
+        print "No extensions found (neither curated nor installed)."
+        return
+    }
+
+    # Step 1: pick an extension
+    let selection = (
+        $extensions
+        | input list --fuzzy --display {|ext|
+            let installed_char = (if $ext.installed { "✓" } else { " " })
+            let curated_char   = (if $ext.curated  { "★" } else { " " })
+            let slug_padded    = ($ext.slug | fill -a left -w 36 -c " ")
+            let title_part     = (if ($ext.title | is-not-empty) { $ext.title } else { "(not installed)" })
+            $"($installed_char)($curated_char)  ($slug_padded)  ($title_part)"
+        } "Raycast Extensions  (✓ installed  ★ in my list)"
+    )
+
+    if ($selection | is-empty) { return }
+
+    # Step 2: choose an action
+    let actions = (if $selection.curated {
+        ["Open in Raycast"]
+    } else {
+        ["Open in Raycast", "Add to my list"]
+    })
+
+    let action = ($actions | input list $"...($selection.slug)")
+
+    if ($action | is-empty) { return }
+
+    # Step 3: execute
+    if $action == "Open in Raycast" {
+        open-raycast $selection.slug
+    } else if $action == "Add to my list" {
+        add-to-curated $selection.slug
+    }
+}
+
+def do-test [] {
+    test-raycast-ext
+    print ""
+    print "--- add-to-curated smoke test ---"
+    let slug = "test/verify-path"
+    add-to-curated $slug
+    let found = (curated-list | where slug == $slug | length)
+    if $found > 0 {
+        print $"✓ added and read back ($slug)"
+        # Undo: remove slug, write back with multi-line array
+        let toml_path = ($env.PWD | path join "raycast" "config.toml")
+        let raw_lines = (open --raw $toml_path | lines)
+        let header_lines = ($raw_lines | take while { |line| ($line | str starts-with "#") or $line == "" })
+        let header_str = if ($header_lines | length) > 0 {
+            ($header_lines | str join (char newline)) + (char newline)
+        } else { "" }
+        let data = (open $toml_path)
+        let clean_slugs = ($data.extensions | where $in != $slug)
+        let body = (format-extensions-toml $clean_slugs)
+        $header_str + $body | save -f $toml_path
+        print "✓ cleaned up test entry"
+    } else {
+        print "✗ failed to add test entry"
+    }
+    print "--- done ---"
+}

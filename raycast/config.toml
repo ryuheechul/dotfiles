@@ -1,0 +1,19 @@
+# My curated list of Raycast extensions to make it easy to sync in any macOS device.
+#
+# This is a bespoke approach:
+# - this is not Raycast supported declarative config for managing extensions.
+# - keep this list and the tooling below:
+#   ../nushell/modules/raycast-extensions.nu  -- data logic + tests
+#   ../bin/path/darwin/raycast-ext            -- TUI to browse/add/open
+#
+# Add entries as "author/name" -- grab these from the Raycast store URL or
+# from the package.json of installed extensions.
+#
+# Browse all open-source extensions at https://github.com/raycast/extensions
+
+extensions = [
+  # Rectangle
+  "crickford/rectangle",
+  # Sesh
+  "joshmedeski/sesh",
+]

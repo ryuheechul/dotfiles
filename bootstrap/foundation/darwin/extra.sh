@@ -37,9 +37,7 @@ mas install 869223134  # KakaoTalk
 mas install 1480933944 # Vimari
 mas install 1142151959 # Just Focus
 mas install 803453959  # Slack
-mas install 1480933944 # Vimari
 mas install 1284863847 # Unsplash Wallpapers
-mas install 441258766  # magnet
 
 ######### Brew Cask #########
 
@@ -74,7 +72,7 @@ _install_cask betterdisplay
 _install_cask warp
 _install_cask thaw
 _is_admin && _install_cask 1password # since it won't work if it's installed a location other than /Applications
-_install_cask amethyst
+_install_cask rectangle
 _install_cask google-chrome
 _install_cask zen
 _install_cask notion
@@ -135,11 +133,11 @@ echo "You might want to do the followings:"
 echo "- System Preference > Accessibility > Display > Reduce Motion checkbox"
 echo "- System Preference > Keyboard > Adjust repeat speed and delay"
 echo "- Open Karabiner Element and allow permissions"
-echo "- Open Amethyst to have tiling start working"
 echo "- System Preference > Display > change the dominant display if you use multi screen setup"
 echo "- Install Keytty from ~/Downloads/Keytty.x.x.x.dmg"
 echo "- Open Just Focus to start using Pomodoro technic"
 echo '- run `brew services ls` to see if any services you want to run (e.g. syncthing)'
+echo '- run `raycast-ext` to find and install extensions'
 
 sleep 2
 
