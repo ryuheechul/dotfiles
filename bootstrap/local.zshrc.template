@@ -29,6 +29,7 @@ export MY_NIX_EXTRA_BAT=1
 # export MY_NIX_EXTRA_AWS=1
 # export MY_NIX_EXTRA_TAG=1
 # export MY_NIX_EXTRA_K8S=1
+export MY_NIX_EXTRA_AGE=1
 # export MY_NIX_EXTRA_SSH=1
 # export MY_NIX_EXTRA_SSH_XORG=1
 # export MY_NIX_EXTRA_AI_CLIENT=1

@@ -100,6 +100,7 @@ with pkgs;
     earthly # Build automation for the container era
     sops # Simple and flexible tool for managing secrets
     age # Modern encryption tool with small explicit keys
+    passage # Stores, retrieves, generates, and synchronizes passwords securely
     sshs # Terminal user interface for SSH
     lazyssh # Terminal-based SSH manager
     snitch # friendlier ss / netstat for humans

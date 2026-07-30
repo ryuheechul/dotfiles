@@ -166,6 +166,9 @@ with pkgs;
   # `xauth list`
   # `mcookie | xargs xauth add :0 .`
 ]
+++ ifEnv "MY_NIX_EXTRA_AGE" [
+  age-plugin-se # Age plugin for Apple's Secure Enclave
+]
 ++ ifEnv "WSL_DISTRO_NAME" wsl
 ++ ifEnv "MY_NIX_EXTRA_RUSTY_FAM" rusty-fam
 ++ ifEnv "MY_NIX_EXTRA_EXPERIMENT" exp
