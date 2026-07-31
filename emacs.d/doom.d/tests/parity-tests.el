@@ -461,6 +461,66 @@ dropped the line below - the muscle-memory hazard this guards against."
                              "line2\nline3\n")))))
       (kill-buffer buf))))
 
+(ert-deftest parity/wrapped-lines-operators-stay-logical ()
+  "On a wrapped line dd/yy/dj/V act on the whole LOGICAL line while
+normal j moves by screen line - nvim's narrow scope (plan.org). Pinned
+per-state in navigate.el, not `evil-respect-visual-line-mode', which
+leaked screen-line motions into operator-pending and visual via
+`:enable' and broke dd, yy, V, D, etc. on wrapped lines."
+  (let* ((buf (get-buffer-create "*parity-wrapped*"))
+         (frame (selected-frame))
+         (width (frame-width frame))
+         (long "0123456789ABCDEFGHIJKLMNOPQR") ; 26 chars: folds at width 20
+         (reset (lambda ()
+                  (erase-buffer)
+                  (insert "line1\n" long "\nline3\nline4\n")
+                  (goto-char (point-min))
+                  (forward-line 1)          ; cursor on the wrapping line
+                  (evil-normal-state))))
+    (unwind-protect
+        (progn
+          (set-window-buffer (selected-window) buf)
+          (set-frame-width frame 20)
+          (with-current-buffer buf
+            (visual-line-mode 1)
+            (evil-local-mode 1)
+            ;; sanity: the long line really folds at this window width
+            (funcall reset)
+            (should (= (count-screen-lines (line-beginning-position)
+                                           (line-end-position))
+                       2))
+            ;; normal j: screen line - crosses the fold, same logical line
+            (funcall reset)
+            (execute-kbd-macro (kbd "j"))
+            (should (= (line-number-at-pos (point)) 2))
+            ;; dd: deletes the whole logical line (both screen lines)
+            (funcall reset)
+            (execute-kbd-macro (kbd "dd"))
+            (should (equal (buffer-string) "line1\nline3\nline4\n"))
+            ;; yy: yanks the whole logical line, fold included
+            (funcall reset)
+            (execute-kbd-macro (kbd "yy"))
+            (let ((interprogram-paste-function nil))
+              (should (equal (substring-no-properties (current-kill 0))
+                             (concat long "\n"))))
+            ;; dj: spans two full logical lines even when the first wraps
+            (funcall reset)
+            (execute-kbd-macro (kbd "dj"))
+            (should (equal (buffer-string) "line1\nline4\n"))
+            ;; V: linewise visual over the whole logical line; yanking the
+            ;; selection gets the fold too, not just the first screen line
+            (funcall reset)
+            (execute-kbd-macro (kbd "V"))
+            (should (eq evil-state 'visual))
+            (should (eq evil-visual-selection 'line))
+            (funcall reset)
+            (execute-kbd-macro (kbd "Vy"))
+            (let ((interprogram-paste-function nil))
+              (should (equal (substring-no-properties (current-kill 0))
+                             (concat long "\n"))))))
+      (set-frame-width frame width)
+      (kill-buffer buf))))
+
 (ert-deftest parity/long-line-hint-is-subtle-rule-not-aggressive-colour ()
   "Long lines get a dim vertical rule at `fill-column'
 (display-fill-column-indicator), not whitespace-mode's `lines' or

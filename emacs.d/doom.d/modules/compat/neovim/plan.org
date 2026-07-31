@@ -102,13 +102,26 @@ follow-up (2026-07-14), operator-motion regression: that setting installs a
 visual-line-mode keymap in MOTION state binding j/k to the EXCLUSIVE
 ~evil-next-visual-line~/~evil-previous-visual-line~ (evil-integration.el), and
 operator-pending inherits motion state - so ~dj~/~dk~/~yj~/~yk~ stopped being
-linewise over two full lines and became a 1-line exclusive delete that
-dropped the adjacent line (a real muscle-memory hazard: delete the wrong
-line). nvim avoids this by remapping j->gj in normal mode only, never
-operator-pending; mirrored by restoring the linewise motions in OPERATOR
-state ([[file:./navigate.el][navigate.el]], ~evil-define-minor-mode-key~ on ~'operator~) so operators
-span whole lines again while bare j/k keep visual-line nav. pinned by
-~parity/operator-jk-full-linewise~.
+linewise. Fixed initially with an OPERATOR-state override for j/k in
+navigate.el; but the root cause (~evil-respect-visual-line-mode~ being too
+broad) also broke ~dd~/~yy~ (which use ~:motion evil-line-or-visual-line~, a
+function call, not a keybinding), ~V~ (rebound to ~evil-visual-screen-line~),
+and visual-state j/k. Replaced ~evil-respect-visual-line-mode~ entirely with
+manual bindings scoped by state (2026-07-30, [[file:./navigate.el][navigate.el]]):
+- NORMAL state: j/k/0/$ get visual-line-aware motions (nvim's gj/gk/g0/g$)
+- OPERATOR state: overridden back to logical-line motions
+- VISUAL state: overridden back to logical-line motions
+- Internal functions (~evil-line-or-visual-line~, ~evil-expand-line-for-line-based-operators~,
+  ~evil-end-of-line-or-visual-line~) no longer see the setting, so ~dd~/~yy~/~D~/~C~
+  operate on logical lines as nvim does
+- ~V~ enters ~evil-visual-line~ (logical) instead of ~evil-visual-screen-line~
+- ~f/t/F/T~ stay on logical lines (past the wrap fold): doom's evil-snipe
+  override (scope ~line~) searches the whole logical line, matching nvim's
+  f/t (flit.nvim there) - no advice needed
+pinned by ~parity/operator-jk-full-linewise~ (dj/dk/yj on short lines) and
+~parity/wrapped-lines-operators-stay-logical~ (dd/yy/dj/V on a line that
+actually wraps at the window width - the regression that never wrapped in
+the older test).
 
 ** DONE ~,~ -> repeat last ex command
 nvim: ~@:~. Bound to ~evil-ex-repeat~ in morevil. Shadows evil's reverse

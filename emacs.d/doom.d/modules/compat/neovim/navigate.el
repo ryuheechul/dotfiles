@@ -11,20 +11,35 @@
 ;; (bug#77438). living with one-column for now.
 (setq evil-move-beyond-eol t)
 
-;; keep dj/dk/yj/yk (and cj, >j, ...) linewise over FULL lines including the
-;; cursor line, like nvim. `evil-respect-visual-line-mode' (./init.el, for the
-;; visual-line j/k navigation) installs a visual-line-mode keymap in MOTION
-;; state binding j/k to the exclusive `evil-next-visual-line' /
-;; `evil-previous-visual-line' (evil-integration.el); operator-pending inherits
-;; motion state, so `dj' turned into a 1-line exclusive delete that dropped the
-;; line below - a real muscle-memory hazard (delete the wrong line). nvim
-;; sidesteps this by remapping j->gj in normal mode only, not operator-pending;
-;; mirror that by restoring the linewise motions in OPERATOR state, so
-;; operators span whole lines again while bare j/k keep visual-line nav.
+;; `evil-respect-visual-line-mode' is not used (see ./init.el) because it
+;; installs visual-line-aware bindings in the MOTION state, which leaks into
+;; operator-pending and visual via `:enable' and changes internal functions
+;; (evil-line-or-visual-line, evil-expand-line-for-line-based-operators) to
+;; operate on screen lines - breaking dd, yy, V, D, etc.  nvim limits its
+;; wrap-aware remapping to NORMAL mode only (j->gj, etc.), leaving all other
+;; contexts (operator-pending, visual, line-based operators) on logical lines.
+;; Replicate that narrow scope here.
 (after! evil
-  (evil-define-minor-mode-key 'operator 'visual-line-mode
-    "j" #'evil-next-line
-    "k" #'evil-previous-line))
+  ;; Normal state: visual-line-aware j/k/0/$ (nvim's gj/gk/g0/g$)
+  (evil-define-minor-mode-key 'normal 'visual-line-mode
+    "j" #'evil-next-visual-line
+    "k" #'evil-previous-visual-line
+    "0" #'evil-beginning-of-visual-line
+    "$" #'evil-end-of-visual-line)
+
+  ;; Inherited by operator-pending and visual via `:enable', so override
+  ;; back to logical lines there (nvim: j = logical in these states).
+  (dolist (state '(operator visual))
+    (evil-define-minor-mode-key state 'visual-line-mode
+      "j" #'evil-next-line
+      "k" #'evil-previous-line
+      "0" #'evil-beginning-of-line
+      "$" #'evil-end-of-line)))
+
+;; f/t/F/T need no wrap handling here: doom's evil-snipe override (scope
+;; 'line) searches the whole logical line past the wrap fold, matching
+;; nvim's f/t (flit.nvim there) - and it never consults
+;; evil-respect-visual-line-mode, which must stay nil (see init.el)
 
 ;; nvim's C-] (bound to gl there, "go to the link under the cursor") is
 ;; first and foremost the :help navigation key - it follows the help-tag

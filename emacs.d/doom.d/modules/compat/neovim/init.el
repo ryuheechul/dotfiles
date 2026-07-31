@@ -9,7 +9,9 @@
 ;; ../../../../../nvim/lua/plugins/keymaps.lua); evil defaults to whole line
 (setq evil-want-Y-yank-to-eol t)
 
-;; nvim's j/k move by VISUAL line, wrapping into account, when no count is
-;; given (its default). evil defaults to logical-line j/k regardless of
-;; wrap; pairs with the existing global-visual-line-mode elsewhere in doom
-(setq evil-respect-visual-line-mode t)
+;; nvim remaps j/k/0/$ to visual-line-aware equivalents only in NORMAL mode,
+;; not in operator-pending or visual. `evil-respect-visual-line-mode' is too
+;; broad: it creates motion-state bindings that leak into operator-pending and
+;; visual via `:enable', causing dd/yy/V to operate on screen lines instead of
+;; logical lines.  We replicate nvim's narrow scope in navigate.el instead.
+(setq evil-respect-visual-line-mode nil)
