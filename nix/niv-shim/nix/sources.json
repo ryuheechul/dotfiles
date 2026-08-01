@@ -5,10 +5,10 @@
         "homepage": "https://nix-community.github.io/home-manager/",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "b2b7db486e06e098711dc291bb25db82850e1d16",
-        "sha256": "0gy8k4cvwd5w4dn5il9i6whn8vwdc2sykd0n742b8vsfjfz4sr1a",
+        "rev": "bf9ce9fec78f95f374e8dd3b503863a3ec128ebe",
+        "sha256": "0adf14aa4ng1dgifrlasxwxq0rlllf37x76rzjh0zjs889bjfhxy",
         "type": "tarball",
-        "url": "https://github.com/nix-community/home-manager/archive/b2b7db486e06e098711dc291bb25db82850e1d16.tar.gz",
+        "url": "https://github.com/nix-community/home-manager/archive/bf9ce9fec78f95f374e8dd3b503863a3ec128ebe.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixos": {
@@ -17,10 +17,10 @@
         "homepage": "",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "331800de5053fcebacf6813adb5db9c9dca22a0c",
-        "sha256": "1p54fm6dkbq62kpi55cr4wyx7b1nsajpsnjgs64cmp073fwi15f7",
+        "rev": "241313f4e8e508cb9b13278c2b0fa25b9ca27163",
+        "sha256": "09d83cyl9dlfkkbspkgkk7bfydj3mvw6r1x98kvc2v8wl2xd8ldy",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/331800de5053fcebacf6813adb5db9c9dca22a0c.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/241313f4e8e508cb9b13278c2b0fa25b9ca27163.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixos-hardware": {
@@ -41,10 +41,10 @@
         "homepage": "",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8eb2333b95f6",
-        "sha256": "0kbclkd000a5dysskgzlkydri90zprnhy18zyidvk8v3gnqqqd4x",
+        "rev": "f8e81fc7eb06",
+        "sha256": "0kv3s9mbi70ykjpjb979z9765ihm83kdiw4vha2r1rn6qrffydxj",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/8eb2333b95f6.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/f8e81fc7eb06.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs-stable-darwin": {

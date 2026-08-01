@@ -24,6 +24,10 @@ let
   # no longer necessary as there is official package now
   # ghostty = import ../custom/ghostty.nix { pkgs = pkgs; };
   ghostty = with pkgs; if stdenv.isDarwin then ghostty-bin else ghostty;
+  # Lower minikube's priority (6) so kubectl (with default priority 5) wins the conflict
+  minikube = (pkgs.minikube.overrideAttrs (oldAttrs: {
+    meta = (oldAttrs.meta or {}) // { priority = 6; };
+  }));
 in
 with pkgs;
 [
@@ -141,6 +145,7 @@ with pkgs;
   skopeo # Command line utility for various operations on container images and image repositories
   # minikube with podman - https://github.com/containers/podman/issues/12713#issuecomment-1002567777
   # an example podman machine works for minikube - `podman machine init --rootful --cpus 4 --memory 4096 --disk-size 30`
+  earthbuild # Build automation for the container era
 ]
 ++ ifEnv "MY_NIX_EXTRA_SSH" [
   openssh # An implementation of the SSH protocol

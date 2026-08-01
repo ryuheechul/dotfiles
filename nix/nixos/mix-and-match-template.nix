@@ -20,6 +20,7 @@ username:
       # ./recipes/docker-rootful.nix
       # ./recipes/podman-rootful-docker.nix
       ./recipes/podman.nix
+      # ./recipes/podman-machine.nix
       ./recipes/libvirt.nix
       ./recipes/quickemu.nix
       ./recipes/incus.nix

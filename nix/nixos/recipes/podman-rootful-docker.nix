@@ -1,6 +1,9 @@
 { config, ... }:
 
-# check out `./podman.nix` and `./docker-rootful.nix`
+# also see:
+# - ./podman.nix
+# - ./docker-rootful.nix
+
 {
   imports = [ ./podman.nix ];
 

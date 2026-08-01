@@ -7,9 +7,9 @@
   # the benefits and motivation is explained at https://tailscale.com/blog/sisyphean-dns-client-linux
   # this basically put a stop on the fight over `/etc/resolv.conf`
   services.resolved.enable = true;
-  services.resolved.llmnr = "false";
   services.resolved.settings = {
     Resolve = lib.mkIf config.services.avahi.enable {
+      LLMNR = "false";
       # maybe I should disable MulticastDNS regardless of using avahi or not?
       MulticastDNS = "false";
       # anyhow now host/dig/nslookup will stop resolving .local when ping does - https://serverfault.com/a/579996/633069

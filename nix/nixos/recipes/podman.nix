@@ -1,5 +1,9 @@
 { pkgs, ... }:
 
+# also see:
+# - ./podman-machine.nix
+# - ./podman-rootful-docker.nix
+
 # https://nixos.wiki/wiki/Podman
 # https://wiki.nixos.org/wiki/Distrobox
 # https://wiki.nixos.org/wiki/NixOS_Containers
