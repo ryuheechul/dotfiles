@@ -1,0 +1,87 @@
+#!/usr/bin/env -S nu --no-config-file
+#MISE description="Install and upgrade gh extensions"
+#
+# gh extensions are managed here instead of home-manager's
+# programs.gh.extensions: that pins each extension to whatever nixpkgs has,
+# so upgrading means waiting on nixpkgs and rebuilding. this task installs
+# missing extensions and upgrades the rest straight from upstream - run it
+# with `mise run gh-ext-sync` (mise bootstrap also runs it, and `mise run
+# gh-ext` is a chooser that dispatches here or to gh-ext-add).
+#
+# The curated list of extensions lives in gh/extensions.toml in this repo
+# (edit it, or use the add-to-curated helper in
+# nushell/modules/gh-extensions.nu). The list logic is loaded from that same
+# module through the mise/home/nushell symlink (-> ../../nushell): it's
+# relative, so it resolves to the repo's nushell/ both in the repo checkout
+# and when this whole directory is deployed as ~/.config/mise. The list file
+# itself is read from its deployed path ~/.config/gh/extensions.toml (see
+# conf.d/20-dotfiles-symlinks.toml).
+#
+# Installs are declarative: an entry gets installed only if its directory is
+# absent from the extensions dir, so re-running the task never reinstalls
+# what's already there. anything installed manually but not listed still gets
+# upgraded, it just isn't removed or installed. symlinked dirs are skipped
+# entirely - they're local dev checkouts (e.g. gh-scans, symlinked to
+# ~/play/gh-scans) and upgrading them would `git pull` inside a live working
+# tree.
+
+# force https for every git operation this task triggers (clone + pull):
+# during the initial bootstrap there's no ssh key/agent set up yet, and
+# extension repos are public so anonymous https works. scoped to this task's
+# process tree only via GIT_CONFIG_* env vars - gh's own git_protocol: ssh
+# config and ~/.gitconfig stay untouched. equivalent to passing
+# `-c url.https://github.com/.insteadOf=...` to each git command, and like
+# all -c config it takes precedence over loaded config files.
+$env.GIT_CONFIG_COUNT = "2"
+$env.GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf"
+$env.GIT_CONFIG_VALUE_0 = "git@github.com:"
+$env.GIT_CONFIG_KEY_1 = "url.https://github.com/.insteadOf"
+$env.GIT_CONFIG_VALUE_1 = "ssh://git@github.com/"
+
+if (which gh | is-empty) {
+  print "gh-ext: skipping, gh not found on PATH"
+  exit 0
+}
+
+let data_home = ($env.XDG_DATA_HOME? | default ($env.HOME | path join ".local" "share"))
+let ext_dir = ($data_home | path join "gh" "extensions")
+
+# load the module through the nushell symlink next to this tasks dir
+# (mise/home/nushell -> ../../nushell, see comment at the top). `use` only
+# accepts parse-time constant paths and resolves relative ones against the
+# invocation cwd, so the module is loaded in a fresh `nu -c` whose script is
+# built here at runtime - the path is a literal in that child's parse.
+let module_path = ($env.FILE_PWD | path join ".." "nushell" "modules" "gh-extensions.nu")
+let extensions = (nu --no-config-file -c $"use '($module_path)' *; curated-list | to json" | from json)
+if ($extensions | is-empty) {
+  print "gh-ext: list is empty or missing, skipping installs"
+} else {
+  for ext in $extensions {
+    let name = ($ext | split row "/" | last)
+    if ($ext_dir | path join $name | path exists) {
+      print $"gh-ext: ($name) already installed"
+    } else {
+      print $"gh-ext: installing ($ext)"
+      gh extension install $ext
+    }
+  }
+}
+
+# upgrade everything real; skip symlinked local checkouts. a single flaky
+# extension shouldn't fail the task, but the failure is still reported.
+if ($ext_dir | path exists) {
+  for entry in (ls $ext_dir) {
+    let name = ($entry.name | path basename)
+    if $entry.type != "dir" {
+      if $entry.type == "symlink" {
+        print $"gh-ext: skipping symlinked local checkout ($name)"
+      }
+      continue
+    }
+    try {
+      gh extension upgrade $name
+    } catch {
+      print $"gh-ext: warning, upgrade failed for ($name)"
+    }
+  }
+}

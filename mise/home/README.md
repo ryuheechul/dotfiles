@@ -20,7 +20,11 @@ loaded in alphabetical order:
 - [`conf.d/20-dotfiles-symlinks.toml`](conf.d/20-dotfiles-symlinks.toml) - symlinked dotfiles (`[dotfiles]`)
 - [`conf.d/25-dotfiles-edits.toml`](conf.d/25-dotfiles-edits.toml) - dotfile edits, e.g. the gitconfig include (`[dotfiles]`)
 - [`conf.d/30-tools.toml`](conf.d/30-tools.toml) - global CLI tools (`[tools]`)
-- [`conf.d/40-tasks.toml`](conf.d/40-tasks.toml) - post-install tasks (`[tasks.bootstrap]`)
+- [`conf.d/40-tasks.toml`](conf.d/40-tasks.toml) - tasks:
+  - `[tasks.bootstrap]` - post-install tasks, run automatically by `mise bootstrap` (also runs gh-ext-sync)
+- [`tasks/gh-ext`](tasks/gh-ext) - file task: chooser between the two tasks below, with an `input list` picker like raycast-ext (`mise run gh-ext`)
+- [`tasks/gh-ext-sync`](tasks/gh-ext-sync) - file task: gh extension management - installs missing extensions, upgrades the rest; extension list in [`../../gh/extensions.toml`](../../gh/extensions.toml) (edit it, or use `nushell/modules/gh-extensions.nu`) (`mise run gh-ext-sync`)
+- [`tasks/gh-ext-add`](tasks/gh-ext-add) - file task: interactive TUI listing installed gh extensions (plus curated-but-not-installed at the top, ✓ = installed, ★ = already curated); pick one to add it to the curated list, so the list stays portable without hand-editing the TOML; manual only, not run by bootstrap (`mise run gh-ext-add`)
 - [`conf.d/50-macos-defaults.toml`](conf.d/50-macos-defaults.toml) - macOS defaults (`[bootstrap.macos.*]`)
 
 ## Useful commands
@@ -29,6 +33,9 @@ Once this is deployed to `~/.config/mise`:
 
 ```sh
 mise config ls                        # which config files mise is actually loading
+mise run gh-ext                    # chooser: curate an installed extension, or sync the curated list
+mise run gh-ext-sync               # install missing gh extensions, upgrade the rest
+mise run gh-ext-add                # pick an installed extension to curate (TUI)
 mise bootstrap status                 # drift across repos/dotfiles/tools/macos defaults
 mise bootstrap --dry-run              # what a full `mise bootstrap` would do, without doing it
 mise bootstrap repos status           # same, scoped to just one part (dotfiles/tools/etc. too)

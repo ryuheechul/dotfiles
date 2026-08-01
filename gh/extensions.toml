@@ -1,0 +1,20 @@
+# Curated list of gh extensions to install/upgrade on any machine.
+#
+# This is a bespoke approach - gh has no declarative extension config, so we
+# keep a curated list here and manage it with the tooling below:
+#   ../nushell/modules/gh-extensions.nu -- data logic + tests
+#   ../mise/home/tasks/gh-ext-sync      -- installs/upgrades (mise run gh-ext-sync)
+#   ../mise/home/tasks/gh-ext-add       -- interactive TUI to add installed ones
+#   ../mise/home/tasks/gh-ext           -- chooser between the two above
+#
+# Add entries as "owner/repo" from the GitHub repo URL.
+# Installs are declarative: an entry gets installed only if it's missing, so
+# re-running never reinstalls what's already there. Extensions installed but
+# not listed are left alone (upgraded but not removed).
+
+extensions = [
+  # A rich terminal UI for GitHub that doesn't break your flow.
+  "dlvhdr/gh-dash",
+  # GitHub Stacked PRs
+  "github/gh-stack",
+]

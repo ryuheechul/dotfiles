@@ -1,0 +1,64 @@
+#!/usr/bin/env -S nu --no-config-file
+#MISE description="Add installed gh extensions to the curated list"
+#
+# Manual, interactive TUI for gh/extensions.toml - deliberately NOT wired
+# into bootstrap (see conf.d/40-tasks.toml, which only runs gh-ext-sync).
+# Run it directly, or reach it from the chooser:
+#
+#   mise run gh-ext-add
+#   mise run gh-ext      # chooser -> "Add extension to my curated list"
+#
+# Lists what's on this machine: installed gh extensions (from `gh ext list`)
+# plus curated-but-not-installed entries, installed-but-not-curated at the
+# top, ✓★ marking installed / already-curated status (like raycast-ext).
+# Pick one to add it to gh/extensions.toml via add-to-curated - no
+# hand-editing the TOML, and a fresh machine gets the same set back from
+# `mise run gh-ext-sync`. After a successful add it offers to run gh-ext-sync
+# right away.
+#
+# Like the gh-ext-sync task, the list logic is loaded from nushell/modules
+# through the mise/home/nushell symlink (-> ../../nushell); see gh-ext-sync's
+# header comment for why this goes through a child `nu -c`.
+
+# load the module through the nushell symlink next to this tasks dir
+let module_path = ($env.FILE_PWD | path join ".." "nushell" "modules" "gh-extensions.nu")
+
+# fail fast: check for a terminal before the (expensive) candidate fetch
+if not (is-terminal --stdin) {
+    print "gh-ext-add: the picker needs a terminal - run with: mise run --raw gh-ext-add"
+    exit 1
+}
+
+# installed extensions + curated status come from the module
+let candidates = (nu --no-config-file -c $"use '($module_path)' *; combined-list | to json" | from json)
+
+if ($candidates | is-empty) {
+    print "gh-ext-add: nothing found (nothing curated, nothing installed)"
+    exit 1
+}
+
+let selection = ($candidates
+    | input list --fuzzy --display {|ext|
+        let installed_char = (if $ext.installed { "✓" } else { " " })
+        let curated_char   = (if $ext.curated { "★" } else { " " })
+        let slug_padded    = ($ext.slug | fill -a left -w 40 -c " ")
+        $"($installed_char)($curated_char)  ($slug_padded)  ($ext.name)"
+    } "gh extensions  (✓ installed  ★ already in my curated list)")
+
+if ($selection | is-empty) {
+    exit 0
+}
+
+if $selection.curated {
+    print $"gh-ext-add: ($selection.slug) is already in the curated list"
+} else {
+    nu --no-config-file -c $"use '($module_path)' *; add-to-curated '($selection.slug)'"
+    # offer to sync so the newly curated extension gets installed right away
+    let sync = ([
+        "Yes, sync now"
+        "No, just update the list"
+    ] | input list $"Run gh-ext-sync now? Installs ($selection.slug)")
+    if $sync == "Yes, sync now" {
+        run-external ($env.FILE_PWD | path join "gh-ext-sync")
+    }
+}

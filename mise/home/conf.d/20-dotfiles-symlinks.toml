@@ -48,6 +48,8 @@ done
 "~/.config/herdr/config.toml" = "~/.config/dfs-rhc/herdr/config.toml"
 # gh
 "~/.config/gh/config.yml" = "~/.config/dfs-rhc/gh/config.yml"
+# gh extensions curated list (read by the gh-ext mise task)
+"~/.config/gh/extensions.toml" = "~/.config/dfs-rhc/gh/extensions.toml"
 # gh-dash
 "~/.config/gh-dash/config.yml" = "~/.config/dfs-rhc/gh/dash/config.yml"
 # bat

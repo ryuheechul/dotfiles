@@ -191,7 +191,7 @@ alias -s git='git clone'
 alias rsync='rsync --exclude=.git' # prevents disasters of overriding git history in case local is not fully synced with remote yet
 alias shellcheck='shellcheck --color=always'
 alias distrobox='STARTSHIP_SESSION_KEY= UNSET_ALL_MY_ZSH_STUFF_LOADED=1 distrobox'
-alias gh='GLAMOUR_STYLE=$(theme-tone) gh'
+alias gh='GLAMOUR_STYLE=$(theme-tone) GH_STACK_THEME=$(theme-tone) gh'
 # equip auxww by default for convenience: basically show all process with full command
 alias ps='grc ps auxww'
 alias watch='viddy -d'

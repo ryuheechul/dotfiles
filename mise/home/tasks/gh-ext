@@ -1,0 +1,39 @@
+#!/usr/bin/env -S nu --no-config-file
+#MISE description="Choose: curate installed extensions or sync the curated list"
+#
+# Thin chooser between the two gh extension tasks, with the same `input list`
+# picker experience as raycast-ext. Run it with:
+#
+#   mise run gh-ext
+#
+#   Add extension to my curated list  -> gh-ext-add  (TUI: pick an installed
+#                                        extension to add to gh/extensions.toml)
+#   Sync curated list                 -> gh-ext-sync (install missing, upgrade
+#                                        the rest; this is also what bootstrap
+#                                        runs, see conf.d/40-tasks.toml)
+#
+# The chosen task is executed directly from this tasks dir - both scripts
+# locate everything via FILE_PWD, so this works in the repo checkout and the
+# deployed ~/.config/mise alike.
+
+let actions = [
+    "Add extension to my curated list"
+    "Sync curated list (install missing, upgrade the rest)"
+]
+
+if not (is-terminal --stdin) {
+    print "gh-ext: the chooser needs a terminal - run with: mise run --raw gh-ext"
+    exit 1
+}
+
+let action = ($actions | input list "gh extensions")
+
+if ($action | is-empty) {
+    exit 0
+}
+
+if $action == "Add extension to my curated list" {
+    run-external ($env.FILE_PWD | path join "gh-ext-add")
+} else {
+    run-external ($env.FILE_PWD | path join "gh-ext-sync")
+}

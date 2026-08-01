@@ -1,3 +1,56 @@
 pager:
   diff: delta --detect-dark-light=never
 confirmQuit: true
+
+# https://www.gh-dash.dev/configuration/keybindings/
+keybindings:
+  universal:
+    - key: d
+      builtin: pageDown
+    - key: b
+      builtin: pageUp
+  prs:
+  # unset diff to none from d so the universal key is not overshadowed
+    - key: ""
+      builtin: diff
+    - key: v
+      name: view-pr
+      command: >
+        gh pr view {{.PrNumber}}
+    - key: e
+      name: edit-pr
+      command: >
+        gh pr edit {{.PrNumber}}
+
+# https://www.gh-dash.dev/configuration/theme/
+# gh-dash v4.25.2 renders theme colors as truecolor RGB, so hex values
+# (#RRGGBB) pass through exactly. Palette indices do NOT resolve against the
+# terminal palette - "2" renders as the fixed xterm green #008000, "10" as
+# #00ff00 - they ignore base16-shell entirely. Hex is therefore the only way
+# to match the active base16 theme. Values below are base16-solarized-dark;
+# swap the text/background/border hexes for the -light variants to match the
+# light theme.
+theme:
+  colors:
+    text:
+      primary: "#93a1a1"     # default foreground
+      secondary: "#268bd2"   # blue accents
+      inverted: "#002b36"    # text on the footer strip
+      faint: "#93a1a1"       # timestamps, metadata, tab labels
+      warning: "#b58900"     # warnings
+      success: "#859900"     # approved, passing
+      error: "#dc322f"       # errors
+      actor: "#657b83"       # muted gray
+    background:
+      selected: "#073642"    # selected row + footer strip
+    border:
+      primary: "#2aa198"     # cyan borders
+      secondary: "#268bd2"   # blue borders
+      faint: "#073642"       # tab-pill background, blends into the footer
+    icon:
+      newcontributor: "#2aa198"  # cyan
+      contributor: "#6c71c4"     # violet
+      collaborator: "#b58900"    # yellow
+      member: "#859900"          # green
+      owner: "#dc322f"           # red
+      unknownrole: "#657b83"     # gray

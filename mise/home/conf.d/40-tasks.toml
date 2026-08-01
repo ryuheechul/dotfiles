@@ -44,4 +44,9 @@ fi
 # zsh (zinit) - source it now to install missing zsh plugins during
 # bootstrap instead of on first interactive shell startup
 zsh -c "source '$HOME/.config/dfs-rhc/zsh/my_addons/zinit'"
+
+# gh extensions - install missing, upgrade the rest (the gh-ext-sync task in
+# ../tasks/gh-ext-sync). the `|| true` keeps a gh network flake from failing
+# the whole bootstrap, which every other step here is careful to never do.
+mise run gh-ext-sync || true
 '''
