@@ -133,4 +133,23 @@ in
   # networking.firewall.trustedInterfaces = [ bridgeName ];
 
   security.apparmor.enable = true; # requires reboot
+
+  # These are what make it possible for DNS query from external network to go through.
+  #
+  # # A. This unblocks the port so it can connect to `incusbr0`
+  # networking.firewall = {
+  #   allowedUDPPorts = [ 53 ];
+  #   allowedTCPPorts = [ 53 ];
+  # };
+  #
+  # # B. in addition to A. the host's systemd-resolved can act as a "bridge" name server.
+  # services.resolved = {
+  #   settings.Resolve = {
+  #     DNSStubListener = "yes";
+  #     DNSStubListenerExtra = "0.0.0.0";
+  #   };
+  # };
+  #
+  # But in case to handle this from a interface what's being blocked,
+  # see firewall config from `./tailscale.nix`.
 }
