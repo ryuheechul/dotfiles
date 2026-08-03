@@ -37,6 +37,7 @@ username:
     ./recipes/vm-guest-qemu.nix
     ./recipes/vm-guest-utm.nix
     ./recipes/vm-guest-utm-mount.nix
+    ./recipes/lxc-guest.nix
     ./recipes/wsl.nix
     ./recipes/mtu-probing.nix
     # desktop
