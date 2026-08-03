@@ -7,6 +7,8 @@ let
   isLinux = with pkgs; lib.optionals stdenv.isLinux;
   # No longer needed as upstream is also now 3.7+
   # tmux-next = import ./custom/tmux-next-3.7.nix { pkgs = pkgs; };
+  # so that it doesn't conflict with some terminals (e.g. ghostty)
+  ncurses = (pkgs.lib.lowPrio pkgs.ncurses);
 in
 with pkgs;
 # just for fun/testing

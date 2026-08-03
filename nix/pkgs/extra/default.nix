@@ -23,11 +23,16 @@ let
   backlog = import ../custom/backlog.nix { pkgs = pkgs; };
   # no longer necessary as there is official package now
   # ghostty = import ../custom/ghostty.nix { pkgs = pkgs; };
-  ghostty = with pkgs; if stdenv.isDarwin then ghostty-bin else ghostty;
+  ghostty = if pkgs.stdenv.isDarwin then pkgs.ghostty-bin else pkgs.ghostty;
   # Lower minikube's priority (6) so kubectl (with default priority 5) wins the conflict
-  minikube = (pkgs.minikube.overrideAttrs (oldAttrs: {
-    meta = (oldAttrs.meta or {}) // { priority = 6; };
-  }));
+  minikube = (
+    # similar alternative: `(pkgs.lib.lowPrio pkgs.minikube)`
+    pkgs.minikube.overrideAttrs (oldAttrs: {
+      meta = (oldAttrs.meta or { }) // {
+        priority = 6;
+      };
+    })
+  );
 in
 with pkgs;
 [
@@ -171,9 +176,13 @@ with pkgs;
   # `xauth list`
   # `mcookie | xargs xauth add :0 .`
 ]
-++ ifEnv "MY_NIX_EXTRA_AGE" [
-  age-plugin-se # Age plugin for Apple's Secure Enclave
-]
+++ ifEnv "MY_NIX_EXTRA_AGE" (
+  [
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    age-plugin-se # Age plugin for Apple's Secure Enclave
+  ]
+)
 ++ ifEnv "WSL_DISTRO_NAME" wsl
 ++ ifEnv "MY_NIX_EXTRA_RUSTY_FAM" rusty-fam
 ++ ifEnv "MY_NIX_EXTRA_EXPERIMENT" exp
