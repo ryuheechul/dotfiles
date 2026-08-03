@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Usage: notify-gui message [title]
+
+# WARN: this is actually stub for ../darwin/notify-gui and it's NOOP for now

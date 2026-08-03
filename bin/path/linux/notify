@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Usage: notify [other command and its args]
+# It will use sound and visual notification to notify when the command has finished running
+
+# WARN: this is actually stub for ../darwin/notify and it's NOOP for now
