@@ -26,8 +26,8 @@ keybindings:
 # gh-dash v4.25.2 renders theme colors as truecolor RGB, so hex values
 # (#RRGGBB) pass through exactly. Palette indices do NOT resolve against the
 # terminal palette - "2" renders as the fixed xterm green #008000, "10" as
-# #00ff00 - they ignore base16-shell entirely. Hex is therefore the only way
-# to match the active base16 theme. Values below are base16-solarized-dark;
+# #00ff00 - they ignore the active tinty theme entirely. Hex is therefore the
+# only way to match the active theme. Values below are base16-solarized-dark;
 # swap the text/background/border hexes for the -light variants to match the
 # light theme.
 theme:

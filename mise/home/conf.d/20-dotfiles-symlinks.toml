@@ -19,12 +19,12 @@
 #
 [bootstrap.hooks.pre-dotfiles]
 # rsop/espanso/ghostty auto-vivify a real (non-symlink) config directory on
-# first run if none exists yet (herdr does the same with its config.toml) -
-# [dotfiles] refuses to overwrite real data without --force, so clear only
-# that case here; an already-correct symlink is left alone since mise
-# re-points symlinks freely on its own
+# first run if none exists yet (herdr does the same with its config.toml,
+# tinty with its config dir) - [dotfiles] refuses to overwrite real data
+# without --force, so clear only that case here; an already-correct symlink
+# is left alone since mise re-points symlinks freely on its own
 run = '''
-for target in "$HOME/.config/carapace" "$HOME/.config/rsop" "$HOME/.config/espanso" "$HOME/.config/ghostty" "$HOME/.config/herdr/config.toml"; do
+for target in "$HOME/.config/carapace" "$HOME/.config/rsop" "$HOME/.config/espanso" "$HOME/.config/ghostty" "$HOME/.config/herdr/config.toml" "$HOME/.config/tinted-theming"; do
   # exists (real file/dir or symlink) AND is not already a symlink
   # -> a real leftover blocking [dotfiles], so clear it
   if test -e "$target" && test ! -L "$target"; then
@@ -78,6 +78,8 @@ done
 "~/.config/zellij" = "~/.config/dfs-rhc/zellij"
 # tmux
 "~/.tmux.conf" = "~/.config/dfs-rhc/tmux.conf"
+# tinty (tinted-theming)
+"~/.config/tinted-theming" = "~/.config/dfs-rhc/tinted-theming"
 # sesh
 "~/.config/sesh" = "~/.config/dfs-rhc/sesh"
 # editorconfig

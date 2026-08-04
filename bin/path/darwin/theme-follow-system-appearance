@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## subscribe changes on macOS system appearance and update base16-shell accordingly
+## subscribe changes on macOS system appearance and update the tinty theme accordingly
 
 # discovered a good solution https://github.com/bouk/dark-mode-notify via https://www.stefanjudis.com/notes/a-terminal-script-to-get-notified-when-macos-changes-its-appearance-dark/
 
@@ -43,6 +43,6 @@ EOF
   export PATH="$(brew --prefix swift)/bin:${PATH}"
 fi
 
-## run dark-mode-notify.swift to fix base16-shell based on system's theme
+## run dark-mode-notify.swift to set the tinty theme based on system's theme
 # `dark` and `light` are provided via ../../../zsh/fn/theme
 "${dmn_path}/dark-mode-notify.swift" zsh -c 'test "${DARKMODE}" = 1 && dark || light'

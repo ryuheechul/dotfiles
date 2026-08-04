@@ -133,12 +133,17 @@ Mechanics: [barriers lifted and how](./mechanics.md#enter-anywhere-nest-anything
 ## One tone, every layer
 
 Light/dark is a single system-wide decision, not a per-tool setting: when
-the tone flips (macOS appearance change, or manual `dark`/`light`),
-everything currently on screen follows - every tmux pane, every herdr
-client and pane, emacs, and whatever TUI is running inside any of them -
-without restarting anything. The mechanism is a two-file pub/sub bus (a
-*state* file and a *signal* file); new shells read the state at startup,
-and every already-running subscriber watches the signal.
+the tone flips (macOS appearance change, GNOME's night-theme switcher, the
+editor toggles, or manual `dark`/`light`), everything currently on screen
+follows - every tmux
+pane, every herdr client and pane, emacs, and whatever TUI is running inside
+any of them - without restarting anything. The mechanism is a pub/sub bus
+with one publisher and two files: [tinty](../tinted-theming/tinty/config.toml)
+is the publisher (every flip is a `tinty apply`); its generated palette
+script is the *state* file (read through the stable `~/.active-theme` link the
+hook maintains), and a *signal* file is bumped on every apply.
+New shells read the state at startup, and every already-running subscriber
+watches the signal.
 
 Two load-bearing choices make "every layer" actually hold:
 

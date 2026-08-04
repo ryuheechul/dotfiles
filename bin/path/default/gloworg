@@ -18,8 +18,8 @@ set -euo pipefail
 
 # `light` or `dark`; same logic as theme-tone in
 # ../../../zsh/my_addons/aliases, which is a zsh function and thus out of
-# reach here (current-base16 is a sibling script)
-tone="$(current-base16 | sed s/solarized-//)"
+# reach here (theme-name is a sibling script)
+tone="$(theme-name | sed s/solarized-//)"
 
 if test -n "${1:-}"; then
   # org's headline TODO/DONE keywords have no markdown equivalent (org's

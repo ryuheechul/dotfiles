@@ -78,11 +78,17 @@ local init = function()
 end
 
 local toggle_bg = function()
+  -- change the tone instantly in this instance
   if vim.o.background == 'dark' then
     vim.o.background = 'light'
   else
     vim.o.background = 'dark'
   end
+  -- ...and via `theme-set` (../../../bin/path/default/theme-set) so tinty's
+  -- hooks notify every subscriber - all running nvim/emacs instances, tmux,
+  -- herdr; this instance's fwatch (../plugins/theme.lua) re-applies the tone
+  -- when the signal bumps (re-applying the same tone is a no-op, so no loop)
+  vim.fn.system { 'theme-set', vim.o.background }
 end
 
 local config = function()

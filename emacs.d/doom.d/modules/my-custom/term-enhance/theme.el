@@ -30,7 +30,7 @@
    (if override-base16-with-doom (base16-to-doom theme-name) theme-name)
    t))
 
-;; use this instead of using load-theme directly to sync theme between emacs and base16-shell
+;; use this instead of using load-theme directly to sync theme between emacs and tinty
 (defun switch-doom-theme (theme-name)
   (apply-theme (intern theme-name))
   (setenv
@@ -39,9 +39,17 @@
 
 ;; toggle between light and dark
 (defun toggle-doom-theme-tone ()
-  (if (eq (doom-theme-value) 'base16-solarized-dark)
-      (switch-doom-theme (symbol-name 'base16-solarized-light))
-    (switch-doom-theme (symbol-name 'base16-solarized-dark))))
+  ;; decide the target tone once - the instant doom switch and the
+  ;; `theme-set` notification below both need it
+  (let ((target (if (eq (doom-theme-value) 'base16-solarized-dark)
+                    "light" "dark")))
+    ;; change the tone instantly in this instance
+    (switch-doom-theme (concat "base16-solarized-" target))
+    ;; ...and via `theme-set` (bin/path/default/theme-set) so tinty's hooks
+    ;; notify every subscriber - all running nvim/emacs instances, tmux, herdr;
+    ;; this instance's file-notify watcher (below) re-applies the theme when
+    ;; the signal bumps (re-applying the same theme is a no-op, so no loop)
+    (call-process "theme-set" nil nil nil target)))
 
 ;; to match with <Space> t b from my neovim
 (map! :leader
@@ -51,8 +59,8 @@
       "b"
       (lambda () (interactive) (toggle-doom-theme-tone)))
 
-(defun follow-theme-base16-shell ()
-  (switch-doom-theme (concat "base16-" (shell-command-to-string "current-base16"))))
+(defun follow-theme-tinty ()
+  (switch-doom-theme (concat "base16-" (shell-command-to-string "theme-name"))))
 
 ;; use base16-theme package to enable base16 theme on emacs
 (use-package! base16-theme
@@ -68,17 +76,19 @@
   ;; and with GUI version, somehow it looks different depends on
   ;; which terminal that I use to run emacs - this was actually mitigated
   ;; by setting COLORTERM=truecolor
-  ;; decide the tone based on ~/.base16_theme (by my `current-base16` command)
-  (follow-theme-base16-shell))
+  ;; decide the tone based on tinty's current scheme (by my `theme-name` command)
+  (follow-theme-tinty))
 
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/File-Notifications.html
 (require 'filenotify)
 
 ;; subscriber of "One tone, every layer" - ../../../../../docs/mechanics.md
 (file-notify-add-watch
-  ;; ;; this `file-notify-add-watch' actually can handle change on the symlink directory like below
-  ;; "~/.base16_theme" '(change) (lambda (event) (follow-theme-base16-shell))
-  ;; ;; however on my another watcher, ~/.config/dfs-rhc/bin/path/default/base16-shell-auto-reload can't
-  ;; ;; since it relys on entr and it doesn't support that - https://github.com/eradman/entr/issues/30
-  ;; ;; therefore we just watch the same file as other watchers to maintain the same logic across watchers
-  "~/.base16_theme.updated-time" '(change) (lambda (event) (follow-theme-base16-shell)))
+  ;; ;; `file-notify-add-watch' can handle change on a symlink target, so watching
+  ;; ;; the stable `~/.active-theme` state link directly would work for emacs - but
+  ;; ;; the other watchers (nvim's fwatch) all key off the signal file, and the old
+  ;; ;; entr-based watcher couldn't follow a repointed symlink
+  ;; ;; (https://github.com/eradman/entr/issues/30) - so we watch the same
+  ;; ;; `~/.active-theme.updated-time` file as everyone else to maintain the same
+  ;; ;; logic across watchers
+  "~/.active-theme.updated-time" '(change) (lambda (event) (follow-theme-tinty)))

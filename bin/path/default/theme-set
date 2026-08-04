@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# non-shell entry point for theme changes - emacs, nvim, etc. call this
+# instead of knowing about tinty ("One tone, every layer" -
+# ../../docs/philosophy.md). The zsh-native equivalent is the `light`/`dark`
+# functions in ../../zsh/fn/theme, which add the SSH guard and source the new
+# theme into the current shell - both shell-specific concerns a non-shell
+# caller doesn't want.
+case "$1" in
+  light|dark) ;;
+  *) echo "usage: theme-set light|dark" >&2; exit 1 ;;
+esac
+# the main point is to trigger tinty's global hooks via `tinty apply`
+# (../../tinted-theming/tinty/config.toml) so all subscribers are notified of
+# the change - including every running instance of nvim/emacs, tmux, herdr
+tinty apply "base16-solarized-${1}"

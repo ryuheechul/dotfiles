@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# repaint every tmux pane with the current tinted-shell theme
+# (called per theme change by tinty's global hooks - see
+# ../../../tinted-theming/tinty/config.toml; the why is "One tone, every
+# layer" in docs/philosophy.md)
+#
+# a throwaway window sources the cached palette script; it sees $TMUX and
+# passes the palette escapes through to the host terminal, which recolors
+# every pane at once
+
+# the stable link the tinty item hook repoints on every apply (see
+# ../../../tinted-theming/tinty/config.toml)
+theme_file="${HOME}/.active-theme"
+
+test -f "$theme_file" || exit 0
+
+# running from inside tmux would limit the repaint to that one session -
+# these unsets simulate being outside of tmux, so it's safe to call this
+# from anywhere. They must come before the first `tmux` call below (the
+# has-session probe), since the mask below keys off INSIDE_EMACS which
+# the emacs shell sets before anything here has run.
+unset TERM
+unset TERM_PROGRAM
+unset TMUX
+unset TMUX_PANE
+unset TMUX_PLUGIN_MANAGER_PATH
+unset tmux_version
+
+# INSIDE_EMACS is the odd one out: it's not tmux-related, but shells
+# inside emacs have ../../path/emacs/tmux (a mask) first on $PATH that
+# bails with exit 1 whenever INSIDE_EMACS is set, so the `tmux` calls
+# below would fail silently from emacs terminals while working everywhere
+# else. Unsetting it lets the mask fall through to the real tmux (its
+# `which -a` pass-through path); the mask still blocks interactive tmux,
+# since those shells keep INSIDE_EMACS set.
+unset INSIDE_EMACS
+
+# no tmux server to repaint (the throwaway window needs one)
+tmux has-session 2>/dev/null || exit 0
+
+tmux new-window "sleep 0.1 && source \"${theme_file}\" && exit"

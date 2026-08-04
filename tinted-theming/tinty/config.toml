@@ -1,0 +1,59 @@
+# tinty is the publisher of "One tone, every layer" - ../../../docs/mechanics.md
+#
+# `light`/`dark` (../../../zsh/fn/theme) run `tinty apply base16-solarized-<tone>`;
+# tinty then regenerates every item's theme file and fires the global hooks
+# below. The hooks are how a tone change reaches already-running subscribers
+# (the repaints the old base16-shell `entr` watcher used to do); new shells
+# need no delivery at all - they source the cached palette script at startup
+# (../../../zsh/my_addons/shell_ext).
+
+# applied on a bare `tinty apply`; also what `tinty init` would reapply at
+# shell startup (this repo never calls `tinty init` - shell_ext falls back to
+# `light` when the cache file is missing instead, so every apply IS a change)
+default-scheme = "base16-solarized-light"
+
+# `tinty cycle` toggles between the two tones
+default-cycle-ring = "tone"
+
+# global hooks - run after every `tinty apply` (no `tinty init` anywhere in
+# this repo, so an apply always means the tone actually changed)
+#
+# NOTE: TOML ordering matters here - after the first `[[rings]]`/`[[items]]`
+# header below, every bare key would belong to that table instead of the
+# root, so `hooks` has to stay before the first `[[...]]` header.
+hooks = [
+  # the *signal* of the pub/sub bus: every subscriber watches this file for
+  # mtime changes and re-reads the theme (nvim's fwatch, emacs's file-notify)
+  'date +%s > "$HOME/.active-theme.updated-time"',
+  # repaint every running tmux pane (throwaway window sources the cache; the
+  # tinted-shell script sees $TMUX and passes the escapes through to the host)
+  "theme-reload-on-tmux",
+  # repaint everything herdr shows (herdr has no passthrough - the script
+  # writes the raw escapes to every client tty and pane pty itself)
+  "theme-reload-on-herdr",
+]
+
+[[rings]]
+name = "tone"
+schemes = ["base16-solarized-light", "base16-solarized-dark"]
+
+# the generated palette script IS the theme for every terminal/tui: sourcing
+# it emits the OSC 4 palette + OSC 10/11 fg/bg escapes (wrapped in tmux
+# passthrough when $TMUX is set). Instead of tinty's default `source` hook we
+# point a stable link at tinty's rendered script itself: consumers read
+# `~/.active-theme` and never need to know the layout - a tool-agnostic name
+# (was `~/.base16_theme` in the base16 era, then considering `~/.tinty-theme`,
+# `~/.shell-theme` and `~/.current-theme` briefly) so a tool change never
+# renames the bus. tinty keeps the generated artifact after the hooks run (it
+# maintains its own stable link to it), so the symlink survives every apply.
+# The hook must stay free of single quotes, since tinty wraps it in
+# `sh -c '{}'` before word-splitting.
+[[items]]
+name = "tinted-shell"
+path = "https://github.com/tinted-theming/tinted-shell"
+themes-dir = "scripts"
+hook = """
+# the stable address every consumer sources, so none of them knows the layout
+ln -sfn "${TINTY_THEME_FILE_PATH}" "${HOME}/.active-theme"
+"""
+supported-systems = ["base16", "base24"]

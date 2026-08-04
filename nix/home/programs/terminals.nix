@@ -9,7 +9,7 @@ let
     text = ''
       # `maximized` provides better experience than `fullscreen` on linux
       os_window_state maximized
-      launch zsh -c 'source ~/.base16_theme; exec-tmux-attach kitty'
+      launch zsh -c 'source-active-theme; exec-tmux-attach kitty'
     '';
   };
   # below works the same way as above for current purpose

@@ -1,0 +1,55 @@
+#!/usr/bin/env nu
+
+# repaint everything herdr shows with the current tinted-shell theme
+# (called per theme change by tinty's global hooks - see
+# ../../../tinted-theming/tinty/config.toml; the why is "One tone, every
+# layer" in docs/philosophy.md)
+#
+# herdr has no tmux-style escape passthrough, keeps per-pane palettes, and
+# renders through each attached client's host terminal - so deliver the raw
+# palette escapes ourselves to
+# (a) each client's host tty (chrome + client-side rendering; herdr's UI
+#     theme is set to "terminal" so it follows the host palette)
+# (b) each pane's pty (updates herdr's per-pane palettes, so apps drawing
+#     with ansi colors follow)
+
+def main [] {
+  let esc = (^zsh -c 'emit-active-theme' | into binary)
+
+  # (a) host ttys of all herdr client/server processes
+  let client_ttys = (
+    ^ps -axo tty=,comm=
+    | lines
+    | parse --regex '^\s*(?<tty>\S+)\s+(?<comm>.*)$'
+    | where comm == 'herdr'
+    | get tty
+  )
+
+  # (b) pane ptys via each pane's foreground process group. skipped when no
+  #     herdr server is running: `herdr pane list` then exits non-zero with
+  #     "Connection refused" (which this nu version prints as an Os error) -
+  #     `complete` captures that instead of failing, so we just produce no
+  #     panes and only the ps-based client ttys above get repainted
+  let herdr_list = (^herdr pane list | complete)
+  let pane_ttys = (
+    if $herdr_list.exit_code == 0 {
+      $herdr_list.stdout
+      | from json
+      | get result.panes.pane_id
+      | each {|pane|
+          let pgid = (^herdr pane process-info --pane $pane | from json | get result.process_info.foreground_process_group_id)
+          ^ps -o tty= -p $pgid | str trim
+        }
+    } else { [] }
+  )
+
+  $client_ttys
+  | append $pane_ttys
+  | uniq
+  | where { $in != '??' and $in != '' }
+  | each {|tty|
+      # some ttys can reject writes (permissions); skip quietly
+      try { $esc | save --raw --force $'/dev/($tty)' }
+    }
+  | ignore
+}

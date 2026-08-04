@@ -101,7 +101,7 @@
 [tig "color"]
   ; specify either 8 color like black white ... or 256 color
   ; 256 color might not work depends on TERM - read more on that here, https://github.com/jonas/tig/issues/559
-  ; note that using black or white could result them to be reversed (inconsistency) depends on situations probably due to how my theme from base16-shell works
+  ; note that using black or white could result them to be reversed (inconsistency) depends on situations probably due to how my theme from tinty works
   cursor = black cyan bold
   commit = magenta black ; something like `commit h65hc6...`
   title-blur = white black ; like the one from parent view - also for the vertical line...

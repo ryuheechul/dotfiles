@@ -164,9 +164,9 @@ _tag navi
 # fallback any command to npx # disabled for now
 # source <(npx --shell-auto-fallback zsh)
 
-## base16-shell supports
+## tinty (tinted-theming) supports
 
-function should_skip_loading_base16_shell()
+function should_skip_loading_tinted_shell()
 {
   if is-ssh || test -n "${INSIDE_EMACS}" || test -n "${VIMRUNTIME}" || test -n "${NVIM}" ; then
     return 0 # true
@@ -175,23 +175,12 @@ function should_skip_loading_base16_shell()
   fi
 }
 
-if should_skip_loading_base16_shell; then
+if should_skip_loading_tinted_shell; then
   true
 else
-  BASE16_SHELL="${BASE16_SHELL:-${HOME}/.config/base16-shell}"
-  [ -n "${PS1}" ] && \
-      [ -s "${BASE16_SHELL}/profile_helper.sh" ] && \
-          source "${BASE16_SHELL}/profile_helper.sh"
+  source-active-theme
 
-  # to initialize a theme when there is none
-  test -f ~/.base16_theme || light
-
-  # shim to workaround the issue with cached result of above
-  export BASE16_THEME="$(current-base16)"
-
-  source ~/.base16_theme
-
-  _tag base16
+  _tag tinted
 fi
 
 

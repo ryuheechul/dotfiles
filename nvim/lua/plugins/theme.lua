@@ -5,17 +5,18 @@
 -- this function seems to be global in order to be called from below
 -- I could wrap the whole thing in a function to have a closure effect
 -- but I'm lazy and why not have this function to be available in command line as well
-local follow_base16_shell = function()
-  -- instead of relying vim.env.BASE16_THEME
-  -- `current-base16` response the most accurate value
-  local handle = io.popen 'current-base16'
+local follow_tinty_theme = function()
+  -- no env var to rely on: `theme-name` responds the most accurate value
+  local handle = io.popen 'theme-name'
 
   if handle ~= nil then
     local result = handle:read '*a'
-    local theme_base = (result:gsub('solarized--', ''))
+    -- strip the trailing newline and the solarized- prefix (theme-name
+    -- already drops base16-) to get just the tone (light/dark)
+    local tone = result:gsub('^solarized%-', ''):gsub('%s+$', '')
     handle:close()
 
-    vim.api.nvim_set_option('background', theme_base)
+    vim.api.nvim_set_option('background', tone)
   end
 end
 
@@ -41,18 +42,18 @@ return {
         vim.cmd [[ colorscheme everforest ]]
       end
 
-      -- comply with base16
-      follow_base16_shell()
+      -- comply with the current tinty theme
+      follow_tinty_theme()
 
       -- set up a callback on file change so it can correct the theme tone by itself
       -- (subscriber of "One tone, every layer" - ../../../docs/mechanics.md)
       local fwatch = require 'fwatch'
       -- because `~` wouldn't work here
-      fwatch.watch(vim.env.HOME .. '/.base16_theme.updated-time', {
+      fwatch.watch(vim.env.HOME .. '/.active-theme.updated-time', {
         on_event = function()
           -- use `defer_fn` to avoid [blahblah] must not be called in a lua loop callback
           vim.defer_fn(function()
-            follow_base16_shell()
+            follow_tinty_theme()
           end, 1)
         end,
       })

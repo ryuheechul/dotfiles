@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# like the old `current-base16` but backed by tinty: prints the bare scheme
+# name (e.g. solarized-light) for consumers that need the tone
+# ("One tone, every layer" - ../../docs/philosophy.md)
+#
+# asks `tinty current` (tinty's own API) rather than reading its internal
+# state file - consumers must not know the layout, the same principle as
+# the stable `~/.active-theme` link. solarized-dark fallback keeps consumers
+# sane before the first apply ever runs (fresh installs) or on setups
+# without tinty (containers/throwaways).
+
+out="$(tinty current 2>/dev/null)" || out=""
+test -z "$out" && {
+  printf '%s' solarized-dark
+  exit
+}
+
+printf '%s' "${out#base16-}"

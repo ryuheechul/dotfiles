@@ -91,9 +91,7 @@ fi
 # this will return either `light` or `dark`
 function theme-tone () {
   # assuming I only use `solarized-*`
-  current-base16 | sed s/solarized-//
-  # although below "works" it doesn't work well with my cached base16 shell eval - look at the end of ./shell_ext
-  # printenv BASE16_THEME | sed s/solarized-//
+  theme-name | sed s/solarized-//
 }
 
 # a helper also that warns about the `git reset --hard`, read more at https://jwiegley.github.io/git-from-the-bottom-up/3-Reset/4-doing-a-hard-reset.html
@@ -166,7 +164,7 @@ fi
 function hunk {
   # since there is no other way like env var
   # to work with current theme without wrapping with function
-  current-base16 | xargs env hunk "$@" --theme
+  theme-name | xargs env hunk "$@" --theme
 }
 
 function tuicr {

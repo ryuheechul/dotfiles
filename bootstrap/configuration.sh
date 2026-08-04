@@ -55,7 +55,7 @@ ln -sfn "${this_repo_path}" "${XDG_CONFIG_HOME}/dfs-rhc"
 dfs_rhc="${XDG_CONFIG_HOME}/dfs-rhc"
 
 # in case my bins are being used in the configuration step already
-# - one discovered usage is that `current-base16` is being used in ../nvim/lua/plugins/theme.lua
+# - one discovered usage is that `theme-name` is being used in ../nvim/lua/plugins/theme.lua
 export PATH="${dfs_rhc}/bin/path/default:${PATH}"
 
 # mise - deploy config first so `mise bootstrap` below can see it; see

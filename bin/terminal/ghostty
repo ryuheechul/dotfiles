@@ -3,6 +3,6 @@
 if test "${CMUX_BUNDLE_ID}" = com.cmuxterm.app; then
   zsh
 else
-  source ~/.base16_theme
+  source-active-theme
   exec-tmux-attach ghostty
 fi

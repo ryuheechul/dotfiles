@@ -1,44 +1,62 @@
 # -*- mode: sh; -*- vim: set ft=zsh:
 
-export BASE16_SHELL="${XDG_CONFIG_HOME}/base16-shell"
-
 # this is the publisher of the light/dark pub/sub bus - "One tone, every
 # layer" in ../../docs/mechanics.md
-function _change_my_base16_theme() {
-  # helper functions to make theme tone changes and that to be followable by other tools
-  _update_theme_changed_time() {
-    # let external tools to have a chance to follow the change and adopt to it
-    date +%s > ~/.base16_theme.updated-time
-  }
-
+function _change_my_tone() {
   if is-ssh; then
     if echo "${INSIDE_EMACS}" | grep tramp >/dev/null; then
-      echo 'abort changing base16-shell when accessed via TRAMP'
+      echo 'abort changing theme when accessed via TRAMP'
       return
     elif command -v gum >/dev/null; then
       gum confirm "You appeared to be connected via SSH and this will change the theme on remote machine not client, still proceed?" &&
         true ||
         return
     else
-      echo 'abort changing base16-shell when accessed via SSH'
+      echo 'abort changing theme when accessed via SSH'
       return
     fi
   fi
 
-  # change theme manually - by coping how base16-shell theme change works
-  ln -sf "${BASE16_SHELL}/scripts/base16-solarized-${1}.sh" ~/.base16_theme
+  # change theme - `tinty apply` regenerates every item's theme file (the
+  # cached palette script among them) and fires the global hooks: the signal
+  # bump and the tmux/herdr repaints ("One tone, every layer" in
+  # ../../docs/mechanics.md, implementation in ../../tinted-theming/tinty/config.toml)
+  tinty apply "base16-solarized-${1}"
 
-  # and source the new one
-  source ~/.base16_theme
-
-  # update time to trigger notify subscribers too
-  _update_theme_changed_time
+  # and source the new one (the stable link the hook repoints on every apply);
+  # --no-fallback: a failed apply leaves nothing new to source, and falling
+  # back to `light` here would recurse (light -> _change_my_tone -> ...)
+  source-active-theme --no-fallback
 }
 
 light() {
-  _change_my_base16_theme light
+  _change_my_tone light
 }
 
 dark() {
-  _change_my_base16_theme dark
+  _change_my_tone dark
+}
+
+# emit the active theme's raw palette escapes to stdout, context-free
+# (no tmux/screen passthrough, no iTerm codes, $TTY forced to stdout) -
+# the capture-friendly way to source ~/.active-theme, used by the tinty
+# hooks (../../tinted-theming/tinty/config.toml -> ../../bin/path/default/theme-reload-on-herdr)
+function emit-active-theme() {
+  test -f "${HOME}/.active-theme" || return 1
+  # tinted-shell branches on $TMUX, $TERM=tmux|screen|linux, $ITERM_SESSION_ID
+  # (OSC 4/10/11/12 raw vs passthrough vs iTerm-proprietary)
+  TTY=/dev/stdout TMUX= ITERM_SESSION_ID= TERM=xterm-256color source "${HOME}/.active-theme"
+}
+
+# source the active theme into the current shell; when the cache is missing,
+# initialize it via `light` (which sources the theme it just applied, so no
+# double source). Pass any argument (e.g. --no-fallback) to skip that fallback
+# and return silently when the file is missing. For stdout capture use
+# emit-active-theme above.
+function source-active-theme() {
+  if test -f "${HOME}/.active-theme"; then
+    source "${HOME}/.active-theme"
+  elif test $# -eq 0; then
+    light
+  fi
 }

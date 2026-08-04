@@ -63,9 +63,12 @@ with pkgs;
     # bashInteractive # use latest bash
     # zsh # my favorite shell interface
     # starship # cross-shell prompt
+    herdr # Agent multiplexer that lives in your terminal
     tmux # terminal multiplexer
     zellij # A terminal workspace with batteries included
     sesh # Smart session manager for the terminal
+    # Theming tool - the publisher of "One tone, every layer" (see ../../../tinted-theming/tinty/config.toml)
+    tinty # Base16 and base24 color scheme manager
   ]
 ++
   # editor - mostly for neovim

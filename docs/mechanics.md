@@ -102,41 +102,67 @@ whatever an editor hands its children never gets baked.
 
 Philosophy: [why light/dark is one system-wide decision](./philosophy.md#one-tone-every-layer).
 
-The mechanism is a tiny pub/sub bus made of two files:
-[zsh/fn/theme](../zsh/fn/theme) points `~/.base16_theme` at the new
-base16-shell script (the *state*) and bumps
-`~/.base16_theme.updated-time` (the *signal*). Publishers: the
-system-appearance launchd agent and the manual `dark`/`light` commands
-(both in [watch-theme-change.nix](../nix/home/services/watch-theme-change.nix)
-/ `zsh/fn/theme`). Subscribers watch the signal file, each with its own
-delivery problem:
+The mechanism is a tiny pub/sub bus made of a *state* and a *signal*:
+[tinty](../tinted-theming/tinty/config.toml) is the publisher - `dark`/`light`
+([zsh/fn/theme](../zsh/fn/theme)) run `tinty apply`, which regenerates the
+palette script (the *state*: the tinted-shell `[[items]]` hook repoints the
+stable `~/.active-theme` link at tinty's rendered script) and then fires
+tinty's global hooks:
+bump `~/.active-theme.updated-time` (the *signal*) and repaint the running
+subscribers. Publishers: the system-appearance launchd agent on macOS
+([watch-theme-change.nix](../nix/home/services/watch-theme-change.nix)),
+GNOME's night-theme-switcher on Linux
+([dconf.nix](../nix/home/dconf.nix)), the manual `dark`/`light`
+commands, and the editor toggles via
+[theme-set](../bin/path/default/theme-set) - the non-shell entry point
+(nvim's `<Space>tb`, emacs's `<leader>tb`) so editors never need to know
+tinty exists. Subscribers watch the signal file, each with its own delivery
+problem:
 
-- **new shells** need no delivery at all - they source `~/.base16_theme`
-  at startup, so the state file alone covers everything born after the
-  flip. The rest is about what's *already running*.
-- **tmux** ([base16-shell-reload-on-tmux](../bin/path/default/base16-shell-reload-on-tmux),
-  called by the [base16-shell-auto-reload](../bin/path/default/base16-shell-auto-reload)
-  `entr` watcher): a throwaway window sources the theme; the base16
-  script sees `$TMUX` and passes the palette escapes through to the host
-  terminal, which recolors every pane at once.
-- **herdr** ([base16-shell-reload-on-herdr](../bin/path/default/base16-shell-reload-on-herdr),
-  same watcher): no passthrough exists, and herdr both keeps
+- **new shells** need no delivery at all - they source the stable
+  `~/.active-theme` link at startup ([shell_ext](../zsh/my_addons/shell_ext)),
+  so the state alone covers everything born after the flip. The rest is about
+  what's *already running*.
+- **tmux** ([theme-reload-on-tmux](../bin/path/default/theme-reload-on-tmux),
+  a tinty global hook): a throwaway window sources the stable link; it
+  sees `$TMUX` and passes the palette escapes through to the host terminal,
+  which recolors every pane at once.
+- **herdr** ([theme-reload-on-herdr](../bin/path/default/theme-reload-on-herdr),
+  another tinty global hook): no passthrough exists, and herdr both keeps
   *per-pane* palettes and renders through each attached client's host
-  terminal - so the watcher writes the raw escapes itself, to every
-  attached client's host tty (chrome + client-side rendering; herdr's UI
-  theme is set to `terminal` so it follows the host palette) and to every
-  pane's pty (found via herdr's socket API), which updates the per-pane
-  palettes.
+  terminal - so the hook writes the raw escapes itself, to every attached
+  client's host tty (chrome + client-side rendering; herdr's UI theme is set
+  to `terminal` so it follows the host palette) and to every pane's pty
+  (found via herdr's socket API), which updates the per-pane palettes.
 - **emacs** ([term-enhance/theme.el](../emacs.d/doom.d/modules/my-custom/term-enhance/theme.el)):
   `file-notify` on the same signal file switches the doom theme, and
   `switch-theme` is also exposed the other way (shell -> emacs) via the
   terminal bridges.
-- **nvim** ([plugins/theme.lua](../nvim/lua/plugins/theme.lua)): same
-  idea with `fwatch` - the signal file flips the colorscheme tone in
-  every running instance.
+- **nvim** ([plugins/theme.lua](../nvim/lua/plugins/theme.lua)): same idea
+  with `fwatch` - the signal file flips the colorscheme tone in every running
+  instance.
 
-The two load-bearing choices (indexed colors over truecolor, remote
-shells opt out) are stated in philosophy; their implementation is in
+Consumers that only need the *tone* (e.g. `glow -s <style>`) call
+[theme-name](../bin/path/default/theme-name), which asks `tinty current`
+(tinty's own API) for the persisted scheme - no consumer reads tinty's
+internal state, the same principle as the `~/.active-theme` link.
+
+**Scope**: the bus covers one system - the machine running `tinty apply`
+plus the terminal(s) attached to it. An ssh client and its remote are
+separate systems; each keeps its own tone, so over ssh the client and
+server can legitimately differ. Run the flip on the side whose terminal
+you are looking at.
+
+**Symptoms that look like breakage but aren't**: a flip run inside an
+ssh'd server leaves that server's panes visually unchanged. The state
+*did* change on the server ([theme-name](../bin/path/default/theme-name),
+nvim/emacs tone, tmux's own palette) - pane pixels are painted by the
+client-side terminal, the "outside", and only a flip on the client side
+recolors them. A status-line blip during the flip is the throwaway
+repaint window doing its job, not a failure.
+
+The two load-bearing choices (indexed colors over truecolor, remote shells
+opt out) are stated in philosophy; their implementation is in
 [zsh/fn/theme](../zsh/fn/theme) (refuses to run over SSH/tramp) and
 [source.zsh](../emacs.d/doom.d/shell/source.zsh)'s theme-drift sync
 (skips tramp shells for the same reason).

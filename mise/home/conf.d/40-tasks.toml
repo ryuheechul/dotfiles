@@ -8,8 +8,27 @@ run = '''
 # bat
 bat cache --build || true
 
-# base16
-touch "$HOME/.base16_theme.updated-time"
+# tinty - install the schemes repo, generate every item's theme file, and
+# apply the last-used scheme (falling back to the default on a fresh
+# machine), so the cached palette script + current_scheme state exist before
+# any subscriber starts. guard: throwaway setups (containers,
+# dotfiles-launchpad) never install it; `|| true` keeps a network flake from
+# failing the whole bootstrap.
+#
+# first ensure the theme bus files exist even before the first apply (the
+# old base16 bootstrap touched them for the same reason): watchers (emacs's
+# file-notify, nvim's fwatch) error on a missing signal file, so this runs
+# unconditionally - regardless of tinty's presence - while the install/apply
+# below recreates both for real.
+touch "${HOME}/.active-theme.updated-time" 2>/dev/null || true
+touch "${HOME}/.active-theme" 2>/dev/null || true
+
+if command -v tinty >/dev/null 2>&1; then
+  tinty install || true
+  # apply the last-used scheme (fallback: default on a fresh machine); pipe so
+  # the scheme needs no nested quoting, `grep .` also falls back on empty output
+  { tinty current 2>/dev/null | grep . || echo base16-solarized-light; } | xargs tinty apply || true
+fi
 
 # tmux (tpm plugin install) - tpm reads ~/.tmux.conf straight off disk and
 # doesn't need a running server, so this never touches the tmux server at all

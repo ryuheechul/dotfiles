@@ -4,7 +4,6 @@
 # matching this repo's previous `git clone || (cd X && git pull)` behavior.
 
 [bootstrap.repos]
-"~/.config/base16-shell" = { url = "https://github.com/chriskempson/base16-shell.git", ref = "master" }
 "~/.tmux/plugins/tpm" = { url = "https://github.com/tmux-plugins/tpm.git", ref = "master" }
 "~/.emacs.d" = { url = "https://github.com/plexus/chemacs2.git", ref = "main" }
 "~/.spacemacs.d" = { url = "https://github.com/syl20bnr/spacemacs.git", ref = "develop" }
@@ -14,8 +13,6 @@
 # `repos apply`'s dirty-check treats untracked local changes as blocking, so
 # each of these clears a runtime-generated dir/cache before it runs
 run = '''
-# zsh compiles sourced scripts into *.zwc byte-code caches as a side effect of normal shell startup
-rm -f ~/.config/base16-shell/*.zwc
 # chemacs2 writes CLI startup logs here at runtime (no compiled elisp/eln-cache - that lives in ~/.doom-emacs.d)
 rm -rf ~/.emacs.d/.local
 '''
