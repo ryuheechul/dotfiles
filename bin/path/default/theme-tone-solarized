@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# like `theme-tone` but maps the tone to the solarized theme value
+# (solarized-light / solarized-dark) - for tools that bundle only the
+# solarized themes (hunk's --theme accepts its own bundled names, of which
+# the solarized pair is the default; a scheme experiment is never a hunk
+# theme). The original theme-tone derivation (theme-name | sed
+# s/solarized-//, back when only solarized-* was used) lives on here.
+#
+# kept a PATH script (not a zsh function) so non-shell callers can use it
+# too - same pattern as theme-tone.
+
+case "$(theme-tone)" in
+  light) printf '%s\n' solarized-light ;;
+  *)     printf '%s\n' solarized-dark ;;
+esac

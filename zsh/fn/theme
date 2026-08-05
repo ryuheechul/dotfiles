@@ -17,11 +17,20 @@ function _change_my_tone() {
     fi
   fi
 
+  # only the two tones have a pair file
+  case "${1}" in
+    light|dark) ;;
+    *) echo "usage: light|dark" >&2; return 1 ;;
+  esac
+
   # change theme - `tinty apply` regenerates every item's theme file (the
   # cached palette script among them) and fires the global hooks: the signal
   # bump and the tmux/herdr repaints ("One tone, every layer" in
-  # ../../docs/mechanics.md, implementation in ../../tinted-theming/tinty/config.toml)
-  tinty apply "base16-solarized-${1}"
+  # ../../docs/mechanics.md, implementation in ../../tinted-theming/tinty/config.toml).
+  # The pair itself lives outside the repo (two flat files created lazily by
+  # `theme-pair` on first read - only it knows the paths), so switching
+  # theme families never touches this file.
+  tinty apply "$(theme-pair "${1}")"
 
   # and source the new one (the stable link the hook repoints on every apply);
   # --no-fallback: a failed apply leaves nothing new to source, and falling

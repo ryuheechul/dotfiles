@@ -88,11 +88,8 @@ if is-darwin; then
   alias nt='notify'
 fi
 
-# this will return either `light` or `dark`
-function theme-tone () {
-  # assuming I only use `solarized-*`
-  theme-name | sed s/solarized-//
-}
+# this will return either `light` or `dark` - bin/path/default/theme-tone
+# (a PATH script, family-agnostic - reads the tone off `tinty current`)
 
 # a helper also that warns about the `git reset --hard`, read more at https://jwiegley.github.io/git-from-the-bottom-up/3-Reset/4-doing-a-hard-reset.html
 # I indeed accidentally blow some unstaged changes few times... hence this function to prevent that
@@ -164,7 +161,7 @@ fi
 function hunk {
   # since there is no other way like env var
   # to work with current theme without wrapping with function
-  theme-name | xargs env hunk "$@" --theme
+  theme-tone-solarized | xargs env hunk "$@" --theme
 }
 
 function tuicr {

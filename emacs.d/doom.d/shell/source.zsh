@@ -143,8 +143,12 @@ fi
 # (tramp shells opt out - "One tone, every layer" in ../../../docs/philosophy.md)
 echo "${INSIDE_EMACS}" | grep tramp >/dev/null ||
   {
-    test "${DOOM_EMACS_THEME}" = "base16-$(theme-name)" ||
-      { test "${DOOM_EMACS_THEME}" = "base16-solarized-dark" && dark || light; }
+    # in sync already? compare tones - DOOM_EMACS_THEME is the tone this
+    # Emacs applied and `theme-tone` is tinty's current one; comparing
+    # scheme names would break when the light/dark variants come from
+    # different families (or a dark-only scheme like catppuccin-mocha)
+    test "${DOOM_EMACS_THEME}" = "$(theme-tone 2>/dev/null)" ||
+      { test "${DOOM_EMACS_THEME}" = "dark" && dark || light; }
   }
 
 # run command on start up requested from Emacs

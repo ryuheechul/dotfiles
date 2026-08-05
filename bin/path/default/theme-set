@@ -11,5 +11,7 @@ case "$1" in
 esac
 # the main point is to trigger tinty's global hooks via `tinty apply`
 # (../../tinted-theming/tinty/config.toml) so all subscribers are notified of
-# the change - including every running instance of nvim/emacs, tmux, herdr
-tinty apply "base16-solarized-${1}"
+# the change - including every running instance of nvim/emacs, tmux, herdr.
+# The pair itself lives outside the repo - only `theme-pair` knows the file
+# paths - so switching theme families never touches this file.
+tinty apply "$(theme-pair "$1")"

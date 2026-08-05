@@ -6,17 +6,19 @@
 -- I could wrap the whole thing in a function to have a closure effect
 -- but I'm lazy and why not have this function to be available in command line as well
 local follow_tinty_theme = function()
-  -- no env var to rely on: `theme-name` responds the most accurate value
-  local handle = io.popen 'theme-name'
+  -- no env var to rely on: `theme-tone` responds the most accurate value,
+  -- and unlike `theme-name` it prints just the tone (light/dark) - theme-name
+  -- carries the family's scheme name (solarized-light vs builtin-solarized-light),
+  -- so decoding the tone from it would break when the family changes
+  local handle = io.popen 'theme-tone'
 
   if handle ~= nil then
-    local result = handle:read '*a'
-    -- strip the trailing newline and the solarized- prefix (theme-name
-    -- already drops base16-) to get just the tone (light/dark)
-    local tone = result:gsub('^solarized%-', ''):gsub('%s+$', '')
+    local tone = handle:read '*l'
     handle:close()
 
-    vim.api.nvim_set_option('background', tone)
+    if tone ~= nil and tone ~= '' then
+      vim.api.nvim_set_option('background', tone)
+    end
   end
 end
 

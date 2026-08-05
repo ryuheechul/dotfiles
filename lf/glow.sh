@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-theme=$(theme-name | sed 's/solarized-//')
+theme=$(theme-tone)
 
 # This would enable color but it would look out of style due to the issue described here until it's resolved: https://github.com/charmbracelet/glow/issues/654.
 export CLICOLOR_FORCE=1

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# like `theme-name` but prints only the tone (light/dark), for consumers
+# that style by tone regardless of theme family (glow, gh, tuicr, lf
+# preview, nvim background, emacs theme). The tone is decided by which pair
+# side (`theme-pair dark` / `theme-pair light`) `tinty current` matches:
+# the pair is the source of truth and can hold any scheme (mixed families
+# per tone, or dark-only names like catppuccin-mocha with no -dark suffix),
+# so no name parsing is needed. Falls back to the last word of
+# `tinty current` for schemes outside the pair, and to `dark` before the
+# first apply ever runs (fresh installs) / without tinty
+# (containers/throwaways) - same idea as theme-name's fallback.
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+out="$(tinty current 2>/dev/null)" || out=""
+test -z "$out" && {
+  printf '%s' dark
+  exit
+}
+
+case "$out" in
+  "$("${script_dir}/theme-pair" dark)") printf '%s' dark ;;
+  "$("${script_dir}/theme-pair" light)") printf '%s' light ;;
+  # not in the pair - best-effort guess from the name
+  # (base16-solarized-dark -> dark)
+  *) printf '%s' "${out##*-}" ;;
+esac

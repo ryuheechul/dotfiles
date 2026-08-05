@@ -16,10 +16,10 @@
 
 set -euo pipefail
 
-# `light` or `dark`; same logic as theme-tone in
-# ../../../zsh/my_addons/aliases, which is a zsh function and thus out of
-# reach here (theme-name is a sibling script)
-tone="$(theme-name | sed s/solarized-//)"
+# `light` or `dark`; same logic as the theme-tone zsh function in
+# ../../../zsh/my_addons/aliases, which is out of reach here - the sibling
+# script theme-tone does it
+tone="$(theme-tone)"
 
 if test -n "${1:-}"; then
   # org's headline TODO/DONE keywords have no markdown equivalent (org's

@@ -1,26 +1,28 @@
 # tinty is the publisher of "One tone, every layer" - ../../../docs/mechanics.md
 #
-# `light`/`dark` (../../../zsh/fn/theme) run `tinty apply base16-solarized-<tone>`;
-# tinty then regenerates every item's theme file and fires the global hooks
-# below. The hooks are how a tone change reaches already-running subscribers
-# (the repaints the old base16-shell `entr` watcher used to do); new shells
-# need no delivery at all - they source the cached palette script at startup
+# `light`/`dark` (../../../zsh/fn/theme) and `theme-set`
+# (../../../bin/path/default/theme-set) run `tinty apply <scheme>`; the
+# light/dark pair is bridged by ../../../bin/path/default/theme-pair - the
+# only interface to it, owning the file paths (two flat files under
+# $XDG_CACHE_HOME/dfs-rhc/theme/<tone>/tinty - one file per tool per tone,
+# moved as a whole by pointing the standard XDG_CACHE_HOME elsewhere), so
+# switching theme families touches only those files. tinty then
+# regenerates every item's theme file and fires the global hooks below. The
+# hooks are how a tone change reaches already-running subscribers (the
+# repaints the old base16-shell `entr` watcher used to do); new shells need
+# no delivery at all - they source the cached palette script at startup
 # (../../../zsh/my_addons/shell_ext).
-
-# applied on a bare `tinty apply`; also what `tinty init` would reapply at
-# shell startup (this repo never calls `tinty init` - shell_ext falls back to
-# `light` when the cache file is missing instead, so every apply IS a change)
-default-scheme = "base16-solarized-light"
-
-# `tinty cycle` toggles between the two tones
-default-cycle-ring = "tone"
+#
+# no `default-scheme`/`[[rings]]` on purpose: nothing here runs a bare
+# `tinty apply` or `tinty cycle` (callers always pass an explicit scheme
+# from the pair files), so the pair has exactly one home - theme-pair's.
 
 # global hooks - run after every `tinty apply` (no `tinty init` anywhere in
 # this repo, so an apply always means the tone actually changed)
 #
-# NOTE: TOML ordering matters here - after the first `[[rings]]`/`[[items]]`
-# header below, every bare key would belong to that table instead of the
-# root, so `hooks` has to stay before the first `[[...]]` header.
+# NOTE: TOML ordering matters here - after the first `[[items]]` header
+# below, every bare key would belong to that table instead of the root, so
+# `hooks` has to stay before the first `[[...]]` header.
 hooks = [
   # the *signal* of the pub/sub bus: every subscriber watches this file for
   # mtime changes and re-reads the theme (nvim's fwatch, emacs's file-notify)
@@ -32,10 +34,6 @@ hooks = [
   # writes the raw escapes to every client tty and pane pty itself)
   "theme-reload-on-herdr",
 ]
-
-[[rings]]
-name = "tone"
-schemes = ["base16-solarized-light", "base16-solarized-dark"]
 
 # the generated palette script IS the theme for every terminal/tui: sourcing
 # it emits the OSC 4 palette + OSC 10/11 fg/bg escapes (wrapped in tmux

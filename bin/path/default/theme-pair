@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+# usage: theme-pair light|dark [scheme]
+#
+# the ONLY interface to the light/dark pair - no consumer knows the file
+# paths (or even that the pair is files); they just ask this binary. Each
+# side of the pair holds the tinty scheme name to use for that tone:
+#
+#   light -> ${XDG_CACHE_HOME:-${HOME}/.cache}/dfs-rhc/theme/light/tinty
+#   dark  -> ${XDG_CACHE_HOME:-${HOME}/.cache}/dfs-rhc/theme/dark/tinty
+#
+# the tree is dfs-rhc/theme/<tone>/<tool>: one file per tool per tone, so a
+# future tool that needs its own per-tone value just adds a file (no path
+# surgery here). `tinty` is the current tool; the name travels in the path,
+# so switching to another tint tool later is a rename. The tree lives under
+# the standard XDG cache dir - dfS-rhc (the repo) has its own subtree there,
+# moved as a whole by pointing XDG_CACHE_HOME elsewhere, so no custom env
+# var is needed. The pair can hold any schemes (mixed families per tone,
+# or dark-only names like catppuccin-mocha without a -dark suffix);
+# changing themes = editing the files.
+#
+#   theme-pair light|dark       print the scheme name for that tone; creates
+#                               the file with the default when missing/empty,
+#                               so the first read is also the bootstrap
+#   theme-pair light|dark NAME  write NAME to that tone's file (set - what
+#                               theme-choose uses to record the chosen scheme)
+#
+# the defaults below live only here - theme-set, the `light`/`dark` shell
+# functions, theme-tone, and the mise bootstrap all go through this bridge.
+
+default_light="base16-solarized-light"
+default_dark="base16-solarized-dark"
+
+case "$1" in
+  light)
+    file="${XDG_CACHE_HOME:-${HOME}/.cache}/dfs-rhc/theme/light/tinty"
+    default="${default_light}"
+    ;;
+  dark)
+    file="${XDG_CACHE_HOME:-${HOME}/.cache}/dfs-rhc/theme/dark/tinty"
+    default="${default_dark}"
+    ;;
+  *)
+    echo "usage: theme-pair light|dark [scheme]" >&2
+    exit 1
+    ;;
+esac
+
+# the pair dir is nested (dfs-rhc/theme/<tone>/) and may not exist yet on a
+# fresh machine - create it on any access, read or write.
+mkdir -p "${file%/*}"
+
+# set mode: a NAME argument writes it to the file, replacing any existing
+# value. read mode (no NAME) only creates the file when missing/empty, so a
+# second read never resets a customized value.
+if test $# -ge 2; then
+  printf '%s\n' "$2" > "${file}"
+else
+  test -s "${file}" || printf '%s\n' "${default}" > "${file}"
+fi
+cat "${file}"

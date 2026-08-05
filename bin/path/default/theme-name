@@ -16,4 +16,10 @@ test -z "$out" && {
   exit
 }
 
-printf '%s' "${out#base16-}"
+# strip the family prefix (base16-, base24-, ...) leaving the bare scheme
+# name - `${out#*-}` cuts up to the first dash, which is exactly the family
+# prefix in tinty scheme names, so switching theme families (e.g.
+# base16-solarized-light -> base24-builtin-solarized-light) needs no edit
+# here (the pair itself is bridged by ../../bin/path/default/theme-pair -
+# the only interface to it, owning the file paths)
+printf '%s' "${out#*-}"

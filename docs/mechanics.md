@@ -116,8 +116,26 @@ GNOME's night-theme-switcher on Linux
 commands, and the editor toggles via
 [theme-set](../bin/path/default/theme-set) - the non-shell entry point
 (nvim's `<Space>tb`, emacs's `<leader>tb`) so editors never need to know
-tinty exists. Subscribers watch the signal file, each with its own delivery
-problem:
+tinty exists. What those publishers apply is decided by one source of truth:
+the light/dark pair, two flat files outside the repo (by default
+`$XDG_CACHE_HOME/dfs-rhc/theme/light/tinty` and `.../dark/tinty` - one
+file per tool per tone, so a future tool just adds a file; the paths are
+[theme-pair](../bin/path/default/theme-pair)'s alone, moved as a whole by
+pointing the standard `XDG_CACHE_HOME` elsewhere), each
+holding the scheme name for that tone. They can hold any schemes - mixed
+families per tone, or dark-only names like `catppuccin-mocha` without a
+`-dark` suffix. Every consumer reads them through the
+[theme-pair](../bin/path/default/theme-pair) bridge - the only interface -
+creating the file with a default on first read. Editing goes through the
+same bridge: `theme-pair <tone> <scheme>` writes a scheme to that tone's
+file, and [theme-choose](../bin/path/default/theme-choose) is the
+interactive picker on top of that set mode (pick a tone, fuzzy-search the
+schemes tinty knows, done - the pair is written and immediately applied
+via `theme-set`, with the palette previewed in the current terminal).
+The bootstrap seeds both files with the
+defaults ([40-tasks.toml](../mise/home/conf.d/40-tasks.toml)); nothing else
+needs to know the names or paths.
+Subscribers watch the signal file, each with its own delivery problem:
 
 - **new shells** need no delivery at all - they source the stable
   `~/.active-theme` link at startup ([shell_ext](../zsh/my_addons/shell_ext)),
@@ -136,16 +154,18 @@ problem:
   (found via herdr's socket API), which updates the per-pane palettes.
 - **emacs** ([term-enhance/theme.el](../emacs.d/doom.d/modules/my-custom/term-enhance/theme.el)):
   `file-notify` on the same signal file switches the doom theme, and
-  `switch-theme` is also exposed the other way (shell -> emacs) via the
-  terminal bridges.
+  `switch-theme` is also exposed the other way (shell -> emacs, carrying a
+  tone) via the terminal bridges.
 - **nvim** ([plugins/theme.lua](../nvim/lua/plugins/theme.lua)): same idea
   with `fwatch` - the signal file flips the colorscheme tone in every running
   instance.
 
-Consumers that only need the *tone* (e.g. `glow -s <style>`) call
-[theme-name](../bin/path/default/theme-name), which asks `tinty current`
-(tinty's own API) for the persisted scheme - no consumer reads tinty's
-internal state, the same principle as the `~/.active-theme` link.
+Consumers that only need the *tone* (e.g. `glow -s <style>`, nvim's
+`background`, emacs's theme choice) call
+[theme-tone](../bin/path/default/theme-tone), which asks `tinty current`
+(tinty's own API) and matches it against the pair - no consumer reads
+tinty's internal state or the pair files directly, the same principle as
+the `~/.active-theme` link.
 
 **Scope**: the bus covers one system - the machine running `tinty apply`
 plus the terminal(s) attached to it. An ssh client and its remote are
@@ -155,7 +175,7 @@ you are looking at.
 
 **Symptoms that look like breakage but aren't**: a flip run inside an
 ssh'd server leaves that server's panes visually unchanged. The state
-*did* change on the server ([theme-name](../bin/path/default/theme-name),
+*did* change on the server ([theme-tone](../bin/path/default/theme-tone),
 nvim/emacs tone, tmux's own palette) - pane pixels are painted by the
 client-side terminal, the "outside", and only a flip on the client side
 recolors them. A status-line blip during the flip is the throwaway

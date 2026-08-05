@@ -23,11 +23,27 @@ bat cache --build || true
 touch "${HOME}/.active-theme.updated-time" 2>/dev/null || true
 touch "${HOME}/.active-theme" 2>/dev/null || true
 
+# initialize the light/dark pair files (the two tones, one tinty scheme name
+# each) through `theme-pair` (../../../bin/path/default/theme-pair), the only
+# interface to the pair. Reading a tone lazily creates its file with the
+# default when missing and never overwrites an existing value, so these two
+# lines boot a fresh machine with the defaults yet re-running this bootstrap
+# cannot reset a pair you customized via theme-choose - initialization, not
+# reset.
+theme-pair light || true
+theme-pair dark || true
+
 if command -v tinty >/dev/null 2>&1; then
   tinty install || true
-  # apply the last-used scheme (fallback: default on a fresh machine); pipe so
-  # the scheme needs no nested quoting, `grep .` also falls back on empty output
-  { tinty current 2>/dev/null | grep . || echo base16-solarized-light; } | xargs tinty apply || true
+  # apply the last-used scheme (fallback: the pair's light tone on a fresh
+  # machine); pipe so the scheme needs no nested quoting, `grep .` also falls
+  # back on empty output. The fallback goes through `theme-pair`, the only
+  # interface to the pair - a fresh machine applies whatever the pair
+  # currently says, no family hardcoded. The pair files already exist from
+  # the two `theme-pair` lines above.
+  # If tinty is missing (dotfiles-less container) the apply no-ops via
+  # `|| true`.
+  { tinty current 2>/dev/null | grep . || theme-pair light; } | xargs tinty apply || true
 fi
 
 # tmux (tpm plugin install) - tpm reads ~/.tmux.conf straight off disk and

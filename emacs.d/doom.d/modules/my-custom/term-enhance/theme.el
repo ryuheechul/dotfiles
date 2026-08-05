@@ -5,46 +5,37 @@
 ;; ./vterm.el since `ghostel-eval-cmds'/`vterm-eval-cmds' are backend-specific
 ;; variables, but everything below applies regardless of which is active.
 
-;; translate between base16-* and doom-*
-(defun base16-to-doom (theme)
-  (if (eq theme 'base16-solarized-dark)
-      'doom-solarized-dark
-    'doom-solarized-light))
+;; The tone (light/dark) is the single contract of the bus. `theme-tone`
+;; (bin/path/default/theme-tone) prints the bare tone, resolved from the
+;; pair via `theme-pair` (the only interface to it - the pair files live
+;; outside the repo and only theme-pair knows their paths). The pair can
+;; hold any schemes - different families per tone, or dark-only names
+;; like catppuccin-mocha without a -dark suffix - so nothing here parses or
+;; guesses a tone from a scheme name. This Emacs maps the tone to its own
+;; theme (doom-solarized-*).
 
-(defun doom-to-base16 (theme)
-  (if (eq theme 'doom-solarized-dark)
-      'base16-solarized-dark
-    'base16-solarized-light))
+;; the tone this Emacs instance currently has applied - the toggle flips
+;; this instead of re-deriving the tone from a theme name
+(defvar my-theme-tone "dark"
+  "The tone (light/dark) this Emacs instance is currently on.")
 
-;; a handle to inject doom-* instead of base16-* optionally
-(setq override-base16-with-doom t)
-
-(defun doom-theme-value ()
-  (let ((theme-val (symbol-value 'doom-theme)))
-    (if override-base16-with-doom
-        (doom-to-base16 theme-val)
-      theme-val)))
-
-(defun apply-theme (theme-name)
-  (load-theme
-   (if override-base16-with-doom (base16-to-doom theme-name) theme-name)
-   t))
+(defun tone-to-theme (tone)
+  "This Emacs's own theme for TONE."
+  (if (string= tone "dark") 'doom-solarized-dark 'doom-solarized-light))
 
 ;; use this instead of using load-theme directly to sync theme between emacs and tinty
-(defun switch-doom-theme (theme-name)
-  (apply-theme (intern theme-name))
-  (setenv
-   "DOOM_EMACS_THEME"
-   (symbol-name (doom-theme-value))))
+(defun switch-doom-theme (tone)
+  (setq my-theme-tone tone)
+  (load-theme (tone-to-theme tone) t)
+  (setenv "DOOM_EMACS_THEME" tone))
 
 ;; toggle between light and dark
 (defun toggle-doom-theme-tone ()
   ;; decide the target tone once - the instant doom switch and the
   ;; `theme-set` notification below both need it
-  (let ((target (if (eq (doom-theme-value) 'base16-solarized-dark)
-                    "light" "dark")))
+  (let ((target (if (string= my-theme-tone "dark") "light" "dark")))
     ;; change the tone instantly in this instance
-    (switch-doom-theme (concat "base16-solarized-" target))
+    (switch-doom-theme target)
     ;; ...and via `theme-set` (bin/path/default/theme-set) so tinty's hooks
     ;; notify every subscriber - all running nvim/emacs instances, tmux, herdr;
     ;; this instance's file-notify watcher (below) re-applies the theme when
@@ -60,7 +51,12 @@
       (lambda () (interactive) (toggle-doom-theme-tone)))
 
 (defun follow-theme-tinty ()
-  (switch-doom-theme (concat "base16-" (shell-command-to-string "theme-name"))))
+  ;; `theme-tone` prints just light/dark - the bus's tone contract (resolved
+  ;; via `theme-pair`); this Emacs's own theme for that tone is applied (the
+  ;; file-notify watcher below runs this on every signal bump)
+  (let ((tone (string-trim (shell-command-to-string "theme-tone"))))
+    (when (member tone '("light" "dark"))
+      (switch-doom-theme tone))))
 
 ;; use base16-theme package to enable base16 theme on emacs
 (use-package! base16-theme
@@ -76,7 +72,7 @@
   ;; and with GUI version, somehow it looks different depends on
   ;; which terminal that I use to run emacs - this was actually mitigated
   ;; by setting COLORTERM=truecolor
-  ;; decide the tone based on tinty's current scheme (by my `theme-name` command)
+  ;; decide the tone based on tinty's current scheme (by my `theme-tone` command)
   (follow-theme-tinty))
 
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/File-Notifications.html

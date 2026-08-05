@@ -1,0 +1,70 @@
+#!/usr/bin/env nu
+
+# usage: theme-choose
+#
+# interactively change one side of the light/dark pair: pick which tone to
+# change, then pick a scheme with fzf. As you cycle the list, fzf's preview
+# pane renders `tinty info <scheme>` for the highlighted entry - the full
+# palette table with color swatches - so you see the theme before committing.
+# The picker runs through fzf-tmux: a big tmux popup when inside tmux, plain
+# full-screen fzf otherwise.
+#
+# The choice is recorded through `theme-pair` (../../../bin/path/default/theme-pair)
+# - the only interface to the pair, used here in its set mode
+# `theme-pair <tone> <scheme>` - and applied right away (`theme-set` ->
+# `tinty apply`, which fires the global hooks: signal bump and the
+# tmux/herdr repaints).
+#
+# fzf (not nushell's `input list --fuzzy`) because the picker needs a
+# per-item preview hook; input list can't run code as the selection moves.
+# fzf-tmux wraps fzf and is a no-op outside tmux. No gum needed.
+
+def main [] {
+  # 1. which tone to change (cancel/esc returns empty)
+  let tone = (["light" "dark"] | input list "Which tone to change?")
+  if ($tone | is-empty) { return }
+
+  # 2. schemes tinty knows (one per line: base16-*, base24-*, tinted8-*)
+  let schemes = (^tinty list | lines | sort)
+
+  if ($schemes | is-empty) {
+    print -e "tinty knows no schemes - run `tinty install` or `tinty update` first"
+    exit 1
+  }
+
+  # 3. pick one with fzf (through fzf-tmux). `--preview` re-runs
+  #    `tinty info {}` on every cursor move/keystroke, rendering the
+  #    highlighted scheme's palette in the preview pane. The current value
+  #    for this tone is shown in the header so you can see what you are
+  #    replacing. fzf exits 130 on cancel / no-match - the `try` turns that
+  #    into a silent return.
+  #    (single line: nu's parser rejects flags on continuation lines)
+  #
+  #    `str join "\n"` is required: piping the list to an external command
+  #    directly makes nu render it as a table (`│ 0 │ base16-... │`), not
+  #    plain lines.
+  #
+  #    fzf-tmux (not plain fzf) so the picker opens as a big tmux popup when
+  #    run inside tmux, and falls back to full-screen fzf outside it. The
+  #    `-p 80%,85%` popup size only applies in tmux; fzf-tmux consumes its
+  #    own short layout flags and passes everything else to fzf.
+  #
+  #    `--height 100%` overrides the 40% height in the global FZF_DEFAULT_OPTS
+  #    - a palette preview needs the whole screen, and command-line flags win
+  #    over the environment default. Inside tmux fzf-tmux appends `--no-height`
+  #    so fzf fills the popup pane instead.
+  let current = (^theme-pair $tone)
+  let header = $"Pick a scheme for ($tone), current: ($current)"
+  let picked = (try { ($schemes | str join "\n") | ^fzf-tmux -p 80%,85% --height 100% --header $header --preview "tinty info {}" --preview-window "right:45%:wrap" } catch { return })
+  if ($picked | is-empty) { return }
+
+  # 4. record it in the pair via theme-pair's set mode
+  ^theme-pair $tone $picked | ignore
+
+  # 5. apply it - `theme-set` runs `tinty apply`, which regenerates every
+  #    item's theme file (the cached palette script among them) and fires the
+  #    global hooks, so tmux/herdr/nvim/emacs all see the new scheme
+  ^theme-set $tone
+
+  print $"($tone) -> ($picked)  applied"
+}
