@@ -1,0 +1,40 @@
+#+TITLE: Troubleshooting a stuck or slow Emacs
+
+Reusable techniques for figuring out what a misbehaving Emacs is actually
+doing, instead of guessing or blindly restarting. Written for me /and/
+for agents advising me. Individual incidents get logged in
+[[file:known-issues.org][known-issues.org]]; this file holds the methods
+that apply across incidents.
+
+* Interrupt a stuck Emacs for a backtrace (toggle-debug-on-quit)
+When the UI freezes or lags and you want to know what Emacs is actually
+doing instead of guessing, turn on the quit debugger first, then interrupt
+the stuck computation:
+
+1. =M-x toggle-debug-on-quit= (or ~(setq debug-on-quit t)~). Transient -
+   stays on until toggled off.
+2. When the freeze happens, press =C-g=. Instead of just cancelling,
+   Emacs pops a ~*Backtrace*~ buffer at the exact frame it was blocked in.
+
+That is how the =:lang sh= freeze in [[file:known-issues.org][known-issues.org]]
+was caught: the backtrace pointed straight at ~bash-completion-capf-nonexclusive~ ->
+~accept-process-output~ inside the ~corfu-auto~ chain, which turned "emacs
+is slow" into "this exact capf is the culprit".
+
+Quick way to prove the technique works (no real bug needed): turn on
+debug-on-quit, then evaluate ~(sit-for 10)~ and press =C-g= while it
+waits - ~sit-for~ processes input while waiting, so the quit lands with
+the backtrace on ~sit-for~. (~sleep-for~ does *not* process input while
+waiting, so =C-g= stays ignored until it returns - a trap worth
+remembering.)
+
+- =debug-on-error= is the wrong tool for hangs: it fires when a
+  computation signals an error, which aborts the very thing you want to
+  catch. =debug-on-quit= interrupts a live computation instead.
+- If =C-g= itself won't respond (wedged daemon): =kill -USR2 <emacs-pid>=
+  dumps a backtrace - how the envrc-over-tramp hang in term-enhance was
+  caught ([[file:modules/my-custom/term-enhance/integration.el][integration.el]]).
+- If nothing blocks but it's merely slow (CPU-bound, no freeze):
+  =M-x profiler-start= + reproduce + =M-x profiler-report=, not
+  debug-on-quit.
+

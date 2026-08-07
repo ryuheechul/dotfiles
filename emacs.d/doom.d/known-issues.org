@@ -1,7 +1,10 @@
 #+TITLE: doom.d known issues
 
-General environment/OS gotchas, not module-specific - see
+General gotchas - environment/OS quirks that aren't specific to one
+private module. See
 [[file:modules/my-custom/term-enhance/known-issues.org][term-enhance's known-issues.org]] for tramp + terminal issues instead.
+Reusable techniques for diagnosing a stuck or slow Emacs live in
+[[file:troubleshooting.org][troubleshooting.org]].
 
 ** DONE macOS keyboard layout silently breaks M- (Meta) bindings
 Symptom: =M-x= (or any =M-<key>=) does nothing in terminal Emacs, works
@@ -25,3 +28,35 @@ Expect =^[x= (=ESC= =x=). Run in each layer (bare terminal, tmux, ssh,
 
 If M- bindings go dead again: check keyboard layout before blaming the
 terminal or multiplexer.
+
+** DONE doom+ :lang sh freezes Emacs on every keystroke (bash-completion)
+Symptom: typing in sh-mode hangs for ~bash-completion-process-timeout~
+(2.5s) on every keystroke, in =emacsclient= instances only. Reproduced
+on both machines at identical doom/doom+ versions - framework behavior,
+not version drift.
+
+Root cause: doom+ =:lang sh= (modules/lang/sh/config.el) wires
+~bash-completion-capf-nonexclusive~ into sh-mode whenever
+=:completion corfu= is enabled and the =+lsp= flag is absent. That capf
+round-trips synchronously to a ~*bash-completion*~ subprocess with a 2.5s
+~accept-process-output~ wait, and corfu-auto runs it on every keystroke.
+~modulep!~ checks only =:lang sh='s own flags, so ~(lsp +eglot)~ or
+~(rust +lsp)~ elsewhere do NOT suppress it - only =+lsp= on =:lang sh=
+itself does.
+
+Fix: =(sh +lsp)= in [[file:init.el][init.el]] - sh-mode completion goes to eglot
+(async), and the package + wiring are disabled entirely.
+
+Warning when enabling future lang modules: this is one instance of a
+general trap - a module wiring a capf that does a *synchronous*
+subprocess round-trip, run by corfu-auto on every keystroke, blocks the
+single-threaded event loop. Before enabling a module under corfu, check
+its wiring for synchronous-subprocess capfs:
+#+begin_src sh
+grep -rn 'make-process\|call-process\|accept-process-output\|process-send-string' \
+  ~/.doom-emacs.d/sources/doom+/modules/lang/<name>/
+#+end_src
+Rule of thumb: prefer the =+lsp= flag (async LSP completion) over
+bash-completion-style packages (sync subprocess per keystroke). A full
+check of every enabled module found no other completion with this hazard
+- everything else is in-process (cape/hotfuzz) or async (eglot/flycheck).

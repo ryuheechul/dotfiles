@@ -125,6 +125,10 @@
        (tty +osc)        ; improve the terminal Emacs experience
 
        :lang
+       ;; when enabling a new lang module under (corfu +icons): check its
+       ;; completion wiring for synchronous-subprocess capfs first (the
+       ;; :lang sh bash-completion freeze - see ./known-issues.org);
+       ;; prefer the +lsp flag where available
        ;;ada               ; In strong typing we (blindly) trust
        ;;(agda +local)     ; types of types of types of types...
        (astro +lsp)        ; ./modules/lang/astro/
@@ -185,7 +189,10 @@
        ;;scad              ; trust the preview, regret the render
        ;;scala             ; java, but good
        ;;(scheme +guile)   ; a fully conniving family of lisps
-       sh                ; she sells {ba,z,fi}sh shells on the C xor
+       ;; never drop +lsp: without it doom+ wires bash-completion, a
+       ;; sync-subprocess capf that freezes Emacs per keystroke (eglot
+       ;; otherwise) - see ./known-issues.org
+       (sh +lsp)         ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
        (svelte +lsp)     ; ./modules/lang/svelte/config.el
