@@ -3,3 +3,5 @@ theme_light = "everforest-light"
 
 # This doesn't seem to work now, so my fallback is with ../zsh/my_addons/aliases.
 appearance = "system"
+# Use vim key binding for comments
+comment_vim = true
