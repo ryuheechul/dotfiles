@@ -14,7 +14,7 @@ cat <<EOF >./configuration.nix
 
 let
   username = "$(whoami)";
-  with-primary-user = import ./meta-configuration.nix { username = username; };
+  with-primary-user = import ./meta/configuration.nix { username = username; };
 in
 {
   imports =
