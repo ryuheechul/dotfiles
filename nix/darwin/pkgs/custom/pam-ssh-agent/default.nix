@@ -7,7 +7,7 @@
 # tree - see ../README.md for why) - nix/pkgs/custom/pam-ssh-agent symlinks back
 # here for non-flake consumers like the nixos side
 #
-# see ../../../modules/security/meta/pam-ssh-agent.nix (darwin) and
+# see ../../../modules/security/pam-ssh-agent.nix (darwin) and
 # ../../../../nixos/recipes/pam-sshagent.nix (nixos) for usage
 #
 # build pattern based on the example at

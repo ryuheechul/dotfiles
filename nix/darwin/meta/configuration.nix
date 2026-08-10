@@ -1,17 +1,14 @@
 # this file is to be imported by ../configuration.nix
 { username }:
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 # reference - https://daiderd.com/nix-darwin/manual/index.html
 
-let
-  # ssh-agent based sudo auth without typing the password (macOS counterpart of
-  # ../../nixos/recipes/pam-sshagent.nix) - a parameterized "meta" module, see
-  # ../modules/security/meta/pam-ssh-agent.nix
-  ssh-agent-auth-module = import ../modules/security/meta/pam-ssh-agent.nix { inherit username; };
-in
 {
   imports = [
-    ssh-agent-auth-module
+    # It will bring these modules:
+    # - `security.pam.sshAgentAuth`
+    # - `security.pam.sshAgentAuthKeys`
+    ../modules/security/pam-ssh-agent-keys.nix
   ];
 
   system.primaryUser = username;
@@ -58,9 +55,9 @@ in
   ## pam/sudo related stuff:
   # - debug with:
   #   - `/etc/pam.d/sudo_local` (for all pam)
-  #   - `/etc/ssh/pam-ssh-agent/authorized_keys.d` (for ssh-agent-auth-module)
+  #   - `/etc/ssh/pam-ssh-agent/authorized_keys.d` (for pam-ssh-agent-keys)
   # - https://write.rog.gr/writing/using-touchid-with-tmux/
-  # - ../modules/security/meta/pam-ssh-agent.nix adds ssh-agent auth on top of these
+  # - ../modules/security/pam-ssh-agent.nix adds ssh-agent auth on top of these
 
   security.pam.services.sudo_local.touchIdAuth = true;
   security.pam.services.sudo_local.watchIdAuth = true;
@@ -68,13 +65,20 @@ in
   # Whether to enable reattaching a program to the user's bootstrap session.
   # This fixes Touch ID for sudo not working inside tmux and screen.
   # This allows programs like tmux and screen that run in the background to survive across user sessions to work with PAM services that are tied to the bootstrap session.
-  security.pam.services.sudo_local.reattach = true;
+  security.pam.services.sudo_local.reattach = (
+    with config.security.pam.services.sudo_local; touchIdAuth || watchIdAuth
+  );
 
   # ssh-agent based sudo auth - this replaces typing the password when the
-  # ssh-agent is loaded; trusted keys are the root-owned copy of
-  # ~/.ssh/authorized_keys at /etc/ssh/pam-ssh-agent/authorized_keys.d/<user>
-  # (refreshed on every switch), see ../modules/security/meta/pam-ssh-agent.nix
+  # ssh-agent is loaded, see ../modules/security/pam-ssh-agent.nix.
   security.pam.sshAgentAuth.enable = true;
+  # sshAgentAuthKeys.enable syncs a root-owned copy of ~/.ssh/authorized_keys
+  # to <directory>/<user> on every switch and wires the pam module to read
+  # <directory>/%u; user picks whose keys - both must be set, see
+  # ../modules/security/pam-ssh-agent-keys.nix
+  security.pam.sshAgentAuthKeys.enable = true;
+  # `user` is required for `sshAgentAuthKeys` to work
+  security.pam.sshAgentAuthKeys.user = username;
 
   # for devenv to use cachix cache
   nix.settings = {
