@@ -187,11 +187,7 @@ return function(setup_default)
           '--network=none',
           '--workdir=' .. volume,
           -- pyright container would mount the source code directory as the same path with the one from host
-          '--volume='
-            .. volume
-            .. ':'
-            .. volume
-            .. ':z',
+          '--volume=' .. volume .. ':' .. volume .. ':z',
           '--mount=' .. mount,
           -- mount,
           image,
