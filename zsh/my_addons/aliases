@@ -220,6 +220,9 @@ alias gs.='gs .'
 alias tgs='tig status'
 alias gu='git restore --staged' # I used to use git reset for this
 alias gr='git restore' # I used to use git checkout for this
+# git reflog with relative dates; flag at the end so `grl show <ref>` works
+# (a git alias would put --date=relative before the subcommand and break it)
+grl() { git reflog "$@" --date=relative }
 alias gd='git diff'
 alias gdc='gd --cached'
 alias gdt='git difftool'

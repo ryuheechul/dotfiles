@@ -14,6 +14,11 @@
 [commit]
   verbose = true
 
+[log]
+  ; affects git log etc. (not git reflog - reflog selector dates are set by the
+  ; --date flag only, see grl in zsh/my_addons/aliases); a --date=... flag overrides this
+  date = relative
+
 [transfer]
   fsckObjects = true
 
@@ -95,6 +100,7 @@
   ignore-case = smart-case ; useful for search
   main-view-id = yes ; show short hash - https://github.com/jonas/tig/issues/340#issuecomment-240764386
   main-view-date-display = relative ; to have shorter date width
+  reflog-view-date-display = relative ; same as main-view, adds the date column to the reflog view (off by default)
   line-graphics = "utf-8"
 
 ; optimize colors under current limitation
