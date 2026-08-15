@@ -255,12 +255,12 @@ Status is strictly read-only and reports evidence separately from conclusions:
 
 | check | evidence and result |
 |---|---|
-| exact outer recipient set | compare the recorded sorted/deduplicated hash and age stanza count with `authorized_recipients`; same-count replacement is detected, and `reencrypt` heals a missing hash |
+| exact outer recipient set | compare the recorded sorted/deduplicated hash with `authorized_recipients`; known one-stanza native/SSH types add a count cross-check, while custom counts may vary; same-count replacement is detected, and `reencrypt` heals a missing hash |
 | identities validity | with a matching agent key, decrypt `identities.age`; matching fingerprint plus failed decryption is invalid/plugin failure, while no matching agent is `cannot verify`, never inferred validity |
-| store stanza state | compare each `*.age` header with `.age-recipients`; zero readable stanzas is invalid, not current |
+| store stanza state | require a closed recipient header; compare known one-stanza native/SSH counts with `.age-recipients`, but report custom counts as non-comparable because one recipient may emit multiple stanzas; malformed, truncated, or scrypt-only files are invalid |
 | recipient backup safety | validate current recipients and `.age-recipients.age-ssh-nt.bak`; unsafe objects block mutation, and a valid backup is suggested when current state is missing or invalid |
 | real inner key | match the actual decrypted `age1...` key, or `store_recipient` without an agent, line by line; comments never prove presence |
-| store readability | when possible, decrypt a real store file with the inner identity and report `store readable: yes`; distinguish no agent, dead socket, and no matching key instead of guessing |
+| store readability | when possible, decrypt every store file with the inner identity and report `store readable: yes`; distinguish no agent, dead socket, and no matching key instead of guessing |
 
 When synchronized, output ends with `all set - nothing pending`. Otherwise the
 `pending:` list names pending checks and recovery actions. Use status whenever

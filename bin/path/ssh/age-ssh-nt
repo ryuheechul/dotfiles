@@ -578,32 +578,66 @@ guard_interrupted_rotation() {
   exit 1
 }
 
-# Count the recipient stanzas (-> X25519 / -> age1 lines) in an age file's
-# plaintext header; used by status to detect staleness without decrypting.
-# Callers pipe age_header into this and guard the pipeline with || true so a
-# corrupt/empty file reads as zero stanzas instead of aborting status.
-count_stanzas() {
-  awk '/^-> (X25519|age1)/ {n++} END {print n+0}'
+# Print: closed-header, recipient-stanza-count, count-is-comparable.
+# Plugins may emit multiple custom stanzas per configured recipient, so only
+# native X25519 and SSH stanza counts can be compared with recipient lines.
+age_header_info() {
+  LC_ALL=C awk '
+    BEGIN { comparable = 1 }
+    function finish_stanza() {
+      if (in_stanza && !body_final) malformed = 1
+    }
+    NR == 1 { if ($0 != "age-encryption.org/v1") malformed = 1; next }
+    closed { next }
+    /^->/ {
+      finish_stanza()
+      if ($0 !~ /^-> [!-~]+( [!-~]+)*$/) malformed = 1
+      if ($2 == "scrypt") scrypt = 1
+      else {
+        n++
+        if ($2 !~ /^(X25519|ssh-ed25519|ssh-rsa|mlkem768x25519|p256tag)$/) comparable = 0
+      }
+      in_stanza = 1
+      body_final = 0
+      next
+    }
+    /^---/ {
+      finish_stanza()
+      if ($1 != "---" || NF != 2 || length($2) != 43 || $2 !~ /^[A-Za-z0-9+\/]+$/ || !in_stanza) malformed = 1
+      closed = 1
+      next
+    }
+    {
+      if (!in_stanza || body_final || length($0) > 64 || $0 !~ /^[A-Za-z0-9+\/]*$/) malformed = 1
+      else if (length($0) < 64) body_final = 1
+    }
+    END {
+      valid = closed && !malformed && !scrypt && n > 0
+      print valid + 0, n + 0, comparable + 0
+    }
+  '
 }
 
 # Print an armored or binary age header without decrypting its body. Armored
 # input is decoded incrementally and stops at the closing header marker; status
 # must never decode or inspect ciphertext merely to count recipient stanzas.
 age_header() {
-  local f="$1" first="" acc="" hdr="" line
+  local f="$1" first=""
   [[ -f "$f" ]] || return 1
   read -r first <"$f" || return 1
+  # A deliberate 16 MiB decoded-header bound prevents malformed files from
+  # making status stream arbitrary ciphertext. Upstream may get SIGPIPE when
+  # the footer is found, so extraction remains best-effort by design.
   if [[ "$first" == "-----BEGIN AGE ENCRYPTED FILE-----" ]]; then
-    while IFS= read -r line; do
-      acc+="$line"
-      hdr="$(printf '%s' "$acc" | base64 -d 2>/dev/null || true)"
-      if printf '%s' "$hdr" | grep -q '^--- '; then
-        printf '%s\n' "$hdr"
-        return 0
-      fi
-    done < <(sed -n '2,$p' "$f")
+    awk 'NR > 1 && !/^-----END AGE ENCRYPTED FILE-----$/ {print} /^-----END AGE ENCRYPTED FILE-----$/ {exit}' "$f" \
+      | base64 -d 2>/dev/null \
+      | head -c 16777216 \
+      | awk '{print} /^--- / {exit}' \
+      || true
   else
-    awk 'NR<=64 {print} /^--- / {exit}' "$f"
+    head -c 16777216 "$f" \
+      | awk '{print} /^--- / {exit}' \
+      || true
   fi
   return 0
 }
@@ -765,9 +799,9 @@ already_bootstrapped() {
 # sidecar is missing, decrypt it in memory with an enrolled agent key and
 # derive the store recipient again.
 repair_bootstrap_metadata() {
-  local stanzas=0 store_pub="" recorded_store_pub="" content="" f repaired=0
-  stanzas="$(age_header "$out" | count_stanzas || true)"
-  [[ "$stanzas" -gt 0 ]] || fatal_with_hint \
+  local header_valid=0 store_pub="" recorded_store_pub="" content="" f repaired=0
+  read -r header_valid _ _ < <(age_header "$out" | age_header_info)
+  [[ "$header_valid" -eq 1 ]] || fatal_with_hint \
     "$out is incomplete or invalid - bootstrap cannot treat it as complete" \
     "restore a valid backup or move the invalid file aside before running bootstrap again"
 
@@ -1044,9 +1078,9 @@ cmd_reencrypt() {
   [[ -f "$out" ]] || fatal_with_hint \
     "no identities file at $out" \
     "run age-ssh-nt bootstrap, or restore a valid backup before re-encrypting"
-  local encrypted_stanzas=0
-  encrypted_stanzas="$(age_header "$out" | count_stanzas || true)"
-  [[ "$encrypted_stanzas" -gt 0 ]] || fatal_with_hint \
+  local header_valid=0
+  read -r header_valid _ _ < <(age_header "$out" | age_header_info)
+  [[ "$header_valid" -eq 1 ]] || fatal_with_hint \
     "$out is incomplete or invalid - refusing to re-encrypt it" \
     "restore $rotation_backup or another valid backup"
   [[ -f "$recipients" ]] && [[ -s "$recipients" ]] \
@@ -1376,8 +1410,9 @@ cmd_passage() {
 # counts with real identity and store decryption probes when the agent permits.
 cmd_status() {
   local rows=() pending=() n_rec=0 raw_rec=0 n_enc=0 n_store=0 raw_store=0 store_duplicates=0
-  local id name f stanzas stale=0 invalid=0 expected_store=0
-  local store_files=() probe_content="" probe_id="" store_pub="" ref_pub="" first=""
+  local id name f stanzas stale=0 invalid=0 incomparable=0 expected_store=0
+  local header_valid=0 header_comparable=0
+  local store_files=() probe_content="" probe_id="" store_pub="" ref_pub=""
   local current_hash="" recorded_hash="" matching_agent=0 store_recipients_ok=0 store_backup_ok=0
   agent_has_enrolled_key && matching_agent=1
 
@@ -1393,10 +1428,10 @@ cmd_status() {
       rows+=("state" "$AGE_SSH_NT_HOME" "bootstrapped but no enrolled recipients (run: age-ssh-nt enroll)")
       pending_add "age-ssh-nt enroll"
     else
-      n_enc="$(age_header "$out" | count_stanzas || true)"
-      if [[ "$n_enc" -ne "$n_rec" ]]; then
-        rows+=("state" "$AGE_SSH_NT_HOME" "identities.age stale: encrypted to $n_enc of $n_rec recipient(s)")
-        pending_add "age-ssh-nt reencrypt"
+      read -r header_valid n_enc header_comparable < <(age_header "$out" | age_header_info)
+      if [[ "$header_valid" -ne 1 ]]; then
+        rows+=("state" "$AGE_SSH_NT_HOME" "identities.age invalid or truncated")
+        pending_add "restore a valid identities backup or diagnose $out"
       else
         current_hash="$(recipient_set_hash "$recipients" 2>/dev/null || true)"
         recorded_hash="$(cat "$out_recipients_hash" 2>/dev/null || true)"
@@ -1406,6 +1441,11 @@ cmd_status() {
         elif [[ "$recorded_hash" != "$current_hash" ]]; then
           rows+=("state" "$AGE_SSH_NT_HOME" "identities.age stale: authorized recipient set changed")
           pending_add "age-ssh-nt reencrypt"
+        elif [[ "$header_comparable" -eq 1 ]] && [[ "$n_enc" -ne "$n_rec" ]]; then
+          rows+=("state" "$AGE_SSH_NT_HOME" "identities.age stale: encrypted to $n_enc of $n_rec recipient(s)")
+          pending_add "age-ssh-nt reencrypt"
+        elif [[ "$header_comparable" -eq 0 ]]; then
+          rows+=("state" "$AGE_SSH_NT_HOME" "identities.age recipient set fresh ($n_rec recipient(s), exact hash; custom stanza count varies)")
         else
           rows+=("state" "$AGE_SSH_NT_HOME" "identities.age recipient set fresh ($n_rec recipient(s), exact set)")
         fi
@@ -1536,18 +1576,20 @@ cmd_status() {
     if [[ -d "$PASSAGE_DIR" ]] && [[ "$n_store" -gt 0 ]]; then
       stale=0
       invalid=0
+      incomparable=0
       for f in "${store_files[@]}"; do
-        stanzas="$(age_header "$f" | count_stanzas || true)"
-        if [[ "$stanzas" -eq 0 ]]; then
+        read -r header_valid stanzas header_comparable < <(age_header "$f" | age_header_info)
+        if [[ "$header_valid" -ne 1 ]]; then
           invalid=1
           break
+        elif [[ "$header_comparable" -eq 0 ]]; then
+          incomparable=1
         elif [[ "$stanzas" -ne "$expected_store" ]]; then
           stale=1
-          break
         fi
       done
       if [[ "$invalid" -eq 1 ]]; then
-        rows+=("store files" "$PASSAGE_DIR" "invalid - at least one .age file has no readable recipient stanzas")
+        rows+=("store files" "$PASSAGE_DIR" "invalid - at least one .age header is malformed, truncated, or not recipient-managed")
         pending_add "inspect or restore invalid .age files in $PASSAGE_DIR"
       elif [[ "$stale" -eq 1 ]]; then
         if [[ "$store_duplicates" -gt 0 ]]; then
@@ -1556,6 +1598,8 @@ cmd_status() {
           rows+=("store files" "$PASSAGE_DIR" "stale - re-encrypt to the current $n_store $ent (run: age-ssh-nt passage reencrypt)")
           pending_add "age-ssh-nt passage reencrypt"
         fi
+      elif [[ "$incomparable" -eq 1 ]]; then
+        rows+=("store files" "$PASSAGE_DIR" "closed recipient headers; custom stanza counts are not comparable to recipient lines")
       else
         if [[ "$store_duplicates" -gt 0 ]]; then
           rows+=("store files" "$PASSAGE_DIR" "matches $raw_store configured recipient lines ($n_store unique); remove duplicates, then re-encrypt")
@@ -1564,17 +1608,21 @@ cmd_status() {
         fi
       fi
     fi
-    # Definitive check: decrypt a store file with the identities themselves.
+    # Definitive check: decrypt every store file with the identities themselves.
     # The recipient list could be edited without re-encrypting (or coincidentally
     # match in count), so only an actual decryption proves readability. The
     # identities travel via stdin (age -d -i -), never a file.
     if [[ ${#store_files[@]} -gt 0 ]]; then
       if [[ -n "$probe_id" ]]; then
-        first="${store_files[0]}"
-        if printf '%s\n' "$probe_content" | age -d -i - -o /dev/null "$first" 2>/dev/null; then
+        invalid=0
+        for f in "${store_files[@]}"; do
+          printf '%s\n' "$probe_content" | age -d -i - -o /dev/null "$f" 2>/dev/null \
+            || invalid=$((invalid + 1))
+        done
+        if [[ "$invalid" -eq 0 ]]; then
           rows+=("store readable" "$PASSAGE_DIR" "yes - decrypts with the age-ssh-nt identity now")
         else
-          rows+=("store readable" "$PASSAGE_DIR" "no - store not encrypted to the age-ssh-nt identity yet")
+          rows+=("store readable" "$PASSAGE_DIR" "no - $invalid/${#store_files[@]} file(s) do not decrypt with the age-ssh-nt identity")
           pending_add "age-ssh-nt passage reencrypt"
         fi
       else
