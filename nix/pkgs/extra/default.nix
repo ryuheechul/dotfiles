@@ -9,6 +9,7 @@ let
   tag = import ../custom/tag { pkgs = pkgs; };
   hired = import ../custom/hired.nix { pkgs = pkgs; };
   ssh-agent-switcher = import ../custom/ssh-agent-switcher { pkgs = pkgs; };
+  age-plugin-sshagent = import ../custom/age-plugin-sshagent.nix { pkgs = pkgs; };
   cfn-lint = pkgs.python3.pkgs.cfn-lint;
   hexto256 = import ../custom/hexto256.nix;
   termimagenator = import ../custom/termimagenator.nix;
@@ -168,6 +169,9 @@ with pkgs;
   #   - `exit` from connection should unmount and stop forwarding just like docker container experience!
   boring # SSH tunnel manager
   ssh-agent-switcher # SSH agent proxy for tmux - see ../../../zsh/integration/interactive-ssh
+  # age-plugin-sshagent keeps the passage identities encrypted (no plaintext key
+  # on disk); the age-ssh-nt wrapper script lives at ../../../bin/path/ssh
+  age-plugin-sshagent # Age plugin that uses SSH agent keys as identities
 ]
 ++ ifEnv "MY_NIX_EXTRA_SSH_XORG" [
   xorg.xorgserver
