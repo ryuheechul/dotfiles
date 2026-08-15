@@ -5,7 +5,8 @@ devices means copying key material around. `age-ssh-nt` bridges the missing
 age-agent experience instead - a single encrypted identities file whose
 recipients are derived from SSH keys (via the `age-plugin-sshagent` plugin),
 so any enrolled key in an SSH agent can decrypt it on demand, and only during
-a `passage` invocation. No plaintext key material ever rests on disk.
+a `passage` invocation. No plaintext key material is kept persistently; the
+Passage bridge briefly uses the private temporary file described below.
 
 From `passage`'s perspective this adds no complexity: the identities are just
 another recipient it decrypts with. Enrolling another SSH key only
@@ -30,22 +31,24 @@ layout is our convention.
 ## Files
 
 This file is the documentation and lives in the repo at `bin/docs/age-ssh-nt.md`;
-the state files it describes live in `~/.age/age-ssh-nt/` (a plain directory,
+the state files it describes live in `$AGE_SSH_NT_HOME` (a plain directory,
 created by `bootstrap`):
 
 | file | secret? | purpose |
 |---|---|---|
 | `identities.age` | yes (0600) | the passage identities, age-encrypted to all enrolled recipients |
+| `identities.age.recipients-sha256` | no | canonical hash of the exact `authorized_recipients` key set used for the current `identities.age` |
+| `identities.age.rotation.bak` | yes (0600) | the previous encrypted passage identities, retained by `rotate` until the new identity is verified against every store entry |
 | `authorized_recipients` | no | one `age1...` recipient per enrolled key, each under a comment naming the key - an open-ended, purely additive list |
 | `*.identity` | no | per-key plugin identity (key fingerprint + salt); only useful while the matching key is in the SSH agent |
 | `store_recipient` | no | the identities' own public key, recorded by `bootstrap`/`reencrypt` so `status` can check the store side without needing the agent |
 | `README.md` | no | tiny pointer dropped by `bootstrap`, links to this documentation (`age-ssh-nt doc`) |
 
 `~/.passage/` holds only genuine passage files (`store/`, `.age-recipients`).
-`~/.passage/store/.age-recipients` is passage's own mechanism (the recipients
+`$PASSAGE_DIR/.age-recipients` is passage's own mechanism (the recipients
 new store entries are encrypted to). The bootstrap step also appends the
 encrypted identities' own public key there (under a comment explaining what it
-is and pointing at `~/.age/age-ssh-nt/`), so `passage insert`/`edit` keep
+is and pointing at `$AGE_SSH_NT_HOME`), so `passage insert`/`edit` keep
 encrypting to the same identity that `age-ssh-nt passage` hands out.
 
 ## The one script (in `bin/path/ssh/`)
@@ -54,18 +57,36 @@ encrypting to the same identity that `age-ssh-nt passage` hands out.
 
 | subcommand | what it does |
 |---|---|
-| `age-ssh-nt bootstrap` | one-shot bootstrap on a new box - generates a fresh age identity in memory (`age-keygen`, never saved to disk), prints a manifest of exactly what will happen (including which SSH key will be used), asks for confirmation, then registers an SSH agent key (picked from a menu if the agent holds several), encrypts the identities to it, appends the identities' own public key to `~/.passage/store/.age-recipients` and verifies decryption |
+| `age-ssh-nt bootstrap` | one-shot bootstrap on a new box - generates a fresh age identity in memory (`age-keygen`, never saved to disk), prints a manifest of exactly what will happen (including which SSH key will be used), asks for confirmation, then registers an SSH agent key (picked from a menu if the agent holds several), encrypts the identities to it, appends the identities' own public key to `$PASSAGE_DIR/.age-recipients` and verifies decryption |
 | `age-ssh-nt enroll` | enroll one more device key: picks a key from the SSH agent (menu if several), derives the name from the key's comment and asks for confirmation - purely additive, never decrypts |
 | `age-ssh-nt reencrypt` | re-encrypt `identities.age` in place to all enrolled recipients (needs an already-enrolled key in the SSH agent; run after `enroll`) |
+| `age-ssh-nt rotate` | replace the passage identity, retain the old encrypted identity and store recipient as a rotation backup, and re-encrypt the store to old + new |
 | `age-ssh-nt status` | report what is done and what still needs doing on both sides - strictly read-only, never changes anything (see [Checking status](#checking-status)) |
 | `age-ssh-nt passage <passage args>` | run passage with the identities decrypted on the fly - `passage reencrypt` is passed through and re-encrypts the store files to `.age-recipients` |
 | `age-ssh-nt doc` | open this documentation with `glow` (falls back to `less`/`cat` if glow is not installed) |
 | `age-ssh-nt help` | usage |
 
-The script honors `AGE_HOME` (default `~/.age`), `PASSAGE_HOME` (default
-`~/.passage`) and `AGE_SSH_NT_HOME` (default `$AGE_HOME/age-ssh-nt`, holding
-`identities.age`, `authorized_recipients` and the `*.identity` files). The
-store recipient list is `$PASSAGE_HOME/store/.age-recipients`.
+State-changing commands are serialized by
+`$AGE_SSH_NT_HOME/.mutation.lock`; concurrent mutations fail with the owning
+PID instead of sharing temporary or backup files. The lock is removed on
+normal exit, errors, INT and TERM. After an uncatchable SIGKILL, confirm that
+the recorded process is gone before removing the stale lock directory.
+
+The script honors `PASSAGE_DIR` (default `~/.passage/store`) and
+`AGE_SSH_NT_HOME` (default `$XDG_DATA_HOME/dfs-rhc/age-ssh-nt`, falling back to
+`~/.local/share/dfs-rhc/age-ssh-nt`; it holds `identities.age`,
+`authorized_recipients` and the `*.identity` files). The store recipient list
+is `$PASSAGE_DIR/.age-recipients`.
+
+When `AGE_SSH_NT_HOME` is unset, existing state is selected in this order:
+the new `dfs-rhc` XDG location, the previous `$XDG_DATA_HOME/age-ssh-nt`
+location, then legacy `~/.age/age-ssh-nt`. New state uses the `dfs-rhc`
+location.
+
+For encryption, `authorized_recipients` is canonicalized in a temporary file:
+comments and blank lines are removed, then key lines are sorted and
+deduplicated. The human-edited source file is never rewritten implicitly;
+`status` reports duplicate lines as pending cleanup.
 
 ## Decryption
 
@@ -75,22 +96,30 @@ passing all identities in one `age -d -i` call does not work). The SSH agent
 must hold one of the enrolled keys - locally on the box, or forwarded from the
 device via `ssh -A`.
 
-The decrypted identities never rest on disk: on Linux the temp file is
-unlinked right after being opened as fd 3, and `passage` reads
-`PASSAGE_IDENTITIES_FILE=/dev/fd/3` (each `age -d` re-opens it at offset 0, so
-`passage edit`'s two reads both work; the kernel reclaims the anonymous inode
-when the script exits - even on SIGKILL). On macOS/BSD, opening `/dev/fd/N` is
-a `dup()` that shares the file offset (fdescfs), so a second read would see
-EOF; there the identities stay in a named 0600 file under `$TMPDIR`, removed
-by an EXIT trap (fires on exit, errors, INT and TERM; a SIGKILL could only
-leave a private 0600 file until the OS cleans it up). The temp file lives in
-`XDG_RUNTIME_DIR` on Linux (tmpfs = RAM, wiped on reboot), `$TMPDIR` on macOS,
-`/tmp` as last resort.
+The decrypted identities briefly occupy a private 0600 named temp file. On
+Linux it is opened as fd 3 and immediately unlinked after decryption, then
+`passage` reads `PASSAGE_IDENTITIES_FILE=/dev/fd/3` (each `age -d` re-opens it
+at offset 0, so `passage edit`'s two reads both work; the kernel reclaims the
+anonymous inode when the script exits, even on SIGKILL). The named-file window
+is normally in `XDG_RUNTIME_DIR` (tmpfs = RAM, wiped on reboot), but `$TMPDIR`
+or `/tmp` fallbacks may be disk-backed.
+
+On macOS/BSD, opening `/dev/fd/N` is equivalent to `dup(N)` (fdescfs) and
+shares the file offset, so a second read would see EOF. There the identities
+remain in a named 0600 file under `$TMPDIR` and the cleanup trap removes it on
+normal exit, errors, INT and TERM. An uncatchable SIGKILL can leave that
+private file until the OS cleans up the temporary directory.
 
 ## Enrolling a device (purely additive)
 
 Enrollment needs the device's own agent (one signature to prove possession),
 never decrypts anything, and never affects previously enrolled devices:
+
+> **Warning:** only forward an agent to a host you trust. During enrollment,
+> the remote host can request the deterministic derivation signature and
+> retain the resulting age private key permanently. An agent confirmation
+> prompt lets you approve the signature request, but it cannot prevent the
+> requesting host from keeping the signature or derived key afterward.
 
 1. From the new device: `ssh -A <box>`, then
    `age-ssh-nt enroll` (approve the signature prompt). It picks a key from the
@@ -103,9 +132,19 @@ never decrypts anything, and never affects previously enrolled devices:
    `age-ssh-nt reencrypt` - decrypts with an enrolled key and
    re-encrypts to all recipients.
 
-Keys that live only on their own device (e.g. iOS Secure Enclave keys) are
-enrolled from the device via step 1 - they never need to exist in the box's
-agent.
+The pinned plugin supports ordinary `ssh-ed25519` keys only. RSA, ECDSA and
+FIDO/security-key variants are omitted from the selection menu; if the agent
+contains no compatible key, enrollment exits with an explicit error.
+
+If enrollment is interrupted after the non-secret `*.identity` file is
+created but before its recipient is appended, running `age-ssh-nt enroll`
+again with the same selected key reports the partial state and repairs the
+missing recipient without generating a different identity.
+
+New plugin identities are generated and checked in a unique sibling temporary
+directory, then atomically installed. If another enrollment claims the same
+comment-derived filename while confirmation is pending, the later enrollment
+stops without touching the existing identity and asks to be rerun.
 
 One caveat: enrollment derives the age identity from a signature the agent
 produces, so it only works with agents that sign deterministically. If the
@@ -125,20 +164,48 @@ re-encrypts the store to it - the SSH side (`authorized_recipients`, the
 age-ssh-nt rotate   # from any machine whose agent holds an enrolled key
 ```
 
-It prints a manifest (rewrite `identities.age`, update the store recipients,
-re-encrypt `~/.passage/store/`), asks for confirmation, then runs in two
-re-encrypt passes: first to [old + new] so the store stays decryptable by a
-live identity at every step, then - after the fresh identity is verified in
-place - to the new identity only, trimming the old key from
-`~/.passage/store/.age-recipients`. A crash at any point leaves the store
-readable by one of the identities, and re-running converges.
+It prints a manifest (back up and rewrite `identities.age`, update the store
+recipients, re-encrypt `$PASSAGE_DIR`) and asks for confirmation. When store
+files exist it first offers an optional read-only check that decrypts each file
+to `/dev/null` with the current identity. Failures are listed with a hint to
+inspect them through `age-ssh-nt passage`, but do not block rotation; the final
+confirmation decides whether to proceed.
 
-Rotation is for rotating the store secret, not the SSH keys. Because the
-wrapper key is derived from an agent signature, anyone who can make the agent
-sign can re-derive it - rotation does not change that. What it does fix is the
-one-time-leak class: a captured signature is bound to its salt (each fresh
-identity uses a new salt), so anything observed before the rotation is
-worthless after it.
+Before Passage runs, rotation restores the exact old store recipient if it is
+missing, adds the new one, and verifies that both lines are present. It then
+runs one re-encryption pass to old + new.
+Because `passage reencrypt` is not assumed to be all-or-nothing, the old
+encrypted identities are renamed to `identities.age.rotation.bak` and the old
+store recipient remains in `.age-recipients`, marked with a cleanup comment.
+No plaintext backup is written.
+
+Recipient-list changes use an atomic sibling rewrite. Rotation also keeps a
+temporary sibling snapshot of the original `.age-recipients` and restores it
+when verification, Passage, or identity installation fails. A SIGKILL can
+leave that snapshot and the pending marker behind; `status` reports the
+interrupted pre-install state and the original recipient snapshot path.
+
+`status` reports the rotation as pending while the rotation backup exists, and a
+second rotation is refused. After verifying that every store entry works with
+the new identity, remove the marked backup recipient and its comment, run
+`age-ssh-nt passage reencrypt`, verify the store again, then remove
+`identities.age.rotation.bak`.
+
+If an entry works only with the old identity, restore it before troubleshooting:
+
+```sh
+mv "$AGE_SSH_NT_HOME/identities.age" "$AGE_SSH_NT_HOME/identities.age.failed-rotation"
+mv "$AGE_SSH_NT_HOME/identities.age.rotation.bak" "$AGE_SSH_NT_HOME/identities.age"
+age-ssh-nt reencrypt   # also restores the store_recipient status sidecar
+```
+
+Rotation changes only the inner passage identity, not the SSH-derived wrapper.
+The plugin `*.identity` salt and outer recipient remain unchanged, so anyone
+who can make the agent sign - or who retained the deterministic signature for
+that salt - can still derive the wrapper key and decrypt newly rotated
+`identities.age`. Invalidating such a signature requires replacing that outer
+plugin identity and recipient, which is intentionally outside this command's
+scope.
 
 ## Fresh setup
 
@@ -147,9 +214,9 @@ age-ssh-nt bootstrap   # first command on a new box
 ```
 
 It prints a manifest of exactly what it will do (create
-`~/.age/age-ssh-nt/`, the key registration, `authorized_recipients` and
+`$AGE_SSH_NT_HOME`, the key registration, `authorized_recipients` and
 `identities.age`;
-append the identities' public key to `~/.passage/store/.age-recipients`) and
+append the identities' public key to `$PASSAGE_DIR/.age-recipients`) and
 shows which SSH key it will use, then asks for confirmation before doing
 anything. After a `y`, it registers an SSH agent key (a numbered menu appears
 if the agent holds several), generates a fresh age identity in memory
@@ -163,12 +230,24 @@ store still decrypts:
 age-ssh-nt passage show <entry>
 ```
 
+`identities.age` is written to a sibling temporary file, verified, and then
+installed atomically. If bootstrap is interrupted after that rename but before
+its sidecar or store recipient is written, running `age-ssh-nt bootstrap`
+again cryptographically decrypts the existing file before repairing missing
+metadata from its real contents. An incomplete, fabricated or invalid file is
+reported explicitly rather than being treated as a completed bootstrap.
+
+The recipient-set hash is likewise prepared in a unique sibling file and its
+destination must be a regular non-symlink file. Identity replacement is rolled
+back (or an incomplete first bootstrap is removed) if the hash cannot be
+installed.
+
 If `authorized_recipients` already exists (seeded from another box), bootstrap
 does not register a key: it still generates fresh identities in memory and
 encrypts them to the existing recipient list. The identities are always newly
 generated - plaintext is never kept, so nothing can be reused or recovered.
 
-Back up `~/.age/age-ssh-nt/identities.age` together with `~/.passage/store/` -
+Back up `$AGE_SSH_NT_HOME/identities.age` together with `$PASSAGE_DIR/` -
 the identities file is required to decrypt the store, and it is the only
 secret file in this directory.
 
@@ -182,17 +261,24 @@ age-ssh-nt status
 ```
 
 It is strictly read-only - it never writes or changes anything - and combines
-three kinds of checks:
+several checks:
 
-- **Recipient-count staleness**: every age file's header records one recipient
-  stanza (`-> X25519 ...`) per recipient it was encrypted to, and additive
-  changes are visible as a shortfall in that count. `identities.age` is
-  compared against `authorized_recipients` (after `enroll` appends a
-  recipient, status reports `identities.age stale: encrypted to X of N
-  recipient(s)` with the pending step `age-ssh-nt reencrypt`), and each
-  `*.age` store file against `~/.passage/store/.age-recipients` (after
-  `bootstrap` appends the identities' own key, pre-existing files are stale
-  until `age-ssh-nt passage reencrypt`).
+- **Exact identities recipient set**: after writing `identities.age`, the
+  script records a hash of the sorted, deduplicated key lines from
+  `authorized_recipients`. Status compares both that hash and the age stanza
+  count, so replacing one recipient with another is detected even when the
+  count stays the same. A missing hash is reported as unverified and healed by
+  `age-ssh-nt reencrypt`.
+- **Cryptographic identity validation**: when an enrolled key is present in the
+  current agent, status must successfully decrypt `identities.age` before
+  calling its ciphertext valid. If the matching fingerprint is present but
+  decryption fails, status reports an invalid/plugin-failure state and a
+  pending recovery action. Without a matching agent it reports that validity
+  cannot be verified rather than inferring validity from header-shaped text.
+- **Store recipient-count staleness**: every store file's age header records
+  one recipient stanza (`-> X25519 ...`) per recipient it was encrypted to.
+  Each `*.age` file is compared against `$PASSAGE_DIR/.age-recipients`; zero
+  readable stanzas are reported as an invalid file rather than up to date.
 - **Real key-line check**: the `recipients` row matches the identities' actual
   `age1...` public key (derived from the decrypted identities, or read from
   the `store_recipient` sidecar when no agent is present) against the store

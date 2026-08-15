@@ -19,7 +19,7 @@
 #       enroll one more device key (run from the device via `ssh -A`): picks a
 #       key from the SSH agent (menu if several), derives the identity name
 #       from the key's comment, asks for confirmation, then writes
-#       ~/.age/age-ssh-nt/<name>.identity and appends its recipient. Purely
+#       $AGE_SSH_NT_HOME/<name>.identity and appends its recipient. Purely
 #       additive - never decrypts, never touches the encrypted identities.
 #       Requires a bootstrap first (bootstrap includes the first enrollment).
 #       Afterwards re-encrypt once from any machine holding an enrolled key:
@@ -32,8 +32,8 @@
 #       rotate the passage identities: replace the identity sealed in
 #       identities.age with a fresh age-keygen identity and re-encrypt the
 #       store to it (SSH side - authorized_recipients, *.identity files -
-#       is untouched). Safe to re-run: each step keeps the store decryptable
-#       by a live identity.
+#       is untouched). Keeps the old encrypted identities and store recipient
+#       as a rotation backup until the user verifies and removes them.
 #   age-ssh-nt status
 #       report what is done and what still needs doing on both sides
 #       (identities.age vs the enrolled recipients, store files vs
@@ -50,20 +50,21 @@
 #   age-ssh-nt passage <args...>
 #       run passage with the identities decrypted on the fly; `passage
 #       reencrypt` is passed through unchanged (re-encrypts the store files
-#       to $PASSAGE_HOME/store/.age-recipients).
+#       to $PASSAGE_DIR/.age-recipients).
 #
 # Recipients are `age1...` keys produced by `age-plugin-sshagent keygen`, one
 # per device SSH key. Encryption needs no SSH agent - only the public
 # recipients - so adding a device later is purely additive: enroll it, append
 # its recipient, re-encrypt; every previously enrolled device keeps working.
 #
-# The decrypted identities reach passage without ever leaving a file on disk:
+# The decrypted identities briefly occupy a private 0600 named temp file so
+# passage can reopen them as a seekable identity file:
 #   - Linux (and Cygwin): /dev/fd/N opens the file with a fresh, independent
 #     offset, so we decrypt to a temp file, open it read-only as fd 3,
 #     immediately unlink it, and pass PASSAGE_IDENTITIES_FILE=/dev/fd/3. No
 #     file name exists anywhere; the kernel frees the anonymous inode when
-#     the script exits, even on SIGKILL. The EXIT trap set right after mktemp
-#     is only a safety net for the brief pre-unlink window (e.g. decryption
+#     the script exits, even on SIGKILL. The global EXIT trap is only a safety
+#     net for the brief pre-unlink window (e.g. decryption
 #     failure) and is a no-op once the name is dropped.
 #   - macOS/BSD: opening /dev/fd/N is equivalent to dup(N) (fdescfs), sharing
 #     the file offset - the second read of `passage edit` (age runs twice)
@@ -78,32 +79,49 @@
 # and `passage edit` decrypts the same identities file twice.
 #
 # Decryption uses the age identities in $AGE_SSH_NT_HOME (default
-# ~/.age/age-ssh-nt) - non-secret files that age-plugin-sshagent turns into
+# $XDG_DATA_HOME/dfs-rhc/age-ssh-nt, or
+# ~/.local/share/dfs-rhc/age-ssh-nt) - non-secret files that
+# age-plugin-sshagent turns into
 # real decryption keys by asking the SSH agent to sign. The agent must hold one
 # of the enrolled keys (local, or forwarded from the device via `ssh -A`).
 #
 # Env overrides:
-#   AGE_HOME         (default ~/.age)
-#   PASSAGE_HOME     (default ~/.passage)
-#   AGE_SSH_NT_HOME  (default $AGE_HOME/age-ssh-nt; holds identities.age,
+#   PASSAGE_DIR      (default ~/.passage/store)
+#   AGE_SSH_NT_HOME  (default $XDG_DATA_HOME/dfs-rhc/age-ssh-nt, falling back
+#                     to ~/.local/share/dfs-rhc/age-ssh-nt; holds identities.age,
 #                     authorized_recipients and the *.identity files)
-#   The store recipient list is $PASSAGE_HOME/store/.age-recipients.
+#   The store recipient list is $PASSAGE_DIR/.age-recipients.
 #
 # The full design and file layout is documented in bin/docs/age-ssh-nt.md
-# (view it with: age-ssh-nt doc). The repo's ~/.age/age-ssh-nt/ directory is a
-# plain directory (not a symlink); bootstrap drops a tiny README.md there that
-# points back to this doc.
+# (view it with: age-ssh-nt doc). The state directory is plain (not a symlink);
+# bootstrap drops a tiny README.md there that points back to this doc.
 
 set -euo pipefail
 
-AGE_HOME="${AGE_HOME:-$HOME/.age}"
-PASSAGE_HOME="${PASSAGE_HOME:-$HOME/.passage}"
-AGE_SSH_NT_HOME="${AGE_SSH_NT_HOME:-$AGE_HOME/age-ssh-nt}"
+PASSAGE_DIR="${PASSAGE_DIR:-$HOME/.passage/store}"
+if [[ -z "${AGE_SSH_NT_HOME:-}" ]]; then
+  data_home="${XDG_DATA_HOME:-$HOME/.local/share}"
+  default_home="$data_home/dfs-rhc/age-ssh-nt"
+  previous_xdg_home="$data_home/age-ssh-nt"
+  legacy_home="$HOME/.age/age-ssh-nt"
+  if [[ -d "$default_home" ]]; then
+    AGE_SSH_NT_HOME="$default_home"
+  elif [[ -d "$previous_xdg_home" ]]; then
+    AGE_SSH_NT_HOME="$previous_xdg_home"
+  elif [[ -d "$legacy_home" ]]; then
+    AGE_SSH_NT_HOME="$legacy_home"
+  else
+    AGE_SSH_NT_HOME="$default_home"
+  fi
+fi
 
 identities_dir="${AGE_SSH_NT_HOME}"
 recipients="${AGE_SSH_NT_HOME}/authorized_recipients"
 out="${AGE_SSH_NT_HOME}/identities.age"
-store_recipients="${PASSAGE_HOME}/store/.age-recipients"
+out_recipients_hash="${out}.recipients-sha256"
+rotation_backup="${out}.rotation.bak"
+store_recipients="${PASSAGE_DIR}/.age-recipients"
+store_recipients_snapshot="${PASSAGE_DIR}/.age-recipients.age-ssh-nt.rotation.bak"
 
 # The documentation, resolved relative to this script's real location (the
 # repo layout: bin/path/ssh/age-ssh-nt + bin/docs/age-ssh-nt.md). Physical
@@ -116,6 +134,92 @@ doc="${AGE_SSH_NT_DOC:-$repo_bin/docs/age-ssh-nt.md}"
 # Platform-aware temp dir: RAM-backed on systemd/Linux, launchd per-user dir on
 # macOS, plain /tmp as last resort (see header comment for the tradeoffs).
 tmpdir="${XDG_RUNTIME_DIR:-${TMPDIR:-/tmp}}"
+mutation_lock="$identities_dir/.mutation.lock"
+passage_tmp=""
+out_hash_tmp=""
+encryption_recipients_tmp=""
+held_lock=""
+rotation_snapshot_active=0
+rotation_snapshot_missing=0
+rotation_installed=0
+
+restore_store_recipients_snapshot() {
+  [[ "$rotation_snapshot_active" -eq 1 ]] || return 0
+  if [[ "$rotation_snapshot_missing" -eq 1 ]]; then
+    rm -f "$store_recipients" "$store_recipients_snapshot"
+  else
+    if [[ -d "$store_recipients" ]] && [[ ! -L "$store_recipients" ]]; then
+      echo "error: cannot restore recipient snapshot over directory: $store_recipients" >&2
+      return 1
+    fi
+    rm -f "$store_recipients"
+    mv -f "$store_recipients_snapshot" "$store_recipients"
+  fi
+  rotation_snapshot_active=0
+}
+
+begin_store_recipients_snapshot() {
+  if [[ -e "$store_recipients_snapshot" ]] || [[ -L "$store_recipients_snapshot" ]]; then
+    echo "error: previous rotation recipient snapshot still exists: $store_recipients_snapshot" >&2
+    echo "hint: inspect status and restore or remove the snapshot before rotating" >&2
+    return 1
+  fi
+  mkdir -p "$(dirname "$store_recipients")" || return 1
+  if [[ -e "$store_recipients" ]] || [[ -L "$store_recipients" ]]; then
+    [[ -f "$store_recipients" ]] && [[ ! -L "$store_recipients" ]] || {
+      echo "error: store recipients is not a regular file: $store_recipients" >&2
+      return 1
+    }
+    cp -p "$store_recipients" "$store_recipients_snapshot" || return 1
+    rotation_snapshot_missing=0
+  else
+    : >"$store_recipients_snapshot" || return 1
+    rotation_snapshot_missing=1
+  fi
+  rotation_snapshot_active=1
+}
+
+commit_store_recipients_snapshot() {
+  [[ "$rotation_snapshot_active" -eq 1 ]] || return 0
+  rm -f "$store_recipients_snapshot"
+  rotation_snapshot_active=0
+}
+
+# One cleanup path owns both temporary plaintext and the mutation lock, so
+# adding either resource cannot overwrite another EXIT trap.
+cleanup() {
+  [[ -z "$passage_tmp" ]] || rm -f "$passage_tmp"
+  [[ -z "$out_hash_tmp" ]] || rm -f "$out_hash_tmp"
+  [[ -z "$encryption_recipients_tmp" ]] || rm -f "$encryption_recipients_tmp"
+  if [[ "$rotation_snapshot_active" -eq 1 ]] && [[ "$rotation_installed" -eq 0 ]]; then
+    restore_store_recipients_snapshot || true
+  fi
+  if [[ -n "$held_lock" ]]; then
+    rm -f "$held_lock/pid"
+    rmdir "$held_lock" 2>/dev/null || true
+  fi
+}
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+# Serialize state-changing operations with portable atomic mkdir. A SIGKILL
+# can leave the directory behind; report its PID and require deliberate manual
+# cleanup rather than guessing that a lock is stale and racing a live process.
+acquire_mutation_lock() {
+  [[ -z "$held_lock" ]] || return 0
+  mkdir -p "$identities_dir"
+  if ! mkdir "$mutation_lock" 2>/dev/null; then
+    local owner=""
+    owner="$(cat "$mutation_lock/pid" 2>/dev/null || true)"
+    echo "error: another age-ssh-nt mutation is running${owner:+ (pid $owner)}" >&2
+    echo "lock: $mutation_lock" >&2
+    echo "hint: if that process no longer exists, remove the lock directory manually" >&2
+    exit 1
+  fi
+  held_lock="$mutation_lock"
+  printf '%s\n' "$$" >"$held_lock/pid"
+}
 
 usage() {
   echo "usage: age-ssh-nt bootstrap                    (one-shot bootstrap on a new box:" >&2
@@ -125,7 +229,7 @@ usage() {
   echo "                                                   name is derived from the key and confirmed)" >&2
   echo "       age-ssh-nt reencrypt                    (re-encrypt identities.age in place to enrolled keys)" >&2
   echo "       age-ssh-nt rotate                        (rotate the passage identities: fresh identity," >&2
-  echo "                                                   store re-encrypted to it - SSH keys untouched)" >&2
+  echo "                                                   encrypted rotation backup kept - SSH keys untouched)" >&2
   echo "       age-ssh-nt status                        (what is done and what still needs doing on both sides:" >&2
   echo "                                                   identities.age vs enrolled keys, store files vs" >&2
   echo "                                                   store recipients - read-only, never changes anything)" >&2
@@ -133,6 +237,16 @@ usage() {
   echo "                                                   reencrypt passes through to passage)" >&2
   echo "       age-ssh-nt doc                           (open the full documentation with glow)" >&2
   echo "       age-ssh-nt help                         (this help)" >&2
+}
+
+require_no_args() {
+  local command="$1"
+  shift
+  [[ "$#" -eq 0 ]] || {
+    echo "error: $command takes no arguments" >&2
+    usage
+    exit 1
+  }
 }
 
 # Slugify an SSH key comment into a safe identity-file name.
@@ -151,20 +265,47 @@ slugify() {
 keygen_identity() {
   local name="${1:-}" selector="${2:-}" identity="$identities_dir/${1:-}.identity"
   mkdir -p "$identities_dir"
-  local args=(-o "$identity")
+  local keygen_dir="" keygen_identity="" out="" pub="" file_pub=""
+  local args=()
+  if ! keygen_dir="$(mktemp -d "$identities_dir/.keygen.XXXXXX")"; then
+    echo "error: could not create a temporary identity directory in $identities_dir" >&2
+    return 1
+  fi
+  keygen_identity="$keygen_dir/$name.identity"
+  args=(-o "$keygen_identity")
   [[ -n "$selector" ]] && args+=(-k "$selector")
   # keygen prints the public key to stderr; the identity file itself is
   # non-secret (fingerprint + salt) and safe to keep around
-  local out pub
   out="$(age-plugin-sshagent keygen "${args[@]}" 2>&1 >/dev/null || true)"
   pub="$(printf '%s\n' "$out" | sed -n 's/^Public key: //p')"
-  if [[ -z "$pub" ]]; then
+  file_pub="$(sed -n 's/^# public key: //p' "$keygen_identity" 2>/dev/null | head -1)"
+  if [[ -z "$pub" ]] || [[ "$pub" != "$file_pub" ]]; then
     echo "error: keygen failed for '$name' - age-plugin-sshagent said:" >&2
     printf '%s\n' "$out" | sed '/^$/d' | sed 's/^/  /' >&2
-    rm -f "$identity"
+    rm -f "$keygen_identity"
+    rmdir "$keygen_dir" 2>/dev/null || true
     return 1
   fi
+  if [[ -e "$identity" ]] || [[ -L "$identity" ]]; then
+    echo "error: identity name became unavailable while waiting: $identity" >&2
+    echo "hint: rerun the command to choose a new derived name" >&2
+    rm -f "$keygen_identity"
+    rmdir "$keygen_dir" 2>/dev/null || true
+    return 1
+  fi
+  if ! mv "$keygen_identity" "$identity"; then
+    echo "error: could not install generated identity at $identity" >&2
+    rm -f "$keygen_identity"
+    rmdir "$keygen_dir" 2>/dev/null || true
+    return 1
+  fi
+  rmdir "$keygen_dir" 2>/dev/null || true
   echo "$pub"
+}
+
+# Print the public recipient recorded in an existing plugin identity file.
+identity_recipient() {
+  sed -n 's/^# public key: //p' "$identities_dir/$1.identity" 2>/dev/null | head -1
 }
 
 # Parse one `ssh-add -l` key line (`256 <fp> <comment> (<type>)`) into the
@@ -192,9 +333,10 @@ choose_agent_key() {
     echo "error: SSH agent has no keys - add one with: ssh-add" >&2
     exit 1
   }
-  mapfile -t keys < <(printf '%s\n' "$lines" | grep 'SHA256:')
+  mapfile -t keys < <(printf '%s\n' "$lines" | grep -E 'SHA256:.* \(ED25519\)$' || true)
   [[ ${#keys[@]} -gt 0 ]] || {
-    echo "error: no usable keys in the SSH agent" >&2
+    echo "error: the SSH agent has no supported Ed25519 keys" >&2
+    echo "hint: age-plugin-sshagent supports ordinary ssh-ed25519 keys (not RSA, ECDSA, or security-key variants)" >&2
     exit 1
   }
   n=${#keys[@]}
@@ -252,20 +394,33 @@ already_enrolled() {
   return 1
 }
 
-# Drop a tiny README.md into $AGE_SSH_NT_HOME pointing back at the full
-# documentation, if it is not there yet (idempotent; also heals old boxes).
+# Return 0 when the current agent lists a fingerprint recorded by one of the
+# enrolled plugin identities. This does not ask the agent to sign.
+agent_has_enrolled_key() {
+  local agent_fps="" fp="" f
+  [[ -n "${SSH_AUTH_SOCK:-}" ]] && [[ -S "$SSH_AUTH_SOCK" ]] || return 1
+  agent_fps="$(ssh-add -l 2>/dev/null | awk '{print $2}' || true)"
+  [[ -n "$agent_fps" ]] || return 1
+  for f in "$identities_dir"/*.identity; do
+    [[ -f "$f" ]] || continue
+    fp="$(sed -n 's/^# ssh key: \([^ ]*\).*/\1/p' "$f" | head -1)"
+    [[ -n "$fp" ]] && grep -qxF "$fp" <<<"$agent_fps" && return 0
+  done
+  return 1
+}
+
+# Rewrite the managed README.md in $AGE_SSH_NT_HOME without embedding the
+# checkout's absolute path, so moving the repository cannot stale the pointer.
 drop_readme() {
   local readme="$identities_dir/README.md"
-  [[ -f "$readme" ]] && return 0
-  cat >"$readme" <<EOF
+  cat >"$readme" <<'EOF'
 # age-ssh-nt
 
-This directory is managed by \`age-ssh-nt\` (SSH-agent-backed passage
-identities). The full documentation lives at:
+This directory is managed by `age-ssh-nt` (SSH-agent-backed passage
+identities).
 
-    $doc
-
-Open it with: \`age-ssh-nt doc\` (or set AGE_SSH_NT_DOC to point elsewhere).
+Open the full documentation with: `age-ssh-nt doc`.
+Set `AGE_SSH_NT_DOC` to override where that command reads it from.
 EOF
 }
 
@@ -286,6 +441,11 @@ manifest_table() {
   fi
 }
 
+agent_trust_warning() {
+  echo "warning: enroll only on a trusted host - a host using your forwarded agent can retain the derived age key" >&2
+  echo "         agent confirmation approves the signature but cannot prevent the host from keeping its result" >&2
+}
+
 # Emit TSV rows (what<TAB>path<TAB>detail) for the enrolled keys, for the
 # bootstrap manifest table (label defaults to "use").
 enrolled_keys_rows() {
@@ -301,13 +461,102 @@ enrolled_keys_rows() {
   done
 }
 
-# Count the enrolled recipients in the given recipients file (defaults to
-# $recipients), ignoring comment lines. A missing file counts as zero so
-# status keeps reporting instead of dying on a missing/partial file.
+# Print the canonical effective recipient set: comments and blanks removed,
+# keys sorted and deduplicated. The human-edited source file stays untouched.
+canonical_recipient_lines() {
+  local f="$1"
+  [[ -f "$f" ]] || return 0
+  awk '!/^[[:space:]]*#/ && NF {print}' "$f" | LC_ALL=C sort -u
+}
+
+# Count unique enrolled recipients in the given file (defaults to $recipients).
+# A missing file counts as zero so status survives partial state.
 recipient_count() {
+  local f="${1:-$recipients}"
+  canonical_recipient_lines "$f" | awk 'END {print NR+0}'
+}
+
+raw_recipient_count() {
   local f="${1:-$recipients}"
   [[ -f "$f" ]] || { echo 0; return 0; }
   awk '!/^[[:space:]]*#/ && NF {n++} END {print n+0}' "$f"
+}
+
+# Hash the effective recipient set, ignoring comments, blank lines, ordering
+# and duplicates. This records the exact set identities.age was encrypted to,
+# which its age header intentionally does not reveal.
+recipient_set_hash() {
+  local f="${1:-$recipients}"
+  [[ -f "$f" ]] || return 1
+  canonical_recipient_lines "$f" \
+    | sha256sum \
+    | cut -d' ' -f1
+}
+
+prepare_encryption_recipients() {
+  encryption_recipients_tmp="$(mktemp "$tmpdir/age-ssh-nt-recipients.XXXXXX")" || return 1
+  if ! canonical_recipient_lines "$recipients" >"$encryption_recipients_tmp"; then
+    rm -f "$encryption_recipients_tmp"
+    encryption_recipients_tmp=""
+    return 1
+  fi
+  [[ -s "$encryption_recipients_tmp" ]] || {
+    echo "error: no effective recipients in $recipients" >&2
+    rm -f "$encryption_recipients_tmp"
+    encryption_recipients_tmp=""
+    return 1
+  }
+}
+
+prepare_out_recipients_hash() {
+  if [[ -e "$out_recipients_hash" ]] || [[ -L "$out_recipients_hash" ]]; then
+    [[ -f "$out_recipients_hash" ]] && [[ ! -L "$out_recipients_hash" ]] || {
+      echo "error: recipient hash destination is not a regular file: $out_recipients_hash" >&2
+      return 1
+    }
+  fi
+  out_hash_tmp="$(mktemp "$identities_dir/.recipients-sha256.XXXXXX")" || return 1
+  if ! recipient_set_hash "$recipients" >"$out_hash_tmp"; then
+    rm -f "$out_hash_tmp"
+    out_hash_tmp=""
+    return 1
+  fi
+  chmod 600 "$out_hash_tmp" || {
+    rm -f "$out_hash_tmp"
+    out_hash_tmp=""
+    return 1
+  }
+}
+
+commit_out_recipients_hash() {
+  [[ -n "$out_hash_tmp" ]] || return 1
+  if ! mv -f "$out_hash_tmp" "$out_recipients_hash"; then
+    rm -f "$out_hash_tmp"
+    out_hash_tmp=""
+    return 1
+  fi
+  out_hash_tmp=""
+  [[ -f "$out_recipients_hash" ]] && [[ ! -L "$out_recipients_hash" ]] || {
+    echo "error: recipient hash was not installed as a regular file: $out_recipients_hash" >&2
+    return 1
+  }
+}
+
+rotation_backup_exists() {
+  [[ -e "$rotation_backup" ]] || [[ -L "$rotation_backup" ]]
+}
+
+guard_interrupted_rotation() {
+  [[ ! -f "$out" ]] || return 0
+  rotation_backup_exists || return 0
+  if [[ -f "$rotation_backup" ]] && [[ ! -L "$rotation_backup" ]]; then
+    echo "error: rotation was interrupted after preserving the old identities" >&2
+    printf 'restore with:\n  mv -- %q %q\n' "$rotation_backup" "$out" >&2
+  else
+    echo "error: $rotation_backup exists but is not a regular backup file" >&2
+    echo "hint: inspect or remove that object before bootstrapping" >&2
+  fi
+  exit 1
 }
 
 # Count the recipient stanzas (-> X25519 / -> age1 lines) in an age file's
@@ -367,7 +616,7 @@ pending_add() {
 # recipients and is never touched.
 store_recipients_comment="# age-ssh-nt: the passage identities' own age recipient - store entries
 # encrypt to this key; age-ssh-nt passage decrypts them on the fly. See
-# ~/.age/age-ssh-nt/ (open the docs with: age-ssh-nt doc)"
+# $AGE_SSH_NT_HOME/ (open the docs with: age-ssh-nt doc)"
 
 # Verify "$1" (an age-encrypted file) decrypts to exactly "$2" with one of the
 # enrolled identity files. age aborts on the first plugin identity whose key is
@@ -384,37 +633,47 @@ verify_identities() {
   return 1
 }
 
-# Append "$1" (the identities' own public key) to $store_recipients under the
-# marker comment, deduplicated. Returns 0 when a key was added.
-store_recipients_append() {
-  local k="$1" marker="${store_recipients_comment%%$'\n'*}"
-  [[ -n "$k" ]] || return 1
+# Ensure "$1" (the identities' own public key) is in $store_recipients under
+# the marker comment. If "$2" is set, write it immediately before the key.
+# Returns nonzero only on error; sets store_recipients_result=added|already.
+store_recipients_ensure() {
+  local k="$1" note="${2:-}" marker="${store_recipients_comment%%$'\n'*}"
+  local dir="" tmp=""
+  store_recipients_result="already"
+  [[ -n "$k" ]] || {
+    echo "error: refusing to add an empty store recipient" >&2
+    return 1
+  }
   if [[ -f "$store_recipients" ]] && grep -qxF "$k" "$store_recipients"; then
+    return 0
+  fi
+  if [[ -e "$store_recipients" ]] || [[ -L "$store_recipients" ]]; then
+    [[ -f "$store_recipients" ]] && [[ ! -L "$store_recipients" ]] || {
+      echo "error: store recipients is not a regular file: $store_recipients" >&2
+      return 1
+    }
+  fi
+  dir="$(dirname "$store_recipients")"
+  mkdir -p "$dir" || return 1
+  tmp="$(mktemp "$dir/.age-recipients.tmp.XXXXXX")" || return 1
+  if [[ -f "$store_recipients" ]] && ! cat "$store_recipients" >"$tmp"; then
+    rm -f "$tmp"
     return 1
   fi
-  mkdir -p "$(dirname "$store_recipients")"
   if [[ ! -f "$store_recipients" ]] || ! grep -qxF "$marker" "$store_recipients"; then
-    printf '%s\n' "$store_recipients_comment" >>"$store_recipients"
+    printf '%s\n' "$store_recipients_comment" >>"$tmp" || { rm -f "$tmp"; return 1; }
   fi
-  printf '%s\n' "$k" >>"$store_recipients"
-  return 0
-}
-
-# Rewrite the age-ssh-nt section of $store_recipients (from the marker comment
-# to EOF) so it holds exactly "$1"; lines above the marker are left alone.
-# Used by rotate to drop the old identities after the store has been
-# re-encrypted to the new one.
-store_recipients_replace() {
-  local k="$1" marker="${store_recipients_comment%%$'\n'*}"
-  mkdir -p "$(dirname "$store_recipients")"
-  local tmp
-  tmp="$(mktemp "${TMPDIR:-/tmp}/store-recipients.XXXXXX")"
-  if [[ -f "$store_recipients" ]]; then
-    awk -v m="$marker" 'index($0, m) { exit } { print }' "$store_recipients" >"$tmp"
+  if [[ -n "$note" ]] && ! printf '%s\n' "$note" >>"$tmp"; then
+    rm -f "$tmp"
+    return 1
   fi
-  printf '%s\n' "$store_recipients_comment" >>"$tmp"
-  printf '%s\n' "$k" >>"$tmp"
-  mv -f "$tmp" "$store_recipients"
+  printf '%s\n' "$k" >>"$tmp" || { rm -f "$tmp"; return 1; }
+  chmod 600 "$tmp" || { rm -f "$tmp"; return 1; }
+  if ! mv -f "$tmp" "$store_recipients"; then
+    rm -f "$tmp"
+    return 1
+  fi
+  store_recipients_result="added"
 }
 
 # Print the enrolled keys (from the identity file headers) for the manifest.
@@ -430,11 +689,63 @@ already_bootstrapped() {
   echo "check status:    age-ssh-nt status   (what's done, what's still pending on both sides)" >&2
 }
 
+# Complete metadata that may be missing after an interrupted bootstrap. The
+# final identities.age must at least have a valid age header; if its public key
+# sidecar is missing, decrypt it in memory with an enrolled agent key and
+# derive the store recipient again.
+repair_bootstrap_metadata() {
+  local stanzas=0 store_pub="" recorded_store_pub="" content="" f repaired=0
+  stanzas="$(age_header "$out" | count_stanzas || true)"
+  if [[ "$stanzas" -eq 0 ]]; then
+    echo "error: $out is incomplete or invalid - bootstrap cannot treat it as complete" >&2
+    echo "hint: restore a valid backup or move the invalid file aside before running bootstrap again" >&2
+    exit 1
+  fi
+
+  for f in "$identities_dir"/*.identity; do
+    [[ -f "$f" ]] || continue
+    if content="$(age -d -i "$f" "$out" 2>/dev/null)"; then
+      break
+    fi
+    content=""
+  done
+  if [[ -z "$content" ]]; then
+    if agent_has_enrolled_key; then
+      echo "error: an enrolled key is present, but $out failed cryptographic decryption" >&2
+      echo "hint: restore a valid identities backup before running bootstrap again" >&2
+    else
+      echo "error: existing bootstrap could not be cryptographically verified" >&2
+      echo "hint: load an enrolled key into the SSH agent, then run bootstrap again" >&2
+    fi
+    exit 1
+  fi
+  store_pub="$(printf '%s\n' "$content" | age-keygen -y 2>/dev/null || true)"
+  [[ -n "$store_pub" ]] || {
+    echo "error: could not derive the store recipient while validating bootstrap" >&2
+    exit 1
+  }
+  recorded_store_pub="$(sed -n '/^age1/{p;q;}' "$identities_dir/store_recipient" 2>/dev/null || true)"
+  if [[ "$recorded_store_pub" != "$store_pub" ]]; then
+    printf '%s\n' "$store_pub" >"$identities_dir/store_recipient"
+    repaired=1
+  fi
+  store_recipients_ensure "$store_pub" || exit 1
+  if [[ "$store_recipients_result" == "added" ]]; then
+    repaired=1
+  fi
+  [[ -f "$identities_dir/README.md" ]] || repaired=1
+  drop_readme
+  [[ "$repaired" -eq 0 ]] || echo "repaired interrupted bootstrap metadata" >&2
+}
+
 # One-shot bootstrap: manifest, confirm, then register, encrypt, verify. The
 # identities are always a fresh age key generated in memory - never read from a
 # file or written to disk, so there is nothing to delete.
 cmd_bootstrap() {
+  guard_interrupted_rotation
   if [[ -f "$out" ]]; then
+    acquire_mutation_lock
+    repair_bootstrap_metadata
     already_bootstrapped
     return 0
   fi
@@ -469,11 +780,13 @@ cmd_bootstrap() {
       printf 'use\t%s\trecipient list (%s entries)\n' "$recipients" "$(recipient_count)"
     fi
     printf 'create\t%s\tthe passage identities, age-encrypted\n' "$out"
+    printf 'create\t%s\texact recipient-set hash for status\n' "$out_recipients_hash"
     printf 'create\t%s\tstore recipient for status checks (the identities'"'"' own public key)\n' "$identities_dir/store_recipient"
     printf 'create\t%s/README.md\tpointer to the documentation (age-ssh-nt doc)\n' "$identities_dir"
     printf 'update\t%s\tadd the identities'"'"' own public key (store encryption)\n' "$store_recipients"
   } | manifest_table
   echo "  (source: fresh identity generated in memory - never saved to disk, nothing to delete)" >&2
+  agent_trust_warning
 
   # confirm before doing anything; a generated identity is non-destructive, so
   # a scripted run (no way to answer) proceeds
@@ -489,6 +802,14 @@ cmd_bootstrap() {
     ;;
   esac
 
+  acquire_mutation_lock
+  guard_interrupted_rotation
+  if [[ -f "$out" ]]; then
+    repair_bootstrap_metadata
+    already_bootstrapped
+    return 0
+  fi
+
   # register the first key
   if [[ -n "$name" ]]; then
     local pub
@@ -498,34 +819,39 @@ cmd_bootstrap() {
     echo "registered $name -> $pub" >&2
   fi
 
-  # encrypt
-  printf '%s\n' "$content" | age -a -R "$recipients" -o "$out"
-  chmod 600 "$out"
-  echo "encrypted -> $out ($(recipient_count) recipient(s))" >&2
-  drop_readme
-
-  # verify decryption: pipe the fresh identity through each enrolled identity
-  # file and byte-compare against the source content, all in memory (no temp
-  # file to clean up; age reads the identity from its own disk location, so
-  # nothing is ever written). $out was freshly created and is deleted on
-  # failure so bootstrap stays re-runnable.
-  if verify_identities "$out" "$content"; then
-    if [[ -n "$store_pub" ]]; then
-      if store_recipients_append "$store_pub"; then
-        echo "store recipients updated: $store_recipients" >&2
-      else
-        echo "store recipients already up to date: $store_recipients" >&2
-      fi
-    fi
-    echo "verified (fresh identity, never saved to disk)" >&2
-    if [[ -n "$store_pub" ]]; then
-      printf '%s\n' "$store_pub" >"$identities_dir/store_recipient"
-    fi
-  else
+  # Encrypt to a sibling temp and verify it before atomically installing the
+  # final file. If the process dies afterward, the next bootstrap repairs any
+  # metadata that had not yet been written.
+  prepare_encryption_recipients || exit 1
+  printf '%s\n' "$content" | age -a -R "$encryption_recipients_tmp" -o "$out.tmp"
+  chmod 600 "$out.tmp"
+  if ! verify_identities "$out.tmp" "$content"; then
     echo "error: decryption check failed" >&2
-    rm -f "$out" # freshly created and unusable - keep bootstrap re-runnable
+    rm -f "$out.tmp"
     exit 1
   fi
+  prepare_out_recipients_hash || {
+    rm -f "$out.tmp"
+    exit 1
+  }
+  mv -f "$out.tmp" "$out"
+  if ! commit_out_recipients_hash; then
+    rm -f "$out"
+    echo "error: could not install recipient hash - removed incomplete bootstrap identities" >&2
+    exit 1
+  fi
+  echo "encrypted and verified -> $out ($(recipient_count) recipient(s))" >&2
+  drop_readme
+  if [[ -n "$store_pub" ]]; then
+    store_recipients_ensure "$store_pub" || exit 1
+    if [[ "$store_recipients_result" == "added" ]]; then
+      echo "store recipients updated: $store_recipients" >&2
+    else
+      echo "store recipients already up to date: $store_recipients" >&2
+    fi
+    printf '%s\n' "$store_pub" >"$identities_dir/store_recipient"
+  fi
+  echo "verified (fresh identity, never saved to disk)" >&2
   echo "verify with: age-ssh-nt passage show <entry>" >&2
 }
 
@@ -543,23 +869,34 @@ cmd_enroll() {
     echo "bootstrap is one-shot: it generates the identity and enrolls the first key" >&2
     exit 1
   }
-  local name="" fp="" comment="" dup="" ans="" pub=""
+  local name="" fp="" comment="" dup="" ans="" pub="" repair=0
   choose_agent_key
   dup="$(already_enrolled || true)"
   if [[ -n "$dup" ]]; then
-    echo "error: key $comment ($fp) is already enrolled as $dup" >&2
-    exit 1
+    pub="$(identity_recipient "$dup")"
+    if [[ -n "$pub" ]] && ! grep -qxF "$pub" "$recipients" 2>/dev/null; then
+      name="$dup"
+      repair=1
+    else
+      echo "error: key $comment ($fp) is already enrolled as $dup" >&2
+      exit 1
+    fi
   fi
 
   echo >&2
   echo "enrolling will:" >&2
   {
     printf 'what\tpath\tdetail\n'
-    printf 'register\t%s\tkey: %s (%s)\n' "$name" "$comment" "$fp"
-    printf 'create\t%s/%s.identity\tkey registration (agent-derived, non-secret)\n' "$identities_dir" "$name"
+    if [[ "$repair" -eq 1 ]]; then
+      printf 'repair\t%s/%s.identity\tkey exists but its recipient is missing\n' "$identities_dir" "$name"
+    else
+      printf 'register\t%s\tkey: %s (%s)\n' "$name" "$comment" "$fp"
+      printf 'create\t%s/%s.identity\tkey registration (agent-derived, non-secret)\n' "$identities_dir" "$name"
+    fi
     printf 'update\t%s\tappend recipient\n' "$recipients"
   } | manifest_table
-  if ! read -r -p "enroll as $name? [Y/n] " ans; then
+  agent_trust_warning
+  if ! read -r -p "$([[ "$repair" -eq 1 ]] && printf 'repair' || printf 'enroll as') $name? [Y/n] " ans; then
     echo "aborted - nothing was created" >&2
     exit 1
   fi
@@ -571,10 +908,39 @@ cmd_enroll() {
     ;;
   esac
 
-  pub="$(keygen_identity "$name" "$fp")" || exit 1
+  acquire_mutation_lock
+  dup="$(already_enrolled || true)"
+  if [[ "$repair" -eq 1 ]]; then
+    pub="$(identity_recipient "$name")"
+    [[ -n "$pub" ]] || {
+      echo "error: the partial identity disappeared before it could be repaired" >&2
+      exit 1
+    }
+    if grep -qxF "$pub" "$recipients" 2>/dev/null; then
+      echo "enrollment was already repaired concurrently: $name -> $pub"
+      return 0
+    fi
+  elif [[ -n "$dup" ]]; then
+    pub="$(identity_recipient "$dup")"
+    if [[ -n "$pub" ]] && ! grep -qxF "$pub" "$recipients" 2>/dev/null; then
+      name="$dup"
+      repair=1
+    else
+      echo "error: key $comment ($fp) was enrolled concurrently as $dup" >&2
+      exit 1
+    fi
+  fi
+
+  if [[ "$repair" -eq 0 ]]; then
+    pub="$(keygen_identity "$name" "$fp")" || exit 1
+  fi
   mkdir -p "$(dirname "$recipients")"
   append_recipient "$pub"
-  echo "enrolled $name -> $pub"
+  if [[ "$repair" -eq 1 ]]; then
+    echo "repaired enrollment $name -> $pub"
+  else
+    echo "enrolled $name -> $pub"
+  fi
   echo "recipient added to $recipients"
   echo "now re-encrypt once from any machine holding an enrolled key in its agent:"
   echo "  age-ssh-nt reencrypt"
@@ -595,8 +961,8 @@ decrypt_to() {
 
 # Hand the decrypted temp file to passage without leaving it on disk, setting
 # $identities_src to the path passage should read. See the header comment for
-# why Linux and macOS/BSD take different routes. The caller sets an EXIT trap
-# right after mktemp, so every exit path is covered; on Linux this additionally
+# why Linux and macOS/BSD take different routes. The global EXIT trap covers
+# every exit path; on Linux this additionally
 # drops the name, turning the trap into a no-op and making even SIGKILL clean.
 setup_identities_src() {
   local tmp="$1"
@@ -614,7 +980,6 @@ setup_identities_src() {
 # after the command function has returned, when its locals no longer exist.
 identities_tmp() {
   passage_tmp="$(mktemp "$tmpdir/passage-identities.XXXXXX")"
-  trap 'rm -f "$passage_tmp"' EXIT
 }
 
 # Re-encrypt identities.age in place to all enrolled recipients. Runs after
@@ -623,10 +988,24 @@ identities_tmp() {
 # do this - that command re-encrypts the store files and is passed through
 # untouched by cmd_passage.
 cmd_reencrypt() {
+  acquire_mutation_lock
+  [[ -f "$out" ]] || {
+    echo "error: no identities file at $out" >&2
+    echo "hint: run age-ssh-nt bootstrap, or restore a valid backup before re-encrypting" >&2
+    exit 1
+  }
+  local encrypted_stanzas=0
+  encrypted_stanzas="$(age_header "$out" | count_stanzas || true)"
+  [[ "$encrypted_stanzas" -gt 0 ]] || {
+    echo "error: $out is incomplete or invalid - refusing to re-encrypt it" >&2
+    echo "hint: restore $rotation_backup or another valid backup" >&2
+    exit 1
+  }
   [[ -f "$recipients" ]] && [[ -s "$recipients" ]] || {
     echo "error: no recipients in $recipients (enroll with: age-ssh-nt enroll)" >&2
     exit 1
   }
+  prepare_encryption_recipients || exit 1
   identities_tmp
   if ! decrypt_to "$passage_tmp"; then
     echo "error: no enrolled identity matches a key in the current SSH agent" >&2
@@ -636,29 +1015,60 @@ cmd_reencrypt() {
   # record the identities' own public key so status can check the store side
   # without needing the agent (also heals boxes that never bootstrapped here).
   # Must read the temp file before setup_identities_src unlinks it on Linux.
-  local sp=""
+  local sp="" current_content=""
+  current_content="$(<"$passage_tmp")"
   sp="$(age-keygen -y <"$passage_tmp" 2>/dev/null || true)"
-  [[ -n "$sp" ]] && printf '%s\n' "$sp" >"$identities_dir/store_recipient"
   setup_identities_src "$passage_tmp"
   # write to a sibling temp, then atomically rename on success: a crash
   # mid-write leaves the previous identities.age intact and decryptable
-  age -a -R "$recipients" -o "$out.tmp" "$identities_src"
+  age -a -R "$encryption_recipients_tmp" -o "$out.tmp" "$identities_src"
   chmod 600 "$out.tmp"
-  mv -f "$out.tmp" "$out"
+  if ! verify_identities "$out.tmp" "$current_content"; then
+    rm -f "$out.tmp"
+    echo "error: re-encrypted identities could not be verified with any key in the current SSH agent" >&2
+    echo "hint: keep at least one currently available enrolled recipient until the new file is verified" >&2
+    exit 1
+  fi
+  prepare_out_recipients_hash || {
+    rm -f "$out.tmp"
+    exit 1
+  }
+  local out_rollback="$out.rollback.$$"
+  cp -p "$out" "$out_rollback" || {
+    rm -f "$out.tmp"
+    exit 1
+  }
+  if ! mv -f "$out.tmp" "$out"; then
+    rm -f "$out_rollback"
+    exit 1
+  fi
+  if ! commit_out_recipients_hash; then
+    mv -f "$out_rollback" "$out"
+    echo "error: could not install recipient hash - restored previous identities" >&2
+    exit 1
+  fi
+  rm -f "$out_rollback"
+  [[ -n "$sp" ]] && printf '%s\n' "$sp" >"$identities_dir/store_recipient"
   echo "re-encrypted -> $out ($(recipient_count) recipient(s))"
 }
 
 # Rotate the passage identities: replace the identity sealed in identities.age
-# with a fresh age-keygen identity and re-encrypt the store to it. The SSH
-# side (authorized_recipients, *.identity files) is untouched - this rotates
-# the store side only. Safe to re-run: the store stays decryptable by a live
-# identity at every step (the old one until identities.age is rewritten, the
-# new one after).
+# with a fresh age-keygen identity and re-encrypt the store to old + new. The
+# SSH side (authorized_recipients, *.identity files) is untouched. The old
+# encrypted identities and recipient remain as a rotation backup until the user
+# verifies every store entry and removes them.
 cmd_rotate() {
+  acquire_mutation_lock
+  guard_interrupted_rotation
   [[ -f "$out" ]] || {
     echo "error: no bootstrap yet ($out missing) - run: age-ssh-nt bootstrap" >&2
     exit 1
   }
+  if rotation_backup_exists; then
+    echo "error: a previous rotation is still pending: $rotation_backup" >&2
+    echo "hint: verify every store entry, remove the marked backup recipient, re-encrypt the store, then remove the backup" >&2
+    exit 1
+  fi
   identities_tmp
   if ! decrypt_to "$passage_tmp"; then
     echo "error: no enrolled identity matches a key in the current SSH agent" >&2
@@ -666,37 +1076,81 @@ cmd_rotate() {
     exit 1
   fi
   # Note: $passage_tmp keeps its named path (identities_tmp's
-  # setup_identities_src is NOT called) because it feeds two separate
-  # `passage reencrypt` runs below; the EXIT trap removes it.
-  local content="" store_pub=""
+  # setup_identities_src is NOT called) because it feeds `passage reencrypt`
+  # below; the EXIT trap removes it.
+  local content="" store_pub="" old_store_pub="" rotation_note="" old_note=""
+  old_store_pub="$(age-keygen -y <"$passage_tmp" 2>/dev/null || true)"
+  [[ -n "$old_store_pub" ]] || {
+    echo "error: could not derive the current identity's public key" >&2
+    exit 1
+  }
   content="$(age-keygen)"
   store_pub="$(printf '%s\n' "$content" | age-keygen -y 2>/dev/null || true)"
   [[ -n "$store_pub" ]] || {
     echo "error: could not derive the fresh identity's public key" >&2
     exit 1
   }
-  local store_files=() n_store_files=0
-  mapfile -t store_files < <(find "$PASSAGE_HOME/store" -name '*.age' -type f 2>/dev/null || true)
+  local store_files=() failed_files=() n_store_files=0 verified_files=0 old_recipient_missing=0 passage_dir="$PASSAGE_DIR"
+  [[ -d "$passage_dir" ]] && passage_dir="$(cd -P -- "$passage_dir" && pwd)"
+  mapfile -t store_files < <(find "$passage_dir" -name '*.age' -type f 2>/dev/null || true)
   n_store_files=${#store_files[@]}
+  grep -qxF "$old_store_pub" "$store_recipients" 2>/dev/null || old_recipient_missing=1
 
   # manifest: what will happen, before anything is changed
   echo
   echo "rotating will:" >&2
   {
     printf 'what\tpath\tdetail\n'
+    printf 'backup\t%s\told encrypted identity (keep until the store is verified)\n' "$rotation_backup"
     printf 'rewrite\t%s\tfresh identity (same %s enrolled recipient(s))\n' "$out" "$(recipient_count)"
-    printf 'update\t%s\tstore recipients -> the new identity\n' "$store_recipients"
-    if [[ "$n_store_files" -gt 0 ]]; then
-      printf 'reencrypt\t%s\t%s store file(s) to the new identity (old + new, then new only)\n' "$PASSAGE_HOME/store" "$n_store_files"
+    if [[ "$old_recipient_missing" -eq 1 ]]; then
+      printf 'repair\t%s\trestore the missing old recipient, then add the new identity\n' "$store_recipients"
     else
-      printf 'skip\t%s\tno store files to re-encrypt\n' "$PASSAGE_HOME/store"
+      printf 'update\t%s\tadd the new identity; retain the old recipient as a rotation backup\n' "$store_recipients"
+    fi
+    if [[ "$n_store_files" -gt 0 ]]; then
+      printf 'reencrypt\t%s\t%s store file(s) to old + new identities\n' "$PASSAGE_DIR" "$n_store_files"
+    else
+      printf 'skip\t%s\tno store files to re-encrypt\n' "$PASSAGE_DIR"
     fi
   } | manifest_table
   echo "  (the SSH side - authorized_recipients, *.identity files - is untouched)" >&2
 
-  local ans=""
+  local ans="" verify_ans="" f=""
+  if [[ "$n_store_files" -gt 0 ]]; then
+    if read -r -p "verify current store files before rotating? [Y/n] " verify_ans; then
+      case "${verify_ans,,}" in
+      "" | y | yes)
+        for f in "${store_files[@]}"; do
+          if age -d -i "$passage_tmp" -o /dev/null "$f" 2>/dev/null; then
+            verified_files=$((verified_files + 1))
+          else
+            failed_files+=("$f")
+          fi
+        done
+        echo "verified current store: $verified_files/$n_store_files file(s) decrypt" >&2
+        if [[ ${#failed_files[@]} -gt 0 ]]; then
+          echo "warning: the current identity could not decrypt:" >&2
+          printf '  %s\n' "${failed_files[@]}" >&2
+          echo "hint: inspect these entries with age-ssh-nt passage before rotating" >&2
+          echo "      rotation may still proceed; the encrypted rotation backup remains for recovery" >&2
+        fi
+        ;;
+      n | no)
+        echo "current store verification skipped" >&2
+        ;;
+      *)
+        echo "current store verification skipped (unrecognized answer: $verify_ans)" >&2
+        ;;
+      esac
+    else
+      echo "current store verification skipped (no input)" >&2
+    fi
+  fi
+
   if ! read -r -p "rotate the passage identities? [Y/n] " ans; then
-    ans="y"
+    echo "aborted - rotate requires explicit confirmation" >&2
+    exit 1
   fi
   case "${ans,,}" in
   "" | y | yes) ;;
@@ -706,55 +1160,96 @@ cmd_rotate() {
     ;;
   esac
 
-  # pass 1: store encrypted to [old identities + new], decryptable by both;
-  # a crash here still leaves the store readable by the old identities
-  if store_recipients_append "$store_pub"; then
-    echo "store recipients updated: $store_recipients" >&2
-  else
-    echo "store recipients already up to date: $store_recipients" >&2
-  fi
-  if [[ "$n_store_files" -gt 0 ]]; then
-    echo "re-encrypting the store to the current recipients (old + new identity)..." >&2
-    PASSAGE_IDENTITIES_FILE="$passage_tmp" passage reencrypt
-  fi
-
-  # rewrite identities.age with the fresh identity: write a sibling temp,
-  # verify it decrypts, then atomically rename - a crash mid-write leaves the
-  # previous identities.age intact and decryptable
-  printf '%s\n' "$content" | age -a -R "$recipients" -o "$out.tmp"
+  # Prepare and verify the new encrypted identity before changing the store.
+  prepare_encryption_recipients || exit 1
+  printf '%s\n' "$content" | age -a -R "$encryption_recipients_tmp" -o "$out.tmp"
   chmod 600 "$out.tmp"
-  if verify_identities "$out.tmp" "$content"; then
-    mv -f "$out.tmp" "$out"
-    printf '%s\n' "$store_pub" >"$identities_dir/store_recipient"
-    echo "verified - rotated -> $out" >&2
-  else
+  if ! verify_identities "$out.tmp" "$content"; then
     echo "error: decryption check failed - nothing was changed" >&2
     rm -f "$out.tmp"
     exit 1
   fi
+  prepare_out_recipients_hash || {
+    rm -f "$out.tmp"
+    exit 1
+  }
+  begin_store_recipients_snapshot || {
+    rm -f "$out.tmp"
+    exit 1
+  }
 
-  # pass 2: drop the old identities from the store recipients and re-encrypt
-  # to the new identity only (decrypted with the old identities, which
-  # $passage_tmp still holds and the store still carries from pass 1); the
-  # store has been readable by the new identity since pass 1, so a crash here
-  # converges on re-run
-  store_recipients_replace "$store_pub"
-  echo "store recipients trimmed: $store_recipients" >&2
-  if [[ "$n_store_files" -gt 0 ]]; then
-    echo "re-encrypting the store to the new identity only..." >&2
-    PASSAGE_IDENTITIES_FILE="$passage_tmp" passage reencrypt
+  # Re-encrypt once to old + new. The old recipient and encrypted identities
+  # remain available as an explicit recovery path for any file passage skips.
+  if [[ "$old_recipient_missing" -eq 1 ]]; then
+    old_note="# age-ssh-nt: restored current identity recipient before rotation"
+    store_recipients_ensure "$old_store_pub" "$old_note" || {
+      rm -f "$out.tmp"
+      exit 1
+    }
+    if [[ "$store_recipients_result" == "added" ]]; then
+      echo "restored old store recipient: $store_recipients" >&2
+    fi
   fi
-  echo "rotated: $out and $store_recipients now hold only the new identity" >&2
+  rotation_note="# age-ssh-nt: rotation pending - backup recipient: $old_store_pub
+# keep it and $rotation_backup until every store entry works with the new identity"
+  store_recipients_ensure "$store_pub" "$rotation_note" || {
+    rm -f "$out.tmp"
+    exit 1
+  }
+  if [[ "$store_recipients_result" == "added" ]]; then
+    echo "store recipients updated: $store_recipients" >&2
+  else
+    echo "store recipients already up to date: $store_recipients" >&2
+  fi
+  if ! grep -qxF "$old_store_pub" "$store_recipients" 2>/dev/null \
+    || ! grep -qxF "$store_pub" "$store_recipients" 2>/dev/null; then
+    rm -f "$out.tmp"
+    echo "error: could not ensure both old and new store recipients - nothing was rotated" >&2
+    exit 1
+  fi
+  if [[ "$n_store_files" -gt 0 ]]; then
+    echo "re-encrypting the store to the current recipients (old + new identity)..." >&2
+    if ! PASSAGE_DIR="$passage_dir" PASSAGE_IDENTITIES_FILE="$passage_tmp" passage reencrypt; then
+      rm -f "$out.tmp"
+      echo "error: passage re-encryption failed - the old identity remains active" >&2
+      exit 1
+    fi
+  fi
+
+  # Preserve the old encrypted identities, then install the already-verified
+  # new file. If the second rename fails, restore the old file immediately.
+  mv "$out" "$rotation_backup"
+  if ! mv -f "$out.tmp" "$out"; then
+    mv -f "$rotation_backup" "$out"
+    echo "error: could not install the new identities - restored the old file" >&2
+    exit 1
+  fi
+  if ! commit_out_recipients_hash; then
+    mv -f "$rotation_backup" "$out"
+    echo "error: could not install recipient hash - restored the old identities" >&2
+    exit 1
+  fi
+  rotation_installed=1
+  printf '%s\n' "$store_pub" >"$identities_dir/store_recipient"
+  commit_store_recipients_snapshot
+  echo "verified - rotated -> $out" >&2
+  echo "rotation backup kept: $rotation_backup" >&2
+  echo "cleanup: verify every store entry, remove the marked backup recipient, re-encrypt the store, then remove the backup" >&2
 }
 
 # The passage bridge: pass everything through to passage with the identities
 # decrypted on the fly (including `reencrypt`, which re-encrypts the store
 # files to $store_recipients). NOTE: `passage_tmp` is script-global on
-# purpose - the EXIT trap ('rm -f "$passage_tmp"') fires after this function
-# has returned, when its locals no longer exist.
+# purpose - the cleanup trap fires after this function has returned, when its
+# locals no longer exist.
 cmd_passage() {
   passage_tmp=""
-  local idents=("$identities_dir"/*.identity)
+  local idents=("$identities_dir"/*.identity) passage_dir="$PASSAGE_DIR"
+  case "${1:-}" in
+  init | insert | add | edit | generate | delete | rm | remove | rename | mv | copy | cp | reencrypt | git)
+    acquire_mutation_lock
+    ;;
+  esac
   [[ -e "${idents[0]}" ]] || {
     echo "error: no age identities in $identities_dir (enroll with: age-ssh-nt enroll)" >&2
     exit 1
@@ -766,34 +1261,50 @@ cmd_passage() {
     exit 1
   fi
   setup_identities_src "$passage_tmp"
+  [[ -d "$passage_dir" ]] && passage_dir="$(cd -P -- "$passage_dir" && pwd)"
   echo "passage via age-ssh-nt: $*" >&2
-  PASSAGE_IDENTITIES_FILE="$identities_src" passage "$@"
+  PASSAGE_DIR="$passage_dir" PASSAGE_IDENTITIES_FILE="$identities_src" passage "$@"
 }
 
 # Report what is done and what still needs doing on both sides - the age-ssh-nt
 # side (identities.age vs the enrolled recipients) and the passage side (store
-# files vs .age-recipients). Staleness is detected without decrypting anything:
-# every age file's header records one recipient stanza per recipient it was
-# encrypted to, so an additive change (enroll appends a recipient, bootstrap
-# adds the identities' key to the store) shows up as a shortfall in the file's
-# stanza count.
+# files vs .age-recipients). identities.age uses its recorded canonical
+# recipient-set hash for exact comparison; store files expose only stanza
+# counts, so status combines those counts with an actual decryption probe.
 cmd_status() {
-  local rows=() pending=() n_rec=0 n_enc=0 n_store=0 id name f stanzas stale=0
+  local rows=() pending=() n_rec=0 raw_rec=0 n_enc=0 n_store=0 id name f stanzas stale=0 invalid=0
   local store_files=() probe_content="" probe_id="" store_pub="" ref_pub="" first=""
+  local current_hash="" recorded_hash="" matching_agent=0
+  agent_has_enrolled_key && matching_agent=1
 
   # ---- age-ssh-nt side ----
   if [[ -f "$out" ]]; then
     n_rec="$(recipient_count)"
+    raw_rec="$(raw_recipient_count)"
+    if [[ "$raw_rec" -gt "$n_rec" ]]; then
+      rows+=("recipients config" "$recipients" "$((raw_rec - n_rec)) duplicate key line(s) ignored for encryption")
+      pending_add "remove duplicate key lines from $recipients"
+    fi
     if [[ "$n_rec" -eq 0 ]]; then
       rows+=("state" "$AGE_SSH_NT_HOME" "bootstrapped but no enrolled recipients (run: age-ssh-nt enroll)")
       pending_add "age-ssh-nt enroll"
     else
       n_enc="$(age_header "$out" | count_stanzas || true)"
-      if [[ "$n_enc" -eq "$n_rec" ]]; then
-        rows+=("state" "$AGE_SSH_NT_HOME" "bootstrapped - identities.age fresh ($n_rec recipient(s))")
-      else
+      if [[ "$n_enc" -ne "$n_rec" ]]; then
         rows+=("state" "$AGE_SSH_NT_HOME" "identities.age stale: encrypted to $n_enc of $n_rec recipient(s)")
         pending_add "age-ssh-nt reencrypt"
+      else
+        current_hash="$(recipient_set_hash "$recipients" 2>/dev/null || true)"
+        recorded_hash="$(cat "$out_recipients_hash" 2>/dev/null || true)"
+        if [[ -z "$recorded_hash" ]]; then
+          rows+=("state" "$AGE_SSH_NT_HOME" "identities.age recipient set unverified (run: age-ssh-nt reencrypt)")
+          pending_add "age-ssh-nt reencrypt"
+        elif [[ "$recorded_hash" != "$current_hash" ]]; then
+          rows+=("state" "$AGE_SSH_NT_HOME" "identities.age stale: authorized recipient set changed")
+          pending_add "age-ssh-nt reencrypt"
+        else
+          rows+=("state" "$AGE_SSH_NT_HOME" "identities.age recipient set fresh ($n_rec recipient(s), exact set)")
+        fi
       fi
     fi
     for f in "$identities_dir"/*.identity; do
@@ -815,11 +1326,16 @@ cmd_status() {
     done
     if [[ -n "$probe_id" ]]; then
       rows+=("agent" "${SSH_AUTH_SOCK:-unset}" "can decrypt now: yes (via $probe_id)")
+      rows+=("ciphertext" "$out" "cryptographically valid")
       store_pub="$(printf '%s\n' "$probe_content" | age-keygen -y 2>/dev/null || true)"
     elif [[ -z "${SSH_AUTH_SOCK:-}" ]]; then
       rows+=("agent" "unset" "can decrypt now: no - no SSH agent in this session (SSH_AUTH_SOCK unset)")
     elif [[ ! -S "$SSH_AUTH_SOCK" ]]; then
       rows+=("agent" "$SSH_AUTH_SOCK" "can decrypt now: no - SSH_AUTH_SOCK points at a socket that is gone")
+    elif [[ "$matching_agent" -eq 1 ]]; then
+      rows+=("agent" "$SSH_AUTH_SOCK" "can decrypt now: no - enrolled key is present but decryption failed")
+      rows+=("ciphertext" "$out" "invalid or plugin decryption failed")
+      pending_add "restore a valid identities backup or diagnose plugin decryption for $out"
     else
       rows+=("agent" "$SSH_AUTH_SOCK" "can decrypt now: no - no enrolled key in the current SSH agent")
     fi
@@ -827,13 +1343,42 @@ cmd_status() {
     rows+=("state" "$AGE_SSH_NT_HOME" "not bootstrapped (run: age-ssh-nt bootstrap)")
     pending_add "age-ssh-nt bootstrap"
   fi
+  if rotation_backup_exists; then
+    if [[ ! -f "$rotation_backup" ]] || [[ -L "$rotation_backup" ]]; then
+      rows+=("rotation backup" "$rotation_backup" "invalid backup object - blocks rotation")
+      pending_add "inspect or remove invalid backup object: $rotation_backup"
+    elif [[ -f "$out" ]]; then
+      rows+=("rotation backup" "$rotation_backup" "pending cleanup - keep until every store entry works with the new identity")
+      pending_add "verify every store entry; remove the marked backup recipient; age-ssh-nt passage reencrypt; remove $rotation_backup"
+    else
+      rows+=("rotation backup" "$rotation_backup" "interrupted rotation - restore this file as $out")
+      pending_add "restore $rotation_backup as $out"
+    fi
+  fi
+  if [[ -e "$store_recipients_snapshot" ]] || [[ -L "$store_recipients_snapshot" ]]; then
+    if [[ ! -f "$store_recipients_snapshot" ]] || [[ -L "$store_recipients_snapshot" ]]; then
+      rows+=("rotation recipients" "$store_recipients_snapshot" "invalid snapshot object")
+      pending_add "inspect invalid recipient snapshot: $store_recipients_snapshot"
+    elif rotation_backup_exists && [[ -f "$out" ]]; then
+      rows+=("rotation recipients" "$store_recipients_snapshot" "leftover snapshot after identity installation")
+      pending_add "verify rotation state, then remove $store_recipients_snapshot"
+    else
+      rows+=("rotation recipients" "$store_recipients_snapshot" "interrupted before identity installation - original recipients preserved here")
+      pending_add "restore $store_recipients_snapshot as $store_recipients"
+    fi
+  elif [[ -f "$store_recipients" ]] \
+    && grep -q '^# age-ssh-nt: rotation pending - backup recipient:' "$store_recipients" \
+    && ! rotation_backup_exists; then
+    rows+=("rotation recipients" "$store_recipients" "rotation marker without an identity backup - inspect orphan recipients")
+    pending_add "inspect orphan rotation recipients in $store_recipients"
+  fi
 
   # ---- passage side ----
-  if [[ -d "$PASSAGE_HOME/store" ]]; then
-    mapfile -t store_files < <(find "$PASSAGE_HOME/store" -name '*.age' -type f 2>/dev/null || true)
-    rows+=("store" "$PASSAGE_HOME/store" "${#store_files[@]} store file(s)")
+  if [[ -d "$PASSAGE_DIR" ]]; then
+    mapfile -t store_files < <(find -H "$PASSAGE_DIR" -name '*.age' -type f 2>/dev/null || true)
+    rows+=("store" "$PASSAGE_DIR" "${#store_files[@]} store file(s)")
   else
-    rows+=("store" "$PASSAGE_HOME" "no passage store found")
+    rows+=("store" "$PASSAGE_DIR" "no passage store found")
   fi
   if [[ -f "$store_recipients" ]]; then
     n_store="$(recipient_count "$store_recipients")"
@@ -853,20 +1398,27 @@ cmd_status() {
     else
       rows+=("recipients" "$store_recipients" "$n_store $ent - identity presence unknown (no recorded store recipient; run: age-ssh-nt reencrypt)")
     fi
-    if [[ -d "$PASSAGE_HOME/store" ]] && [[ "$n_store" -gt 0 ]]; then
+    if [[ -d "$PASSAGE_DIR" ]] && [[ "$n_store" -gt 0 ]]; then
       stale=0
+      invalid=0
       for f in "${store_files[@]}"; do
         stanzas="$(age_header "$f" | count_stanzas || true)"
-        if [[ "$stanzas" -gt 0 ]] && [[ "$stanzas" -ne "$n_store" ]]; then
+        if [[ "$stanzas" -eq 0 ]]; then
+          invalid=1
+          break
+        elif [[ "$stanzas" -ne "$n_store" ]]; then
           stale=1
           break
         fi
       done
-      if [[ "$stale" -eq 1 ]]; then
-        rows+=("store files" "$PASSAGE_HOME/store" "stale - re-encrypt to the current $n_store $ent (run: age-ssh-nt passage reencrypt)")
+      if [[ "$invalid" -eq 1 ]]; then
+        rows+=("store files" "$PASSAGE_DIR" "invalid - at least one .age file has no readable recipient stanzas")
+        pending_add "inspect or restore invalid .age files in $PASSAGE_DIR"
+      elif [[ "$stale" -eq 1 ]]; then
+        rows+=("store files" "$PASSAGE_DIR" "stale - re-encrypt to the current $n_store $ent (run: age-ssh-nt passage reencrypt)")
         pending_add "age-ssh-nt passage reencrypt"
       else
-        rows+=("store files" "$PASSAGE_HOME/store" "up to date ($n_store $ent)")
+        rows+=("store files" "$PASSAGE_DIR" "up to date ($n_store $ent)")
       fi
     fi
     # Definitive check: decrypt a store file with the identities themselves.
@@ -877,13 +1429,13 @@ cmd_status() {
       if [[ -n "$probe_id" ]]; then
         first="${store_files[0]}"
         if printf '%s\n' "$probe_content" | age -d -i - -o /dev/null "$first" 2>/dev/null; then
-          rows+=("store readable" "$PASSAGE_HOME/store" "yes - decrypts with the age-ssh-nt identity now")
+          rows+=("store readable" "$PASSAGE_DIR" "yes - decrypts with the age-ssh-nt identity now")
         else
-          rows+=("store readable" "$PASSAGE_HOME/store" "no - store not encrypted to the age-ssh-nt identity yet")
+          rows+=("store readable" "$PASSAGE_DIR" "no - store not encrypted to the age-ssh-nt identity yet")
           pending_add "age-ssh-nt passage reencrypt"
         fi
       else
-        rows+=("store readable" "$PASSAGE_HOME/store" "cannot verify without an enrolled key in the current SSH agent")
+        rows+=("store readable" "$PASSAGE_DIR" "cannot verify without an enrolled key in the current SSH agent")
       fi
     fi
   else
@@ -922,11 +1474,20 @@ cmd_doc() {
 }
 
 case "${1:-}" in
-"" | help | -h | --help)
+"")
+  usage
+  exit 0
+  ;;
+help | -h | --help)
+  help_command="$1"
+  shift
+  require_no_args "$help_command" "$@"
   usage
   exit 0
   ;;
 bootstrap)
+  shift
+  require_no_args bootstrap "$@"
   cmd_bootstrap
   ;;
 enroll)
@@ -934,12 +1495,18 @@ enroll)
   cmd_enroll "$@"
   ;;
 reencrypt)
+  shift
+  require_no_args reencrypt "$@"
   cmd_reencrypt
   ;;
 rotate)
+  shift
+  require_no_args rotate "$@"
   cmd_rotate
   ;;
 status)
+  shift
+  require_no_args status "$@"
   cmd_status
   ;;
 passage)
@@ -947,6 +1514,8 @@ passage)
   cmd_passage "$@"
   ;;
 doc)
+  shift
+  require_no_args doc "$@"
   cmd_doc
   ;;
 *)

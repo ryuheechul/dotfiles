@@ -88,7 +88,9 @@ if test -n "${SSH_AUTH_SOCK}"; then
   fi
 fi
 
-command -v age-ssh-nt >/dev/null && alias passage='age-ssh-nt passage'
+command -v age-ssh-nt >/dev/null \
+  && command -v age-plugin-sshagent >/dev/null \
+  && alias passage='age-ssh-nt passage'
 
 if should-use-zellij; then
   # prevent infinite session opening with the same name, 'ssh'
