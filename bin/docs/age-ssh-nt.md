@@ -50,6 +50,17 @@ new store entries are encrypted to). The bootstrap step also appends the
 encrypted identities' own public key there (under a comment explaining what it
 is and pointing at `$AGE_SSH_NT_HOME`), so `passage insert`/`edit` keep
 encrypting to the same identity that `age-ssh-nt passage` hands out.
+Before age-ssh-nt rewrites an existing valid recipient list, it atomically
+copies it to `$PASSAGE_DIR/.age-recipients.age-ssh-nt.bak`. This non-secret,
+last-known-good copy is ignored by Passage. An invalid current list never
+overwrites a valid backup, and unsafe backup objects such as symlinks or
+directories block mutations until inspected.
+The backup starts with a generated-file comment explaining that it is
+overwritten by the next recipient rewrite and is safe to delete after
+`age-ssh-nt status` confirms the current `.age-recipients` is valid. Restoring
+the backup and later rewriting recipients does not duplicate this header.
+Managed comment/key blocks are separated from existing content by exactly one
+blank line.
 
 ## The one script (in `bin/path/ssh/`)
 
@@ -61,6 +72,7 @@ encrypting to the same identity that `age-ssh-nt passage` hands out.
 | `age-ssh-nt enroll` | enroll one more device key: picks a key from the SSH agent (menu if several), derives the name from the key's comment and asks for confirmation - purely additive, never decrypts |
 | `age-ssh-nt reencrypt` | re-encrypt `identities.age` in place to all enrolled recipients (needs an already-enrolled key in the SSH agent; run after `enroll`) |
 | `age-ssh-nt rotate` | replace the passage identity, retain the old encrypted identity and store recipient as a rotation backup, and re-encrypt the store to old + new |
+| `age-ssh-nt rotate finalize` | verify every store file with the new identity, remove the old recipient, re-encrypt the store, and remove the encrypted rotation backup |
 | `age-ssh-nt status` | report what is done and what still needs doing on both sides - strictly read-only, never changes anything (see [Checking status](#checking-status)) |
 | `age-ssh-nt passage <passage args>` | run passage with the identities decrypted on the fly - `passage reencrypt` is passed through and re-encrypts the store files to `.age-recipients` |
 | `age-ssh-nt doc` | open this documentation with `glow` (falls back to `less`/`cat` if glow is not installed) |
@@ -71,6 +83,8 @@ State-changing commands are serialized by
 PID instead of sharing temporary or backup files. The lock is removed on
 normal exit, errors, INT and TERM. After an uncatchable SIGKILL, confirm that
 the recorded process is gone before removing the stale lock directory.
+Lifecycle failures also point to `age-ssh-nt status`, which reports the current
+state and recovery steps. Argument errors and deliberate aborts omit that hint.
 
 The script honors `PASSAGE_DIR` (default `~/.passage/store`) and
 `AGE_SSH_NT_HOME` (default `$XDG_DATA_HOME/dfs-rhc/age-ssh-nt`, falling back to
@@ -87,6 +101,10 @@ For encryption, `authorized_recipients` is canonicalized in a temporary file:
 comments and blank lines are removed, then key lines are sorted and
 deduplicated. The human-edited source file is never rewritten implicitly;
 `status` reports duplicate lines as pending cleanup.
+Store recipients remain under Passage's control and are not deduplicated before
+encryption. `status` therefore reports duplicate `.age-recipients` key lines
+before recommending re-encryption; remove the duplicates first, then run the
+single re-encryption that removes their duplicate ciphertext stanzas.
 
 ## Decryption
 
@@ -179,17 +197,30 @@ encrypted identities are renamed to `identities.age.rotation.bak` and the old
 store recipient remains in `.age-recipients`, marked with a cleanup comment.
 No plaintext backup is written.
 
-Recipient-list changes use an atomic sibling rewrite. Rotation also keeps a
-temporary sibling snapshot of the original `.age-recipients` and restores it
-when verification, Passage, or identity installation fails. A SIGKILL can
-leave that snapshot and the pending marker behind; `status` reports the
-interrupted pre-install state and the original recipient snapshot path.
+Recipient-list changes use an atomic sibling rewrite and first refresh the
+durable `.age-recipients.age-ssh-nt.bak`. Rotation also keeps a separate temporary sibling
+snapshot of the original `.age-recipients` and restores it when verification,
+Passage, or identity installation fails. A SIGKILL can leave that snapshot and
+the pending marker behind; `status` reports the interrupted pre-install state
+and the original recipient snapshot path.
 
 `status` reports the rotation as pending while the rotation backup exists, and a
-second rotation is refused. After verifying that every store entry works with
-the new identity, remove the marked backup recipient and its comment, run
-`age-ssh-nt passage reencrypt`, verify the store again, then remove
-`identities.age.rotation.bak`.
+second rotation is refused. Finish it from a session whose agent holds an
+enrolled key:
+
+```sh
+age-ssh-nt rotate finalize
+```
+
+Finalization decrypts both the current and backup identities to derive their
+exact recipients, so it does not trust manually edited marker comments. It
+refuses to continue unless every store file decrypts with the current identity,
+then prints a manifest and asks for explicit confirmation. It atomically
+removes the old recipient and managed rotation note, restores the standard
+age-ssh-nt comment immediately above the current recipient, runs Passage
+re-encryption, verifies every store file again, and only then removes
+`identities.age.rotation.bak`. Failures restore the recipient list and retain
+the encrypted backup.
 
 If an entry works only with the old identity, restore it before troubleshooting:
 
@@ -279,6 +310,10 @@ several checks:
   one recipient stanza (`-> X25519 ...`) per recipient it was encrypted to.
   Each `*.age` file is compared against `$PASSAGE_DIR/.age-recipients`; zero
   readable stanzas are reported as an invalid file rather than up to date.
+- **Recipient backup safety**: status validates both `.age-recipients` and its
+  durable `.age-recipients.age-ssh-nt.bak`, reports unsafe backup objects that block
+  mutations, and points to the backup when the current list is missing or
+  invalid.
 - **Real key-line check**: the `recipients` row matches the identities' actual
   `age1...` public key (derived from the decrypted identities, or read from
   the `store_recipient` sidecar when no agent is present) against the store
