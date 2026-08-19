@@ -20,18 +20,23 @@ q() {
     return
   fi
 
-  # 2. exit virtualenv if inside
+  # 2. exit devenv if inside
+  if test -n "${DEVENV_PROFILE}" && test "${SHLVL}" -gt 1; then
+    exit
+  fi
+
+  # 3. exit virtualenv if inside
   if test -n "${VIRTUAL_ENV}" && type deactivate >/dev/null; then
     deactivate
     return
   fi
 
-  # 3. exit distrobox if inside
+  # 4. exit distrobox if inside
   if test -n "${DISTROBOX_ENTER_PATH}"; then
     exit
   fi
 
-  # 4. inside nested multiplexers, offer detaching (back to the outer mux,
+  # 5. inside nested multiplexers, offer detaching (back to the outer mux,
   # session kept alive) as the default instead of closing.
   # $_MUX_NESTED / $_MUX_INNERMOST / the _mux_* helpers all come from
   # ../integration/multiplexers - the docs live there; the `type` guard
@@ -82,7 +87,7 @@ q() {
     esac
   fi
 
-  # 5. branch between tmux and non-tmux for exit behavior
+  # 6. branch between tmux and non-tmux for exit behavior
   if test -z "${TMUX}"; then
     gum confirm "Want to close ${environment}?" && exit
     return

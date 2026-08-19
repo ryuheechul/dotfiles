@@ -18,3 +18,8 @@ if test -n "${HERDR_ENV}"; then
   unset HOST_ALWAYS_USE_TMUX
   unset ALL_MY_ZSH_STUFF_LOADED
 fi
+
+# this is technically not a terminal but to handle devenv shell (or via a hook)
+if test -n "${DEVENV_PROFILE}"; then
+  export UNSET_ALL_MY_ZSH_STUFF_LOADED=1
+fi

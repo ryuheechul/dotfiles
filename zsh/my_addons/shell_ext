@@ -141,6 +141,35 @@ fastcommandcheck mise && _evalcache mise activate zsh
 
 _tag mise
 
+# use devenv
+fastcommandcheck devenv && _evalcache devenv hook zsh
+
+#  Safely clone and override to fix the subdirectory jumping "bug"
+if test 1 -eq $+functions[_devenv_hook]; then
+  # Cleanly duplicate the original function definition into a new name (no recursion!)
+  functions[_devenv_hook_original]=$functions[_devenv_hook]
+
+  # Redefine the target hook to capture PWD and OLDPWD before the hook mess it up
+  _devenv_hook() {
+    export _PWD_BEFORE_DEVENV="${PWD}"
+    export _OLDPWD_BEFORE_DEVENV="${OLDPWD}"
+    _devenv_hook_original "$@"
+  }
+fi
+
+# restore PWD and OLPWD that devenv forgot about
+if test -n "${DEVENV_PROFILE}" && test -n "${_PWD_BEFORE_DEVENV}"; then
+  # to restore the memory for `cd -`
+  cd -q "${_OLDPWD_BEFORE_DEVENV}"
+  # to restore the target directory
+  cd -q "${_PWD_BEFORE_DEVENV}"
+
+  unset _PWD_BEFORE_DEVENV
+  unset _OLDPWD_BEFORE_DEVENV
+fi
+
+_tag devenv
+
 # reassert our own $PATH entries - see ../path/set-special's file-level
 # comment for the why (mise's cache above can clobber them)
 source "${my_zsh_d}/path/set-special"
