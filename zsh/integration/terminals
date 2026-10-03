@@ -23,3 +23,14 @@ fi
 if test -n "${DEVENV_PROFILE}"; then
   export UNSET_ALL_MY_ZSH_STUFF_LOADED=1
 fi
+
+# Apple container machine run starts the session with TERM=xterm and never forwards
+# the host TERM (otherwise you would pass -e TERM=... on every call), so
+# terminfo reports 8 colours even though COLORTERM=truecolor comes from
+# home-manager session vars. CONTAINER_SHELL is set by the container CLI on
+# interactive and one-shot sessions alike - upgrade only while the CLI's own
+# value is still in place, so ssh (client-declared TERM) and tmux (its own
+# screen/tmux-256color) keep theirs.
+if test -n "${CONTAINER_SHELL}" && test "${TERM}" = xterm && test -z "${SSH_CONNECTION}"; then
+  export TERM=xterm-256color
+fi
