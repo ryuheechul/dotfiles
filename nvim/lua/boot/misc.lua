@@ -130,11 +130,18 @@ vim.opt.clipboard = 'unnamedplus'
 local is_ssh = vim.env.SSH_CONNECTION ~= nil
 local is_zellij = vim.env.ZELLIJ_SESSION_NAME ~= nil
 local is_emacs = vim.env.INSIDE_EMACS ~= nil
+-- macOS has no display either but does have pbcopy, which Neovim itself
+-- selects via has("mac"); every X11/Wayland backend below needs a display.
+local has_native_backend = vim.env.DISPLAY ~= nil or vim.env.WAYLAND_DISPLAY ~= nil
+  or vim.fn.has('mac') == 1
 
--- Use internal OSC 52 provider only for SSH sessions without additional layers.
--- This avoids the race conditions experienced with 'unnamedplus' when an immediate
--- native provider (like pbcopy or xclip) is available.
-local shouldUseInternalOsc52 = is_ssh and not is_zellij and not is_emacs
+-- Use internal OSC 52 provider for SSH sessions and for sessions with no display
+-- at all (container machine run, other headless Linux), where xsel/xclip/wl-copy
+-- cannot work and Neovim would only report "No provider". Sessions with a display
+-- keep the native provider: this avoids the race conditions experienced with
+-- 'unnamedplus' when an immediate native provider (like pbcopy or xclip) is available.
+local shouldUseInternalOsc52 = (is_ssh or not has_native_backend)
+  and not is_zellij and not is_emacs
 
 if shouldUseInternalOsc52 then
   local osc52 = require 'vim.ui.clipboard.osc52'
