@@ -24,6 +24,10 @@ let
           "libvirtd"
           "qemu-libvirtd"
         ]
+        # non-root use of hardware acceleration: grants /dev/kvm access so
+        # qemu/libvirt guests run with KVM as the user instead of root only;
+        # skipped where the kernel has no KVM (/dev/kvm absent)
+        ++ pkgs.lib.optionals (builtins.pathExists "/dev/kvm") [ "kvm" ]
         ++ pkgs.lib.optionals config.virtualisation.incus.enable [ "incus-admin" ]
         ++ pkgs.lib.optionals config.services.sunshine.enable [ "input" ]
         ++ pkgs.lib.optionals config.services.davfs2.enable [ "davfs2" ];
