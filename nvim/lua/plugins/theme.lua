@@ -25,7 +25,7 @@ end
 return {
   {
     -- NeoSolarized: A fixed solarized colorscheme for better truecolor support.
-    'JoveYu/NeoSolarized', -- using fork instead for this issue, https://github.com/overcache/NeoSolarized/issues/26
+    'lanx-x/NeoSolarized',
     lazy = false,
     priority = 900,
     dependencies = {
