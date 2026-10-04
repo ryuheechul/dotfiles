@@ -1,5 +1,9 @@
 # -*- mode: sh; -*- vim: set ft=zsh:
 
+
+## actual platform: which system is this shell running on
+
+
 function is-nixos {
   grep "NAME=NixOS" /etc/os-release &> /dev/null
 }
@@ -16,10 +20,43 @@ function is-wsl {
   test -n "${WSL_DISTRO_NAME}"
 }
 
+function is-container-machine {
+  # CONTAINER_SHELL is set by the container CLI on interactive and one-shot
+  # sessions alike (the TERM fixup in ../integration/terminals relies on it too)
+  test -n "${CONTAINER_SHELL}"
+}
+
+
+## session / shell state: how this shell was invoked and what it is missing
+
+
 function is-ssh {
   # test -n "${SSH_TTY}" # since SSH_TTY is not present when there is no pseudo-terminal allocation;
   # which prevents non interactive invocation will fail to have a path set via ../path/set-basic
   # hence relies on another ENV_VAR that should be present whether it's interactive or not
   # test -n "${SSH_CLIENT}"
   test -n "${SSH_CONNECTION}" # is more reliable as this one is the only one that survives in the nested shell when `$SSH_TTY` is unset
+}
+
+function is-dumb-terminal {
+  test "${TERM}" = "dumb"
+}
+
+# true when this shell should re-exec itself to pick up supplementary groups:
+# - is-zsh-interactive (./zsh) is the real interactiveness check ($- has i)
+# - test -t 0 only says stdin is a tty, i.e. a terminal to hand the re-exec
+#   over to (also keeps out non-tty `zsh -i -c`)
+# - root is skipped (root does not need groups)
+# - is-container-machine (in the platform section above) = a container
+#   machine exec session, which starts this shell without initgroups(2), so
+#   /etc/group memberships never reach the process (see ../zshrc for the
+#   re-exec action on true)
+# - declared-vs-actual group count makes it one-shot: once groups are loaded
+#   (or the host declares none at all) the condition is false - no exec loop
+function should-reexec-groups {
+  is-zsh-interactive &&
+    test -t 0 &&
+    test "${UID}" -ne 0 &&
+    is-container-machine &&
+    test "$(id -G | wc -w)" -le "$(grep -cE ":([^,]*,)*${USER}(,|$)" /etc/group)"
 }

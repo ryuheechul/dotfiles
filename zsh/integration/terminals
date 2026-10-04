@@ -31,6 +31,6 @@ fi
 # interactive and one-shot sessions alike - upgrade only while the CLI's own
 # value is still in place, so ssh (client-declared TERM) and tmux (its own
 # screen/tmux-256color) keep theirs.
-if test -n "${CONTAINER_SHELL}" && test "${TERM}" = xterm && test -z "${SSH_CONNECTION}"; then
+if is-container-machine && test "${TERM}" = xterm && test -z "${SSH_CONNECTION}"; then
   export TERM=xterm-256color
 fi

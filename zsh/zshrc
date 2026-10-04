@@ -1,8 +1,22 @@
 # -*- mode: sh; -*- vim: set ft=zsh:
 
-if test "${TERM}" = "dumb"; then
+if is-dumb-terminal; then
   >&2 echo "[my zsh] dumb terminal detected and skipping adding more goodies"
   return
+fi
+
+# container machine run-sessions exec this shell without initgroups(2): the
+# groups declared in /etc/group (e.g. wheel, kvm, etc.) never reach the
+# process, so groups/id look wrong and group-gated resources (0660 devices,
+# sockets) would deny access. Re-exec via plain `sudo su` (no `-`): su still
+# runs initgroups for the target user, while cwd and env survive (a login
+# shell would reset both); sudo is NOPASSWD here, so no password prompt.
+# --preserve-env=CONTAINER_SHELL keeps the CLI marker that sudo would
+# env_reset away, so is-container-machine stays true after the re-exec
+# (./integration/terminals depends on it).
+# Conditions live in ./fn/system (should-reexec-groups)
+if should-reexec-groups; then
+  exec sudo --preserve-env=CONTAINER_SHELL su "${USER}"
 fi
 
 # ./integration/terminals
