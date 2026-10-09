@@ -86,6 +86,24 @@ if is-darwin; then
 
   # shorthand for other commands other than make - eg. `nt true` and `nt false`
   alias nt='notify'
+
+  function container() {
+    # container machine run never forwards host TERM (its own sessions start as
+    # TERM=xterm, which ../integration/terminals can only upgrade statically to
+    # xterm-256color), so the guest could not match the host - e.g.
+    # tmux-256color while inside tmux. Bare `-e TERM` means "inherit from host"
+    if { test "$1" = machine || test "$1" = m; } && test "$2" = run && test -n "$TERM"; then
+      shift 2 # drop the "machine" "run" so "$@" is remained for the rest of args
+      command container machine run -e TERM "$@"
+    else
+      command container "$@"
+    fi
+  }
+
+  alias cm='container machine'
+  alias cmr='cm run'
+  alias cml='cm list'
+  alais cmi='cm inspect'
 fi
 
 # this will return either `light` or `dark` - bin/path/default/theme-tone
