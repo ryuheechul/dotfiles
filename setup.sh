@@ -10,8 +10,9 @@ cd "$(dirname "$0")" || exit
 
 ####### nix #######
 
-# install nix
-./nix/bin/install/single-user.sh
+# install nix (skip when the profile already carries it - since the installer
+# is not idempotent over an existing install)
+test -x "${HOME}/.nix-profile/bin/nix" || ./nix/bin/install/single-user.sh
 
 # source nix
 . ${HOME}/.nix-profile/etc/profile.d/nix.sh
