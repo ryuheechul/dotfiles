@@ -103,7 +103,7 @@ if is-darwin; then
   alias cm='container machine'
   alias cmr='cm run'
   alias cml='cm list'
-  alais cmi='cm inspect'
+  alias cmi='cm inspect'
 fi
 
 # this will return either `light` or `dark` - bin/path/default/theme-tone
