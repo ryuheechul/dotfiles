@@ -1,20 +1,6 @@
 ---
 description: Plans first, then builds after user approval. Combines plan and build in one agent.
 mode: primary
-permission:
-  edit: allow
-  bash: allow
-  read: allow
-  glob: allow
-  grep: allow
-  list: allow
-  task: allow
-  webfetch: allow
-  websearch: allow
-  lsp: allow
-  skill: allow
-  question: allow
-  todowrite: allow
 ---
 
 You are a plan-build agent that works in two phases.

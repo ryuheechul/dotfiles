@@ -97,7 +97,7 @@ done
 "~/.claude/keybindings.json" = "~/.config/dfs-rhc/claude/keybindings.json"
 # opencode
 "~/.config/opencode/opencode.jsonc" = "~/.config/dfs-rhc/opencode/opencode.jsonc"
-"~/.config/opencode/tui.jsonc" = "~/.config/dfs-rhc/opencode/tui.jsonc"
+"~/.config/opencode/cli.json" = "~/.config/dfs-rhc/opencode/cli.json"
 "~/.config/opencode/AGENTS.md" = "~/.config/dfs-rhc/opencode/AGENTS.md"
 "~/.config/opencode/plugins" = { source = "~/.config/dfs-rhc/opencode/plugins", mode = "symlink-each" }
 "~/.config/opencode/agents" = "~/.config/dfs-rhc/opencode/agents"

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://opencode.ai/v2/cli.json",
+  "theme": {
+    "name": "orng"
+  },
+  "diffs": {
+    "wrap": "word"
+  },
+  "session": {
+    "sidebar": "auto",
+    "scrollbar": true,
+    "thinking": "hide"
+  },
+  "animations": true,
+  "plugins": ["./herdr-opencode"],
+  "keybinds": {
+    // Open the external editor. V2 defaults this to <leader>e, but V1's
+    // tui.jsonc bound editor_open to ctrl+e.
+    "prompt.editor": "ctrl+e",
+    // Trade-off for the binding above: input.line.end also defaults to ctrl+e,
+    // and one key can only resolve to one command, so end-of-line moves to the
+    // end key. Set this to "none" to drop it instead.
+    "input.line.end": "end"
+  }
+}

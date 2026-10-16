@@ -6,15 +6,32 @@
   // - https://github.com/anomalyco/opencode/issues/7801
   "default_agent": "plan-build",
   "mcp": {
-    "context-mode": {
-      "type": "local",
-      "command": [
-        "context-mode"
-      ]
+    "servers": {
+      "context-mode": {
+        "type": "local",
+        "command": [
+          "context-mode"
+        ]
+      }
     }
   },
-  "plugin": [
-    "context-mode",
-    "./plugins/notifier.ts",
+  "permissions": [
+    // V1 asked before accessing paths outside the project; V2 allows them by
+    // default, so this restores the V1 prompt.
+    {
+      "action": "external_directory",
+      "resource": "*",
+      "effect": "ask"
+    }
+  ],
+  // Local plugins under ~/.config/opencode/plugins/ (notifier.ts,
+  // herdr-agent-state.js) are discovered automatically, so only package
+  // plugins need listing here.
+  "plugins": [
+    // Disabled until there is a compatibility fix: context-mode still exports
+    // a V1 plugin entry (an object with id and server) that V2 rejects, so it
+    // only ever reported a load failure and provided nothing. The MCP server
+    // of the same name above is V2-compatible and still supplies its tools.
+    // "context-mode",
   ],
 }
