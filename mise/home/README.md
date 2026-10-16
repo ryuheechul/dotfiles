@@ -33,9 +33,9 @@ Once this is deployed to `~/.config/mise`:
 
 ```sh
 mise config ls                        # which config files mise is actually loading
-mise run gh-ext                    # chooser: curate an installed extension, or sync the curated list
-mise run gh-ext-sync               # install missing gh extensions, upgrade the rest
-mise run gh-ext-add                # pick an installed extension to curate (TUI)
+mise run gh-ext                       # chooser: curate an installed extension, or sync the curated list
+mise run gh-ext-sync                  # install missing gh extensions, upgrade the rest
+mise run gh-ext-add                   # pick an installed extension to curate (TUI)
 mise bootstrap status                 # drift across repos/dotfiles/tools/macos defaults
 mise bootstrap --dry-run              # what a full `mise bootstrap` would do, without doing it
 mise bootstrap repos status           # same, scoped to just one part (dotfiles/tools/etc. too)

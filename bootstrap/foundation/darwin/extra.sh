@@ -71,6 +71,7 @@ _install_cask alacritty
 _install_cask betterdisplay
 _install_cask warp
 _install_cask thaw
+_install_cask vorssaint
 _is_admin && _install_cask 1password # since it won't work if it's installed a location other than /Applications
 _install_cask rectangle
 _install_cask google-chrome
