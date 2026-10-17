@@ -10,8 +10,8 @@
 let
   checkEnv = import ../utils/checkEnv.nix;
   ifEnv = envName: pkgs.lib.optionals (checkEnv envName);
-  ifX86 = pkgs.lib.optionals pkgs.stdenv.isx86_64;
-  isLinux = with pkgs; lib.optionals stdenv.isLinux;
+  ifX86 = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isx86_64;
+  isLinux = with pkgs; lib.optionals stdenv.hostPlatform.isLinux;
   for-linux = with pkgs; ([
     kmon # Linux Kernel Manager and Activity Monitor
     # make sure these are linux only, if not move to ./default.nix or ./extra instead

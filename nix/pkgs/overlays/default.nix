@@ -7,6 +7,6 @@ let
 in
 {
   overlays = [ ]
-    ++ lib.optionals stdenv.isDarwin [ (import ./darwin.nix) ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ (import ./darwin.nix) ]
     ++ lib.optionals shouldNeovimNightly [ (import ./neovim-nightly.nix) ];
 }

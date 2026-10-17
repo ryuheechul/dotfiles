@@ -25,8 +25,8 @@ let
     deno # Secure runtime for JavaScript and TypeScript
   ];
   bundle-bun = [
-    # now below is handled via ../../../mise/home/conf.d/30-tools.toml
-    # bun # Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one
+    # below will be shadowed via ../../../mise/home/conf.d/30-tools.toml most of the time
+    bun # Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one
   ];
 in
 bundle-nodejs-with-pkgs ++ bundle-deno ++ bundle-bun

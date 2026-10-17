@@ -4,7 +4,7 @@
 
 let
   urlview = import ./custom/urlview.nix { pkgs = pkgs; };
-  isLinux = with pkgs; lib.optionals stdenv.isLinux;
+  isLinux = with pkgs; lib.optionals stdenv.hostPlatform.isLinux;
   # No longer needed as upstream is also now 3.7+
   # tmux-next = import ./custom/tmux-next-3.7.nix { pkgs = pkgs; };
   # so that it doesn't conflict with some terminals (e.g. ghostty)

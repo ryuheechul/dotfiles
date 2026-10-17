@@ -3,8 +3,8 @@
 let
   checkEnv = import ../utils/checkEnv.nix;
   ifEnv = envName: pkgs.lib.optionals (checkEnv envName);
-  ifX86 = pkgs.lib.optionals pkgs.stdenv.isx86_64;
-  isLinux = with pkgs; lib.optionals stdenv.isLinux;
+  ifX86 = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isx86_64;
+  isLinux = with pkgs; lib.optionals stdenv.hostPlatform.isLinux;
   for-linux =
     with pkgs;
     (

@@ -23,11 +23,11 @@ whose builds failed upstream and were never cached - so they're built locally,
 where they likely fail the same way (and, for heavy ones, can exhaust memory).
 
 To check a specific package, run
-`hydra-check -- --channel nixpkgs-unstable [pkg-name]`. Open the URL of a
+`hydra-check --channel nixpkgs-unstable [pkg-name]`. Open the URL of a
 successful build, note its revision, and pin to it with
 `niv update nixpkgs -r [revision]`; stepping back to a good revision usually
 restores access to the binary cache.
 
-Or run `hydra-check -- --channel nixpkgs-unstable` with no package name to
+Or run `hydra-check --channel nixpkgs-unstable` with no package name to
 spot the revision where a batch of builds started failing, and pin to the one
 just before it.

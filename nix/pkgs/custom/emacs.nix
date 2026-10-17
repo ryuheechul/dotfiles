@@ -4,7 +4,7 @@ let
   checkEnv = import ../../utils/checkEnv.nix;
   # https://blog.phundrak.com/emacs-29-what-can-we-expect/
   # emacs-pgtk: wayland native via pure gtk
-  emacs = if pkgs.stdenv.isLinux then pkgs.emacs-pgtk else pkgs.emacs;
+  emacs = if pkgs.stdenv.hostPlatform.isLinux then pkgs.emacs-pgtk else pkgs.emacs;
   emacsWithOptions = emacs.override {
     # these are pretty much the default but still making it explicit for documentation purpose
     withNativeCompilation = true; # this is pretty much default

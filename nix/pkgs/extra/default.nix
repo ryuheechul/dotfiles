@@ -24,7 +24,7 @@ let
   backlog = import ../custom/backlog.nix { pkgs = pkgs; };
   # no longer necessary as there is official package now
   # ghostty = import ../custom/ghostty.nix { pkgs = pkgs; };
-  ghostty = if pkgs.stdenv.isDarwin then pkgs.ghostty-bin else pkgs.ghostty;
+  ghostty = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.ghostty-bin else pkgs.ghostty;
   # Lower minikube's priority (6) so kubectl (with default priority 5) wins the conflict
   minikube = (
     # similar alternative: `(pkgs.lib.lowPrio pkgs.minikube)`
@@ -148,6 +148,7 @@ with pkgs;
   colima # Container runtimes with minimal setup powered by lima
   diffoci # Diff for Docker and OCI container images
   crane # Tools for interacting with remote images and registries including crane and gcrane
+  regctl # Docker and OCI Registry Client in Go and tooling using those libraries
   skopeo # Command line utility for various operations on container images and image repositories
   # minikube with podman - https://github.com/containers/podman/issues/12713#issuecomment-1002567777
   # an example podman machine works for minikube - `podman machine init --rootful --cpus 4 --memory 4096 --disk-size 30`
@@ -183,7 +184,7 @@ with pkgs;
 ++ ifEnv "MY_NIX_EXTRA_AGE" (
   [
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     age-plugin-se # Age plugin for Apple's Secure Enclave
   ]
 )
