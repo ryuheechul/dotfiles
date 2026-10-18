@@ -30,14 +30,7 @@ if ! command -v nix >/dev/null 2>&1; then
 fi
 
 # get repo path
-if command -v greadlink >/dev/null 2>&1; then
-  this_repo_path="$(greadlink -f "$(pwd)")"
-elif command -v readlink >/dev/null 2>&1; then
-  this_repo_path="$(readlink -f "$(pwd)")"
-else
-  echo "readlink binary is required to continue"
-  exit 1
-fi
+this_repo_path="$PWD"
 
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
