@@ -50,13 +50,50 @@ function add-to-path {
   test -n "${1}" && path=("${1}" ${path})
 }
 
+# move every $path entry under the directory $1 to the front, keeping their
+# relative order (add-to-path moves a single entry only). $1 is a directory,
+# no trailing slash.
+function float-to-front {
+  local -a matched rest entry
+  for entry in ${path}; do
+    # `case` because `test`'s `=` compares literally - it cannot match the
+    # "$1"/* pattern
+    case "${entry}" in
+      ("${1}"/*) matched+=("${entry}") ;;
+      (*)        rest+=("${entry}") ;;
+    esac
+  done
+  # nothing matched (e.g. mise not on $PATH yet) - leave $path as it is
+  test "${#matched}" -gt 0 && path=($matched $rest)
+}
+
 # to mitigate the issue of /etc/profile not sourced for the time being - https://github.com/nix-community/home-manager/issues/3681
 test -z "${path_helper_manually_called}" &&
   test -x /usr/libexec/path_helper &&
   eval $(/usr/libexec/path_helper -s) && export path_helper_manually_called=1
 
 # assuming path for nix is already set from ../env
-test -n "${float_nix_path}" && add-to-path $(printpath | grep 'nix-profile')
+if test -n "${float_nix_path}"; then
+  # nix has to outrank the default paths (brew, /bin, /usr/bin, ...), but
+  # NOT mise: mise tracks upstream releases directly instead of through a
+  # channel, so where the same tool exists in both, the mise copy is the
+  # one meant to run (see ../../mise/README.md's "Priority when adding a
+  # new tool"). Re-floating mise's entries matters for the shells that
+  # inherited them but then return early in ../zshrc (nested/tmux panes,
+  # fast_shell_in_editor, ...) without ever reaching ../my_addons/shell_ext's
+  # mise activation.
+  #
+  # NOTE: in the common case both floats below are no-ops - mise's activation
+  # (../my_addons/shell_ext) floats what it manages anyway, and its precmd
+  # hook re-floats it whenever $PATH changes. So this is more caution than
+  # necessity, for the shells where that activation never runs; it is a bit
+  # of a hack and can be removed later if it turns out nothing needs it.
+  float-to-front "${HOME}/.nix-profile"
+  # mise keeps everything it puts on $PATH (installs/, shims/) under its data
+  # dir, so match that prefix - a bare '*mise*' would also sweep to the front
+  # an unrelated entry that merely has "mise" somewhere in its name
+  float-to-front "${MISE_DATA_DIR:-${XDG_DATA_HOME:-${HOME}/.local/share}/mise}"
+fi
 
 # discover user specific binaries and scripts
 add-to-path "${HOME}/.local/bin"
