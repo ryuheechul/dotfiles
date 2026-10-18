@@ -12,10 +12,13 @@
 bun = "latest"
 codex = "latest"
 claude-code = "latest"
+container = { version = "latest", os = ["macos/arm64"] }
 "github:agavra/tuicr" = "latest"
 "github:liamg/grace" = { version = "latest", os = ["linux/x86_64"] }
+herdr = "latest"
+hunkdiff = "latest"
+microsandbox = "latest"
 "npm:context-mode" = "latest"
-"npm:@earendil-works/pi-coding-agent" = "latest"
-"npm:hunkdiff" = "latest"
 opencode = "latest"
+pi = "latest"
 worktrunk = "latest"
