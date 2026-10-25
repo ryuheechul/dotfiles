@@ -21,9 +21,12 @@ function is-wsl {
 }
 
 function is-container-machine {
-  # CONTAINER_SHELL is set by the container CLI on interactive and one-shot
-  # sessions alike (the TERM fixup in ../integration/terminals relies on it too)
-  test -n "${CONTAINER_SHELL}"
+  # /etc/.machine.initialized is created by the container runtime on every
+  # boot (both 1.5 and 1.6), so it is a version-agnostic way to detect a
+  # container machine session. CONTAINER_SHELL was exported only by 1.5 and
+  # is gone in 1.6, so the file is the cross-version check. The TERM fixup
+  # in ../integration/terminals relies on this too.
+  test -e /etc/.machine.initialized
 }
 
 

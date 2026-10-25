@@ -11,12 +11,11 @@ fi
 # sockets) would deny access. Re-exec via plain `sudo su` (no `-`): su still
 # runs initgroups for the target user, while cwd and env survive (a login
 # shell would reset both); sudo is NOPASSWD here, so no password prompt.
-# --preserve-env=CONTAINER_SHELL keeps the CLI marker that sudo would
-# env_reset away, so is-container-machine stays true after the re-exec
-# (./integration/terminals depends on it).
+# /etc/.machine.initialized survives the re-exec, so is-container-machine
+# stays true after it (./integration/terminals depends on it).
 # Conditions live in ./fn/system (should-reexec-groups)
 if should-reexec-groups; then
-  exec sudo --preserve-env=CONTAINER_SHELL su "${USER}"
+  exec sudo su "${USER}"
 fi
 
 # ./integration/terminals

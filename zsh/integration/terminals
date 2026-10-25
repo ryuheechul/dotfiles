@@ -29,10 +29,10 @@ fi
 # Apple container machine run starts the session with TERM=xterm and never forwards
 # the host TERM (otherwise you would pass -e TERM=... on every call), so
 # terminfo reports 8 colours even though COLORTERM=truecolor comes from
-# home-manager session vars. CONTAINER_SHELL is set by the container CLI on
-# interactive and one-shot sessions alike - upgrade only while the CLI's own
-# value is still in place, so ssh (client-declared TERM) and tmux (its own
-# screen/tmux-256color) keep theirs.
+# home-manager session vars. is-container-machine detects the session via
+# /etc/.machine.initialized (set by the runtime on both 1.5 and 1.6) -
+# upgrade only while TERM=xterm and not over ssh, so ssh (client-declared TERM)
+# and tmux (its own screen/tmux-256color) keep theirs.
 if is-container-machine && test "${TERM}" = xterm && test -z "${SSH_CONNECTION}"; then
   export TERM=xterm-256color
 fi
