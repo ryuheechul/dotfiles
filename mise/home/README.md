@@ -19,12 +19,18 @@ loaded in alphabetical order:
 - [`conf.d/10-repos.toml`](conf.d/10-repos.toml) - cloned repos (`[bootstrap.repos]`)
 - [`conf.d/20-dotfiles-symlinks.toml`](conf.d/20-dotfiles-symlinks.toml) - symlinked dotfiles (`[dotfiles]`)
 - [`conf.d/25-dotfiles-edits.toml`](conf.d/25-dotfiles-edits.toml) - dotfile edits, e.g. the gitconfig include (`[dotfiles]`)
-- [`conf.d/30-tools.toml`](conf.d/30-tools.toml) - global CLI tools (`[tools]`)
+- [`conf.d/30-tools.toml`](conf.d/30-tools.toml) - global CLI tools
+  (`[tools]`), plus Homebrew packages (`[bootstrap.packages]`) and their
+  `post-packages` hook, which runs
+  [`tasks/dotfiles-hook-post-packages`](tasks/dotfiles-hook-post-packages) to
+  register/start the container + socktainer brew services and the socktainer
+  docker context once
 - [`conf.d/40-tasks.toml`](conf.d/40-tasks.toml) - tasks:
   - `[tasks.bootstrap]` - post-install tasks, run automatically by `mise bootstrap` (also runs gh-ext-sync)
 - [`tasks/gh-ext`](tasks/gh-ext) - file task: chooser between the two tasks below, with an `input list` picker like raycast-ext (`mise run gh-ext`)
 - [`tasks/gh-ext-sync`](tasks/gh-ext-sync) - file task: gh extension management - installs missing extensions, upgrades the rest; extension list in [`../../gh/extensions.toml`](../../gh/extensions.toml) (edit it, or use `nushell/modules/gh-extensions.nu`) (`mise run gh-ext-sync`)
 - [`tasks/gh-ext-add`](tasks/gh-ext-add) - file task: interactive TUI listing installed gh extensions (plus curated-but-not-installed at the top, ✓ = installed, ★ = already curated); pick one to add it to the curated list, so the list stays portable without hand-editing the TOML; manual only, not run by bootstrap (`mise run gh-ext-add`)
+- [`tasks/dotfiles-hook-post-packages`](tasks/dotfiles-hook-post-packages) - file task: brew services + socktainer docker context setup, invoked by the `post-packages` hook in [`conf.d/30-tools.toml`](conf.d/30-tools.toml) - hook-internal, not usually run by hand (`mise run dotfiles-hook-post-packages`)
 - [`conf.d/50-macos-defaults.toml`](conf.d/50-macos-defaults.toml) - macOS defaults (`[bootstrap.macos.*]`)
 
 ## Useful commands

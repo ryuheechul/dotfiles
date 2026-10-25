@@ -1,0 +1,66 @@
+#!/usr/bin/env sh
+#MISE description="Register/start brew services and the socktainer docker context"
+#
+# Called by the [bootstrap.hooks.post-packages] hook in
+# ../../conf.d/30-tools.toml - it lives here as a task so that file stays short
+# and the shell logic stays testable on its own. The verbose name keeps it from
+# shadowing, or being shadowed by, a project's own mise task of the same
+# purpose; this way `mise run` inside a project still resolves the global task
+# unless someone deliberately reuses this exact name.
+#
+# brew services and docker contexts aren't declarative mise resources, so this
+# one-time setup lives in a hook. Hooks run on every `mise bootstrap` (unchanged
+# packages don't skip them), so it is written to be repeatable: it only changes
+# state when a service was never registered or the context is missing.
+
+if ! uname | xargs test "Darwin" =; then
+  echo "not macOS, skipping"
+  exit 0
+fi
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "brew not installed, skipping"
+  exit 0
+fi
+
+for svc in container socktainer; do
+  if ! brew list --formula "$svc" >/dev/null 2>&1; then
+    echo "$svc: formula not installed, skipping brew services"
+    continue
+  fi
+
+  # "none" (installed, service definition available, never registered) is the
+  # only state the hook creates; started/stopped/anything else means
+  # `brew services start` already ran, so leave the user's chosen state alone
+  status=$(brew services list | awk -v name="$svc" '$1 == name { print $2; exit }')
+  case "$status" in
+  none | "")
+    brew services start "$svc" || exit 1
+    ;;
+  started)
+    echo "$svc: brew service already started"
+    ;;
+  *)
+    echo "$svc: brew service already registered (status: $status)"
+    ;;
+  esac
+done
+
+if ! command -v docker >/dev/null 2>&1; then
+  echo "socktainer context: docker not installed, skipping"
+  exit 0
+fi
+
+if docker context inspect socktainer >/dev/null 2>&1; then
+  echo "socktainer context: already exists (not switching)"
+else
+  # brew --prefix, not a hardcoded /opt/homebrew, so Intel macs work too
+  docker context create --description socktainer \
+    --docker "host=unix://$(brew --prefix)/var/run/socktainer/.socktainer/container.sock" \
+    socktainer || exit 1
+  docker context use socktainer || exit 1
+fi
+
+# printed whether or not the context was just created/switched - an existing
+# setup is never moved off whatever context is current
+echo "current docker context: $(docker context show)"
