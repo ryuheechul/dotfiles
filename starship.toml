@@ -28,7 +28,21 @@ threshold = 3
 
 # https://starship.rs/config/#mise
 [mise]
-disabled = false
+# Disable the native slow module that runs `mise doctor`
+disabled = true
+# debug above with `starship timings` or `starship explain` after changing it to false
+
+# Use a custom instant module based on https://starship.rs/config/#mise
+[custom.mise]
+description = "Fast mise indicator without doctor checks"
+symbol = "mise "
+style = "bold purple"
+# Triggers if any mise config files or folder are in the directory
+detect_files = ['mise.toml', 'mise.local.toml', '.mise.toml', '.mise.local.toml']
+detect_folders = ['.mise']
+# Simple static text instead of running a slow command
+command = "echo 'detected'"
+format = "on [$symbol$output]($style) "
 
 # https://starship.rs/config/#direnv
 [direnv]
