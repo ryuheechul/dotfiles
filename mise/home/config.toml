@@ -13,3 +13,5 @@ experimental = true
 disable_backends = ["asdf"]
 
 # the rest of the config lives in ./conf.d/*.toml, loaded in alphabetical order
+#
+# and see ./miserc.toml that influence how configs are loaded

@@ -1,0 +1,12 @@
+# https://mise.jdx.dev/configuration.html#miserc
+#
+# Unlike ./config.toml and ./conf.d for configs
+# this file influence on how those are loaded.
+#
+# Debug which configs load with `mise doctor`.
+
+# https://mise.jdx.dev/configuration/settings.html#auto_env
+# https://mise.jdx.dev/configuration/environments.html#platform-environments
+auto_env = true
+# https://mise.jdx.dev/configuration/settings.html#env_conf_d
+env_conf_d = true

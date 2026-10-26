@@ -7,6 +7,8 @@
 # matters more than nix's whole-channel atomicity) - see "Priority when
 # adding a new tool" in ../../README.md
 #
+# also see ./60-packages.macos.toml for packages via brew
+#
 # run `mise install` to actually install if this file is edited manually
 [tools]
 bun = "latest"
@@ -21,25 +23,3 @@ microsandbox = "latest"
 opencode = "latest"
 pi = "latest"
 worktrunk = "latest"
-
-
-# using this section in this file only for homebrew
-# - run `mise bootstrap --only packages` to install packages and run the
-#   post-packages hook below
-# - run `mise bootstrap packages upgrade` to upgrade
-[bootstrap.packages]
-# the post-packages hook registers and starts this via `brew services start`
-"brew:container" = "latest" # macOS only
-# the post-packages hook registers and starts this, then creates and switches
-# to the socktainer docker context - container + socktainer is what makes
-# Apple's `container` speak the docker CLI/API
-"brew:socktainer" = "latest" # macOS only
-
-# brew services and docker contexts aren't declarative mise resources, so this
-# one-time setup lives in a hook; the script itself is in
-# ../tasks/dotfiles-hook-post-packages to keep this file short. Hooks run on
-# every `mise bootstrap` (unchanged packages don't skip them); the task is
-# repeatable and only changes state when a service was never registered or the
-# context is missing.
-[bootstrap.hooks.post-packages]
-run = 'mise run dotfiles-hook-post-packages'

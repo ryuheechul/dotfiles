@@ -1,0 +1,28 @@
+# https://mise.jdx.dev/bootstrap/packages/
+#
+# Install packages for macOS only via the file name `60-packages.macos.toml`
+# since `[bootstrap.packages]` lacks OS filter -
+# https://github.com/jdx/mise/discussions/10895#discussioncomment-19184497.
+#
+# Before adding packages here consider ./30-tools.toml first.
+#
+# Using this section in this file only for homebrew:
+# - run `mise bootstrap --only packages` to install packages and run the
+#   post-packages hook below
+# - run `mise bootstrap packages upgrade` to upgrade
+[bootstrap.packages]
+# the post-packages hook registers and starts this via `brew services start`
+"brew:container" = "latest"
+# the post-packages hook registers and starts this, then creates and switches
+# to the socktainer docker context - container + socktainer is what makes
+# Apple's `container` speak the docker CLI/API
+"brew:socktainer" = "latest"
+
+# brew services and docker contexts aren't declarative mise resources, so this
+# one-time setup lives in a hook; the script itself is in
+# ../tasks/dotfiles-hook-post-packages to keep this file short. Hooks run on
+# every `mise bootstrap` (unchanged packages don't skip them); the task is
+# repeatable and only changes state when a service was never registered or the
+# context is missing.
+[bootstrap.hooks.post-packages]
+run = 'mise run dotfiles-hook-post-packages'
