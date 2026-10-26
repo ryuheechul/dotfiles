@@ -63,6 +63,13 @@ if [ -z "$MY_BASIC_ZSH_STUFF_LOADED" ] || [ -n "$FORCE_LOAD_MY_ZSH_STUFF" ]; the
   # enable reverse-i-search
   bindkey '^R' history-incremental-search-backward
 
+  # initialize completion before zinit/znap shadow compdef;
+  # when ~/.zcompdump is present this only loads the dump (fast), if it is
+  # missing (e.g. a fresh host) compinit rescans fpath to rebuild it - and runs
+  # `compaudit` first, which flags group/world-writable fpath dirs; run
+  # `compaudit` by hand to inspect what it considers insecure
+  autoload -U compinit && compinit
+
   export MY_BASIC_ZSH_STUFF_LOADED=1
 fi
 

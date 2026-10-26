@@ -29,9 +29,6 @@ zinit snippet OMZL::history.zsh; source "${my_zsh_d}/modules/history"
 # this seems to be not in effect because other similar plugins so disabling for now
 # zinit light Aloxaf/fzf-tab
 
-# to deal with compaudit warning for distrobox environment
-test -n "${DISTROBOX_ENTER_PATH}" && autoload -U compinit && compinit -u
-
 # things that migrated to znap would load first
 CURR_DIR="${XDG_CONFIG_HOME}/dfs-rhc/zsh/my_addons"
 zinit snippet "${CURR_DIR}/znap"
@@ -62,3 +59,21 @@ zstyle ':completion:*:*:make:*' tag-order 'targets' # https://unix.stackexchange
 # somehow this should be placed in the bottom to intefere others
 zinit ice as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' \
    atpull'%atclone' pick"direnv" src"zhook.zsh"
+
+# flush the compdef calls that zinit hijacked during the snippet loads above:
+# - while a snippet loads, zinit swaps compdef for its own hijack function that
+#   only queues calls into ZINIT_COMPDEF_REPLAY instead of running them, so
+#   registrations like `compdef _git ggpnp=...` never reach the real compdef
+#   on their own
+# - zicdreplay() runs that queue; compdef is available because ../zshrc runs
+#   compinit before this file is sourced
+# - without it, _comps[ggpnp] / _comps[d] / _comps[zx] stay unset and those
+#   commands get no completion at all
+# - the queue stays populated afterwards (same as `zinit cdreplay`); replaying
+#   it twice is harmless
+# - must stay after synchronous loads only: snippets using `lucid wait` load
+#   after the first prompt and would refill the queue with nothing left to
+#   flush it
+# - further reading on the interception/cdreplay model: the Completions section
+#   of https://github.com/zdharma-continuum/zinit (README)
+(( $+functions[zicdreplay] )) && zicdreplay
