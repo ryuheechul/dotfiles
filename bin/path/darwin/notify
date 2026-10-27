@@ -58,7 +58,7 @@ notify() {
   fi
 
   # print the date just before exit
-  date
+  date >&2
 
   # return the original result
   return "${ret}"
