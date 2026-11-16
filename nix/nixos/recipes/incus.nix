@@ -134,6 +134,33 @@ in
 
   security.apparmor.enable = true; # requires reboot
 
+  # To deal with the gotchas that come with apparmor+incus+nixos.
+  # Without it,
+  # 1. creating OCI container might fail with below message.
+  # ```
+  # Failed creating instance from image: Unpack failed: Failed to run: ...
+  # Permission denied tar: Child returned status 126 tar: ...
+  # ```
+  # 2. using gpu with native-context on VM would fail with below message.
+  # ```
+  # Failed to run: forkqemu limit=memlock:unlimited:unlimited fd=3 fd=4 fd=5 fd=6 --
+  # /nix/store/...-qemu-host-cpu-only-11.1.2/bin/qemu-system-x86_64 -S -name my-vm -uuid ...
+  # -daemonize -cpu host,hv_passthrough,migratable=no,+invtsc -nographic -serial chardev:console
+  # -qmp chardev:monitor -nodefaults -no-user-config -readconfig /run/incus/my-vm/qemu.conf -pidfile
+  # /run/incus/my-vm/qemu.pid -D /var/log/incus/my-vm/qemu.log -display egl-headless,gl=on,rendernode=/dev/dri/renderD128 -smbios type=2,manufacturer=LinuxContainers,product=Incus -run-with user=nobody: : exit status 1
+  # ```
+  security.apparmor.includes."abstractions/base" = ''
+    # 1. Allow Incus/LXC container daemons to execute Nix store wrapped binaries
+    /nix/store/**/bin/.*-wrapped ix,
+    /nix/store/**/lib/*.so* mr,
+
+    # 2. Allow QEMU/Mesa/libdrm to read hardware IDs, drivers, and EGL configs from Nix store
+    /nix/store/** r,
+    /run/opengl-driver/** r,
+    /run/opengl-driver/lib/*.so* mr,
+    /dev/dri/** rw,
+  '';
+
   # These are what make it possible for DNS query from external network to go through.
   #
   # # A. This unblocks the port so it can connect to `incusbr0`
