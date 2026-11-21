@@ -1,4 +1,4 @@
-# see `./settings-min.nix` and `./settings-full-windows.nix` for usages
+# see `./settings-min.nix` and `./settings-full.nix` for usages
 # `../../home/dconf.nix` is also being used to customize shortcuts in settings
 # List available keys with `nix-shell -p keyd --command 'keyd list-keys'`.
 
@@ -49,9 +49,9 @@
   # go forward
   "]" = "C-]";
   # Move cursor to beginning of line
-  left = "home"; # Also don't forget `"option_mac:M" = { left = "C-left"; }` at `./settings-full-windows.nix`
+  left = "home"; # Also don't forget `"option_mac:M" = { left = "C-left"; }` at `./settings-full.nix`
   # Move cursor to end of Line
-  right = "end"; # Also don't forget `"option_mac:M" = { right = "C-right"; }` at `./settings-full-windows.nix`
+  right = "end"; # Also don't forget `"option_mac:M" = { right = "C-right"; }` at `./settings-full.nix`
   # Switch between windows
   "`" = "A-f6";
 }

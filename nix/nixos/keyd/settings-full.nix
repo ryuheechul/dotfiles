@@ -1,10 +1,16 @@
-# - to be used for ../recipes/keyd-host.nix
+# - to be used for ../recipes/keyd-hardware-pc.nix and ../recipes/keyd-hardware-mac.nix
 # - you may debug with `sudo showkey` but there should should be better way too
 #   - or with `sudo libinput debug-events --show-keycodes`
-# - "windows" of "settings-full-windows" means the original hardware platform - aka originally a windows keyboard
+# - the hardware argument selects the physical Command/Option layout,
+#   see ./modifier-keys.nix
+
+{ hardware }:
+
+assert hardware == "pc" || hardware == "mac";
 
 let
   meta_mac = import ./meta-mac.nix;
+  modifier_keys = import ./modifier-keys.nix { inherit hardware meta_mac; };
 in
 {
   space_hjkl = {
@@ -27,9 +33,8 @@ in
 
     # Mac-Like Configuration Example
     #
-    # Uses "Alt" button to the left of spacebar as "Cmd" key
+    # The modifier keys are hardware dependent, see ./modifier-keys.nix
     # based on https://github.com/rvaiya/keyd/blob/master/examples/macos.conf
-    # but currently tailed to the physical keyboard layout of Surface pro 8 (on Gnome)
     #
     # Note:
     #   This 'trick' generally requires that the press+release of the Meta
@@ -37,16 +42,9 @@ in
     #   in mutter to make it inert:
     #     - `gsettings set org.gnome.mutter overlay-key ''`
 
-    # Create a new "Cmd" button, with various Mac OS-like features below
-    leftalt = "overload(meta_mac, leftmeta)";
-    rightalt = "overload(meta_mac, leftmeta)"; # rightmeta seems not working so fallback to leftmeta
-
-    # Swap meta/alt
-    meta = "overload(option_mac, leftalt)";
-
     # Switch to next input source
     leftcontrol = "macro(M-space)";
-  };
+  } // modifier_keys;
 
   # meta_mac modifier layer; inherits from 'Alt' modifier layer
   # (not inheriting from 'Ctrl' modifier causes to define a lot of keys

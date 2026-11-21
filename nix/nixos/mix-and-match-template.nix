@@ -49,7 +49,8 @@ username:
     # services
     ./recipes/resolved.nix
     ./recipes/networkd.nix
-    ./recipes/keyd-host-windows.nix
+    # ./recipes/keyd-hardware-mac.nix # alternative to keyd-hardware-pc.nix on Mac hardware
+    ./recipes/keyd-hardware-pc.nix
     ./recipes/keyd-guest.nix
     ./recipes/flatpak.nix
     ./recipes/openssh.nix

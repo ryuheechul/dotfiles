@@ -5,5 +5,5 @@
 
 {
   services.keyd.enable = true;
-  services.keyd.keyboards.default.settings = import ../keyd/settings-full-windows.nix;
+  services.keyd.keyboards.default.settings = import ../keyd/settings-full.nix { hardware = "pc"; };
 }
